@@ -1,0 +1,46 @@
+{
+  "fixtureId": "ES-003",
+  "assessment": {
+    "evidenceId": "ev-duplicate-001",
+    "claimType": "parking_experience",
+    "entityId": "hotel-002",
+    "evidenceType": "E3",
+    "rawRecordCount": 100,
+    "uniqueSampleCount": 55,
+    "supportCount": 38,
+    "contradictionCount": 10,
+    "neutralCount": 7,
+    "verifiedRatio": 0.62,
+    "duplicateRatio": 0.45,
+    "sourceDiversityCount": 1,
+    "segmentRelevance": 0.8,
+    "factors": {
+      "sourceAuthority": 0.7,
+      "freshness": 0.82,
+      "verification": 0.68,
+      "sampleSufficiency": 1.0,
+      "independence": 0.45,
+      "sourceDiversity": 0.35,
+      "segmentRelevance": 0.8,
+      "claimSpecificity": 0.8,
+      "directObservation": 0.85,
+      "supportRatio": 0.79
+    },
+    "strengthScore": 0.58,
+    "strengthClass": "moderate",
+    "strengthConfidence": 0.9,
+    "penalties": [
+      {
+        "code": "DUPLICATE_PENALTY",
+        "value": 0.15,
+        "reason": "Duplicate ratio above 0.30"
+      }
+    ],
+    "policyVersion": "1.0.0",
+    "warnings": [
+      {
+        "code": "HIGH_DUPLICATE_RATIO"
+      }
+    ]
+  }
+}

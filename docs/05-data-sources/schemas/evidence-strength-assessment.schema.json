@@ -1,0 +1,220 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tatil-modu.local/schemas/data-sources/evidence-strength-assessment.schema.json",
+  "title": "Evidence Strength Assessment",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "evidenceId",
+    "claimType",
+    "entityId",
+    "evidenceType",
+    "rawRecordCount",
+    "uniqueSampleCount",
+    "supportCount",
+    "contradictionCount",
+    "neutralCount",
+    "verifiedRatio",
+    "duplicateRatio",
+    "sourceDiversityCount",
+    "segmentRelevance",
+    "factors",
+    "strengthScore",
+    "strengthClass",
+    "strengthConfidence",
+    "penalties",
+    "policyVersion"
+  ],
+  "properties": {
+    "evidenceId": {
+      "type": "string"
+    },
+    "claimType": {
+      "type": "string"
+    },
+    "entityId": {
+      "type": "string"
+    },
+    "evidenceType": {
+      "type": "string",
+      "enum": [
+        "E1",
+        "E2",
+        "E3",
+        "E4",
+        "E5"
+      ]
+    },
+    "rawRecordCount": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "uniqueSampleCount": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "supportCount": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "contradictionCount": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "neutralCount": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "verifiedRatio": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "duplicateRatio": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "sourceDiversityCount": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "segmentRelevance": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "factors": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sourceAuthority",
+        "freshness",
+        "verification",
+        "sampleSufficiency",
+        "independence",
+        "sourceDiversity",
+        "segmentRelevance",
+        "claimSpecificity",
+        "directObservation",
+        "supportRatio"
+      ],
+      "properties": {
+        "sourceAuthority": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "freshness": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "verification": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "sampleSufficiency": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "independence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "sourceDiversity": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "segmentRelevance": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "claimSpecificity": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "directObservation": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "supportRatio": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      }
+    },
+    "strengthScore": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "strengthClass": {
+      "type": "string",
+      "enum": [
+        "very_strong",
+        "strong",
+        "moderate",
+        "weak",
+        "insufficient"
+      ]
+    },
+    "strengthConfidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "penalties": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "code",
+          "value"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "enum": [
+              "DUPLICATE_PENALTY",
+              "CONTRADICTION_PENALTY",
+              "MANIPULATION_PENALTY",
+              "COVERAGE_PENALTY",
+              "LOW_SAMPLE_PENALTY",
+              "LOW_VERIFICATION_PENALTY",
+              "SEGMENT_MISMATCH_PENALTY"
+            ]
+          },
+          "value": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "reason": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      }
+    },
+    "policyVersion": {
+      "type": "string"
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    }
+  }
+}

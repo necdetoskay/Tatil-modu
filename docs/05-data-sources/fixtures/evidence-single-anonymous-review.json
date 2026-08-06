@@ -1,0 +1,47 @@
+{
+  "fixtureId": "ES-001",
+  "assessment": {
+    "evidenceId": "ev-single-001",
+    "claimType": "cleanliness_experience",
+    "entityId": "hotel-001",
+    "evidenceType": "E2",
+    "rawRecordCount": 1,
+    "uniqueSampleCount": 1,
+    "supportCount": 1,
+    "contradictionCount": 0,
+    "neutralCount": 0,
+    "verifiedRatio": 0.0,
+    "duplicateRatio": 0.0,
+    "sourceDiversityCount": 1,
+    "segmentRelevance": 0.5,
+    "factors": {
+      "sourceAuthority": 0.35,
+      "freshness": 0.9,
+      "verification": 0.3,
+      "sampleSufficiency": 0.2,
+      "independence": 1.0,
+      "sourceDiversity": 0.35,
+      "segmentRelevance": 0.5,
+      "claimSpecificity": 0.6,
+      "directObservation": 0.7,
+      "supportRatio": 1.0
+    },
+    "strengthScore": 0.42,
+    "strengthClass": "weak",
+    "strengthConfidence": 0.82,
+    "penalties": [
+      {
+        "code": "LOW_SAMPLE_PENALTY",
+        "value": 0.08,
+        "reason": "Single anonymous review"
+      },
+      {
+        "code": "LOW_VERIFICATION_PENALTY",
+        "value": 0.05,
+        "reason": "Unverified source"
+      }
+    ],
+    "policyVersion": "1.0.0",
+    "warnings": []
+  }
+}

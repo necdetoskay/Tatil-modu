@@ -1,0 +1,36 @@
+{
+  "fixtureId": "ES-002",
+  "assessment": {
+    "evidenceId": "ev-family-001",
+    "claimType": "child_friendliness_experience",
+    "entityId": "hotel-001",
+    "evidenceType": "E3",
+    "rawRecordCount": 44,
+    "uniqueSampleCount": 40,
+    "supportCount": 33,
+    "contradictionCount": 4,
+    "neutralCount": 3,
+    "verifiedRatio": 0.88,
+    "duplicateRatio": 0.09,
+    "sourceDiversityCount": 2,
+    "segmentRelevance": 0.96,
+    "factors": {
+      "sourceAuthority": 0.84,
+      "freshness": 0.91,
+      "verification": 0.93,
+      "sampleSufficiency": 1.0,
+      "independence": 0.92,
+      "sourceDiversity": 0.65,
+      "segmentRelevance": 0.96,
+      "claimSpecificity": 0.86,
+      "directObservation": 0.95,
+      "supportRatio": 0.89
+    },
+    "strengthScore": 0.88,
+    "strengthClass": "very_strong",
+    "strengthConfidence": 0.93,
+    "penalties": [],
+    "policyVersion": "1.0.0",
+    "warnings": []
+  }
+}
