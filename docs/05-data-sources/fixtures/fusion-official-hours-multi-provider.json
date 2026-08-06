@@ -1,0 +1,65 @@
+{
+  "fixtureId": "MF-002",
+  "fusion": {
+    "fusionId": "fusion-hours-001",
+    "entityId": "museum-001",
+    "claimType": "opening_hours",
+    "segment": null,
+    "timeWindow": "current",
+    "status": "resolved",
+    "officialFact": {
+      "open": "09:00",
+      "close": "17:00"
+    },
+    "experienceAssessment": null,
+    "userImpactAssessment": null,
+    "selectedValue": {
+      "open": "09:00",
+      "close": "17:00"
+    },
+    "candidateValues": [
+      {
+        "value": {
+          "open": "09:00",
+          "close": "17:00"
+        },
+        "weightedSupport": 2.42,
+        "supportShare": 0.91,
+        "sourceRefs": [
+          "src-official",
+          "src-provider-a",
+          "src-provider-b"
+        ]
+      },
+      {
+        "value": {
+          "open": "10:00",
+          "close": "17:00"
+        },
+        "weightedSupport": 0.24,
+        "supportShare": 0.09,
+        "sourceRefs": [
+          "src-old-listing"
+        ]
+      }
+    ],
+    "sourceRefs": [
+      "src-official",
+      "src-provider-a",
+      "src-provider-b",
+      "src-old-listing"
+    ],
+    "evidenceRefs": [],
+    "conflictRefs": [
+      "conf-hours-001"
+    ],
+    "fusionConfidence": 0.94,
+    "qualityScore": 0.96,
+    "reasonCodes": [
+      "AUTHORITATIVE_FACT_SELECTED",
+      "SOURCE_DIVERSITY_BONUS"
+    ],
+    "policyVersion": "1.0.0",
+    "warnings": []
+  }
+}

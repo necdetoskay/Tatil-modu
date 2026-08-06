@@ -1,0 +1,165 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tatil-modu.local/schemas/data-sources/multi-source-fusion.schema.json",
+  "title": "Multi-source Fusion Result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "fusionId",
+    "entityId",
+    "claimType",
+    "segment",
+    "timeWindow",
+    "status",
+    "officialFact",
+    "experienceAssessment",
+    "userImpactAssessment",
+    "selectedValue",
+    "candidateValues",
+    "sourceRefs",
+    "evidenceRefs",
+    "conflictRefs",
+    "fusionConfidence",
+    "qualityScore",
+    "reasonCodes",
+    "policyVersion"
+  ],
+  "properties": {
+    "fusionId": {
+      "type": "string"
+    },
+    "entityId": {
+      "type": "string"
+    },
+    "claimType": {
+      "type": "string"
+    },
+    "segment": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "timeWindow": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "resolved",
+        "resolved_with_caveats",
+        "mixed",
+        "unresolved",
+        "insufficient"
+      ]
+    },
+    "officialFact": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "experienceAssessment": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "userImpactAssessment": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "selectedValue": {},
+    "candidateValues": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "value",
+          "weightedSupport",
+          "supportShare"
+        ],
+        "properties": {
+          "value": {},
+          "weightedSupport": {
+            "type": "number",
+            "minimum": 0
+          },
+          "supportShare": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "sourceRefs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "sourceRefs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    },
+    "evidenceRefs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "conflictRefs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "fusionConfidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "qualityScore": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "reasonCodes": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "AUTHORITATIVE_FACT_SELECTED",
+          "FRESHER_VALUE_SELECTED",
+          "STRONG_EXPERIENCE_EVIDENCE",
+          "SOURCE_DIVERSITY_BONUS",
+          "DOMINANT_SOURCE_PENALTY",
+          "UNRESOLVED_CONFLICT_PENALTY",
+          "SEGMENT_SPECIFIC_RESULT",
+          "TIME_WINDOW_SPLIT",
+          "INSUFFICIENT_COVERAGE",
+          "MIXED_SUPPORT",
+          "OFFICIAL_EXPERIENCE_DIVERGENCE"
+        ]
+      }
+    },
+    "policyVersion": {
+      "type": "string"
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    }
+  }
+}

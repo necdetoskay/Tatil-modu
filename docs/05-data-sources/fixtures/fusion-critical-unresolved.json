@@ -1,0 +1,56 @@
+{
+  "fixtureId": "MF-007",
+  "fusion": {
+    "fusionId": "fusion-child-policy-001",
+    "entityId": "hotel-002",
+    "claimType": "child_policy",
+    "segment": "family_with_toddler",
+    "timeWindow": "current",
+    "status": "unresolved",
+    "officialFact": null,
+    "experienceAssessment": null,
+    "userImpactAssessment": {
+      "riskLevel": "critical",
+      "reason": "Conflicting current child policy sources."
+    },
+    "selectedValue": null,
+    "candidateValues": [
+      {
+        "value": "children_allowed",
+        "weightedSupport": 0.91,
+        "supportShare": 0.52,
+        "sourceRefs": [
+          "src-official-a"
+        ]
+      },
+      {
+        "value": "children_not_allowed",
+        "weightedSupport": 0.84,
+        "supportShare": 0.48,
+        "sourceRefs": [
+          "src-provider-b"
+        ]
+      }
+    ],
+    "sourceRefs": [
+      "src-official-a",
+      "src-provider-b"
+    ],
+    "evidenceRefs": [],
+    "conflictRefs": [
+      "conf-child-policy-001"
+    ],
+    "fusionConfidence": 0.42,
+    "qualityScore": 0.61,
+    "reasonCodes": [
+      "UNRESOLVED_CONFLICT_PENALTY",
+      "MIXED_SUPPORT"
+    ],
+    "policyVersion": "1.0.0",
+    "warnings": [
+      {
+        "code": "CROSS_CHECK_REQUIRED"
+      }
+    ]
+  }
+}

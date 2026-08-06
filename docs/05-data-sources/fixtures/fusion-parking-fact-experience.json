@@ -1,0 +1,45 @@
+{
+  "fixtureId": "MF-001",
+  "fusion": {
+    "fusionId": "fusion-parking-001",
+    "entityId": "hotel-001",
+    "claimType": "parking",
+    "segment": "family_with_toddler",
+    "timeWindow": "current_90_days",
+    "status": "resolved_with_caveats",
+    "officialFact": {
+      "parkingAvailable": true,
+      "parkingFee": "free"
+    },
+    "experienceAssessment": {
+      "eveningCapacity": "often_insufficient",
+      "strengthClass": "strong"
+    },
+    "userImpactAssessment": {
+      "riskLevel": "medium_high",
+      "reason": "Free parking exists but capacity is often insufficient in the evening."
+    },
+    "selectedValue": null,
+    "candidateValues": [],
+    "sourceRefs": [
+      "src-official-parking",
+      "src-review-provider"
+    ],
+    "evidenceRefs": [
+      "ev-parking-capacity-001"
+    ],
+    "conflictRefs": [
+      "conf-parking-002"
+    ],
+    "fusionConfidence": 0.84,
+    "qualityScore": 0.88,
+    "reasonCodes": [
+      "AUTHORITATIVE_FACT_SELECTED",
+      "STRONG_EXPERIENCE_EVIDENCE",
+      "OFFICIAL_EXPERIENCE_DIVERGENCE",
+      "SEGMENT_SPECIFIC_RESULT"
+    ],
+    "policyVersion": "1.0.0",
+    "warnings": []
+  }
+}
