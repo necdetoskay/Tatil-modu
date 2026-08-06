@@ -1,0 +1,46 @@
+{
+  "testId": "DDA-003",
+  "name": "Kritik profil eksik",
+  "category": "discover_destination",
+  "critical": true,
+  "input": {
+    "schemaVersion": "1.0.0",
+    "requestId": "DDA-003",
+    "tripProfile": {
+      "fixtureSummary": "Süre ve başlangıç noktası bilinmiyor"
+    },
+    "discoveryRequest": {
+      "mode": "discover_destination",
+      "maxCandidates": 5,
+      "countryScope": "Türkiye",
+      "regionScope": "Türkiye",
+      "fixedDestination": null,
+      "excludeDestinations": [],
+      "requiredDiversity": true
+    },
+    "providedData": {
+      "distanceMatrix": {},
+      "climateContext": {},
+      "candidateSeedSet": [],
+      "sourceRecords": []
+    },
+    "runtimeContext": {
+      "currentDate": "2026-08-06",
+      "timezone": "Europe/Istanbul",
+      "mode": "fixture"
+    }
+  },
+  "expectedStatus": "invalid",
+  "assertions": [
+    {
+      "path": "$.status",
+      "operator": "equals",
+      "expected": "invalid"
+    },
+    {
+      "path": "$.confidence",
+      "operator": "lessThan",
+      "expected": 0.5
+    }
+  ]
+}

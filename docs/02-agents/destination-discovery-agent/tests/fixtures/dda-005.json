@@ -1,0 +1,41 @@
+{
+  "testId": "DDA-005",
+  "name": "Muhafazakâr deniz gereksinimi",
+  "category": "discover_destination",
+  "critical": true,
+  "input": {
+    "schemaVersion": "1.0.0",
+    "requestId": "DDA-005",
+    "tripProfile": {
+      "fixtureSummary": "Kadınlara özel plaj hard constraint, alkolsüz tesis tercihi"
+    },
+    "discoveryRequest": {
+      "mode": "discover_destination",
+      "maxCandidates": 5,
+      "countryScope": "Türkiye",
+      "regionScope": "Türkiye",
+      "fixedDestination": null,
+      "excludeDestinations": [],
+      "requiredDiversity": true
+    },
+    "providedData": {
+      "distanceMatrix": {},
+      "climateContext": {},
+      "candidateSeedSet": [],
+      "sourceRecords": []
+    },
+    "runtimeContext": {
+      "currentDate": "2026-08-06",
+      "timezone": "Europe/Istanbul",
+      "mode": "fixture"
+    }
+  },
+  "expectedStatus": "complete",
+  "assertions": [
+    {
+      "path": "$.rejectedCandidates",
+      "operator": "minimumLength",
+      "expected": 1
+    }
+  ]
+}

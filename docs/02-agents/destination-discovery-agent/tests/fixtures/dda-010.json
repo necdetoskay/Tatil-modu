@@ -1,0 +1,46 @@
+{
+  "testId": "DDA-010",
+  "name": "Bütçe verisi yetersiz",
+  "category": "discover_subregions",
+  "critical": true,
+  "input": {
+    "schemaVersion": "1.0.0",
+    "requestId": "DDA-010",
+    "tripProfile": {
+      "fixtureSummary": "Bütçe belirtilmiş fakat canlı fiyat verisi yok"
+    },
+    "discoveryRequest": {
+      "mode": "discover_subregions",
+      "maxCandidates": 5,
+      "countryScope": "Türkiye",
+      "regionScope": "Antalya",
+      "fixedDestination": null,
+      "excludeDestinations": [],
+      "requiredDiversity": true
+    },
+    "providedData": {
+      "distanceMatrix": {},
+      "climateContext": {},
+      "candidateSeedSet": [],
+      "sourceRecords": []
+    },
+    "runtimeContext": {
+      "currentDate": "2026-08-06",
+      "timezone": "Europe/Istanbul",
+      "mode": "fixture"
+    }
+  },
+  "expectedStatus": "partial",
+  "assertions": [
+    {
+      "path": "$.status",
+      "operator": "equals",
+      "expected": "partial"
+    },
+    {
+      "path": "$.warnings",
+      "operator": "minimumLength",
+      "expected": 1
+    }
+  ]
+}

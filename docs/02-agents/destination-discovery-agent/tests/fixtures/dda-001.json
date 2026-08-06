@@ -1,0 +1,51 @@
+{
+  "testId": "DDA-001",
+  "name": "Balıkesir içinde alt bölge keşfi",
+  "category": "discover_subregions",
+  "critical": true,
+  "input": {
+    "schemaVersion": "1.0.0",
+    "requestId": "DDA-001",
+    "tripProfile": {
+      "fixtureSummary": "Kocaeli çıkışlı, 2 yetişkin, 6 ve 2 yaş çocuk, 3 gün, özel araç, 30000 TRY, deniz ve doğa"
+    },
+    "discoveryRequest": {
+      "mode": "discover_subregions",
+      "maxCandidates": 5,
+      "countryScope": "Türkiye",
+      "regionScope": "Balıkesir",
+      "fixedDestination": null,
+      "excludeDestinations": [],
+      "requiredDiversity": true
+    },
+    "providedData": {
+      "distanceMatrix": {},
+      "climateContext": {},
+      "candidateSeedSet": [],
+      "sourceRecords": []
+    },
+    "runtimeContext": {
+      "currentDate": "2026-08-06",
+      "timezone": "Europe/Istanbul",
+      "mode": "fixture"
+    }
+  },
+  "expectedStatus": "complete",
+  "assertions": [
+    {
+      "path": "$.status",
+      "operator": "equals",
+      "expected": "complete"
+    },
+    {
+      "path": "$.candidates",
+      "operator": "minimumLength",
+      "expected": 2
+    },
+    {
+      "path": "$.candidates[0].hardConstraintStatus",
+      "operator": "notEquals",
+      "expected": "fail"
+    }
+  ]
+}

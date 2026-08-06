@@ -1,0 +1,41 @@
+{
+  "testId": "DDA-004",
+  "name": "Çocuklu aile uzun yol riski",
+  "category": "discover_destination",
+  "critical": true,
+  "input": {
+    "schemaVersion": "1.0.0",
+    "requestId": "DDA-004",
+    "tripProfile": {
+      "fixtureSummary": "İstanbul çıkışlı, 2 günlük, 2 yaş çocuk, özel araç"
+    },
+    "discoveryRequest": {
+      "mode": "discover_destination",
+      "maxCandidates": 5,
+      "countryScope": "Türkiye",
+      "regionScope": "Türkiye",
+      "fixedDestination": null,
+      "excludeDestinations": [],
+      "requiredDiversity": true
+    },
+    "providedData": {
+      "distanceMatrix": {},
+      "climateContext": {},
+      "candidateSeedSet": [],
+      "sourceRecords": []
+    },
+    "runtimeContext": {
+      "currentDate": "2026-08-06",
+      "timezone": "Europe/Istanbul",
+      "mode": "fixture"
+    }
+  },
+  "expectedStatus": "complete",
+  "assertions": [
+    {
+      "path": "$.warnings",
+      "operator": "minimumLength",
+      "expected": 1
+    }
+  ]
+}

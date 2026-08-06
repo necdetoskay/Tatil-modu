@@ -1,0 +1,267 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tatil-modu.local/schemas/destination-discovery-agent/output.schema.json",
+  "title": "Destination Candidate Set",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "agent",
+    "requestId",
+    "status",
+    "discoveryScope",
+    "scoringProfile",
+    "candidates",
+    "rejectedCandidates",
+    "warnings",
+    "assumptions",
+    "confidence",
+    "confidenceFactors"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "agent": {
+      "type": "object",
+      "required": [
+        "name",
+        "version",
+        "promptVersion"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "const": "destination-discovery-agent"
+        },
+        "version": {
+          "type": "string"
+        },
+        "promptVersion": {
+          "type": "string"
+        },
+        "model": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "requestId": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "complete",
+        "partial",
+        "invalid"
+      ]
+    },
+    "discoveryScope": {
+      "type": "object"
+    },
+    "scoringProfile": {
+      "type": "object"
+    },
+    "candidates": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/candidate"
+      },
+      "maxItems": 20
+    },
+    "rejectedCandidates": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "assumptions": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      },
+      "default": []
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "confidenceFactors": {
+      "type": "object"
+    }
+  },
+  "$defs": {
+    "candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "candidateId",
+        "name",
+        "type",
+        "country",
+        "province",
+        "subregion",
+        "rank",
+        "scores",
+        "totalScore",
+        "matchReasons",
+        "risks",
+        "hardConstraintStatus",
+        "recommendedResearchScope",
+        "confidence",
+        "sourceRefs"
+      ],
+      "properties": {
+        "candidateId": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "country",
+            "region",
+            "province",
+            "district",
+            "town",
+            "island",
+            "route_cluster"
+          ]
+        },
+        "country": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "province": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "subregion": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "rank": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "scores": {
+          "type": "object",
+          "required": [
+            "preferenceMatch",
+            "accessibility",
+            "seasonFit",
+            "familyFit",
+            "budgetFit",
+            "experienceDiversity",
+            "dataReliability"
+          ],
+          "properties": {
+            "preferenceMatch": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "accessibility": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "seasonFit": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "familyFit": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "budgetFit": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "experienceDiversity": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "dataReliability": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            }
+          }
+        },
+        "totalScore": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "matchReasons": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        },
+        "risks": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "hardConstraintStatus": {
+          "type": "string",
+          "enum": [
+            "pass",
+            "conditional",
+            "fail"
+          ]
+        },
+        "recommendedResearchScope": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "sourceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

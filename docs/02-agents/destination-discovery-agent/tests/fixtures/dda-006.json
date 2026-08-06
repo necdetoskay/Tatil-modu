@@ -1,0 +1,44 @@
+{
+  "testId": "DDA-006",
+  "name": "Elektrikli araç erişimi",
+  "category": "discover_subregions",
+  "critical": true,
+  "input": {
+    "schemaVersion": "1.0.0",
+    "requestId": "DDA-006",
+    "tripProfile": {
+      "fixtureSummary": "Elektrikli araç, hızlı şarj zorunlu"
+    },
+    "discoveryRequest": {
+      "mode": "discover_subregions",
+      "maxCandidates": 5,
+      "countryScope": "Türkiye",
+      "regionScope": "Muğla",
+      "fixedDestination": null,
+      "excludeDestinations": [],
+      "requiredDiversity": true
+    },
+    "providedData": {
+      "distanceMatrix": {},
+      "climateContext": {},
+      "candidateSeedSet": [],
+      "sourceRecords": []
+    },
+    "runtimeContext": {
+      "currentDate": "2026-08-06",
+      "timezone": "Europe/Istanbul",
+      "mode": "fixture"
+    }
+  },
+  "expectedStatus": "partial",
+  "assertions": [
+    {
+      "path": "$.status",
+      "operator": "equalsAny",
+      "expected": [
+        "complete",
+        "partial"
+      ]
+    }
+  ]
+}

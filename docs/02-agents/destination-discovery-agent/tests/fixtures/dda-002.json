@@ -1,0 +1,46 @@
+{
+  "testId": "DDA-002",
+  "name": "Açık destinasyon, deniz önceliği",
+  "category": "discover_destination",
+  "critical": true,
+  "input": {
+    "schemaVersion": "1.0.0",
+    "requestId": "DDA-002",
+    "tripProfile": {
+      "fixtureSummary": "Ankara çıkışlı çift, 5 gün, deniz birinci öncelik, 45000 TRY"
+    },
+    "discoveryRequest": {
+      "mode": "discover_destination",
+      "maxCandidates": 5,
+      "countryScope": "Türkiye",
+      "regionScope": "Türkiye",
+      "fixedDestination": null,
+      "excludeDestinations": [],
+      "requiredDiversity": true
+    },
+    "providedData": {
+      "distanceMatrix": {},
+      "climateContext": {},
+      "candidateSeedSet": [],
+      "sourceRecords": []
+    },
+    "runtimeContext": {
+      "currentDate": "2026-08-06",
+      "timezone": "Europe/Istanbul",
+      "mode": "fixture"
+    }
+  },
+  "expectedStatus": "complete",
+  "assertions": [
+    {
+      "path": "$.candidates",
+      "operator": "minimumLength",
+      "expected": 3
+    },
+    {
+      "path": "$.candidates[0].scores.preferenceMatch",
+      "operator": "greaterThan",
+      "expected": 0.7
+    }
+  ]
+}

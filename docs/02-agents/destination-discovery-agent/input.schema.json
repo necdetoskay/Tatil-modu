@@ -1,0 +1,141 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tatil-modu.local/schemas/destination-discovery-agent/input.schema.json",
+  "title": "Destination Discovery Agent Input",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "requestId",
+    "tripProfile",
+    "discoveryRequest"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "requestId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "tripProfile": {
+      "type": "object"
+    },
+    "discoveryRequest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "maxCandidates"
+      ],
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": [
+            "discover_destination",
+            "discover_subregions",
+            "reconsider"
+          ]
+        },
+        "maxCandidates": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 20
+        },
+        "countryScope": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "regionScope": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "fixedDestination": {
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "excludeDestinations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        },
+        "requiredDiversity": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    },
+    "providedData": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "distanceMatrix": {
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "climateContext": {
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "candidateSeedSet": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "object"
+          }
+        },
+        "sourceRecords": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          },
+          "default": []
+        }
+      }
+    },
+    "runtimeContext": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "currentDate": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
+        },
+        "timezone": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "fixture",
+            "hybrid",
+            "live"
+          ]
+        }
+      }
+    }
+  }
+}
