@@ -1,0 +1,30 @@
+{
+  "fixtureId": "FS-007",
+  "assessment": {
+    "claimType": "opening_hours",
+    "freshnessClass": "F3",
+    "evaluationTime": "2026-08-06T13:00:00Z",
+    "targetDate": "2026-08-10",
+    "retrievedAt": "2026-08-06T12:55:00Z",
+    "observedAt": null,
+    "effectiveAt": null,
+    "validUntil": null,
+    "expiresAt": null,
+    "ageSeconds": 300,
+    "expectedLifetimeSeconds": 604800,
+    "freshnessScore": 0.99,
+    "freshnessConfidence": 0.45,
+    "status": "fresh",
+    "hardExpired": false,
+    "reasonCodes": [
+      "ONLY_RETRIEVED_AT_AVAILABLE",
+      "UNKNOWN_EFFECTIVE_DATE"
+    ],
+    "policyVersion": "1.0.0",
+    "warnings": [
+      {
+        "code": "CONTENT_UPDATE_TIME_UNKNOWN"
+      }
+    ]
+  }
+}

@@ -1,0 +1,145 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tatil-modu.local/schemas/data-sources/freshness-assessment.schema.json",
+  "title": "Freshness Assessment",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "claimType",
+    "freshnessClass",
+    "evaluationTime",
+    "targetDate",
+    "expectedLifetimeSeconds",
+    "freshnessScore",
+    "freshnessConfidence",
+    "status",
+    "hardExpired",
+    "reasonCodes",
+    "policyVersion"
+  ],
+  "properties": {
+    "claimType": {
+      "type": "string"
+    },
+    "freshnessClass": {
+      "type": "string",
+      "enum": [
+        "F1",
+        "F2",
+        "F3",
+        "F4",
+        "F5"
+      ]
+    },
+    "evaluationTime": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "targetDate": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date"
+    },
+    "retrievedAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "observedAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "effectiveAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "validUntil": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "expiresAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "ageSeconds": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 0
+    },
+    "expectedLifetimeSeconds": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "freshnessScore": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "minimum": 0,
+      "maximum": 1
+    },
+    "freshnessConfidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "fresh",
+        "acceptable",
+        "stale",
+        "expired",
+        "unknown"
+      ]
+    },
+    "hardExpired": {
+      "type": "boolean"
+    },
+    "reasonCodes": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "OUTSIDE_VALID_HORIZON",
+          "VALID_UNTIL_PASSED",
+          "EXPIRES_AT_PASSED",
+          "TARGET_DATE_MISMATCH",
+          "MISSING_SOURCE_TIME",
+          "ONLY_RETRIEVED_AT_AVAILABLE",
+          "STALE_IF_ERROR_USED",
+          "REVIEW_WINDOW_TOO_OLD",
+          "UNKNOWN_EFFECTIVE_DATE"
+        ]
+      },
+      "uniqueItems": true
+    },
+    "policyVersion": {
+      "type": "string"
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    }
+  }
+}

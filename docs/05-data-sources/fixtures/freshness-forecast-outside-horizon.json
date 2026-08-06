@@ -1,0 +1,26 @@
+{
+  "fixtureId": "FS-003",
+  "assessment": {
+    "claimType": "weather_forecast",
+    "freshnessClass": "F2",
+    "evaluationTime": "2026-08-06T13:00:00Z",
+    "targetDate": "2027-04-01",
+    "retrievedAt": "2026-08-06T12:00:00Z",
+    "observedAt": null,
+    "effectiveAt": null,
+    "validUntil": "2026-08-20T00:00:00Z",
+    "expiresAt": "2026-08-06T16:00:00Z",
+    "ageSeconds": 3600,
+    "expectedLifetimeSeconds": 10800,
+    "freshnessScore": 0.0,
+    "freshnessConfidence": 1.0,
+    "status": "expired",
+    "hardExpired": true,
+    "reasonCodes": [
+      "OUTSIDE_VALID_HORIZON",
+      "TARGET_DATE_MISMATCH"
+    ],
+    "policyVersion": "1.0.0",
+    "warnings": []
+  }
+}

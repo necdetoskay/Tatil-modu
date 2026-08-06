@@ -1,0 +1,23 @@
+{
+  "fixtureId": "FS-001",
+  "assessment": {
+    "claimType": "hotel_price",
+    "freshnessClass": "F1",
+    "evaluationTime": "2026-08-06T13:00:00Z",
+    "targetDate": "2026-09-01",
+    "retrievedAt": "2026-08-06T12:40:00Z",
+    "observedAt": null,
+    "effectiveAt": null,
+    "validUntil": null,
+    "expiresAt": "2026-08-06T13:10:00Z",
+    "ageSeconds": 1200,
+    "expectedLifetimeSeconds": 1800,
+    "freshnessScore": 0.67,
+    "freshnessConfidence": 0.98,
+    "status": "acceptable",
+    "hardExpired": false,
+    "reasonCodes": [],
+    "policyVersion": "1.0.0",
+    "warnings": []
+  }
+}
