@@ -22,9 +22,23 @@ Agent sayısı başlangıçta bilinçli olarak sınırlı tutulur. Bir görev an
 
 **Çıktı:** `TripProfile`
 
-**Tool:** Yok.
+**Tool:** Yok. (Fixture-mode test uyumlu)
 
-**Durum:** Tasarım başladı.
+**Durum:** ✅ Tamamlandı v1.0
+
+**Belgeler:**
+- [Specification](trip-profile-agent/specification.md)
+- [System Prompt](trip-profile-agent/system-prompt.md)
+- [Decision Rules](trip-profile-agent/decision-rules.md)
+- [Input Schema](trip-profile-agent/input.schema.json)
+- [Output Schema](trip-profile-agent/output.schema.json)
+- [Tool Policy](trip-profile-agent/tool-policy.md)
+- [Handoff Contracts](trip-profile-agent/handoff-contracts.md)
+- [Evaluation Rubric](trip-profile-agent/evaluation-rubric.md)
+- [Test Fixtures (15)](trip-profile-agent/tests/fixtures/)
+- [Tests README](trip-profile-agent/tests/README.md)
+
+**Test matrisi**: 15 fixture (normal, missing-info, conflict, invalid-input, preference, special-requirement, context-conflict, date-flexibility, budget, transportation, accessibility, critical-missing). Schema coverage: 100%.
 
 ---
 
