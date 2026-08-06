@@ -1,0 +1,89 @@
+{
+  "fixtureId": "REV-001",
+  "input": {
+    "entity": {
+      "canonicalEntityId": "prop-fixture-001",
+      "providerEntityIds": [
+        {
+          "providerId": "fixture-review-provider",
+          "entityId": "hotel-001"
+        }
+      ]
+    },
+    "dateRange": {
+      "start": "2026-05-01",
+      "end": "2026-08-01"
+    },
+    "languages": [
+      "tr"
+    ],
+    "limit": 100,
+    "pageToken": null,
+    "verifiedPreference": "prefer_verified",
+    "usagePurpose": "analysis",
+    "includeText": true
+  },
+  "output": {
+    "status": "success",
+    "entity": {
+      "canonicalEntityId": "prop-fixture-001"
+    },
+    "reviews": [
+      {
+        "canonicalReviewId": "rev-canonical-001",
+        "providerReviewId": "provider-review-001",
+        "providerId": "fixture-review-provider",
+        "canonicalEntityId": "prop-fixture-001",
+        "reviewDate": "2026-07-18",
+        "rating": 4.0,
+        "ratingScale": 5.0,
+        "content": {
+          "mode": "permitted_extract",
+          "text": null,
+          "extract": "Oda temizdi ancak otopark akşam doluydu.",
+          "reference": "provider-review-001"
+        },
+        "language": {
+          "code": "tr",
+          "confidence": 0.99
+        },
+        "verifiedStatus": "verified",
+        "reviewerSegment": {
+          "travelerType": "family",
+          "stayType": "leisure",
+          "authorHash": "hash:fixture-author"
+        },
+        "duplicate": {
+          "isDuplicate": false,
+          "clusterId": null
+        },
+        "spamAssessment": {
+          "suspicion": "low",
+          "reasons": []
+        },
+        "license": {
+          "licenseId": "fixture-license-v1",
+          "textUsageMode": "extract_only",
+          "storageAllowed": true,
+          "redistributionAllowed": false,
+          "retentionClass": "operational"
+        },
+        "sourceRefs": [
+          "src-review-001"
+        ]
+      }
+    ],
+    "collectionMetadata": {
+      "retrievedAt": "2026-08-06T13:00:00Z",
+      "providerCount": 1,
+      "reviewCount": 1,
+      "verifiedCount": 1,
+      "duplicateCount": 0,
+      "languageDistribution": {
+        "tr": 1
+      }
+    },
+    "nextPageToken": null,
+    "warnings": []
+  }
+}

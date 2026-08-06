@@ -1,0 +1,122 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tatil-modu.local/schemas/capabilities/climate.normals/output.schema.json",
+  "title": "climate.normals output",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "status",
+    "location",
+    "period",
+    "referencePeriod",
+    "metrics",
+    "interpretationLabel",
+    "warnings",
+    "sourceRefs"
+  ],
+  "properties": {
+    "status": {
+      "type": "string",
+      "enum": [
+        "success",
+        "partial",
+        "failed"
+      ]
+    },
+    "location": {
+      "type": "object"
+    },
+    "period": {
+      "type": "object"
+    },
+    "referencePeriod": {
+      "type": "string"
+    },
+    "metrics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "temperatureMinC",
+        "temperatureMaxC",
+        "precipitationMm",
+        "windSpeedKph",
+        "seaTemperatureC",
+        "sunshineHours",
+        "humidityPercent",
+        "extremeEventNotes"
+      ],
+      "properties": {
+        "temperatureMinC": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "temperatureMaxC": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "precipitationMm": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "windSpeedKph": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "seaTemperatureC": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "sunshineHours": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "humidityPercent": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 100
+        },
+        "extremeEventNotes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "interpretationLabel": {
+      "type": "string",
+      "const": "climate_normal_not_forecast"
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "sourceRefs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    }
+  }
+}

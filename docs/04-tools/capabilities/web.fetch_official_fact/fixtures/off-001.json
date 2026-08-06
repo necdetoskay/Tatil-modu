@@ -1,0 +1,60 @@
+{
+  "fixtureId": "OFF-001",
+  "input": {
+    "source": {
+      "mode": "url",
+      "url": "https://example.gov.tr/muze",
+      "canonicalEntityId": null
+    },
+    "factRequest": {
+      "factType": "opening_hours",
+      "expectedValueType": "time_range",
+      "fieldName": "openingHours",
+      "extractionHints": [
+        "ziyaret saatleri",
+        "açılış",
+        "kapanış"
+      ]
+    },
+    "locale": "tr-TR",
+    "freshness": {
+      "maxAgeSeconds": 86400,
+      "requireEffectiveDate": false
+    }
+  },
+  "output": {
+    "status": "success",
+    "factType": "opening_hours",
+    "observationType": "observed",
+    "value": {
+      "days": [
+        "monday",
+        "tuesday",
+        "wednesday",
+        "thursday",
+        "friday"
+      ],
+      "open": "09:00",
+      "close": "17:00"
+    },
+    "valueType": "time_range",
+    "verificationStatus": "verified",
+    "page": {
+      "url": "https://example.gov.tr/muze",
+      "title": "Müze Ziyaret Saatleri",
+      "officialStatus": "official",
+      "contentLanguage": "tr"
+    },
+    "evidence": {
+      "fragmentRef": "fragment-001",
+      "selector": "#ziyaret-saatleri",
+      "contentHash": "sha256:fixture"
+    },
+    "retrievedAt": "2026-08-06T13:00:00Z",
+    "effectiveAt": null,
+    "warnings": [],
+    "sourceRefs": [
+      "src-official-001"
+    ]
+  }
+}

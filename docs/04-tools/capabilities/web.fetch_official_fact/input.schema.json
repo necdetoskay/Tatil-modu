@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tatil-modu.local/schemas/capabilities/web.fetch_official_fact/input.schema.json",
+  "title": "web.fetch_official_fact input",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "source",
+    "factRequest",
+    "locale",
+    "freshness"
+  ],
+  "properties": {
+    "source": {
+      "type": "object",
+      "required": [
+        "mode"
+      ],
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": [
+            "url",
+            "entity"
+          ]
+        },
+        "url": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri"
+        },
+        "canonicalEntityId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "factRequest": {
+      "type": "object",
+      "required": [
+        "factType",
+        "expectedValueType"
+      ],
+      "properties": {
+        "factType": {
+          "type": "string"
+        },
+        "expectedValueType": {
+          "type": "string",
+          "enum": [
+            "string",
+            "number",
+            "boolean",
+            "date",
+            "time_range",
+            "money",
+            "object",
+            "array"
+          ]
+        },
+        "fieldName": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "extractionHints": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "locale": {
+      "type": "string",
+      "default": "tr-TR"
+    },
+    "freshness": {
+      "type": "object",
+      "required": [
+        "maxAgeSeconds"
+      ],
+      "properties": {
+        "maxAgeSeconds": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "requireEffectiveDate": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    }
+  }
+}

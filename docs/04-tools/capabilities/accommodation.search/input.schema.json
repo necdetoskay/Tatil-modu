@@ -1,0 +1,168 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tatil-modu.local/schemas/capabilities/accommodation.search/input.schema.json",
+  "title": "accommodation.search input",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "destination",
+    "checkIn",
+    "checkOut",
+    "occupancy",
+    "rooms",
+    "currency",
+    "limit"
+  ],
+  "properties": {
+    "destination": {
+      "type": "object",
+      "required": [
+        "canonicalAreaId"
+      ],
+      "properties": {
+        "canonicalAreaId": {
+          "type": "string"
+        },
+        "coordinates": {
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "radiusMeters": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1
+        }
+      }
+    },
+    "checkIn": {
+      "type": "string",
+      "format": "date"
+    },
+    "checkOut": {
+      "type": "string",
+      "format": "date"
+    },
+    "occupancy": {
+      "type": "object",
+      "required": [
+        "adults",
+        "children"
+      ],
+      "properties": {
+        "adults": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 20
+        },
+        "children": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "age"
+            ],
+            "properties": {
+              "age": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 17
+              }
+            }
+          },
+          "maxItems": 10
+        }
+      }
+    },
+    "rooms": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 10
+    },
+    "currency": {
+      "type": "string",
+      "enum": [
+        "TRY",
+        "USD",
+        "EUR",
+        "GBP"
+      ]
+    },
+    "filters": {
+      "type": "object",
+      "properties": {
+        "mustHave": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "niceToHave": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "mealPlans": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "cancellation": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "free",
+            "flexible",
+            "any",
+            null
+          ]
+        },
+        "parking": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "free",
+            "available",
+            "any",
+            null
+          ]
+        },
+        "minimumRating": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 5
+        },
+        "minimumReviewCount": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        }
+      }
+    },
+    "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100
+    },
+    "pageToken": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

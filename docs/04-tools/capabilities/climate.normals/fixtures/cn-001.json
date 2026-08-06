@@ -1,0 +1,50 @@
+{
+  "fixtureId": "CN-001",
+  "input": {
+    "location": {
+      "canonicalPlaceId": "tr-balikesir-ayvalik",
+      "coordinates": null
+    },
+    "period": {
+      "type": "month",
+      "month": 9,
+      "startDate": null,
+      "endDate": null
+    },
+    "granularity": "monthly",
+    "requestedFields": [
+      "temperature_range",
+      "precipitation",
+      "wind",
+      "sea_temperature",
+      "sunshine"
+    ],
+    "preferredReferencePeriod": "1991-2020"
+  },
+  "output": {
+    "status": "success",
+    "location": {
+      "canonicalPlaceId": "tr-balikesir-ayvalik"
+    },
+    "period": {
+      "type": "month",
+      "month": 9
+    },
+    "referencePeriod": "1991-2020",
+    "metrics": {
+      "temperatureMinC": 19.0,
+      "temperatureMaxC": 29.0,
+      "precipitationMm": 24.0,
+      "windSpeedKph": 17.0,
+      "seaTemperatureC": 24.0,
+      "sunshineHours": 9.5,
+      "humidityPercent": null,
+      "extremeEventNotes": []
+    },
+    "interpretationLabel": "climate_normal_not_forecast",
+    "warnings": [],
+    "sourceRefs": [
+      "src-climate-001"
+    ]
+  }
+}

@@ -1,0 +1,290 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tatil-modu.local/schemas/capabilities/accommodation.search/output.schema.json",
+  "title": "accommodation.search output",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "status",
+    "searchContext",
+    "offers",
+    "nextPageToken",
+    "warnings"
+  ],
+  "properties": {
+    "status": {
+      "type": "string",
+      "enum": [
+        "success",
+        "partial",
+        "failed"
+      ]
+    },
+    "searchContext": {
+      "type": "object",
+      "required": [
+        "checkIn",
+        "checkOut",
+        "occupancy",
+        "currency",
+        "retrievedAt"
+      ],
+      "properties": {
+        "checkIn": {
+          "type": "string",
+          "format": "date"
+        },
+        "checkOut": {
+          "type": "string",
+          "format": "date"
+        },
+        "occupancy": {
+          "type": "object"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "retrievedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "offers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "canonicalPropertyId",
+          "propertyName",
+          "propertyType",
+          "providerEntityIds",
+          "location",
+          "rating",
+          "reviewCount",
+          "roomOffer",
+          "price",
+          "availability",
+          "policies",
+          "attributes",
+          "sourceRefs"
+        ],
+        "properties": {
+          "canonicalPropertyId": {
+            "type": "string"
+          },
+          "propertyName": {
+            "type": "string"
+          },
+          "propertyType": {
+            "type": "string",
+            "enum": [
+              "hotel",
+              "aparthotel",
+              "pension",
+              "resort",
+              "villa",
+              "apartment",
+              "camp",
+              "other"
+            ]
+          },
+          "providerEntityIds": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            },
+            "minItems": 1
+          },
+          "location": {
+            "type": "object"
+          },
+          "rating": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "minimum": 0,
+            "maximum": 5
+          },
+          "reviewCount": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 0
+          },
+          "roomOffer": {
+            "type": "object",
+            "required": [
+              "offerId",
+              "roomName",
+              "maxOccupancy",
+              "bedConfiguration",
+              "mealPlan"
+            ],
+            "properties": {
+              "offerId": {
+                "type": "string"
+              },
+              "roomName": {
+                "type": "string"
+              },
+              "maxOccupancy": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "bedConfiguration": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              },
+              "mealPlan": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          },
+          "price": {
+            "type": "object",
+            "required": [
+              "totalAmount",
+              "currency",
+              "nightlyAverage",
+              "taxesIncluded",
+              "feesIncluded",
+              "breakdown",
+              "priceRetrievedAt"
+            ],
+            "properties": {
+              "totalAmount": {
+                "type": "number",
+                "minimum": 0
+              },
+              "currency": {
+                "type": "string"
+              },
+              "nightlyAverage": {
+                "type": "number",
+                "minimum": 0
+              },
+              "taxesIncluded": {
+                "type": [
+                  "boolean",
+                  "null"
+                ]
+              },
+              "feesIncluded": {
+                "type": [
+                  "boolean",
+                  "null"
+                ]
+              },
+              "breakdown": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              },
+              "priceRetrievedAt": {
+                "type": "string",
+                "format": "date-time"
+              }
+            }
+          },
+          "availability": {
+            "type": "object",
+            "required": [
+              "available",
+              "checkedAt"
+            ],
+            "properties": {
+              "available": {
+                "type": "boolean"
+              },
+              "checkedAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "remainingUnits": {
+                "type": [
+                  "integer",
+                  "null"
+                ],
+                "minimum": 0
+              }
+            }
+          },
+          "policies": {
+            "type": "object",
+            "required": [
+              "cancellation",
+              "childPolicy",
+              "checkIn",
+              "checkOut",
+              "parking"
+            ],
+            "properties": {
+              "cancellation": {
+                "type": [
+                  "object",
+                  "null"
+                ]
+              },
+              "childPolicy": {
+                "type": [
+                  "object",
+                  "null"
+                ]
+              },
+              "checkIn": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "checkOut": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "parking": {
+                "type": [
+                  "object",
+                  "null"
+                ]
+              }
+            }
+          },
+          "attributes": {
+            "type": "object"
+          },
+          "sourceRefs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1
+          }
+        }
+      }
+    },
+    "nextPageToken": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    }
+  }
+}

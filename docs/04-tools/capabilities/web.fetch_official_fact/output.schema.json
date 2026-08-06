@@ -1,0 +1,148 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tatil-modu.local/schemas/capabilities/web.fetch_official_fact/output.schema.json",
+  "title": "web.fetch_official_fact output",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "status",
+    "factType",
+    "observationType",
+    "value",
+    "valueType",
+    "verificationStatus",
+    "page",
+    "evidence",
+    "retrievedAt",
+    "effectiveAt",
+    "warnings",
+    "sourceRefs"
+  ],
+  "properties": {
+    "status": {
+      "type": "string",
+      "enum": [
+        "success",
+        "partial",
+        "failed"
+      ]
+    },
+    "factType": {
+      "type": "string"
+    },
+    "observationType": {
+      "type": "string",
+      "enum": [
+        "observed",
+        "inferred",
+        "not_found"
+      ]
+    },
+    "value": {},
+    "valueType": {
+      "type": "string",
+      "enum": [
+        "string",
+        "number",
+        "boolean",
+        "date",
+        "time_range",
+        "money",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "verificationStatus": {
+      "type": "string",
+      "enum": [
+        "verified",
+        "single_source",
+        "conflicting",
+        "unverified",
+        "stale"
+      ]
+    },
+    "page": {
+      "type": "object",
+      "required": [
+        "url",
+        "title",
+        "officialStatus",
+        "contentLanguage"
+      ],
+      "properties": {
+        "url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "title": {
+          "type": "string"
+        },
+        "officialStatus": {
+          "type": "string",
+          "enum": [
+            "official",
+            "data_owner",
+            "unverified"
+          ]
+        },
+        "contentLanguage": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "required": [
+        "fragmentRef",
+        "selector",
+        "contentHash"
+      ],
+      "properties": {
+        "fragmentRef": {
+          "type": "string"
+        },
+        "selector": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "contentHash": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "retrievedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "effectiveAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "sourceRefs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    }
+  }
+}

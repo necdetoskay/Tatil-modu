@@ -1,0 +1,139 @@
+{
+  "fixtureId": "ACC-001",
+  "input": {
+    "destination": {
+      "canonicalAreaId": "tr-balikesir-ayvalik",
+      "coordinates": null,
+      "radiusMeters": 25000
+    },
+    "checkIn": "2026-09-01",
+    "checkOut": "2026-09-03",
+    "occupancy": {
+      "adults": 2,
+      "children": [
+        {
+          "age": 6
+        },
+        {
+          "age": 2
+        }
+      ]
+    },
+    "rooms": 1,
+    "currency": "TRY",
+    "filters": {
+      "mustHave": [
+        "free_parking"
+      ],
+      "niceToHave": [
+        "pool"
+      ],
+      "mealPlans": [
+        "breakfast"
+      ],
+      "cancellation": "free",
+      "parking": "free",
+      "minimumRating": 4.0,
+      "minimumReviewCount": 100
+    },
+    "limit": 20,
+    "pageToken": null
+  },
+  "output": {
+    "status": "success",
+    "searchContext": {
+      "checkIn": "2026-09-01",
+      "checkOut": "2026-09-03",
+      "occupancy": {
+        "adults": 2,
+        "children": [
+          6,
+          2
+        ]
+      },
+      "currency": "TRY",
+      "retrievedAt": "2026-08-06T13:00:00Z"
+    },
+    "offers": [
+      {
+        "canonicalPropertyId": "prop-fixture-001",
+        "propertyName": "Fixture Family Hotel",
+        "propertyType": "hotel",
+        "providerEntityIds": [
+          {
+            "providerId": "fixture-provider",
+            "entityId": "hotel-001"
+          }
+        ],
+        "location": {
+          "canonicalAreaId": "tr-balikesir-ayvalik"
+        },
+        "rating": 4.4,
+        "reviewCount": 420,
+        "roomOffer": {
+          "offerId": "offer-001",
+          "roomName": "Family Room",
+          "maxOccupancy": 4,
+          "bedConfiguration": [
+            {
+              "type": "double",
+              "count": 1
+            },
+            {
+              "type": "single",
+              "count": 2
+            }
+          ],
+          "mealPlan": "breakfast"
+        },
+        "price": {
+          "totalAmount": 12000.0,
+          "currency": "TRY",
+          "nightlyAverage": 6000.0,
+          "taxesIncluded": true,
+          "feesIncluded": true,
+          "breakdown": [
+            {
+              "type": "room",
+              "amount": 12000.0
+            }
+          ],
+          "priceRetrievedAt": "2026-08-06T13:00:00Z"
+        },
+        "availability": {
+          "available": true,
+          "checkedAt": "2026-08-06T13:00:00Z",
+          "remainingUnits": 2
+        },
+        "policies": {
+          "cancellation": {
+            "type": "free_until",
+            "deadline": "2026-08-28T23:59:59+03:00"
+          },
+          "childPolicy": {
+            "childrenAllowed": true,
+            "agesAccepted": [
+              0,
+              17
+            ]
+          },
+          "checkIn": "14:00",
+          "checkOut": "11:00",
+          "parking": {
+            "available": true,
+            "free": true
+          }
+        },
+        "attributes": {
+          "pool": true,
+          "family_friendly": true
+        },
+        "sourceRefs": [
+          "src-acc-001"
+        ]
+      }
+    ],
+    "nextPageToken": null,
+    "warnings": []
+  }
+}

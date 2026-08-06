@@ -1,0 +1,110 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tatil-modu.local/schemas/capabilities/reviews.collect/input.schema.json",
+  "title": "reviews.collect input",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "entity",
+    "dateRange",
+    "languages",
+    "limit",
+    "verifiedPreference",
+    "usagePurpose"
+  ],
+  "properties": {
+    "entity": {
+      "type": "object",
+      "required": [
+        "canonicalEntityId",
+        "providerEntityIds"
+      ],
+      "properties": {
+        "canonicalEntityId": {
+          "type": "string"
+        },
+        "providerEntityIds": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "providerId",
+              "entityId"
+            ],
+            "properties": {
+              "providerId": {
+                "type": "string"
+              },
+              "entityId": {
+                "type": "string"
+              }
+            }
+          },
+          "minItems": 1
+        }
+      }
+    },
+    "dateRange": {
+      "type": "object",
+      "required": [
+        "start",
+        "end"
+      ],
+      "properties": {
+        "start": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
+        },
+        "end": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
+        }
+      }
+    },
+    "languages": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 1000
+    },
+    "pageToken": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "verifiedPreference": {
+      "type": "string",
+      "enum": [
+        "verified_only",
+        "prefer_verified",
+        "any"
+      ]
+    },
+    "usagePurpose": {
+      "type": "string",
+      "enum": [
+        "analysis",
+        "display_excerpt",
+        "audit",
+        "quality_evaluation"
+      ]
+    },
+    "includeText": {
+      "type": "boolean",
+      "default": true
+    }
+  }
+}

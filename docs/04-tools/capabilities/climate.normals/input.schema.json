@@ -1,0 +1,99 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tatil-modu.local/schemas/capabilities/climate.normals/input.schema.json",
+  "title": "climate.normals input",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "location",
+    "period",
+    "granularity",
+    "requestedFields"
+  ],
+  "properties": {
+    "location": {
+      "type": "object",
+      "required": [
+        "canonicalPlaceId"
+      ],
+      "properties": {
+        "canonicalPlaceId": {
+          "type": "string"
+        },
+        "coordinates": {
+          "type": [
+            "object",
+            "null"
+          ]
+        }
+      }
+    },
+    "period": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "month",
+            "date_range"
+          ]
+        },
+        "month": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1,
+          "maximum": 12
+        },
+        "startDate": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
+        },
+        "endDate": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
+        }
+      }
+    },
+    "granularity": {
+      "type": "string",
+      "enum": [
+        "monthly",
+        "seasonal"
+      ]
+    },
+    "requestedFields": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "temperature_range",
+          "precipitation",
+          "wind",
+          "sea_temperature",
+          "sunshine",
+          "humidity",
+          "extreme_event_notes"
+        ]
+      },
+      "uniqueItems": true
+    },
+    "preferredReferencePeriod": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

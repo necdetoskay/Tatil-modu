@@ -1,0 +1,325 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tatil-modu.local/schemas/capabilities/reviews.collect/output.schema.json",
+  "title": "reviews.collect output",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "status",
+    "entity",
+    "reviews",
+    "collectionMetadata",
+    "nextPageToken",
+    "warnings"
+  ],
+  "properties": {
+    "status": {
+      "type": "string",
+      "enum": [
+        "success",
+        "partial",
+        "failed"
+      ]
+    },
+    "entity": {
+      "type": "object",
+      "required": [
+        "canonicalEntityId"
+      ],
+      "properties": {
+        "canonicalEntityId": {
+          "type": "string"
+        }
+      }
+    },
+    "reviews": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "canonicalReviewId",
+          "providerReviewId",
+          "providerId",
+          "canonicalEntityId",
+          "reviewDate",
+          "rating",
+          "ratingScale",
+          "content",
+          "language",
+          "verifiedStatus",
+          "reviewerSegment",
+          "duplicate",
+          "spamAssessment",
+          "license",
+          "sourceRefs"
+        ],
+        "properties": {
+          "canonicalReviewId": {
+            "type": "string"
+          },
+          "providerReviewId": {
+            "type": "string"
+          },
+          "providerId": {
+            "type": "string"
+          },
+          "canonicalEntityId": {
+            "type": "string"
+          },
+          "reviewDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "rating": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "minimum": 0
+          },
+          "ratingScale": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "exclusiveMinimum": 0
+          },
+          "content": {
+            "type": "object",
+            "required": [
+              "mode",
+              "text",
+              "extract",
+              "reference"
+            ],
+            "properties": {
+              "mode": {
+                "type": "string",
+                "enum": [
+                  "full_text",
+                  "permitted_extract",
+                  "reference_only",
+                  "none"
+                ]
+              },
+              "text": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "extract": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "reference": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          },
+          "language": {
+            "type": "object",
+            "required": [
+              "code",
+              "confidence"
+            ],
+            "properties": {
+              "code": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "confidence": {
+                "type": [
+                  "number",
+                  "null"
+                ],
+                "minimum": 0,
+                "maximum": 1
+              }
+            }
+          },
+          "verifiedStatus": {
+            "type": "string",
+            "enum": [
+              "verified",
+              "unverified",
+              "unknown"
+            ]
+          },
+          "reviewerSegment": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "travelerType": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "stayType": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "authorHash": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          },
+          "duplicate": {
+            "type": "object",
+            "required": [
+              "isDuplicate",
+              "clusterId"
+            ],
+            "properties": {
+              "isDuplicate": {
+                "type": "boolean"
+              },
+              "clusterId": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          },
+          "spamAssessment": {
+            "type": "object",
+            "required": [
+              "suspicion",
+              "reasons"
+            ],
+            "properties": {
+              "suspicion": {
+                "type": "string",
+                "enum": [
+                  "none",
+                  "low",
+                  "medium",
+                  "high",
+                  "unknown"
+                ]
+              },
+              "reasons": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "license": {
+            "type": "object",
+            "required": [
+              "licenseId",
+              "textUsageMode",
+              "storageAllowed",
+              "redistributionAllowed",
+              "retentionClass"
+            ],
+            "properties": {
+              "licenseId": {
+                "type": "string"
+              },
+              "textUsageMode": {
+                "type": "string",
+                "enum": [
+                  "full",
+                  "extract_only",
+                  "reference_only",
+                  "metadata_only"
+                ]
+              },
+              "storageAllowed": {
+                "type": "boolean"
+              },
+              "redistributionAllowed": {
+                "type": "boolean"
+              },
+              "retentionClass": {
+                "type": "string",
+                "enum": [
+                  "ephemeral",
+                  "short_term",
+                  "operational",
+                  "audit",
+                  "restricted"
+                ]
+              }
+            }
+          },
+          "sourceRefs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1
+          }
+        }
+      }
+    },
+    "collectionMetadata": {
+      "type": "object",
+      "required": [
+        "retrievedAt",
+        "providerCount",
+        "reviewCount",
+        "verifiedCount",
+        "duplicateCount",
+        "languageDistribution"
+      ],
+      "properties": {
+        "retrievedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "providerCount": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "reviewCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "verifiedCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "duplicateCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "languageDistribution": {
+          "type": "object"
+        }
+      }
+    },
+    "nextPageToken": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    }
+  }
+}
