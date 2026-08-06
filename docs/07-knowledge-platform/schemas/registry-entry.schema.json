@@ -1,0 +1,134 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tatil-modu.local/schemas/knowledge-platform/registry-entry.schema.json",
+  "title": "Knowledge Registry Entry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "registryType",
+    "entryId",
+    "canonicalName",
+    "version",
+    "status",
+    "owner",
+    "description",
+    "aliases",
+    "dependencies",
+    "tags",
+    "effectiveFrom",
+    "replacementRef"
+  ],
+  "properties": {
+    "registryType": {
+      "type": "string",
+      "enum": [
+        "ontology",
+        "claim",
+        "rule",
+        "formula",
+        "threshold",
+        "policy",
+        "prompt",
+        "capability",
+        "tool",
+        "schema",
+        "feature",
+        "evaluation",
+        "test",
+        "version",
+        "migration"
+      ]
+    },
+    "entryId": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_.-]+$"
+    },
+    "canonicalName": {
+      "type": "string",
+      "minLength": 1
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "proposed",
+        "approved",
+        "active",
+        "deprecated",
+        "disabled",
+        "retired"
+      ]
+    },
+    "owner": {
+      "type": "string",
+      "minLength": 1
+    },
+    "approver": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1
+    },
+    "aliases": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "dependencies": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "effectiveFrom": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "deprecatedAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "replacementRef": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "changeReason": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "provenance": {
+      "type": "object"
+    },
+    "metadata": {
+      "type": "object"
+    }
+  }
+}

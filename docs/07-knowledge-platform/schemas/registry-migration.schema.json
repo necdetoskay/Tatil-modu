@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tatil-modu.local/schemas/knowledge-platform/registry-migration.schema.json",
+  "title": "Registry Migration",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "migrationId",
+    "migrationType",
+    "sourceRefs",
+    "targetRefs",
+    "effectiveFrom",
+    "reversible",
+    "impactedConsumers",
+    "status",
+    "testRefs"
+  ],
+  "properties": {
+    "migrationId": {
+      "type": "string"
+    },
+    "migrationType": {
+      "type": "string",
+      "enum": [
+        "rename_label",
+        "add_alias",
+        "replace_entry",
+        "split_entry",
+        "merge_entries",
+        "change_parent",
+        "change_value_contract",
+        "deprecate_entry"
+      ]
+    },
+    "sourceRefs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    },
+    "targetRefs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "effectiveFrom": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "reversible": {
+      "type": "boolean"
+    },
+    "transform": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "rollbackTransform": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "impactedConsumers": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "approved",
+        "active",
+        "completed",
+        "failed",
+        "rolled_back"
+      ]
+    },
+    "testRefs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    }
+  }
+}

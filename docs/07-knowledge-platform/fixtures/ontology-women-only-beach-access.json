@@ -1,0 +1,55 @@
+{
+  "fixtureId": "KP-ONT-002",
+  "entry": {
+    "registryType": "ontology",
+    "entryId": "ontology.aspect.beach.access_policy.women_only",
+    "canonicalName": "Women-only beach access policy",
+    "version": "1.0.0",
+    "status": "active",
+    "owner": "travel-intelligence",
+    "approver": "architecture",
+    "description": "Access policy defining a women-only beach or women-only access period.",
+    "aliases": [
+      "women only beach",
+      "ladies beach",
+      "kadınlar plajı",
+      "bayanlar plajı"
+    ],
+    "dependencies": [
+      "ontology.aspect.beach.access_policy",
+      "ontology.entity.beach"
+    ],
+    "tags": [
+      "beach",
+      "access-policy",
+      "hard-constraint"
+    ],
+    "effectiveFrom": "2026-08-06T00:00:00Z",
+    "deprecatedAt": null,
+    "replacementRef": null,
+    "changeReason": "Required as canonical hard-constraint concept",
+    "provenance": {
+      "documentRef": "ontology-registry.md"
+    },
+    "metadata": {
+      "constraintEligible": true
+    },
+    "nodeType": "constraint",
+    "definition": "Women-only access applies to the beach or a specified operating period.",
+    "labels": {
+      "en": "Women-only beach access",
+      "tr": "Kadınlara özel plaj erişimi"
+    },
+    "allowedEntityTypes": [
+      "ontology.entity.beach"
+    ],
+    "examples": [
+      "The beach is reserved for women.",
+      "Women-only access is available between 09:00 and 18:00."
+    ],
+    "counterExamples": [
+      "The beach is family-friendly.",
+      "There is a separate women-only pool."
+    ]
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tatil-modu.local/schemas/knowledge-platform/ontology-node.schema.json",
+  "title": "Ontology Node",
+  "allOf": [
+    {
+      "$ref": "registry-entry.schema.json"
+    },
+    {
+      "type": "object",
+      "required": [
+        "nodeType",
+        "definition",
+        "labels",
+        "allowedEntityTypes"
+      ],
+      "properties": {
+        "nodeType": {
+          "type": "string",
+          "enum": [
+            "entity",
+            "aspect",
+            "sub_aspect",
+            "risk",
+            "opportunity",
+            "user_context",
+            "traveler_segment",
+            "constraint",
+            "facility",
+            "activity",
+            "time_context"
+          ]
+        },
+        "definition": {
+          "type": "string"
+        },
+        "labels": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "allowedEntityTypes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "examples": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "counterExamples": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  ]
+}

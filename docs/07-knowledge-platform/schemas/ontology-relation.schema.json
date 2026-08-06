@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tatil-modu.local/schemas/knowledge-platform/ontology-relation.schema.json",
+  "title": "Ontology Relation",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "relationId",
+    "sourceNodeRef",
+    "relationType",
+    "targetNodeRef",
+    "version",
+    "status"
+  ],
+  "properties": {
+    "relationId": {
+      "type": "string"
+    },
+    "sourceNodeRef": {
+      "type": "string"
+    },
+    "relationType": {
+      "type": "string",
+      "enum": [
+        "is_a",
+        "part_of",
+        "has_aspect",
+        "applies_to",
+        "conflicts_with",
+        "requires",
+        "increases_risk",
+        "reduces_risk",
+        "supports",
+        "replaced_by",
+        "alias_of"
+      ]
+    },
+    "targetNodeRef": {
+      "type": "string"
+    },
+    "version": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "active",
+        "deprecated",
+        "disabled"
+      ]
+    },
+    "metadata": {
+      "type": "object"
+    }
+  }
+}

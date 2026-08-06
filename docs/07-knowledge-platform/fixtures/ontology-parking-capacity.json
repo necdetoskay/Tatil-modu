@@ -1,0 +1,54 @@
+{
+  "fixtureId": "KP-ONT-001",
+  "entry": {
+    "registryType": "ontology",
+    "entryId": "ontology.aspect.parking.capacity",
+    "canonicalName": "Parking capacity",
+    "version": "1.0.0",
+    "status": "active",
+    "owner": "travel-intelligence",
+    "approver": "architecture",
+    "description": "A parking area's ability to provide sufficient spaces for expected demand.",
+    "aliases": [
+      "car park capacity",
+      "parking lot capacity",
+      "otopark kapasitesi"
+    ],
+    "dependencies": [
+      "ontology.aspect.parking"
+    ],
+    "tags": [
+      "parking",
+      "capacity",
+      "experience"
+    ],
+    "effectiveFrom": "2026-08-06T00:00:00Z",
+    "deprecatedAt": null,
+    "replacementRef": null,
+    "changeReason": "Initial ontology foundation",
+    "provenance": {
+      "documentRef": "ontology-registry.md"
+    },
+    "metadata": {},
+    "nodeType": "sub_aspect",
+    "definition": "Capacity and practical sufficiency of parking spaces.",
+    "labels": {
+      "en": "Parking capacity",
+      "tr": "Otopark kapasitesi"
+    },
+    "allowedEntityTypes": [
+      "ontology.entity.accommodation",
+      "ontology.entity.restaurant",
+      "ontology.entity.beach",
+      "ontology.entity.attraction"
+    ],
+    "examples": [
+      "Parking is full after 20:00.",
+      "There are sufficient spaces during weekdays."
+    ],
+    "counterExamples": [
+      "Parking is free.",
+      "Parking is 300 metres away."
+    ]
+  }
+}
