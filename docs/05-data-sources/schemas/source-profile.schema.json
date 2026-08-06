@@ -1,0 +1,206 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tatil-modu.local/schemas/data-sources/source-profile.schema.json",
+  "title": "Source Profile",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "sourceId",
+    "sourceFamily",
+    "sourceSubtype",
+    "providerId",
+    "roles",
+    "authorityScopes",
+    "license",
+    "privacyClass",
+    "status"
+  ],
+  "properties": {
+    "sourceId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sourceFamily": {
+      "type": "string",
+      "enum": [
+        "S1",
+        "S2",
+        "S3",
+        "S4",
+        "S5",
+        "S6",
+        "S7"
+      ]
+    },
+    "sourceSubtype": {
+      "type": "string",
+      "minLength": 1
+    },
+    "providerId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "canonicalUrl": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "uri"
+    },
+    "providerEntityId": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "roles": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "authoritative",
+          "corroborating",
+          "experiential",
+          "discovery_only",
+          "conflicting",
+          "historical"
+        ]
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "authorityScopes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "claimType",
+          "authorityScore",
+          "authorityClass"
+        ],
+        "properties": {
+          "claimType": {
+            "type": "string"
+          },
+          "authorityScore": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "authorityClass": {
+            "type": "string",
+            "enum": [
+              "A",
+              "B",
+              "C",
+              "D",
+              "E"
+            ]
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "authoritative",
+              "corroborating",
+              "experiential",
+              "discovery_only"
+            ]
+          },
+          "factors": {
+            "type": "object"
+          },
+          "penalties": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          }
+        }
+      }
+    },
+    "geographicCoverage": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "languageCoverage": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "license": {
+      "type": "object",
+      "required": [
+        "licenseId",
+        "commercialUseAllowed",
+        "storageAllowed",
+        "redistributionAllowed"
+      ],
+      "properties": {
+        "licenseId": {
+          "type": "string"
+        },
+        "commercialUseAllowed": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "storageAllowed": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "redistributionAllowed": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "textUsageMode": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "full",
+            "extract_only",
+            "reference_only",
+            "metadata_only",
+            null
+          ]
+        }
+      }
+    },
+    "privacyClass": {
+      "type": "string",
+      "enum": [
+        "public",
+        "user_context",
+        "sensitive",
+        "restricted"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "candidate",
+        "approved",
+        "degraded",
+        "restricted",
+        "disabled",
+        "deprecated"
+      ]
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    }
+  }
+}

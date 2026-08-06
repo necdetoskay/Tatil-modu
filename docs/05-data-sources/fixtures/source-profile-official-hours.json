@@ -1,0 +1,48 @@
+{
+  "fixtureId": "DS-001",
+  "sourceProfile": {
+    "sourceId": "src-official-hours-001",
+    "sourceFamily": "S1",
+    "sourceSubtype": "facility_owner",
+    "providerId": "official-site",
+    "canonicalUrl": "https://example.gov.tr/muze",
+    "providerEntityId": "museum-001",
+    "roles": [
+      "authoritative"
+    ],
+    "authorityScopes": [
+      {
+        "claimType": "opening_hours",
+        "authorityScore": 0.97,
+        "authorityClass": "A",
+        "role": "authoritative",
+        "factors": {
+          "ownership": 1.0,
+          "legalMandate": 0.8,
+          "operationalControl": 1.0,
+          "directObservation": 0.8,
+          "domainExpertise": 0.9,
+          "identityVerification": 1.0,
+          "claimSpecificity": 1.0
+        },
+        "penalties": []
+      }
+    ],
+    "geographicCoverage": [
+      "TR"
+    ],
+    "languageCoverage": [
+      "tr"
+    ],
+    "license": {
+      "licenseId": "official-public-info",
+      "commercialUseAllowed": true,
+      "storageAllowed": true,
+      "redistributionAllowed": true,
+      "textUsageMode": "extract_only"
+    },
+    "privacyClass": "public",
+    "status": "approved",
+    "warnings": []
+  }
+}

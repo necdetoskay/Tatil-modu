@@ -1,0 +1,64 @@
+{
+  "fixtureId": "DS-002",
+  "sourceProfile": {
+    "sourceId": "src-review-001",
+    "sourceFamily": "S3",
+    "sourceSubtype": "verified_stay_review",
+    "providerId": "fixture-review-provider",
+    "canonicalUrl": null,
+    "providerEntityId": "review-001",
+    "roles": [
+      "experiential"
+    ],
+    "authorityScopes": [
+      {
+        "claimType": "cleanliness_experience",
+        "authorityScore": 0.84,
+        "authorityClass": "B",
+        "role": "experiential",
+        "factors": {
+          "ownership": 0.0,
+          "legalMandate": 0.0,
+          "operationalControl": 0.0,
+          "directObservation": 1.0,
+          "domainExpertise": 0.3,
+          "identityVerification": 0.9,
+          "claimSpecificity": 1.0
+        },
+        "penalties": []
+      },
+      {
+        "claimType": "official_check_in_policy",
+        "authorityScore": 0.28,
+        "authorityClass": "E",
+        "role": "corroborating",
+        "factors": {
+          "ownership": 0.0,
+          "legalMandate": 0.0,
+          "operationalControl": 0.0,
+          "directObservation": 0.5,
+          "domainExpertise": 0.2,
+          "identityVerification": 0.9,
+          "claimSpecificity": 0.4
+        },
+        "penalties": []
+      }
+    ],
+    "geographicCoverage": [
+      "TR"
+    ],
+    "languageCoverage": [
+      "tr"
+    ],
+    "license": {
+      "licenseId": "fixture-review-license",
+      "commercialUseAllowed": true,
+      "storageAllowed": true,
+      "redistributionAllowed": false,
+      "textUsageMode": "extract_only"
+    },
+    "privacyClass": "public",
+    "status": "approved",
+    "warnings": []
+  }
+}
