@@ -1,0 +1,132 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tatil-modu.local/schemas/travel-intelligence/common-claim.schema.json",
+  "title": "Common Travel Intelligence Claim",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "claimId",
+    "entityId",
+    "claimType",
+    "category",
+    "claimScope",
+    "value",
+    "valueType",
+    "timeWindow",
+    "segment",
+    "observationType",
+    "sourceRefs",
+    "evidenceRefs",
+    "conflictRefs",
+    "confidence",
+    "status"
+  ],
+  "properties": {
+    "claimId": {
+      "type": "string"
+    },
+    "entityId": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "tripContextId": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "claimType": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "fact",
+        "experience",
+        "risk",
+        "opportunity",
+        "trend",
+        "constraint",
+        "preference_match",
+        "recommendation_signal"
+      ]
+    },
+    "claimScope": {
+      "type": "object"
+    },
+    "value": {},
+    "valueType": {
+      "type": "string"
+    },
+    "unit": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "timeWindow": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "segment": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "observationType": {
+      "type": "string",
+      "enum": [
+        "observed",
+        "aggregated",
+        "derived",
+        "inferred",
+        "user_provided"
+      ]
+    },
+    "sourceRefs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "evidenceRefs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "conflictRefs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "supported",
+        "partially_supported",
+        "mixed",
+        "unresolved",
+        "insufficient",
+        "rejected"
+      ]
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    }
+  }
+}

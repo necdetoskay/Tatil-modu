@@ -1,0 +1,72 @@
+{
+  "fixtureId": "TI-001",
+  "assessment": {
+    "assessmentId": "ti-parking-001",
+    "module": {
+      "moduleId": "parking-intelligence",
+      "version": "1.0.0"
+    },
+    "entityId": "hotel-001",
+    "tripContextId": "trip-family-001",
+    "status": "complete",
+    "dimensions": {
+      "suitability": 0.45,
+      "risk": 0.72,
+      "relevance": 0.95,
+      "comfort": 0.4,
+      "timeImpact": 0.62
+    },
+    "risks": [
+      {
+        "riskId": "risk-parking-evening",
+        "type": "parking_capacity",
+        "probability": 0.8,
+        "impact": 0.65,
+        "exposure": 0.9,
+        "userSensitivity": 0.95,
+        "mitigability": 0.35,
+        "score": 0.29,
+        "severity": "medium_high",
+        "evidenceRefs": [
+          "ev-parking-capacity-001"
+        ],
+        "mitigations": [
+          "arrive_before_18",
+          "verify_alternative_parking"
+        ]
+      }
+    ],
+    "opportunities": [
+      {
+        "type": "free_parking",
+        "score": 0.7
+      }
+    ],
+    "recommendationSignals": [
+      {
+        "type": "verify_before_visit",
+        "priority": "high",
+        "reason": "Evening capacity risk for family with toddler."
+      }
+    ],
+    "confidence": 0.86,
+    "explanation": {
+      "summary": "Free parking exists, but recent family reviews report evening capacity problems.",
+      "limitations": [
+        "Capacity evidence is concentrated in evening arrivals."
+      ]
+    },
+    "claimRefs": [
+      "claim-parking-free",
+      "claim-parking-capacity"
+    ],
+    "observationRefs": [
+      "obs-parking-evening-001"
+    ],
+    "evidenceRefs": [
+      "ev-parking-capacity-001"
+    ],
+    "policyVersion": "1.0.0",
+    "warnings": []
+  }
+}

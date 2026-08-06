@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tatil-modu.local/schemas/travel-intelligence/observation.schema.json",
+  "title": "Travel Intelligence Observation",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "observationId",
+    "entityId",
+    "tripContextId",
+    "observationType",
+    "metricType",
+    "value",
+    "timeWindow",
+    "segment",
+    "sampleMetadata",
+    "sourceRefs",
+    "evidenceRefs",
+    "freshnessScore",
+    "confidence"
+  ],
+  "properties": {
+    "observationId": {
+      "type": "string"
+    },
+    "entityId": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "tripContextId": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "observationType": {
+      "type": "string",
+      "enum": [
+        "single_record",
+        "aggregate",
+        "time_series",
+        "event",
+        "measurement",
+        "behavior_pattern",
+        "user_context"
+      ]
+    },
+    "metricType": {
+      "type": "string"
+    },
+    "value": {},
+    "timeWindow": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "segment": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "sampleMetadata": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "sourceRefs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "evidenceRefs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "freshnessScore": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    }
+  }
+}
