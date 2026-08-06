@@ -1,55 +1,40 @@
-# ADR-0002 — 10 Agent Mimarisi (20 Agent'den tasarruf)
+# ADR-0002 — Sınırlı ve Kanıt Temelli Agent Mimarisi
 
 | Alan | Değer |
 |---|---|
-| Tür | Process ADR |
-| Durum | Accepted |
-| Tarih | 2026-08-06 |
-| Karar Sahibi | Project Team |
-| İlgili Doküman | ARCH-002 |
+| Tür | Architecture Decision Record |
+| Durum | Accepted — Revised |
+| İlk Tarih | 2026-08-06 |
+| Son Revizyon | 2026-08-06 |
+| Kanonik Katalog | `docs/02-agents/agent-catalog.md` |
 
 ## Bağlam
 
-Oturumda 20 ayrı agent önerisi yapılmıştı (User Profile, Destination Discovery, Weather, Budget, Transportation, Route Planner, Hotel Research, Restaurant Research, Attraction, Review Intelligence, Hidden Gem, Safety, Event, Child Friendly, Accessibility, Daily Planner, Experience, Memory, Report Generator, Orchestrator).
+İlk tasarımda yaklaşık 20 ayrı agent rolü önerildi. Sonraki aşamada 10 domain agent + 1 Orchestrator yaklaşımı değerlendirildi. Ayrıntılı tasarım sırasında Weather Context ve Final Plan Composer gibi bağımsız sözleşme ve test ihtiyacı olan roller ortaya çıktı.
 
 ## Karar
 
-10 domain agent + 1 Orchestrator ile başlanacaktır.
+Agent sayısı sabit bir hedef değildir.
 
-## Gerekçe
+Sistem:
 
-1. **Koordinasyon karmaşıklığı**: 20 agent → (20×19)/2 = 190 handoff ilişkisi. 10 agent → 90.
-2. **Test yükü**: 15 test × 20 agent = 3000 test. 15 × 10 = 150.
-3. **Sorumluluk büyüklüğü**: Her agent daha geniş sorumluluk alanına sahip olur, uzmanlık derinliği artar.
-4. **Orchestrator karmaşıklığı**: 20 agentı yönetmek çok karmaşık. 10 daha yönetilebilir.
+- sınırlı sayıda ana uzmanlık rolüyle başlar,
+- her yeni agent için bağımsız sözleşme, prompt, test ve yaşam döngüsü ihtiyacını kanıtlamayı zorunlu tutar,
+- deterministik servis veya tool ile çözülebilen işi agent yapmaz,
+- yalnız sorumluluk sınırı ve kalite ölçümü belirgin olduğunda yeni agent ekler.
 
-## Değerlendirilen Seçenekler
+İlk kanonik katalog 12 mantıksal rol içerir.
 
-### A. 20 ayrı agent (orijinal öneri)
+## Yeni agent kabul kriterleri
 
-**Eleyildi.** Aşırı granularite, test ve koordinasyon overhead'i.
+- Ayrı ve net sorumluluk sınırı var mı?
+- Bağımsız giriş/çıkış sözleşmesi var mı?
+- Farklı model, prompt veya tool politikası gerekiyor mu?
+- Bağımsız fixture testleri yazılabilir mi?
+- Ayrı confidence ve kalite metriği anlamlı mı?
+- Mevcut agenta eklenmesi single-responsibility ilkesini bozuyor mu?
+- Deterministik servis veya tool olarak çözülemiyor mu?
 
-### B. 10 domain agent + 1 Orchestrator (seçildi)
+## Sonuç
 
-**Kabul edildi.** Uzmanlık derinliği korunur, koordinasyon basitleşir.
-
-### C. 5 mega-agent
-
-**Eleyildi.** Tekrarlanabilirlik ve bağımsız test edilebilirlik kaybolur.
-
-## Sonuçlar
-
-### Olumlu
-
-- Agent sayısı yarıya iner (~50% azalma)
-- Test sayısı kontrollü kalır
-- Orchestrator daha az komponent yönetir
-
-### Olumsuz
-
-- Bazı agent'lar daha karmaşık specification gerektirir
-- Belki daha sonra sub-agent'lara bölünmesi gerekebilir
-
-## Değiştirme Koşulu
-
-Agent sayısı illa da büyüdüğünde (ör: Review Intelligence içinde 5 sub-agent), yeni ADR ile yeniden değerlendirilir.
+Agentların güncel listesi yalnız `docs/02-agents/agent-catalog.md` içinde tutulur. ADR kararın gerekçesini kaydeder; operasyonel katalog görevi görmez.
