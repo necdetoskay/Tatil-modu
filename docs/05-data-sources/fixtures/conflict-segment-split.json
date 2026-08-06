@@ -1,0 +1,28 @@
+{
+  "fixtureId": "CR-004",
+  "resolution": {
+    "conflictId": "conf-noise-001",
+    "entityId": "hotel-001",
+    "claimType": "noise_experience",
+    "conflictClass": "C4",
+    "severity": "informational",
+    "claims": [
+      "claim-family-noisy",
+      "claim-couple-quiet"
+    ],
+    "resolutionStatus": "partially_resolved",
+    "strategy": "segment_split",
+    "selectedClaimRef": null,
+    "preservedClaimRefs": [
+      "claim-family-noisy",
+      "claim-couple-quiet"
+    ],
+    "reasonCodes": [
+      "DIFFERENT_SEGMENT"
+    ],
+    "confidenceImpact": 0.0,
+    "crossCheckRequired": false,
+    "policyVersion": "1.0.0",
+    "warnings": []
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "fixtureId": "CR-001",
+  "resolution": {
+    "conflictId": "conf-parking-001",
+    "entityId": "hotel-001",
+    "claimType": "parking_policy",
+    "conflictClass": "C1",
+    "severity": "high",
+    "claims": [
+      "claim-official-free",
+      "claim-booking-paid"
+    ],
+    "resolutionStatus": "resolved",
+    "strategy": "prefer_authoritative",
+    "selectedClaimRef": "claim-official-free",
+    "preservedClaimRefs": [
+      "claim-official-free",
+      "claim-booking-paid"
+    ],
+    "reasonCodes": [
+      "HIGHER_AUTHORITY",
+      "FRESHER_SOURCE"
+    ],
+    "confidenceImpact": -0.08,
+    "crossCheckRequired": false,
+    "policyVersion": "1.0.0",
+    "warnings": []
+  }
+}

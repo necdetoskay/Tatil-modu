@@ -1,0 +1,140 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tatil-modu.local/schemas/data-sources/conflict-resolution.schema.json",
+  "title": "Conflict Resolution",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "conflictId",
+    "entityId",
+    "claimType",
+    "conflictClass",
+    "severity",
+    "claims",
+    "resolutionStatus",
+    "strategy",
+    "selectedClaimRef",
+    "preservedClaimRefs",
+    "reasonCodes",
+    "confidenceImpact",
+    "crossCheckRequired",
+    "policyVersion"
+  ],
+  "properties": {
+    "conflictId": {
+      "type": "string"
+    },
+    "entityId": {
+      "type": "string"
+    },
+    "claimType": {
+      "type": "string"
+    },
+    "conflictClass": {
+      "type": "string",
+      "enum": [
+        "C1",
+        "C2",
+        "C3",
+        "C4",
+        "C5",
+        "C6",
+        "C7",
+        "C8"
+      ]
+    },
+    "severity": {
+      "type": "string",
+      "enum": [
+        "none",
+        "informational",
+        "low",
+        "medium",
+        "high",
+        "critical"
+      ]
+    },
+    "claims": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 2
+    },
+    "resolutionStatus": {
+      "type": "string",
+      "enum": [
+        "resolved",
+        "partially_resolved",
+        "unresolved",
+        "not_a_conflict"
+      ]
+    },
+    "strategy": {
+      "type": "string",
+      "enum": [
+        "prefer_authoritative",
+        "prefer_fresher",
+        "prefer_direct_observation",
+        "prefer_higher_evidence_strength",
+        "segment_split",
+        "time_split",
+        "scope_split",
+        "normalize_units",
+        "cross_check_required",
+        "manual_review",
+        "preserve_unresolved"
+      ]
+    },
+    "selectedClaimRef": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "preservedClaimRefs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 2
+    },
+    "reasonCodes": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "HIGHER_AUTHORITY",
+          "FRESHER_SOURCE",
+          "STRONGER_EVIDENCE",
+          "DIRECT_OBSERVATION",
+          "DIFFERENT_SCOPE",
+          "DIFFERENT_TIME_WINDOW",
+          "DIFFERENT_SEGMENT",
+          "IDENTITY_MISMATCH",
+          "UNIT_NORMALIZED",
+          "INSUFFICIENT_DATA",
+          "CROSS_CHECK_REQUIRED",
+          "POLICY_EXPERIENCE_DIVERGENCE"
+        ]
+      }
+    },
+    "confidenceImpact": {
+      "type": "number",
+      "minimum": -1,
+      "maximum": 0
+    },
+    "crossCheckRequired": {
+      "type": "boolean"
+    },
+    "policyVersion": {
+      "type": "string"
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    }
+  }
+}
