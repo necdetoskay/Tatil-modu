@@ -1,0 +1,38 @@
+{
+  "testId": "DDA-011",
+  "name": "Çocuklu aile ağırlık uyarlaması",
+  "category": "scoring",
+  "input": {
+    "durationDays": 3,
+    "children": [
+      2,
+      6
+    ],
+    "baseWeights": {
+      "preferenceMatch": 0.25,
+      "accessibility": 0.2,
+      "seasonFit": 0.15,
+      "familyFit": 0.15,
+      "budgetFit": 0.1,
+      "experienceDiversity": 0.1,
+      "dataReliability": 0.05
+    }
+  },
+  "assertions": [
+    {
+      "path": "$.scoringProfile.weights.familyFit",
+      "operator": "equals",
+      "expected": 0.2
+    },
+    {
+      "path": "$.scoringProfile.weights.accessibility",
+      "operator": "equals",
+      "expected": 0.25
+    },
+    {
+      "path": "$.scoringProfile.weightSum",
+      "operator": "equals",
+      "expected": 1.0
+    }
+  ]
+}

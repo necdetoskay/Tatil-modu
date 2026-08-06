@@ -1,0 +1,42 @@
+{
+  "testId": "DDA-015",
+  "name": "Top üç aday çeşitliliği",
+  "category": "diversity",
+  "input": {
+    "requiredDiversity": true,
+    "candidates": [
+      {
+        "name": "A1",
+        "cluster": "sea",
+        "finalScore": 0.9
+      },
+      {
+        "name": "A2",
+        "cluster": "sea",
+        "finalScore": 0.88
+      },
+      {
+        "name": "A3",
+        "cluster": "sea",
+        "finalScore": 0.86
+      },
+      {
+        "name": "B1",
+        "cluster": "nature",
+        "finalScore": 0.84
+      }
+    ]
+  },
+  "assertions": [
+    {
+      "path": "$.ranking[2].name",
+      "operator": "equals",
+      "expected": "B1"
+    },
+    {
+      "path": "$.diversityAdjustments",
+      "operator": "minimumLength",
+      "expected": 1
+    }
+  ]
+}

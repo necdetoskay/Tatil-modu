@@ -1,0 +1,24 @@
+{
+  "testId": "DDA-012",
+  "name": "Hard constraint fail shortlist dışı",
+  "category": "elimination",
+  "input": {
+    "candidate": {
+      "name": "Candidate A",
+      "hardConstraintStatus": "fail",
+      "baseScore": 0.92
+    }
+  },
+  "assertions": [
+    {
+      "path": "$.candidate.eligibleForShortlist",
+      "operator": "equals",
+      "expected": false
+    },
+    {
+      "path": "$.candidate.rank",
+      "operator": "isNull",
+      "expected": null
+    }
+  ]
+}

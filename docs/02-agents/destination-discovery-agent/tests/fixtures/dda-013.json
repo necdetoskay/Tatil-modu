@@ -1,0 +1,18 @@
+{
+  "testId": "DDA-013",
+  "name": "Yol yükü cezası",
+  "category": "penalty",
+  "input": {
+    "durationDays": 2,
+    "oneWayTravelHours": 5.5,
+    "youngChildPresent": true,
+    "multiTransfer": false
+  },
+  "assertions": [
+    {
+      "path": "$.penalties.travelBurden",
+      "operator": "equals",
+      "expected": 0.2
+    }
+  ]
+}

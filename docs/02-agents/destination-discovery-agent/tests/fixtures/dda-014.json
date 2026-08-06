@@ -1,0 +1,34 @@
+{
+  "testId": "DDA-014",
+  "name": "Duplicate aday birleştirme",
+  "category": "deduplication",
+  "input": {
+    "candidates": [
+      {
+        "name": "Cunda",
+        "province": "Balıkesir",
+        "subregion": "Ayvalık"
+      },
+      {
+        "name": "Alibey Adası",
+        "province": "Balıkesir",
+        "subregion": "Ayvalık"
+      }
+    ],
+    "canonicalAliases": {
+      "Alibey Adası": "Cunda"
+    }
+  },
+  "assertions": [
+    {
+      "path": "$.metrics.candidateCount",
+      "operator": "equals",
+      "expected": 1
+    },
+    {
+      "path": "$.rejectedCandidates[*].rejectionCode",
+      "operator": "contains",
+      "expected": "DUPLICATE_CANDIDATE"
+    }
+  ]
+}
