@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tatil-modu.local/schemas/tools/tool-permission-policy.schema.json",
+  "title": "Tool Permission Policy",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "policyVersion",
+    "rules"
+  ],
+  "properties": {
+    "policyVersion": {
+      "type": "string"
+    },
+    "rules": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "ruleId",
+          "agentId",
+          "capability",
+          "decision"
+        ],
+        "properties": {
+          "ruleId": {
+            "type": "string"
+          },
+          "agentId": {
+            "type": "string"
+          },
+          "capability": {
+            "type": "string"
+          },
+          "executionModes": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "fixture",
+                "hybrid",
+                "live",
+                "replay"
+              ]
+            }
+          },
+          "decision": {
+            "type": "string",
+            "enum": [
+              "allow",
+              "allow_with_constraints",
+              "deny",
+              "require_orchestrator_approval",
+              "require_user_consent"
+            ]
+          },
+          "constraints": {
+            "type": "object",
+            "properties": {
+              "maxCost": {
+                "type": [
+                  "number",
+                  "null"
+                ],
+                "minimum": 0
+              },
+              "allowedProviders": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "requiredConsentScopes": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "maxResultCount": {
+                "type": [
+                  "integer",
+                  "null"
+                ],
+                "minimum": 1
+              },
+              "maxFreshnessAgeSeconds": {
+                "type": [
+                  "integer",
+                  "null"
+                ],
+                "minimum": 0
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
