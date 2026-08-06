@@ -1,0 +1,41 @@
+{
+  "testId": "TPA-001",
+  "name": "Temel çocuklu aile tatili",
+  "category": "normal",
+  "critical": true,
+  "input": {
+    "schemaVersion": "1.0.0",
+    "requestId": "TPA-001",
+    "locale": "tr-TR",
+    "userMessage": "Kocaeli'den Balıkesir'e üç günlük tatil istiyorum. İki yetişkin ve 6 ile 2 yaşlarında iki çocuğuz. Kendi aracımızla gideceğiz. Toplam bütçemiz 30.000 TL. Tarihi sen seçebilirsin.",
+    "runtimeContext": {
+      "currentDate": "2026-08-06",
+      "timezone": "Europe/Istanbul",
+      "channel": "test",
+      "testMode": true
+    }
+  },
+  "expectedStatus": "partial",
+  "assertions": [
+    {
+      "path": "$.origin.province",
+      "operator": "equals",
+      "expected": "Kocaeli"
+    },
+    {
+      "path": "$.destination.name",
+      "operator": "equals",
+      "expected": "Balıkesir"
+    },
+    {
+      "path": "$.travelParty.totalTravelers",
+      "operator": "equals",
+      "expected": 4
+    },
+    {
+      "path": "$.budget.amount",
+      "operator": "equals",
+      "expected": 30000
+    }
+  ]
+}

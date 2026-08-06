@@ -1,0 +1,12 @@
+{
+  "fixtureId": "profile-family-basic",
+  "agentName": "trip-profile",
+  "testType": "contract",
+  "description": "2 yetişkin, 2 çocuk (6 ve 2 yaşında), 3 günlük Bodrum tatili, 30000 TL bütçe, özel araba",
+  "createdAt": "2026-08-06",
+  "version": "1.0",
+  "tags": ["family", "private-car", "3-days", "domestic-travel", "budget-10k-per-night"],
+  "input": {
+    "userInput": "3 günlük Bodrum tatili yapmak istiyoruz. 2 yetişkin, 6 ve 2 yaşında iki çocuk var. Bütçemiz 30000 TL. Arabamız var, kendi arabamızla gideriz."
+  }
+}

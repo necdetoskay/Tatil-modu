@@ -1,0 +1,12 @@
+{
+  "fixtureId": "profile-missing-fields",
+  "agentName": "trip-profile",
+  "testType": "adversarial",
+  "description": "Sadece 'tatil yapmak istiyorum' → eksik alanlar, düşük confidence",
+  "createdAt": "2026-08-06",
+  "version": "1.0",
+  "tags": ["missing-fields", "adversarial", "low-confidence", "minimal-input"],
+  "input": {
+    "userInput": "Tatil yapmak istiyorum."
+  }
+}

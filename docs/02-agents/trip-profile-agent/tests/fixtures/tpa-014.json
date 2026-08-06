@@ -1,0 +1,29 @@
+{
+  "testId": "TPA-014",
+  "name": "Erişilebilirlik",
+  "category": "accessibility",
+  "critical": true,
+  "input": {
+    "schemaVersion": "1.0.0",
+    "requestId": "TPA-014",
+    "locale": "tr-TR",
+    "userMessage": "Annem tekerlekli sandalye kullanıyor. Merdivensiz tesis ve erişilebilir banyo zorunlu.",
+    "runtimeContext": {
+      "currentDate": "2026-08-06",
+      "timezone": "Europe/Istanbul",
+      "channel": "test",
+      "testMode": true
+    }
+  },
+  "expectedStatus": "partial",
+  "assertions": [
+    {
+      "path": "$.preferences.mustHaveFeatures",
+      "operator": "containsAll",
+      "expected": [
+        "step_free_access",
+        "accessible_bathroom"
+      ]
+    }
+  ]
+}

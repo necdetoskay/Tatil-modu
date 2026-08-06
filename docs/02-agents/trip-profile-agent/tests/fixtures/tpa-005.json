@@ -1,0 +1,26 @@
+{
+  "testId": "TPA-005",
+  "name": "Negatif çocuk yaşı",
+  "category": "invalid_input",
+  "critical": true,
+  "input": {
+    "schemaVersion": "1.0.0",
+    "requestId": "TPA-005",
+    "locale": "tr-TR",
+    "userMessage": "İki yetişkin ve yaşları 7 ile -2 olan iki çocukla tatile gideceğiz.",
+    "runtimeContext": {
+      "currentDate": "2026-08-06",
+      "timezone": "Europe/Istanbul",
+      "channel": "test",
+      "testMode": true
+    }
+  },
+  "expectedStatus": "invalid",
+  "assertions": [
+    {
+      "path": "$.validationErrors[*].code",
+      "operator": "contains",
+      "expected": "INVALID_CHILD_AGE"
+    }
+  ]
+}

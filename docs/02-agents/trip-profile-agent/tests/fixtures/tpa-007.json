@@ -1,0 +1,26 @@
+{
+  "testId": "TPA-007",
+  "name": "Konaklama ve otopark",
+  "category": "preference",
+  "critical": false,
+  "input": {
+    "schemaVersion": "1.0.0",
+    "requestId": "TPA-007",
+    "locale": "tr-TR",
+    "userMessage": "Butik otel veya pansiyon olabilir. Kendi aracımız olduğu için ücretsiz otopark mutlaka olmalı. Havuz olsa güzel olur.",
+    "runtimeContext": {
+      "currentDate": "2026-08-06",
+      "timezone": "Europe/Istanbul",
+      "channel": "test",
+      "testMode": true
+    }
+  },
+  "expectedStatus": "partial",
+  "assertions": [
+    {
+      "path": "$.preferences.mustHaveFeatures",
+      "operator": "contains",
+      "expected": "free_parking"
+    }
+  ]
+}

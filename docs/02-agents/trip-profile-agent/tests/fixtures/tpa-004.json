@@ -1,0 +1,26 @@
+{
+  "testId": "TPA-004",
+  "name": "Tarih süre çelişkisi",
+  "category": "conflict",
+  "critical": true,
+  "input": {
+    "schemaVersion": "1.0.0",
+    "requestId": "TPA-004",
+    "locale": "tr-TR",
+    "userMessage": "10 Eylül 2026 ile 12 Eylül 2026 arasında beş günlük bir tatil istiyorum.",
+    "runtimeContext": {
+      "currentDate": "2026-08-06",
+      "timezone": "Europe/Istanbul",
+      "channel": "test",
+      "testMode": true
+    }
+  },
+  "expectedStatus": "invalid",
+  "assertions": [
+    {
+      "path": "$.conflicts[*].code",
+      "operator": "contains",
+      "expected": "DATE_DURATION_MISMATCH"
+    }
+  ]
+}

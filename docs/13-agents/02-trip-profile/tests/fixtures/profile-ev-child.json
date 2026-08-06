@@ -1,0 +1,12 @@
+{
+  "fixtureId": "profile-ev-child",
+  "agentName": "trip-profile",
+  "testType": "scenario",
+  "description": "Elektrikli araç, yaş 2 çocuk, engelli erişim ihtiyacı",
+  "createdAt": "2026-08-06",
+  "version": "1.0",
+  "tags": ["electric-vehicle", "baby", "accessibility", "family"],
+  "input": {
+    "userInput": "Elektrikli aracım var. 2 yetişkin, 2 yaşında çocuk. Engelli erişimine de ihtiyaç duyuyoruz. 4 günlük Ege kıyıları tatili. Bütçe yok ama ortamı çok sevdik."
+  }
+}

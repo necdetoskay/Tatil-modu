@@ -1,0 +1,18 @@
+{
+  "fixtureId": "profile-negative-budget",
+  "testType": "behavioral",
+  "expected": {
+    "conflictFlags": ["budget_invalid"],
+    "budget": {
+      "totalTRY": { "max": 0, "note": "Negatif değer conflict olarak işaretlenir" }
+    },
+    "confidence": {
+      "score": { "max": 0.5 }
+    }
+  },
+  "checks": [
+    "CF-03 triggered: budget.totalTRY <= 0",
+    "conflictFlags contains 'budget_invalid'",
+    "confidence.score <= 0.5"
+  ]
+}

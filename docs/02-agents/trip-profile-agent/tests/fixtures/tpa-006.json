@@ -1,0 +1,26 @@
+{
+  "testId": "TPA-006",
+  "name": "Tatil türü öncelikleri",
+  "category": "preference",
+  "critical": true,
+  "input": {
+    "schemaVersion": "1.0.0",
+    "requestId": "TPA-006",
+    "locale": "tr-TR",
+    "userMessage": "Deniz birinci önceliğimiz. Sonra doğa ve yerel yemekler geliyor. Tarihi yerler çok önemli değil.",
+    "runtimeContext": {
+      "currentDate": "2026-08-06",
+      "timezone": "Europe/Istanbul",
+      "channel": "test",
+      "testMode": true
+    }
+  },
+  "expectedStatus": "partial",
+  "assertions": [
+    {
+      "path": "$.preferences.tripTypes[0].type",
+      "operator": "equals",
+      "expected": "sea"
+    }
+  ]
+}

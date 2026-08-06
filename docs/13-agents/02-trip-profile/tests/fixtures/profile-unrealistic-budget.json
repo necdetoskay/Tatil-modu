@@ -1,0 +1,12 @@
+{
+  "fixtureId": "profile-unrealistic-budget",
+  "agentName": "trip-profile",
+  "testType": "scenario",
+  "description": "200 TL/gece ama butik otel istiyor → budget_unrealistic conflict flag",
+  "createdAt": "2026-08-06",
+  "version": "1.0",
+  "tags": ["budget-conflict", "scenario", "budget-unrealistic"],
+  "input": {
+    "userInput": "3 günlük butik otelde tatil yapmak istiyorum. Bütçem 600 TL. 2 yetişkin."
+  }
+}

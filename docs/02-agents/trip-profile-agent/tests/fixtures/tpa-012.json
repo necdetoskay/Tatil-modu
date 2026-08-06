@@ -1,0 +1,26 @@
+{
+  "testId": "TPA-012",
+  "name": "Bütçe çelişkisi",
+  "category": "conflict",
+  "critical": true,
+  "input": {
+    "schemaVersion": "1.0.0",
+    "requestId": "TPA-012",
+    "locale": "tr-TR",
+    "userMessage": "Toplam tatil bütçem 30.000 TL. Otel için de 35.000 TL ayırabilirim.",
+    "runtimeContext": {
+      "currentDate": "2026-08-06",
+      "timezone": "Europe/Istanbul",
+      "channel": "test",
+      "testMode": true
+    }
+  },
+  "expectedStatus": "invalid",
+  "assertions": [
+    {
+      "path": "$.conflicts[*].code",
+      "operator": "contains",
+      "expected": "ACCOMMODATION_BUDGET_EXCEEDS_TOTAL"
+    }
+  ]
+}

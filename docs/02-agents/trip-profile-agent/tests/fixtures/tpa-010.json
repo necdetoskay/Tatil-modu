@@ -1,0 +1,31 @@
+{
+  "testId": "TPA-010",
+  "name": "Esnek tarih",
+  "category": "date_flexibility",
+  "critical": true,
+  "input": {
+    "schemaVersion": "1.0.0",
+    "requestId": "TPA-010",
+    "locale": "tr-TR",
+    "userMessage": "Ağustos sonu veya Eylül başında hafta içi üç günlük bir tatil olabilir. En uygun tarihleri sen seç.",
+    "runtimeContext": {
+      "currentDate": "2026-08-06",
+      "timezone": "Europe/Istanbul",
+      "channel": "test",
+      "testMode": true
+    }
+  },
+  "expectedStatus": "partial",
+  "assertions": [
+    {
+      "path": "$.dates.durationDays",
+      "operator": "equals",
+      "expected": 3
+    },
+    {
+      "path": "$.dates.agentMayRecommendDates",
+      "operator": "equals",
+      "expected": true
+    }
+  ]
+}

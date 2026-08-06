@@ -1,0 +1,26 @@
+{
+  "testId": "TPA-013",
+  "name": "Elektrikli araç",
+  "category": "transportation",
+  "critical": false,
+  "input": {
+    "schemaVersion": "1.0.0",
+    "requestId": "TPA-013",
+    "locale": "tr-TR",
+    "userMessage": "Elektrikli aracımızla gideceğiz. Rota üzerindeki hızlı şarj istasyonları önemli.",
+    "runtimeContext": {
+      "currentDate": "2026-08-06",
+      "timezone": "Europe/Istanbul",
+      "channel": "test",
+      "testMode": true
+    }
+  },
+  "expectedStatus": "partial",
+  "assertions": [
+    {
+      "path": "$.transportation.vehicleType",
+      "operator": "equals",
+      "expected": "electric_car"
+    }
+  ]
+}

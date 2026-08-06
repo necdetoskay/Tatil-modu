@@ -1,0 +1,42 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "TripProfileInput",
+  "description": "Trip Profile Agent ham girdi — doğal dil veya kısmi yapılandırılmış veri",
+  "type": "object",
+  "properties": {
+    "userInput": {
+      "type": "string",
+      "description": "Kullanıcının doğal dil ifadesi (sohbet, voice metni)"
+    },
+    "partialStructured": {
+      "type": "object",
+      "description": "Kısmi form verisi — kullanıcı formu kısmi doldurmuşsa",
+      "properties": {
+        "tripPurpose": { "type": "string" },
+        "startDate": { "type": "string", "format": "date" },
+        "endDate": { "type": "string", "format": "date" },
+        "durationDays": { "type": "integer", "minimum": 1 },
+        "adults": { "type": "integer", "minimum": 1 },
+        "childrenAges": { "type": "array", "items": { "type": "integer" } },
+        "budgetTRY": { "type": "number", "minimum": 0 },
+        "vehicleType": { "type": "string" },
+        "accommodationType": { "type": "string" },
+        "accessibilityNeeds": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "sessionContext": {
+      "type": "object",
+      "description": "Önceki mesajlar, oturum geçmişi",
+      "properties": {
+        "previousMessages": { "type": "array", "items": { "type": "string" } },
+        "visitedDestinations": { "type": "array", "items": { "type": "string" } },
+        "userHistory": { "type": "array", "description": "Geçmiş tatil planları" }
+      }
+    }
+  },
+  "anyOf": [
+    { "required": ["userInput"] },
+    { "required": ["partialStructured"] }
+  ],
+  "additionalProperties": false
+}

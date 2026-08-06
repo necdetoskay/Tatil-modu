@@ -1,0 +1,26 @@
+{
+  "testId": "TPA-011",
+  "name": "Konaklama bütçesi",
+  "category": "budget",
+  "critical": true,
+  "input": {
+    "schemaVersion": "1.0.0",
+    "requestId": "TPA-011",
+    "locale": "tr-TR",
+    "userMessage": "Otel için 15.000 TL ayırdım.",
+    "runtimeContext": {
+      "currentDate": "2026-08-06",
+      "timezone": "Europe/Istanbul",
+      "channel": "test",
+      "testMode": true
+    }
+  },
+  "expectedStatus": "partial",
+  "assertions": [
+    {
+      "path": "$.budget.scope",
+      "operator": "equals",
+      "expected": "accommodation_only"
+    }
+  ]
+}

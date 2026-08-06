@@ -1,0 +1,26 @@
+{
+  "testId": "TPA-008",
+  "name": "Muhafazakâr tesis",
+  "category": "special_requirement",
+  "critical": true,
+  "input": {
+    "schemaVersion": "1.0.0",
+    "requestId": "TPA-008",
+    "locale": "tr-TR",
+    "userMessage": "Denize gireceksek kadınlara özel plaj olmalı. Alkolsüz ve muhafazakâr bir tesis tercih ediyoruz.",
+    "runtimeContext": {
+      "currentDate": "2026-08-06",
+      "timezone": "Europe/Istanbul",
+      "channel": "test",
+      "testMode": true
+    }
+  },
+  "expectedStatus": "partial",
+  "assertions": [
+    {
+      "path": "$.specialRequirements[?(@.category=='beach')].strength",
+      "operator": "contains",
+      "expected": "hard"
+    }
+  ]
+}

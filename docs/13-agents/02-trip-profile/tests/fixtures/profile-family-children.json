@@ -1,0 +1,12 @@
+{
+  "fixtureId": "profile-family-children",
+  "agentName": "trip-profile",
+  "testType": "behavioral",
+  "description": "Çocukların yaşları 3 ve 5 → ageBand doğru mı çıkarılıyor?",
+  "createdAt": "2026-08-06",
+  "version": "1.0",
+  "tags": ["family", "child-age-band", "preschooler", "elementary"],
+  "input": {
+    "userInput": "2 yetişkin ve 3 ve 5 yaşındaki iki çocuk. 4 günlük Antalya tatili. Bütçe 25000 TL."
+  }
+}

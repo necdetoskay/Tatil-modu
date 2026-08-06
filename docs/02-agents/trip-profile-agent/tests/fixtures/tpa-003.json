@@ -1,0 +1,31 @@
+{
+  "testId": "TPA-003",
+  "name": "Sabit tarih uyumlu",
+  "category": "normal",
+  "critical": true,
+  "input": {
+    "schemaVersion": "1.0.0",
+    "requestId": "TPA-003",
+    "locale": "tr-TR",
+    "userMessage": "10 Eylül 2026 ile 12 Eylül 2026 arasında üç günlük Ayvalık tatili istiyoruz.",
+    "runtimeContext": {
+      "currentDate": "2026-08-06",
+      "timezone": "Europe/Istanbul",
+      "channel": "test",
+      "testMode": true
+    }
+  },
+  "expectedStatus": "partial",
+  "assertions": [
+    {
+      "path": "$.dates.mode",
+      "operator": "equals",
+      "expected": "fixed"
+    },
+    {
+      "path": "$.dates.durationDays",
+      "operator": "equals",
+      "expected": 3
+    }
+  ]
+}

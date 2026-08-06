@@ -1,0 +1,31 @@
+{
+  "testId": "TPA-002",
+  "name": "Bütçe belirtilmemiş",
+  "category": "missing_information",
+  "critical": true,
+  "input": {
+    "schemaVersion": "1.0.0",
+    "requestId": "TPA-002",
+    "locale": "tr-TR",
+    "userMessage": "İstanbul'dan Kapadokya'ya iki yetişkin olarak dört günlük bir gezi planlıyoruz. Kendi aracımız yok.",
+    "runtimeContext": {
+      "currentDate": "2026-08-06",
+      "timezone": "Europe/Istanbul",
+      "channel": "test",
+      "testMode": true
+    }
+  },
+  "expectedStatus": "partial",
+  "assertions": [
+    {
+      "path": "$.budget.amount",
+      "operator": "equals",
+      "expected": null
+    },
+    {
+      "path": "$.missingInformation[*].field",
+      "operator": "contains",
+      "expected": "budget.amount"
+    }
+  ]
+}

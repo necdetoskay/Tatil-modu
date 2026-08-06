@@ -1,0 +1,45 @@
+{
+  "fixtureId": "profile-family-basic",
+  "testType": "contract",
+  "expected": {
+    "tripPurpose": "family",
+    "travelers": {
+      "adults": 2,
+      "children": [
+        { "age": 6, "ageBand": "elementary" },
+        { "age": 2, "ageBand": "baby" }
+      ],
+      "elderlyCount": 0
+    },
+    "vehicle": {
+      "type": "private_car"
+    },
+    "budget": {
+      "totalTRY": 30000,
+      "currency": "TRY",
+      "perPersonPerNightTRY": 5000,
+      "budgetFlexibility": "moderate"
+    },
+    "temporal": {
+      "flexibility": "fixed",
+      "durationDays": 3
+    },
+    "childCareNeeds": true,
+    "confidence": {
+      "score": { "min": 0.85, "max": 1.0 }
+    },
+    "conflictFlags": [],
+    "warnings": []
+  },
+  "checks": [
+    "Schema valid",
+    "tripPurpose = family",
+    "children ages [6, 2] extracted correctly",
+    "ageBand 6 → elementary, 2 → baby",
+    "vehicle.type = private_car",
+    "budget.totalTRY = 30000",
+    "childCareNeeds = true (çocuk yaş < 6 var)",
+    "conflictFlags boş",
+    "confidence.score >= 0.85"
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "fixtureId": "profile-missing-fields",
+  "testType": "adversarial",
+  "expected": {
+    "confidence": {
+      "completeness": { "max": 0.3 },
+      "score": { "max": 0.3 }
+    },
+    "missingFields": { "minCount": 8, "note": "En az 8 zorunlu alan eksik" },
+    "warnings": ["input_insufficient_for_confident_profile"]
+  },
+  "checks": [
+    "confidence.completeness <= 0.3",
+    "confidence.score <= 0.3",
+    "missingFields count >= 8",
+    "Orchestrator should prompt user for more info",
+    "Schema still valid (all required fields present)"
+  ]
+}

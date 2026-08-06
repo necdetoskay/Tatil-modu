@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tatil-modu.local/schemas/trip-profile-agent/input.schema.json",
+  "title": "Trip Profile Agent Input",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "requestId",
+    "userMessage"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "requestId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "conversationId": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 128
+    },
+    "locale": {
+      "type": "string",
+      "default": "tr-TR",
+      "pattern": "^[a-z]{2}-[A-Z]{2}$"
+    },
+    "userMessage": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 12000
+    },
+    "knownUserContext": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "previousTripProfile": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "runtimeContext": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "currentDate": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
+        },
+        "timezone": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": "Europe/Istanbul"
+        },
+        "channel": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "web",
+            "mobile",
+            "api",
+            "test",
+            null
+          ]
+        },
+        "testMode": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    }
+  }
+}

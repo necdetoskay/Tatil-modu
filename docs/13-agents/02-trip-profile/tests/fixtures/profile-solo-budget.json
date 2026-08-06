@@ -1,0 +1,12 @@
+{
+  "fixtureId": "profile-solo-budget",
+  "agentName": "trip-profile",
+  "testType": "contract",
+  "description": "1 yetişkin, 5 günlük günlük gezinti, 8000 TL bütçe, otobüsle seyahat",
+  "createdAt": "2026-08-06",
+  "version": "1.0",
+  "tags": ["solo", "budget", "public-transport", "5-days", "exploration"],
+  "input": {
+    "userInput": "Tek başıma 5 günlük bir şehir gezintisi yapmak istiyorum. Bütçem 8000 TL. Otobüsle gideceğim, konaklama için herhangi bir yer uygun."
+  }
+}

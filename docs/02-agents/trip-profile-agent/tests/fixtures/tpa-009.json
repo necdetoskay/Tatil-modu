@@ -1,0 +1,50 @@
+{
+  "testId": "TPA-009",
+  "name": "Güncel mesaj öncelikli",
+  "category": "context_conflict",
+  "critical": true,
+  "input": {
+    "schemaVersion": "1.0.0",
+    "requestId": "TPA-009",
+    "locale": "tr-TR",
+    "userMessage": "Bu geziye bu kez yalnız gideceğim.",
+    "runtimeContext": {
+      "currentDate": "2026-08-06",
+      "timezone": "Europe/Istanbul",
+      "channel": "test",
+      "testMode": true
+    },
+    "knownUserContext": {
+      "homeLocation": {
+        "country": "Türkiye",
+        "province": "Kocaeli",
+        "district": null
+      },
+      "family": {
+        "adults": 2,
+        "children": [
+          {
+            "age": 6
+          },
+          {
+            "age": 2
+          }
+        ]
+      },
+      "preferredTransportation": "private_car"
+    }
+  },
+  "expectedStatus": "partial",
+  "assertions": [
+    {
+      "path": "$.travelParty.adults",
+      "operator": "equals",
+      "expected": 1
+    },
+    {
+      "path": "$.conflicts[*].code",
+      "operator": "contains",
+      "expected": "CURRENT_MESSAGE_CONTEXT_CONFLICT"
+    }
+  ]
+}
