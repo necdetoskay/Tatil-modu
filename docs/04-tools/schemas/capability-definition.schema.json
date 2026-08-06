@@ -1,0 +1,143 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tatil-modu.local/schemas/tools/capability-definition.schema.json",
+  "title": "Capability Definition",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "capabilityId",
+    "toolClassId",
+    "name",
+    "version",
+    "status",
+    "description",
+    "inputContract",
+    "outputContract",
+    "qualityMetrics",
+    "freshnessClass",
+    "costClass",
+    "privacyClass",
+    "allowedExecutionModes",
+    "sourceTraceRequired"
+  ],
+  "properties": {
+    "capabilityId": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]*\\.[a-z][a-z0-9_]*$"
+    },
+    "toolClassId": {
+      "type": "string",
+      "pattern": "^TL-[0-9]{3}$"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "proposed",
+        "contracted",
+        "fixture-tested",
+        "provider-mapped",
+        "live-tested",
+        "approved",
+        "deprecated",
+        "disabled"
+      ]
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1
+    },
+    "inputContract": {
+      "type": "string",
+      "minLength": 1
+    },
+    "outputContract": {
+      "type": "string",
+      "minLength": 1
+    },
+    "requiredFields": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "optionalFields": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "qualityMetrics": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    },
+    "freshnessClass": {
+      "type": "string",
+      "enum": [
+        "static",
+        "slow",
+        "medium",
+        "fast",
+        "realtime",
+        "not_applicable"
+      ]
+    },
+    "costClass": {
+      "type": "string",
+      "enum": [
+        "free",
+        "low",
+        "medium",
+        "high",
+        "variable",
+        "internal"
+      ]
+    },
+    "privacyClass": {
+      "type": "string",
+      "enum": [
+        "public",
+        "user_context",
+        "sensitive",
+        "restricted"
+      ]
+    },
+    "allowedExecutionModes": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "fixture",
+          "hybrid",
+          "live",
+          "replay",
+          "shadow"
+        ]
+      },
+      "minItems": 1
+    },
+    "supportedBatching": {
+      "type": "boolean",
+      "default": false
+    },
+    "sourceTraceRequired": {
+      "type": "boolean"
+    },
+    "dependencies": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

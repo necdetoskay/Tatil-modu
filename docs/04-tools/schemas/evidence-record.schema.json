@@ -1,0 +1,123 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tatil-modu.local/schemas/tools/evidence-record.schema.json",
+  "title": "Evidence Record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "evidenceId",
+    "evidenceType",
+    "entityId",
+    "claim",
+    "lineageLevel",
+    "sourceRefs",
+    "transformationRefs",
+    "confidence",
+    "freshnessStatus"
+  ],
+  "properties": {
+    "evidenceId": {
+      "type": "string"
+    },
+    "evidenceType": {
+      "type": "string"
+    },
+    "entityId": {
+      "type": "string"
+    },
+    "claim": {
+      "type": "string"
+    },
+    "lineageLevel": {
+      "type": "string",
+      "enum": [
+        "L1",
+        "L2",
+        "L3",
+        "L4"
+      ]
+    },
+    "sourceRefs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    },
+    "transformationRefs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "timeWindow": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "start": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
+        },
+        "end": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
+        }
+      }
+    },
+    "sampleSize": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 0
+    },
+    "supportCount": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 0
+    },
+    "contradictionCount": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 0
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "freshnessStatus": {
+      "type": "string",
+      "enum": [
+        "fresh",
+        "acceptable",
+        "stale",
+        "unknown"
+      ]
+    },
+    "segment": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    }
+  }
+}

@@ -1,0 +1,124 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tatil-modu.local/schemas/tools/source-trace-record.schema.json",
+  "title": "Source Trace Record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "sourceId",
+    "sourceType",
+    "providerId",
+    "adapterVersion",
+    "retrievedAt",
+    "trustTier",
+    "verificationStatus",
+    "privacyClass"
+  ],
+  "properties": {
+    "sourceId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sourceType": {
+      "type": "string",
+      "enum": [
+        "official_api",
+        "official_page",
+        "licensed_provider",
+        "map_platform",
+        "booking_platform",
+        "review_platform",
+        "general_web",
+        "user_input",
+        "internal_dataset",
+        "fixture",
+        "replay"
+      ]
+    },
+    "providerId": {
+      "type": "string"
+    },
+    "adapterVersion": {
+      "type": "string"
+    },
+    "canonicalUrl": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "providerEntityId": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "retrievedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "effectiveAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "expiresAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "trustTier": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 4
+    },
+    "verificationStatus": {
+      "type": "string",
+      "enum": [
+        "verified",
+        "cross_checked",
+        "single_source",
+        "unverified",
+        "conflicting",
+        "stale",
+        "rejected"
+      ]
+    },
+    "license": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "contentHash": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "privacyClass": {
+      "type": "string",
+      "enum": [
+        "public",
+        "user_context",
+        "sensitive",
+        "restricted"
+      ]
+    },
+    "retentionClass": {
+      "type": "string",
+      "enum": [
+        "ephemeral",
+        "short_term",
+        "operational",
+        "audit",
+        "restricted"
+      ],
+      "default": "operational"
+    }
+  }
+}
