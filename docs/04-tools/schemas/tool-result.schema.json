@@ -1,0 +1,293 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tatil-modu.local/schemas/tools/tool-result.schema.json",
+  "title": "Tool Result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "requestId",
+    "traceId",
+    "toolId",
+    "capability",
+    "status",
+    "provider",
+    "data",
+    "sources",
+    "freshness",
+    "usage",
+    "timing",
+    "warnings",
+    "errors"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "requestId": {
+      "type": "string"
+    },
+    "traceId": {
+      "type": "string"
+    },
+    "spanId": {
+      "type": "string"
+    },
+    "toolId": {
+      "type": "string"
+    },
+    "capability": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "success",
+        "partial",
+        "failed",
+        "cached",
+        "fixture"
+      ]
+    },
+    "provider": {
+      "type": "object",
+      "required": [
+        "providerId",
+        "adapterVersion"
+      ],
+      "properties": {
+        "providerId": {
+          "type": "string"
+        },
+        "adapterVersion": {
+          "type": "string"
+        },
+        "providerApiVersion": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "fallbackUsed": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    "data": {
+      "type": [
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/source"
+      }
+    },
+    "freshness": {
+      "type": "object",
+      "required": [
+        "retrievedAt",
+        "freshnessStatus"
+      ],
+      "properties": {
+        "retrievedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "effectiveAt": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "expiresAt": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "freshnessStatus": {
+          "type": "string",
+          "enum": [
+            "fresh",
+            "acceptable",
+            "stale",
+            "unknown"
+          ]
+        }
+      }
+    },
+    "usage": {
+      "type": "object",
+      "required": [
+        "currency",
+        "estimatedCost",
+        "actualCost",
+        "cacheHit"
+      ],
+      "properties": {
+        "currency": {
+          "type": "string"
+        },
+        "estimatedCost": {
+          "type": "number",
+          "minimum": 0
+        },
+        "actualCost": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "cacheHit": {
+          "type": "boolean"
+        },
+        "providerUnits": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        }
+      }
+    },
+    "timing": {
+      "type": "object",
+      "required": [
+        "startedAt",
+        "completedAt",
+        "latencyMs",
+        "attemptCount"
+      ],
+      "properties": {
+        "startedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "completedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "latencyMs": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "attemptCount": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "errors": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/error"
+      }
+    },
+    "rawResponseReference": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "$defs": {
+    "source": {
+      "type": "object",
+      "required": [
+        "sourceId",
+        "sourceType",
+        "providerId",
+        "retrievedAt",
+        "trustTier"
+      ],
+      "properties": {
+        "sourceId": {
+          "type": "string"
+        },
+        "sourceType": {
+          "type": "string"
+        },
+        "providerId": {
+          "type": "string"
+        },
+        "canonicalUrl": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "entityId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "retrievedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "trustTier": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4
+        },
+        "license": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "error": {
+      "type": "object",
+      "required": [
+        "code",
+        "category",
+        "retryable",
+        "message"
+      ],
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "category": {
+          "type": "string"
+        },
+        "retryable": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        },
+        "providerCode": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "details": {
+          "type": [
+            "object",
+            "null"
+          ]
+        }
+      }
+    }
+  }
+}

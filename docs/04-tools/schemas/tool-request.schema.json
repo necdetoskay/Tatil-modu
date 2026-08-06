@@ -1,0 +1,199 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tatil-modu.local/schemas/tools/tool-request.schema.json",
+  "title": "Tool Request",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "requestId",
+    "traceId",
+    "toolId",
+    "capability",
+    "executionMode",
+    "caller",
+    "input",
+    "policy"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "requestId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "traceId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "parentSpanId": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "toolId": {
+      "type": "string",
+      "pattern": "^TL-[0-9]{3}$"
+    },
+    "capability": {
+      "type": "string",
+      "minLength": 1
+    },
+    "capabilityVersion": {
+      "type": "string",
+      "default": "1.0.0"
+    },
+    "executionMode": {
+      "type": "string",
+      "enum": [
+        "fixture",
+        "hybrid",
+        "live"
+      ]
+    },
+    "caller": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "agentId",
+        "agentVersion"
+      ],
+      "properties": {
+        "agentId": {
+          "type": "string"
+        },
+        "agentVersion": {
+          "type": "string"
+        },
+        "workflowId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "input": {
+      "type": "object"
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "timeoutMs",
+        "maxRetries",
+        "allowFallback",
+        "cachePolicy",
+        "budget"
+      ],
+      "properties": {
+        "timeoutMs": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 120000
+        },
+        "maxRetries": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 3
+        },
+        "allowFallback": {
+          "type": "boolean"
+        },
+        "allowedProviders": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        },
+        "deniedProviders": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        },
+        "cachePolicy": {
+          "type": "object",
+          "required": [
+            "mode"
+          ],
+          "properties": {
+            "mode": {
+              "type": "string",
+              "enum": [
+                "use_cache",
+                "refresh",
+                "bypass",
+                "fixture_only"
+              ]
+            },
+            "maxAgeSeconds": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "minimum": 0
+            }
+          }
+        },
+        "budget": {
+          "type": "object",
+          "required": [
+            "currency",
+            "maxCost"
+          ],
+          "properties": {
+            "currency": {
+              "type": "string",
+              "enum": [
+                "USD",
+                "TRY",
+                "EUR"
+              ]
+            },
+            "maxCost": {
+              "type": "number",
+              "minimum": 0
+            }
+          }
+        }
+      }
+    },
+    "context": {
+      "type": "object",
+      "properties": {
+        "locale": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "timezone": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "currentDateTime": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "userConsentScope": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        }
+      }
+    }
+  }
+}
