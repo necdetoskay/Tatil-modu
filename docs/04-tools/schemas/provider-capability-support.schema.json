@@ -1,0 +1,124 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tatil-modu.local/schemas/tools/provider-capability-support.schema.json",
+  "title": "Provider Capability Support",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "providerId",
+    "adapterId",
+    "adapterVersion",
+    "capabilities"
+  ],
+  "properties": {
+    "providerId": {
+      "type": "string"
+    },
+    "adapterId": {
+      "type": "string"
+    },
+    "adapterVersion": {
+      "type": "string"
+    },
+    "capabilities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "capabilityId",
+          "capabilityVersions",
+          "regions",
+          "executionModes",
+          "batch",
+          "status"
+        ],
+        "properties": {
+          "capabilityId": {
+            "type": "string"
+          },
+          "capabilityVersions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1
+          },
+          "regions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "executionModes": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "fixture",
+                "hybrid",
+                "live",
+                "replay",
+                "shadow"
+              ]
+            }
+          },
+          "batch": {
+            "type": "boolean"
+          },
+          "realtime": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "traffic": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "pricingRef": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "privacyClass": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "public",
+              "user_context",
+              "sensitive",
+              "restricted",
+              null
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "candidate",
+              "fixture-tested",
+              "live-tested",
+              "approved",
+              "degraded",
+              "disabled",
+              "deprecated"
+            ]
+          },
+          "qualityScore": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "minimum": 0,
+            "maximum": 1
+          }
+        }
+      }
+    }
+  }
+}
