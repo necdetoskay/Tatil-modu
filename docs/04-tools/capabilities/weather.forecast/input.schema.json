@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tatil-modu.local/schemas/capabilities/weather.forecast/input.schema.json",
+  "title": "weather.forecast input",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "location",
+    "startDateTime",
+    "horizonHours",
+    "granularity"
+  ],
+  "properties": {
+    "location": {
+      "type": "object",
+      "required": [
+        "canonicalPlaceId"
+      ],
+      "properties": {
+        "canonicalPlaceId": {
+          "type": "string"
+        },
+        "coordinates": {
+          "type": [
+            "object",
+            "null"
+          ]
+        }
+      }
+    },
+    "startDateTime": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "horizonHours": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 384
+    },
+    "granularity": {
+      "type": "string",
+      "enum": [
+        "hourly",
+        "daily"
+      ]
+    },
+    "requestedFields": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "temperature",
+          "feels_like",
+          "precipitation_probability",
+          "precipitation_amount",
+          "wind_speed",
+          "wind_gust",
+          "condition",
+          "humidity",
+          "uv_index"
+        ]
+      },
+      "uniqueItems": true
+    },
+    "units": {
+      "type": "string",
+      "enum": [
+        "metric",
+        "imperial"
+      ],
+      "default": "metric"
+    }
+  }
+}

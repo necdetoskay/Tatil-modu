@@ -1,0 +1,159 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tatil-modu.local/schemas/capabilities/weather.forecast/output.schema.json",
+  "title": "weather.forecast output",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "status",
+    "location",
+    "generatedAt",
+    "forecastStart",
+    "forecastEnd",
+    "granularity",
+    "items",
+    "warnings",
+    "sourceRefs"
+  ],
+  "properties": {
+    "status": {
+      "type": "string",
+      "enum": [
+        "success",
+        "partial",
+        "failed"
+      ]
+    },
+    "location": {
+      "type": "object"
+    },
+    "generatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "forecastStart": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "forecastEnd": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "granularity": {
+      "type": "string",
+      "enum": [
+        "hourly",
+        "daily"
+      ]
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "time",
+          "temperatureC",
+          "feelsLikeC",
+          "precipitationProbability",
+          "precipitationAmountMm",
+          "windSpeedKph",
+          "windGustKph",
+          "condition",
+          "humidityPercent",
+          "uvIndex",
+          "providerConfidence"
+        ],
+        "properties": {
+          "time": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "temperatureC": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "feelsLikeC": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "precipitationProbability": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "minimum": 0,
+            "maximum": 1
+          },
+          "precipitationAmountMm": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "minimum": 0
+          },
+          "windSpeedKph": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "minimum": 0
+          },
+          "windGustKph": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "minimum": 0
+          },
+          "condition": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "humidityPercent": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "minimum": 0,
+            "maximum": 100
+          },
+          "uvIndex": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "minimum": 0
+          },
+          "providerConfidence": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "minimum": 0,
+            "maximum": 1
+          }
+        }
+      }
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "sourceRefs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    }
+  }
+}

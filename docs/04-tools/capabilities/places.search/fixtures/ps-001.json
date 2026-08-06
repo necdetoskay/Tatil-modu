@@ -1,0 +1,72 @@
+{
+  "fixtureId": "PS-001",
+  "input": {
+    "scope": {
+      "type": "administrative_area",
+      "canonicalAreaId": "tr-balikesir-ayvalik",
+      "center": null,
+      "radiusMeters": null,
+      "boundingBox": null,
+      "routeRef": null
+    },
+    "query": {
+      "text": "çocukla gidilebilecek plaj",
+      "categories": [
+        "beach"
+      ],
+      "mustMatchAllCategories": false
+    },
+    "filters": {
+      "openNow": null,
+      "minimumRating": 4.0,
+      "minimumReviewCount": 100,
+      "attributes": [
+        "family_friendly"
+      ],
+      "excludeStatuses": [
+        "permanently_closed"
+      ]
+    },
+    "locale": "tr-TR",
+    "limit": 20,
+    "pageToken": null
+  },
+  "output": {
+    "status": "success",
+    "results": [
+      {
+        "canonicalPlaceId": "place-sarimsakli-beach",
+        "name": "Sarımsaklı Plajı",
+        "categories": [
+          "beach"
+        ],
+        "coordinates": {
+          "latitude": 39.269,
+          "longitude": 26.652
+        },
+        "address": {
+          "country": "TR",
+          "province": "Balıkesir",
+          "district": "Ayvalık"
+        },
+        "providerEntityIds": [
+          {
+            "providerId": "fixture-provider",
+            "entityId": "sp-001"
+          }
+        ],
+        "operationalStatus": "operational",
+        "rating": 4.3,
+        "reviewCount": 2400,
+        "attributes": {
+          "family_friendly": true
+        },
+        "sourceRefs": [
+          "src-place-001"
+        ]
+      }
+    ],
+    "nextPageToken": null,
+    "warnings": []
+  }
+}

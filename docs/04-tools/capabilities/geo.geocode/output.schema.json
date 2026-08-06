@@ -1,0 +1,130 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tatil-modu.local/schemas/capabilities/geo.geocode/output.schema.json",
+  "title": "geo.geocode output",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "status",
+    "query",
+    "ambiguity",
+    "results",
+    "warnings"
+  ],
+  "properties": {
+    "status": {
+      "type": "string",
+      "enum": [
+        "success",
+        "partial",
+        "failed"
+      ]
+    },
+    "query": {
+      "type": "string"
+    },
+    "ambiguity": {
+      "type": "boolean"
+    },
+    "results": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "canonicalPlaceId",
+          "canonicalName",
+          "placeType",
+          "coordinates",
+          "country",
+          "administrativeHierarchy",
+          "providerEntityIds",
+          "confidence",
+          "sourceRefs"
+        ],
+        "properties": {
+          "canonicalPlaceId": {
+            "type": "string"
+          },
+          "canonicalName": {
+            "type": "string"
+          },
+          "placeType": {
+            "type": "string",
+            "enum": [
+              "country",
+              "region",
+              "province",
+              "district",
+              "town",
+              "neighborhood",
+              "place"
+            ]
+          },
+          "coordinates": {
+            "type": "object",
+            "required": [
+              "latitude",
+              "longitude"
+            ],
+            "properties": {
+              "latitude": {
+                "type": "number",
+                "minimum": -90,
+                "maximum": 90
+              },
+              "longitude": {
+                "type": "number",
+                "minimum": -180,
+                "maximum": 180
+              }
+            }
+          },
+          "country": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "administrativeHierarchy": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "providerEntityIds": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            },
+            "minItems": 1
+          },
+          "matchReasons": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "sourceRefs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1
+          }
+        }
+      }
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    }
+  }
+}

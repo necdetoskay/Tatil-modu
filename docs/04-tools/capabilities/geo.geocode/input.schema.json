@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tatil-modu.local/schemas/capabilities/geo.geocode/input.schema.json",
+  "title": "geo.geocode input",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "query",
+    "limit"
+  ],
+  "properties": {
+    "query": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 500
+    },
+    "countryBias": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 2,
+      "maxLength": 2
+    },
+    "regionBias": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "locale": {
+      "type": "string",
+      "default": "tr-TR"
+    },
+    "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 10
+    },
+    "resolutionPreference": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "country",
+          "region",
+          "province",
+          "district",
+          "town",
+          "neighborhood",
+          "place"
+        ]
+      },
+      "default": []
+    },
+    "hardCountryFilter": {
+      "type": "boolean",
+      "default": false
+    }
+  }
+}

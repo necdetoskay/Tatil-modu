@@ -1,0 +1,129 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tatil-modu.local/schemas/capabilities/directions.matrix/output.schema.json",
+  "title": "directions.matrix output",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "status",
+    "origins",
+    "destinations",
+    "matrix",
+    "generatedAt",
+    "warnings"
+  ],
+  "properties": {
+    "status": {
+      "type": "string",
+      "enum": [
+        "success",
+        "partial",
+        "failed"
+      ]
+    },
+    "origins": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "destinations": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "matrix": {
+      "type": "array",
+      "items": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "status",
+            "reachable",
+            "distanceMeters",
+            "durationSeconds",
+            "trafficDurationSeconds",
+            "flags",
+            "sourceRefs"
+          ],
+          "properties": {
+            "status": {
+              "type": "string",
+              "enum": [
+                "success",
+                "partial",
+                "failed"
+              ]
+            },
+            "reachable": {
+              "type": "boolean"
+            },
+            "distanceMeters": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "minimum": 0
+            },
+            "durationSeconds": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "minimum": 0
+            },
+            "trafficDurationSeconds": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "minimum": 0
+            },
+            "flags": {
+              "type": "object",
+              "properties": {
+                "toll": {
+                  "type": [
+                    "boolean",
+                    "null"
+                  ]
+                },
+                "ferry": {
+                  "type": [
+                    "boolean",
+                    "null"
+                  ]
+                },
+                "highway": {
+                  "type": [
+                    "boolean",
+                    "null"
+                  ]
+                }
+              }
+            },
+            "sourceRefs": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "generatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    }
+  }
+}

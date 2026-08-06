@@ -1,0 +1,127 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tatil-modu.local/schemas/capabilities/directions.matrix/input.schema.json",
+  "title": "directions.matrix input",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "origins",
+    "destinations",
+    "travelMode"
+  ],
+  "properties": {
+    "origins": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 25,
+      "items": {
+        "$ref": "#/$defs/locationRef"
+      }
+    },
+    "destinations": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 25,
+      "items": {
+        "$ref": "#/$defs/locationRef"
+      }
+    },
+    "travelMode": {
+      "type": "string",
+      "enum": [
+        "driving",
+        "walking",
+        "cycling",
+        "transit"
+      ]
+    },
+    "departureTime": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "trafficMode": {
+      "type": "string",
+      "enum": [
+        "none",
+        "best_guess",
+        "optimistic",
+        "pessimistic"
+      ],
+      "default": "none"
+    },
+    "avoid": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "tolls",
+          "highways",
+          "ferries",
+          "unpaved"
+        ]
+      },
+      "uniqueItems": true
+    },
+    "vehicleContext": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "vehicleType": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "electric": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        }
+      }
+    }
+  },
+  "$defs": {
+    "locationRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "canonicalPlaceId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "coordinates": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "properties": {
+            "latitude": {
+              "type": "number",
+              "minimum": -90,
+              "maximum": 90
+            },
+            "longitude": {
+              "type": "number",
+              "minimum": -180,
+              "maximum": 180
+            }
+          }
+        }
+      }
+    }
+  }
+}

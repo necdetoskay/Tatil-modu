@@ -1,0 +1,53 @@
+{
+  "fixtureId": "GEO-001",
+  "input": {
+    "query": "Ayvalık Balıkesir",
+    "countryBias": "TR",
+    "regionBias": "Balıkesir",
+    "locale": "tr-TR",
+    "limit": 3,
+    "resolutionPreference": [
+      "district"
+    ],
+    "hardCountryFilter": true
+  },
+  "output": {
+    "status": "success",
+    "query": "Ayvalık Balıkesir",
+    "ambiguity": false,
+    "results": [
+      {
+        "canonicalPlaceId": "tr-balikesir-ayvalik",
+        "canonicalName": "Ayvalık",
+        "placeType": "district",
+        "coordinates": {
+          "latitude": 39.317,
+          "longitude": 26.695
+        },
+        "country": "TR",
+        "administrativeHierarchy": [
+          {
+            "type": "province",
+            "name": "Balıkesir"
+          }
+        ],
+        "providerEntityIds": [
+          {
+            "providerId": "fixture-provider",
+            "entityId": "ayvalik-001"
+          }
+        ],
+        "matchReasons": [
+          "country_bias_match",
+          "region_bias_match",
+          "district_exact_match"
+        ],
+        "confidence": 0.99,
+        "sourceRefs": [
+          "src-geo-001"
+        ]
+      }
+    ],
+    "warnings": []
+  }
+}

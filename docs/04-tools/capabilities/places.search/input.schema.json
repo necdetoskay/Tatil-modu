@@ -1,0 +1,140 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tatil-modu.local/schemas/capabilities/places.search/input.schema.json",
+  "title": "places.search input",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "scope",
+    "query",
+    "limit"
+  ],
+  "properties": {
+    "scope": {
+      "type": "object",
+      "required": [
+        "type"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "radius",
+            "bounding_box",
+            "administrative_area",
+            "route_corridor"
+          ]
+        },
+        "center": {
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "radiusMeters": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1
+        },
+        "boundingBox": {
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "canonicalAreaId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "routeRef": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "query": {
+      "type": "object",
+      "required": [
+        "text",
+        "categories"
+      ],
+      "properties": {
+        "text": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "categories": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "mustMatchAllCategories": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    "filters": {
+      "type": "object",
+      "properties": {
+        "openNow": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "minimumRating": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 5
+        },
+        "minimumReviewCount": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "attributes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "excludeStatuses": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "locale": {
+      "type": "string",
+      "default": "tr-TR"
+    },
+    "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100
+    },
+    "pageToken": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

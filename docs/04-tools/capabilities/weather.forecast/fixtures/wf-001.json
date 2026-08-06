@@ -1,0 +1,48 @@
+{
+  "fixtureId": "WF-001",
+  "input": {
+    "location": {
+      "canonicalPlaceId": "tr-balikesir-ayvalik",
+      "coordinates": null
+    },
+    "startDateTime": "2026-09-01T00:00:00+03:00",
+    "horizonHours": 48,
+    "granularity": "daily",
+    "requestedFields": [
+      "temperature",
+      "precipitation_probability",
+      "wind_speed",
+      "condition"
+    ],
+    "units": "metric"
+  },
+  "output": {
+    "status": "success",
+    "location": {
+      "canonicalPlaceId": "tr-balikesir-ayvalik"
+    },
+    "generatedAt": "2026-08-30T06:00:00Z",
+    "forecastStart": "2026-09-01T00:00:00+03:00",
+    "forecastEnd": "2026-09-02T23:59:59+03:00",
+    "granularity": "daily",
+    "items": [
+      {
+        "time": "2026-09-01T12:00:00+03:00",
+        "temperatureC": 29.0,
+        "feelsLikeC": 30.0,
+        "precipitationProbability": 0.1,
+        "precipitationAmountMm": 0.0,
+        "windSpeedKph": 18.0,
+        "windGustKph": 28.0,
+        "condition": "partly_cloudy",
+        "humidityPercent": 58.0,
+        "uvIndex": 7.0,
+        "providerConfidence": 0.84
+      }
+    ],
+    "warnings": [],
+    "sourceRefs": [
+      "src-weather-001"
+    ]
+  }
+}

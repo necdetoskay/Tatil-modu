@@ -1,0 +1,77 @@
+{
+  "fixtureId": "DM-001",
+  "input": {
+    "origins": [
+      {
+        "id": "kocaeli",
+        "canonicalPlaceId": "tr-kocaeli"
+      }
+    ],
+    "destinations": [
+      {
+        "id": "ayvalik",
+        "canonicalPlaceId": "tr-balikesir-ayvalik"
+      },
+      {
+        "id": "erdek",
+        "canonicalPlaceId": "tr-balikesir-erdek"
+      }
+    ],
+    "travelMode": "driving",
+    "departureTime": "2026-09-01T08:00:00+03:00",
+    "trafficMode": "best_guess",
+    "avoid": []
+  },
+  "output": {
+    "status": "success",
+    "origins": [
+      {
+        "id": "kocaeli"
+      }
+    ],
+    "destinations": [
+      {
+        "id": "ayvalik"
+      },
+      {
+        "id": "erdek"
+      }
+    ],
+    "matrix": [
+      [
+        {
+          "status": "success",
+          "reachable": true,
+          "distanceMeters": 390000,
+          "durationSeconds": 17100,
+          "trafficDurationSeconds": 18300,
+          "flags": {
+            "toll": true,
+            "ferry": false,
+            "highway": true
+          },
+          "sourceRefs": [
+            "src-dir-001"
+          ]
+        },
+        {
+          "status": "success",
+          "reachable": true,
+          "distanceMeters": 285000,
+          "durationSeconds": 12600,
+          "trafficDurationSeconds": 13800,
+          "flags": {
+            "toll": true,
+            "ferry": false,
+            "highway": true
+          },
+          "sourceRefs": [
+            "src-dir-002"
+          ]
+        }
+      ]
+    ],
+    "generatedAt": "2026-08-06T13:00:00Z",
+    "warnings": []
+  }
+}
