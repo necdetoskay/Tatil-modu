@@ -37,8 +37,8 @@ Bu klasörde TypeScript type, Zod schema, JSON Schema dosyası veya runtime vali
 
 | Sıra | Contract | Dosya | Durum |
 |---:|---|---|---|
-| 1 | Travel Request Contract | `travel-request-contract.md` | next |
-| 2 | Constraint Policy Contract | `constraint-policy-contract.md` | planned |
+| 1 | Travel Request Contract | [`travel-request-contract.md`](travel-request-contract.md) | drafted |
+| 2 | Constraint Policy Contract | `constraint-policy-contract.md` | next |
 | 3 | Family Suitability Contract | `family-suitability-contract.md` | planned |
 | 4 | Destination Candidate Contract | `destination-candidate-contract.md` | planned |
 | 5 | Route Logistics Contract | `route-logistics-contract.md` | planned |
@@ -129,14 +129,15 @@ Final kullanıcı cevabına taşınmaması gereken iç alan var mı?
 travel-request-contract.md
 ```
 
-Bu contract, `trip-intake-agent.md` çıktısının canonical biçimini tanımlayacaktır.
+Bu contract, `trip-intake-agent.md` çıktısının canonical biçimini tanımlar.
 
 ## Current status
 
 ```yaml
 contract_design_state: active
-completed_contracts: []
-next_contract: travel-request-contract.md
+completed_contracts:
+  - travel-request-contract.md
+next_contract: constraint-policy-contract.md
 implementation_allowed: false
 prototype_allowed: false
 schema_code_allowed: false
