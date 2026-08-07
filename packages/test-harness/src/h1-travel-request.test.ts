@@ -1,6 +1,6 @@
 import { readFile } from 'node:fs/promises';
 import { describe, expect, it } from 'vitest';
-import { safeParseTravelRequest } from '../../contracts/src/index';
+import { safeParseTravelRequest } from '../../contracts/src/index.js';
 
 async function loadFixture() {
   const url = new URL('../../test-fixtures/fixtures/trip-intake/TM-TI-HP-001.json', import.meta.url);
