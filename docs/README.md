@@ -77,9 +77,9 @@ Bu dosya dokümantasyonun ana giriş noktasıdır. Her konu için tek bir kanoni
 | Canonical agent specifications | first phase tamamlandı; kod/prototype kapalı |
 | Canonical contracts | first phase tamamlandı; kod/prototype kapalı |
 | Canonical fixtures and evaluation | first phase tamamlandı; kod/prototype/test runner kapalı |
-| Canonical tool and capability design | aktif; ilk artifact Capability Design Overview |
+| Canonical tool and capability design | first phase tamamlandı; adapter/provider/live tool kapalı |
+| Prompt Framework | sıradaki aşama; kod/prototype kapalı |
 | Decision Policy Engine | bekliyor |
-| Prompt Framework | bekliyor |
 | Memory Architecture | bekliyor |
 | Quality Engine | bekliyor |
 | Orchestrator | bekliyor |
@@ -99,4 +99,5 @@ Bu dosya dokümantasyonun ana giriş noktasıdır. Her konu için tek bir kanoni
 10. Canonical agent specification dosyaları `11-agent-specifications/` altında tutulur; `02-agents/` pre-freeze referans olarak kalır.
 11. Canonical handoff contract tasarımları `12-contracts/` altında tutulur; schema code ve runtime validator değildir.
 12. Canonical fixture ve evaluation tasarımları `13-fixtures-and-evaluation/` altında tutulur; test runner, CI veya otomasyon kodu değildir.
-13. Canonical tool ve capability tasarımları `14-tool-and-capability-design/` altında tutulacaktır; gerçek tool çağrısı, adapter kodu veya provider entegrasyonu değildir.
+13. Canonical tool ve capability tasarımları `14-tool-and-capability-design/` altında tutulur; gerçek tool çağrısı, adapter kodu veya provider entegrasyonu değildir.
+14. Prompt framework tasarımları `15-prompts/` altında tutulacaktır; runtime prompt engine veya production prompt routing değildir.
