@@ -6,6 +6,28 @@ Tatil planlamak özellikle çocuklu aileler için yalnızca “nereye gidelim?�
 
 Bu repo, bu karmaşık kararı tek bir sohbet cevabından çıkarıp; sözleşmeli agentlar, doğrulanabilir veri katmanları, açık mimari sınırlar ve test edilebilir planlama modülleriyle çalışan bir aile tatili karar sistemi haline getirmek için hazırlanmıştır.
 
+## Repo iki ana bilgi alanı içerir
+
+Bu repository içinde iki farklı ama ilişkili doküman alanı vardır:
+
+| Alan | Yol | Kapsam |
+|---|---|---|
+| Tatil Modu ürün/mimari dokümantasyonu | [`docs/`](docs/README.md) | Bu ürüne özel PRD, mimari baseline, agent planı, freeze kararları |
+| Generic AI Agent Architecture Handbook | [`ai-agent-architecture-handbook/`](ai-agent-architecture-handbook/README.md) | Tatil Modu dışındaki agent projelerinde de kullanılabilecek genel mimari rehber |
+
+Bu ayrım bilinçlidir. Handbook, Tatil Modu içine hapsolmuş bir proje dokümanı değildir. Tatil Modu, handbook'un ilk reference implementation örneğidir.
+
+```text
+Generic handbook:
+ai-agent-architecture-handbook/
+
+Tatil Modu product documentation:
+docs/
+
+Tatil Modu reference example:
+ai-agent-architecture-handbook/examples/tatil-modu-reference-implementation.md
+```
+
 ## Ürün ne yapacak?
 
 Tatil Modu’nun hedefi, kullanıcının serbest metin tatil isteğini alıp uygulanabilir, açıklanabilir ve alternatifli bir seyahat planına dönüştürmektir.
@@ -88,13 +110,23 @@ Version & Compatibility
 
 ## Architecture Freeze durumu
 
-Repo şu anda kodlamadan önce mimari sınırları sağlamlaştırma aşamasındadır. Güncel canonical mimari çalışma alanı:
+Repo şu anda kodlamadan önce mimari sınırları sağlamlaştırma aşamasındadır.
+
+Güncel architecture baseline staging alanı:
 
 ```text
 docs/08-architecture-baseline/
 ```
 
-Bu baseline içinde Architecture Review & Freeze sürecindeki kritik ve yüksek öncelikli çakışmalar kapatılmıştır. Medium blocker temizliği devam etmektedir.
+Freeze kapanış durumu:
+
+```text
+critical_blockers: closed
+high_blockers: closed
+medium_blockers: closed
+freeze_state: closure_review
+next_gate: ai-agent-architecture-handbook/
+```
 
 Kapanan ana karar alanları:
 
@@ -111,14 +143,19 @@ Kapanan ana karar alanları:
 - architecture terminology registry,
 - Memory Platform boundary,
 - Public Authority layering,
-- Evaluation Standards Hierarchy.
+- Evaluation Standards Hierarchy,
+- Architecture Baseline Staging Policy,
+- Architecture Freeze Closure Checklist.
 
 ## Önemli dokümanlar
 
 | Alan | Güncel belge |
 |---|---|
+| Generic AI Agent Architecture Handbook | [ai-agent-architecture-handbook/README.md](ai-agent-architecture-handbook/README.md) |
+| Tatil Modu reference implementation örneği | [tatil-modu-reference-implementation.md](ai-agent-architecture-handbook/examples/tatil-modu-reference-implementation.md) |
 | Dokümantasyon haritası | [docs/README.md](docs/README.md) |
 | Architecture Freeze baseline | [docs/08-architecture-baseline/README.md](docs/08-architecture-baseline/README.md) |
+| Freeze closure checklist | [architecture-freeze-closure-checklist.md](docs/08-architecture-baseline/architecture-freeze-closure-checklist.md) |
 | Required artifact inventory | [freeze-required-artifact-inventory.md](docs/08-architecture-baseline/freeze-required-artifact-inventory.md) |
 | Dependency index | [architecture-dependency-index.md](docs/08-architecture-baseline/architecture-dependency-index.md) |
 | Terminology registry | [architecture-terminology-registry.md](docs/08-architecture-baseline/architecture-terminology-registry.md) |
@@ -127,7 +164,6 @@ Kapanan ana karar alanları:
 | Evaluation hierarchy | [evaluation-standards-hierarchy.md](docs/08-architecture-baseline/evaluation-standards-hierarchy.md) |
 | Product vision | [PRD-001](docs/10-product/PRD-001-URUN-VIZYONU.md) |
 | Governance | [docs/00-governance/README.md](docs/00-governance/README.md) |
-| Pre-freeze agent catalog | [docs/02-agents/agent-catalog.md](docs/02-agents/agent-catalog.md) |
 
 ## Tasarım yaklaşımı
 
@@ -157,7 +193,7 @@ Proje testleri aile tatili gerçek ihtiyaçlarından türetilmektedir:
 
 ## Mevcut durum
 
-Bu repo şu anda **Architecture Review & Freeze** aşamasındadır.
+Bu repo şu anda **Architecture Review & Freeze closure review** aşamasındadır.
 
 Kodlama başlamadan önce hedef:
 
@@ -165,14 +201,17 @@ Kodlama başlamadan önce hedef:
 2. agent / platform / module sınırlarını dondurmak,
 3. schema, registry ve fixture artifact listesini kesinleştirmek,
 4. test ve evaluation hiyerarşisini netleştirmek,
-5. ardından agent bazlı implementation sprintlerine geçmek.
+5. generic AI Agent Architecture Handbook'u implementation-ready hale getirmek,
+6. ardından agent bazlı implementation sprintlerine geçmek.
 
 ## Sonraki büyük aşama
 
-Architecture Freeze tamamlandıktan sonra sıradaki ana çalışma:
+Sıradaki ana çalışma:
 
 ```text
-AI Agent Architecture Handbook
+ai-agent-architecture-handbook/
 ```
 
-Bu handbook; her agentın görevi, prompt yapısı, contract şeması, tool politikası, fixture testleri, evaluation standardı ve orchestration akışını uygulamaya hazır şekilde tanımlayacaktır.
+Bu handbook; agent, planner, module, platform, contract, tool, memory, evidence, verification, confidence, policy, evaluation, observability ve implementation readiness standartlarını generic şekilde tanımlayacaktır.
+
+Tatil Modu bu standardın ilk gerçek uygulama örneği olarak kullanılacaktır.
