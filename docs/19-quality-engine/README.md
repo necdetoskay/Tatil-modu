@@ -1,7 +1,7 @@
 # 19 — Quality Engine Design
 
 **Doküman türü:** canonical quality engine, review ve scoring design alanı  
-**Durum:** aktif tasarım artifact alanı  
+**Durum:** first phase tamamlandı  
 **Kodlama durumu:** kapalı  
 **Prototype durumu:** kapalı  
 **Runtime reviewer:** kapalı
@@ -15,7 +15,8 @@ Bu alan runtime reviewer, scoring engine, CI evaluator, automated judge, LLM-as-
 ## Ana karar
 
 ```yaml
-quality_engine_design_state: active
+quality_engine_design_state: first_phase_completed
+quality_engine_first_phase_completed: true
 implementation_allowed: false
 prototype_allowed: false
 runtime_reviewer_allowed: false
@@ -86,18 +87,18 @@ out_of_scope:
 
 | Sıra | Artifact | Dosya | Durum |
 |---:|---|---|---|
-| 1 | Quality Engine Overview | `01-quality-engine-overview.md` | next |
-| 2 | Quality Dimension Taxonomy | `02-quality-dimension-taxonomy.md` | planned |
-| 3 | Quality Gate Hierarchy | `03-quality-gate-hierarchy.md` | planned |
-| 4 | Hard Failure and Blocker Policy | `04-hard-failure-blocker-policy.md` | planned |
-| 5 | Family Suitability Quality Rubric | `05-family-suitability-quality-rubric.md` | planned |
-| 6 | Evidence Quality Rubric | `06-evidence-quality-rubric.md` | planned |
-| 7 | Plan Coherence Quality Rubric | `07-plan-coherence-quality-rubric.md` | planned |
-| 8 | Final Response Quality Alignment | `08-final-response-quality-alignment.md` | planned |
-| 9 | Regression Quality Policy | `09-regression-quality-policy.md` | planned |
-| 10 | Human Review Handoff Policy | `10-human-review-handoff-policy.md` | planned |
-| 11 | Quality Report Contract Design | `11-quality-report-contract-design.md` | planned |
-| 12 | Quality Engine Completion Checklist | `12-quality-engine-completion-checklist.md` | planned |
+| 1 | Quality Engine Overview | [`01-quality-engine-overview.md`](01-quality-engine-overview.md) | drafted |
+| 2 | Quality Dimension Taxonomy | [`02-quality-dimension-taxonomy.md`](02-quality-dimension-taxonomy.md) | drafted |
+| 3 | Quality Gate Hierarchy | [`03-quality-gate-hierarchy.md`](03-quality-gate-hierarchy.md) | drafted |
+| 4 | Hard Failure and Blocker Policy | [`04-hard-failure-blocker-policy.md`](04-hard-failure-blocker-policy.md) | drafted |
+| 5 | Family Suitability Quality Rubric | [`05-family-suitability-quality-rubric.md`](05-family-suitability-quality-rubric.md) | drafted |
+| 6 | Evidence Quality Rubric | [`06-evidence-quality-rubric.md`](06-evidence-quality-rubric.md) | drafted |
+| 7 | Plan Coherence Quality Rubric | [`07-plan-coherence-quality-rubric.md`](07-plan-coherence-quality-rubric.md) | drafted |
+| 8 | Final Response Quality Alignment | [`08-final-response-quality-alignment.md`](08-final-response-quality-alignment.md) | drafted |
+| 9 | Regression Quality Policy | [`09-regression-quality-policy.md`](09-regression-quality-policy.md) | drafted |
+| 10 | Human Review Handoff Policy | [`10-human-review-handoff-policy.md`](10-human-review-handoff-policy.md) | drafted |
+| 11 | Quality Report Contract Design | [`11-quality-report-contract-design.md`](11-quality-report-contract-design.md) | drafted |
+| 12 | Quality Engine Completion Checklist | [`12-quality-engine-completion-checklist.md`](12-quality-engine-completion-checklist.md) | drafted |
 
 ## Quality tasarım ilkeleri
 
@@ -115,9 +116,22 @@ out_of_scope:
 ## Current status
 
 ```yaml
-quality_engine_design_state: active
-completed_artifacts: []
-next_artifact: 01-quality-engine-overview.md
+quality_engine_design_state: first_phase_completed
+quality_engine_first_phase_completed: true
+completed_artifacts:
+  - 01-quality-engine-overview.md
+  - 02-quality-dimension-taxonomy.md
+  - 03-quality-gate-hierarchy.md
+  - 04-hard-failure-blocker-policy.md
+  - 05-family-suitability-quality-rubric.md
+  - 06-evidence-quality-rubric.md
+  - 07-plan-coherence-quality-rubric.md
+  - 08-final-response-quality-alignment.md
+  - 09-regression-quality-policy.md
+  - 10-human-review-handoff-policy.md
+  - 11-quality-report-contract-design.md
+  - 12-quality-engine-completion-checklist.md
+next_stage: docs/20-orchestrator/
 implementation_allowed: false
 prototype_allowed: false
 runtime_reviewer_allowed: false
