@@ -48,8 +48,8 @@ Bu klasörde TypeScript type, Zod schema, JSON Schema dosyası veya runtime vali
 | 9 | Verification Evidence Contract | [`verification-evidence-contract.md`](verification-evidence-contract.md) | drafted |
 | 10 | Final Response Contract | [`final-response-contract.md`](final-response-contract.md) | drafted |
 | 11 | Common Evidence Envelope | [`common-evidence-envelope.md`](common-evidence-envelope.md) | drafted |
-| 12 | Common Error Envelope | `common-error-envelope.md` | next |
-| 13 | Contract Completion Checklist | `contract-completion-checklist.md` | planned |
+| 12 | Common Error Envelope | [`common-error-envelope.md`](common-error-envelope.md) | drafted |
+| 13 | Contract Completion Checklist | `contract-completion-checklist.md` | next |
 
 ## Contract standardı
 
@@ -147,7 +147,8 @@ completed_contracts:
   - verification-evidence-contract.md
   - final-response-contract.md
   - common-evidence-envelope.md
-next_contract: common-error-envelope.md
+  - common-error-envelope.md
+next_contract: contract-completion-checklist.md
 implementation_allowed: false
 prototype_allowed: false
 schema_code_allowed: false
