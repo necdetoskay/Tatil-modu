@@ -1,7 +1,7 @@
 # 25 — Headless Test Architecture
 
 **Doküman türü:** canonical headless core test architecture  
-**Durum:** first phase in progress  
+**Durum:** first phase tamamlandı  
 **UI development:** locked  
 **Production readiness:** kapalı
 
@@ -39,7 +39,7 @@ L0 Contract & Schema Tests
 → L7 Adversarial / Regression Suite
 → L8 Real Model / Provider Benchmark
 → Headless Core Acceptance Gate
-→ UI Unlock Decision
+→ UI Readiness Review
 ```
 
 ## Severity sınıfları
@@ -60,7 +60,8 @@ P2:
 ## UI Unlock ana kuralı
 ```yaml
 ui_development_allowed: false
-unlock_when:
+headless_core_accepted: false
+unlock_readiness_when:
   l0_contract_suite: pass
   l1_policy_suite: pass
   l2_tool_memory_suite: pass
@@ -73,21 +74,30 @@ unlock_when:
 ```
 
 ## First-phase artifact seti
-| # | Artifact | Dosya |
-|---:|---|---|
-| 1 | Test Architecture Principles | `01-test-architecture-principles.md` |
-| 2 | Test Layer and Suite Matrix | `02-test-layer-suite-matrix.md` |
-| 3 | Severity, Gate and Threshold Policy | `03-severity-gate-threshold-policy.md` |
-| 4 | Contract and Schema Test Suite | `04-contract-schema-test-suite.md` |
-| 5 | Policy and Domain Test Suite | `05-policy-domain-test-suite.md` |
-| 6 | Tool, Capability and Memory Test Suite | `06-tool-capability-memory-test-suite.md` |
-| 7 | Individual Agent Test Suite | `07-individual-agent-test-suite.md` |
-| 8 | Orchestrator Integration Test Suite | `08-orchestrator-integration-test-suite.md` |
-| 9 | Verification and Quality Test Suite | `09-verification-quality-test-suite.md` |
-| 10 | Golden E2E Scenario Suite | `10-golden-e2e-scenario-suite.md` |
-| 11 | Adversarial and Regression Suite | `11-adversarial-regression-suite.md` |
-| 12 | Model and Provider Evaluation Harness | `12-model-provider-evaluation-harness.md` |
-| 13 | Coverage and Traceability Matrix | `13-coverage-traceability-matrix.md` |
-| 14 | Test Data and Fixture Governance | `14-test-data-fixture-governance.md` |
-| 15 | Headless Core Acceptance Gate | `15-headless-core-acceptance-gate.md` |
-| 16 | Headless Test Architecture Completion Checklist | `16-headless-test-architecture-completion-checklist.md` |
+| # | Artifact | Dosya | Durum |
+|---:|---|---|---|
+| 1 | Test Architecture Principles | `01-test-architecture-principles.md` | completed |
+| 2 | Test Layer and Suite Matrix | `02-test-layer-suite-matrix.md` | completed |
+| 3 | Severity, Gate and Threshold Policy | `03-severity-gate-threshold-policy.md` | completed |
+| 4 | Contract and Schema Test Suite | `04-contract-schema-test-suite.md` | completed |
+| 5 | Policy and Domain Test Suite | `05-policy-domain-test-suite.md` | completed |
+| 6 | Tool, Capability and Memory Test Suite | `06-tool-capability-memory-test-suite.md` | completed |
+| 7 | Individual Agent Test Suite | `07-individual-agent-test-suite.md` | completed |
+| 8 | Orchestrator Integration Test Suite | `08-orchestrator-integration-test-suite.md` | completed |
+| 9 | Verification and Quality Test Suite | `09-verification-quality-test-suite.md` | completed |
+| 10 | Golden E2E Scenario Suite | `10-golden-e2e-scenario-suite.md` | completed |
+| 11 | Adversarial and Regression Suite | `11-adversarial-regression-suite.md` | completed |
+| 12 | Model and Provider Evaluation Harness | `12-model-provider-evaluation-harness.md` | completed |
+| 13 | Coverage and Traceability Matrix | `13-coverage-traceability-matrix.md` | completed |
+| 14 | Test Data and Fixture Governance | `14-test-data-fixture-governance.md` | completed |
+| 15 | Headless Core Acceptance Gate | `15-headless-core-acceptance-gate.md` | completed |
+| 16 | Headless Test Architecture Completion Checklist | `16-headless-test-architecture-completion-checklist.md` | completed |
+
+## Current status
+```yaml
+headless_test_architecture_first_phase_completed: true
+ui_development_allowed: false
+headless_core_accepted: false
+next_stage: docs/24-implementation-readiness/
+next_goal: complete_headless_implementation_readiness
+```
