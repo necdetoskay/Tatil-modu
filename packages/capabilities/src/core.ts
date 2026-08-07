@@ -50,9 +50,14 @@ export interface CapabilityFailure {
 
 export type CapabilityResult<TData = unknown> = CapabilitySuccess<TData> | CapabilityFailure;
 
+/**
+ * Provider adapters operate at the untyped transport boundary. Typed capability
+ * response contracts are owned by the gateway/registry layer, not forced onto
+ * each adapter as an impossible "supports every TData" generic promise.
+ */
 export interface CapabilityProvider {
   readonly providerId: string;
-  execute<TData = unknown>(request: CapabilityRequest): Promise<CapabilityResult<TData>>;
+  execute(request: CapabilityRequest): Promise<CapabilityResult<unknown>>;
 }
 
 export interface CapabilityPolicy {
@@ -80,7 +85,7 @@ export class CapabilityGateway {
       };
     }
 
-    const result = await this.provider.execute<TData>(request);
+    const result = await this.provider.execute(request);
 
     if (result.traceId !== request.traceId || result.capability !== request.capability) {
       return {
@@ -92,6 +97,6 @@ export class CapabilityGateway {
       };
     }
 
-    return result;
+    return result as CapabilityResult<TData>;
   }
 }
