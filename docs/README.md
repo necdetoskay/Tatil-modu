@@ -10,11 +10,13 @@ canonical_design_freeze: approved
 open_design_blockers: 0
 implementation_strategy: headless_core_first
 implementation_readiness_first_phase: PASS
+agent_model_routing_design: first_phase_completed
 headless_core_implementation_allowed: true
 ui_development_allowed: false
 headless_core_accepted: false
 production_release_allowed: false
 live_provider_integration_allowed: false
+production_model_assignments: pending_L8_benchmark
 current_stage: H0_repository_foundation_validation
 h1_allowed: false
 ```
@@ -46,6 +48,7 @@ h1_allowed: false
 | `24-implementation-readiness/` | Headless core topology, sequence, testing, CI ve delivery planı |
 | `25-headless-test-architecture/` | Headless test suite, severity/gate, coverage, model eval ve UI Unlock mimarisi |
 | `26-headless-implementation/` | H0–H12 gerçek implementation ve execution evidence kayıt alanı |
+| `27-agent-model-routing-and-evaluation/` | Agent bazlı model tier, capability/memory matrisi, routing, benchmark ve promotion/rollback tasarımı |
 
 ## Kanonik belge matrisi
 | Konu | Tek kaynak |
@@ -68,6 +71,7 @@ h1_allowed: false
 | Headless test architecture | `25-headless-test-architecture/README.md` |
 | UI unlock gate | `25-headless-test-architecture/15-headless-core-acceptance-gate.md` |
 | Implementation execution | `26-headless-implementation/README.md` |
+| Agent/model routing & evaluation | `27-agent-model-routing-and-evaluation/README.md` |
 
 ## Aşama durumu
 | Aşama | Durum |
@@ -75,6 +79,7 @@ h1_allowed: false
 | Canonical design `11–23` | tamamlandı |
 | Pre-code freeze reassessment | **PASS** |
 | Headless test architecture | first phase tamamlandı |
+| Agent/model routing & evaluation | first phase tamamlandı; model isimleri L8 sonrası seçilecek |
 | Headless implementation readiness | first phase **PASS** |
 | H0 Repository Foundation code | tamamlandı |
 | H0 execution validation | **bekliyor; PASS evidence zorunlu** |
@@ -101,3 +106,5 @@ h1_allowed: false
 14. Live provider, persistent production memory ve deployment ayrı readiness gate'lerine tabidir.
 15. H0–H11 sprintleri test-gated Definition of Done ile kapanır; feature code tek başına sprint completion değildir.
 16. Bir sprintin sonraki sprinti açabilmesi için gerçek test execution evidence gereklidir.
+17. Production model isimleri ve exact token/latency/cost limitleri yalnız `27-agent-model-routing-and-evaluation/` altında tanımlanan L8 benchmark evidence sonrası atanır.
+18. Model tier değişimi agent capability veya memory erişimini genişletemez.
