@@ -1,4 +1,4 @@
-﻿# Tatil Modu — Implementation Blueprint
+# Tatil Modu — Implementation Blueprint
 
 **Doküman türü:** Uygulama ve gerçekleştirme planı
 **Sürüm:** 1.0 Taslak
@@ -114,7 +114,7 @@ Araçlar:
 2. Memory Gateway
 3. Knowledge Platform Registry Core
 4. Travel Knowledge Store contracts
-5. Verification Registry
+5. Verification Facade & Registry
 6. Policy Enforcement
 7. Optimization contracts
 

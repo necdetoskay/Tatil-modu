@@ -1,4 +1,4 @@
-﻿# Tatil Modu — End-to-End Execution Pipeline Teknik Tasarımı
+# Tatil Modu — End-to-End Execution Pipeline Teknik Tasarımı
 
 **Doküman türü:** Sistem yürütme ve orkestrasyon tasarımı
 **Teknik kod adı:** `travel_execution_pipeline`
@@ -85,6 +85,8 @@ Kritik claim'ler:
 - park
 
 Verification Platform'a gider.
+
+Verification Platform bu claim'leri kendi kaynak/çelişki algoritmalarıyla sahiplenmez; Data Source & Trust evaluation sonucunu çağırır, verification result ve snapshot olarak Planner/Agent katmanına taşır.
 
 ## 7. Faz 5 — Planning
 
