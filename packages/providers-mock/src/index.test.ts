@@ -3,10 +3,14 @@ import { DeterministicMockProvider } from './index.js';
 
 const fixtures = [
   { fixtureId: 'ok-route', data: { km: 42 }, evidence: [{ sourceId: 'route-fixture', observedAt: '2026-08-07T20:00:00Z', freshness: 'fresh' as const }] },
+  { fixtureId: 'stale-route', data: { km: 42 }, evidence: [{ sourceId: 'stale-route-fixture', observedAt: '2026-01-01T00:00:00Z', freshness: 'stale' as const }] },
   { fixtureId: 'timeout', fault: 'timeout' as const },
   { fixtureId: 'rate', fault: 'rate_limit' as const },
   { fixtureId: 'down', fault: 'unavailable' as const },
   { fixtureId: 'bad', fault: 'malformed' as const },
+  { fixtureId: 'partial', fault: 'partial' as const },
+  { fixtureId: 'contradictory', fault: 'contradictory' as const },
+  { fixtureId: 'missing-evidence', fault: 'missing_evidence' as const },
   { fixtureId: 'empty', fault: 'empty' as const }
 ];
 
@@ -25,11 +29,21 @@ describe('DeterministicMockProvider', () => {
     ['timeout', 'PROVIDER_TIMEOUT', true],
     ['rate', 'PROVIDER_RATE_LIMIT', true],
     ['down', 'PROVIDER_UNAVAILABLE', true],
+    ['partial', 'PARTIAL_PROVIDER_PAYLOAD', false],
+    ['contradictory', 'CONTRADICTORY_PROVIDER_EVIDENCE', false],
+    ['missing-evidence', 'MISSING_PROVIDER_EVIDENCE', false],
     ['empty', 'EMPTY_RESULT', false]
   ] as const)('normalizes fault %s', async (fixtureId, code, retryable) => {
     const provider = new DeterministicMockProvider(fixtures);
     const result = await provider.execute({ capability: 'route_lookup', traceId: 'trace-x', fixtureId, payload: {} });
     expect(result).toMatchObject({ ok: false, code, retryable });
+  });
+
+  it('preserves stale data as stale evidence instead of a transport failure', async () => {
+    const provider = new DeterministicMockProvider(fixtures);
+    const result = await provider.execute({ capability: 'route_lookup', traceId: 'trace-stale', fixtureId: 'stale-route', payload: {} });
+    expect(result.ok).toBe(true);
+    if (result.ok) expect(result.evidence[0]?.freshness).toBe('stale');
   });
 
   it('returns normalized evidence envelope on success', async () => {
