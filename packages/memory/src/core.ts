@@ -1,6 +1,7 @@
 export type MemoryScope = 'user' | 'household' | 'trip';
 export type MemoryOrigin = 'user_explicit' | 'conversation_context' | 'inferred';
 export type MemoryStatus = 'active' | 'deleted' | 'expired' | 'superseded' | 'invalidated';
+export type MemoryStaleness = 'fresh' | 'approaching_expiry' | 'expired' | 'inactive';
 
 export interface MemoryProvenance {
   sourceType: 'user' | 'conversation' | 'system';
@@ -79,6 +80,16 @@ export class InMemoryMemoryRepository {
     return true;
   }
 
+  classifyStaleness(recordId: string, nowIso: string, approachingExpiryWindowMs = 24 * 60 * 60 * 1000): MemoryStaleness {
+    const record = this.records.get(recordId);
+    if (!record || record.status !== 'active') return 'inactive';
+    if (!record.expiresAt) return 'fresh';
+    const remaining = Date.parse(record.expiresAt) - Date.parse(nowIso);
+    if (remaining <= 0) return 'expired';
+    if (remaining <= approachingExpiryWindowMs) return 'approaching_expiry';
+    return 'fresh';
+  }
+
   readActive(nowIso: string, scope?: MemoryScope): MemoryRecord[] {
     const now = Date.parse(nowIso);
     return [...this.records.values()]
@@ -132,6 +143,8 @@ export class InMemoryMemoryRepository {
   }
 
   snapshot(): MemoryRecord[] {
-    return [...this.records.values()].map((record) => structuredClone(record));
+    return [...this.records.values()]
+      .sort((a, b) => a.id.localeCompare(b.id))
+      .map((record) => structuredClone(record));
   }
 }
