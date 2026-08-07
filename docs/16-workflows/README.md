@@ -1,7 +1,7 @@
 # 16 — Workflow Design
 
 **Doküman türü:** canonical workflow design alanı  
-**Durum:** aktif tasarım artifact alanı  
+**Durum:** first phase tamamlandı  
 **Kodlama durumu:** kapalı  
 **Prototype durumu:** kapalı  
 **Runtime orchestration:** kapalı
@@ -15,7 +15,8 @@ Bu alan runtime workflow engine, job runner, queue, cron, async worker, producti
 ## Ana karar
 
 ```yaml
-workflow_design_state: active
+workflow_design_state: first_phase_completed
+workflow_design_first_phase_completed: true
 implementation_allowed: false
 prototype_allowed: false
 runtime_orchestration_allowed: false
@@ -83,17 +84,17 @@ out_of_scope:
 
 | Sıra | Artifact | Dosya | Durum |
 |---:|---|---|---|
-| 1 | Workflow Design Overview | `01-workflow-design-overview.md` | next |
-| 2 | End-to-End Travel Planning Workflow | `02-end-to-end-travel-planning-workflow.md` | planned |
-| 3 | Trip Intake and Constraint Gate Workflow | `03-trip-intake-constraint-gate-workflow.md` | planned |
-| 4 | Candidate Research and Verification Workflow | `04-candidate-research-verification-workflow.md` | planned |
-| 5 | Family Suitability and Logistics Workflow | `05-family-suitability-logistics-workflow.md` | planned |
-| 6 | Day Plan Composition Workflow | `06-day-plan-composition-workflow.md` | planned |
-| 7 | Final Response Assembly Workflow | `07-final-response-assembly-workflow.md` | planned |
-| 8 | Error Retry and Fallback Workflow | `08-error-retry-fallback-workflow.md` | planned |
-| 9 | Privacy Sensitive Travel Workflow | `09-privacy-sensitive-travel-workflow.md` | planned |
-| 10 | Workflow Observability and Audit Design | `10-workflow-observability-audit-design.md` | planned |
-| 11 | Workflow Completion Checklist | `11-workflow-completion-checklist.md` | planned |
+| 1 | Workflow Design Overview | [`01-workflow-design-overview.md`](01-workflow-design-overview.md) | drafted |
+| 2 | End-to-End Travel Planning Workflow | [`02-end-to-end-travel-planning-workflow.md`](02-end-to-end-travel-planning-workflow.md) | drafted |
+| 3 | Trip Intake and Constraint Gate Workflow | [`03-trip-intake-constraint-gate-workflow.md`](03-trip-intake-constraint-gate-workflow.md) | drafted |
+| 4 | Candidate Research and Verification Workflow | [`04-candidate-research-verification-workflow.md`](04-candidate-research-verification-workflow.md) | drafted |
+| 5 | Family Suitability and Logistics Workflow | [`05-family-suitability-logistics-workflow.md`](05-family-suitability-logistics-workflow.md) | drafted |
+| 6 | Day Plan Composition Workflow | [`06-day-plan-composition-workflow.md`](06-day-plan-composition-workflow.md) | drafted |
+| 7 | Final Response Assembly Workflow | [`07-final-response-assembly-workflow.md`](07-final-response-assembly-workflow.md) | drafted |
+| 8 | Error Retry and Fallback Workflow | [`08-error-retry-fallback-workflow.md`](08-error-retry-fallback-workflow.md) | drafted |
+| 9 | Privacy Sensitive Travel Workflow | [`09-privacy-sensitive-travel-workflow.md`](09-privacy-sensitive-travel-workflow.md) | drafted |
+| 10 | Workflow Observability and Audit Design | [`10-workflow-observability-audit-design.md`](10-workflow-observability-audit-design.md) | drafted |
+| 11 | Workflow Completion Checklist | [`11-workflow-completion-checklist.md`](11-workflow-completion-checklist.md) | drafted |
 
 ## Workflow tasarım ilkeleri
 
@@ -111,9 +112,21 @@ out_of_scope:
 ## Current status
 
 ```yaml
-workflow_design_state: active
-completed_artifacts: []
-next_artifact: 01-workflow-design-overview.md
+workflow_design_state: first_phase_completed
+workflow_design_first_phase_completed: true
+completed_artifacts:
+  - 01-workflow-design-overview.md
+  - 02-end-to-end-travel-planning-workflow.md
+  - 03-trip-intake-constraint-gate-workflow.md
+  - 04-candidate-research-verification-workflow.md
+  - 05-family-suitability-logistics-workflow.md
+  - 06-day-plan-composition-workflow.md
+  - 07-final-response-assembly-workflow.md
+  - 08-error-retry-fallback-workflow.md
+  - 09-privacy-sensitive-travel-workflow.md
+  - 10-workflow-observability-audit-design.md
+  - 11-workflow-completion-checklist.md
+next_stage: docs/17-decision-policy-engine/
 implementation_allowed: false
 prototype_allowed: false
 runtime_orchestration_allowed: false
