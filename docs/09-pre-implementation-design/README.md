@@ -111,5 +111,8 @@ Cevap evet olduğu sürece kodlama başlamaz.
 design_state: active
 implementation_state: blocked_by_design_completion
 prototype_state: blocked_by_design_completion
-next_document: 01-design-completion-assessment.md
+completed_documents:
+  - 01-design-completion-assessment.md
+  - 02-system-blueprint-gap-analysis.md
+next_document: 03-required-design-artifact-map.md
 ```
