@@ -1,0 +1,75 @@
+{
+  "contract_id": "destination_candidate_contract",
+  "contract_version": "0.1.0",
+  "producer_agent": "destination_candidate_agent",
+  "trace_id": "TM-TRACE-DC-001",
+  "source_request_id": "TM-REQ-001",
+  "validation_status": "valid_with_warnings",
+  "confidence": "medium",
+  "destination_scope_summary": {
+    "origin": {
+      "province": "Kocaeli",
+      "confidence": "high"
+    },
+    "primary_target_area": {
+      "province": "Bursa",
+      "confidence": "high"
+    },
+    "default_radius_km": 150,
+    "radius_rule_source": "user_explicit",
+    "radius_rule_confidence": "high",
+    "out_of_radius_allowed_when_exceptional": true
+  },
+  "candidate_destinations": [
+    {
+      "candidate_id": "dest-bursa-center",
+      "candidate_name": "Bursa merkez ve çevresi",
+      "candidate_type": "attraction_cluster",
+      "province": "Bursa",
+      "radius_class": "near_radius_area",
+      "estimated_distance_band_from_origin": "100_150_km",
+      "distance_confidence": "medium",
+      "inclusion_reason": "Çocuklu aile için hayvanat bahçesi, park ve kısa şehir içi aktivite kümeleri.",
+      "family_relevance": {
+        "child_friendly_signal": "strong",
+        "toddler_relevance": "moderate",
+        "older_child_relevance": "strong"
+      },
+      "trip_role": {
+        "can_be_base": true,
+        "can_be_day_trip": true,
+        "can_be_half_day": true
+      },
+      "privacy_relevance": {
+        "sea_or_beach_related": false,
+        "women_only_beach_verification_required": false,
+        "privacy_risk": "none"
+      },
+      "logistics_relevance": {
+        "route_verification_required": true,
+        "parking_verification_required": true,
+        "traffic_verification_required": true
+      },
+      "evidence_status": {
+        "location_evidence_required": true,
+        "source_evidence_required": true,
+        "currently_verified": false,
+        "verification_needs": ["route_distance", "parking_availability_hint"]
+      },
+      "confidence": "medium"
+    }
+  ],
+  "radius_policy": {
+    "default_radius_km": 150,
+    "within_radius_candidate_preferred": true,
+    "out_of_radius_candidate_allowed": true,
+    "out_of_radius_requires_exception_reason": true,
+    "out_of_radius_requires_user_visible_warning": true,
+    "out_of_radius_requires_route_burden_review": true
+  },
+  "privacy_verification_needs": {
+    "women_only_beach_required_when_sea_recommended": true,
+    "sea_candidates_exist": false,
+    "candidates_requiring_privacy_verification": []
+  }
+}
