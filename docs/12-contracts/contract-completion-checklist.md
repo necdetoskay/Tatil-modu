@@ -1,10 +1,10 @@
 # Contract Completion Checklist
 
 **Doküman türü:** canonical design + runtime completion checklist  
-**Durum:** runtime completion review active
+**Durum:** H1/L0 completed
 
 ## Amaç
-`docs/12-contracts/` canonical tasarımı ile `packages/contracts/` runtime implementasyonunun H1/L0 kapanışı öncesi tutarlı olup olmadığını kontrol etmek.
+`docs/12-contracts/` canonical tasarımı ile `packages/contracts/` runtime implementasyonunun H1/L0 kapanış durumunu kayıt altına almak.
 
 ## Design coverage
 | Alan | Canonical design | Runtime slice |
@@ -41,34 +41,31 @@ p0_failures_allowed: 0
 1. Hard constraint upstream'ta kaybolamaz.
 2. Unverified material claim downstream'ta verified fact'a dönüşemez.
 3. Evidence gap Verification katmanına taşınır ve final response tarafından gizlenemez.
-4. Women-only beach şartı sea plan boyunca açık verification/disclosure zincirinde kalır.
+4. Women-only beach şartı sea plan boyunca verification/disclosure zincirinde kalır.
 5. Toddler rest requirement Day Plan ve Final Response'ta korunur.
 6. Blocked status downstream'ta sessizce eligible/pass olamaz.
-7. Confidence hard blocker varken yüksek olamaz.
+7. Confidence hard blocker varken high olamaz.
 8. Final Response yeni operasyonel fact icat edemez.
 
-## Execution evidence requirement
-Her runtime slice için GitHub Actions `Headless Core Gate` başarı kaydı veya eşdeğer execution evidence bulunmalıdır.
-
-H1 genel PASS ayrıca toplu L0 completion validation koşusu gerektirir.
-
-## H1 progression rule
+## Aggregate execution evidence
 ```yaml
-H2_unlocked_only_if:
-  all_runtime_slices_validated: true
-  cross_contract_review: pass
-  aggregate_L0_CI: pass
-  p0_failures: 0
+workflow: Headless Core Gate
+workflow_run_id: 31212945654
+install: PASS
+typecheck: PASS
+package_boundaries: PASS
+vitest_contract_suite: PASS
+p0_failures: 0
 ```
 
-## Current status
+## Completion decision
 ```yaml
 contract_design_first_phase: completed
 all_runtime_slices_implemented: true
 individual_slice_validation: completed
-cross_contract_review: in_progress
-aggregate_L0_CI: pending
-H1_L0: not_yet_passed
-H2: locked
+cross_contract_review: pass
+aggregate_L0_CI: pass
+H1_L0: PASS
+H2_deterministic_policy_core: unlocked
 ui_development_allowed: false
 ```
