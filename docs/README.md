@@ -40,6 +40,8 @@ Bu dosya dokümantasyonun ana giriş noktasıdır. Her konu için tek bir kanoni
 | `19-quality-engine/` | Koddan önce hazırlanacak quality engine, review ve scoring tasarımları |
 | `20-orchestrator/` | Koddan önce hazırlanacak orchestrator, coordination ve handoff routing tasarımları |
 | `21-observability/` | Koddan önce hazırlanacak observability, telemetry, traceability ve operational insight tasarımları |
+| `22-architecture-completion-review/` | Canonical katmanların completion, ownership, gap ve freeze blocker review alanı |
+| `23-product-ux-design/` | Koddan önce hazırlanacak canonical product interaction ve UX deep-design alanı |
 
 ## Kanonik belge matrisi
 
@@ -62,6 +64,8 @@ Bu dosya dokümantasyonun ana giriş noktasıdır. Her konu için tek bir kanoni
 | Canonical quality engine | [`19-quality-engine/README.md`](19-quality-engine/README.md) |
 | Canonical orchestrator design | [`20-orchestrator/README.md`](20-orchestrator/README.md) |
 | Canonical observability design | [`21-observability/README.md`](21-observability/README.md) |
+| Architecture completion review | [`22-architecture-completion-review/README.md`](22-architecture-completion-review/README.md) |
+| Canonical Product/UX deep design | [`23-product-ux-design/README.md`](23-product-ux-design/README.md) |
 | Trip Intake Agent spec | [`11-agent-specifications/trip-intake-agent.md`](11-agent-specifications/trip-intake-agent.md) |
 | Pre-freeze agent listesi | [`02-agents/agent-catalog.md`](02-agents/agent-catalog.md) |
 | Agent template'i | [`02-agents/_templates/agent-specification-template.md`](02-agents/_templates/agent-specification-template.md) |
@@ -97,7 +101,8 @@ Bu dosya dokümantasyonun ana giriş noktasıdır. Her konu için tek bir kanoni
 | Quality Engine | first phase tamamlandı; runtime reviewer/scoring engine kapalı |
 | Orchestrator | first phase tamamlandı; runtime orchestration/live agent execution kapalı |
 | Observability üst katmanı | first phase tamamlandı; runtime telemetry/logging/metrics/tracing kapalı |
-| Architecture completion review | sıradaki aşama |
+| Architecture completion review | first phase tamamlandı; 2 pre-code blocker açık |
+| Product/UX deep design | sıradaki aşama; kod/UI implementation kapalı |
 
 ## Source of truth kuralları
 
@@ -121,3 +126,5 @@ Bu dosya dokümantasyonun ana giriş noktasıdır. Her konu için tek bir kanoni
 18. Quality engine tasarımları `19-quality-engine/` altında tutulur; runtime reviewer, scoring engine, LLM judge veya CI evaluator değildir.
 19. Orchestrator tasarımları `20-orchestrator/` altında tutulur; runtime orchestrator engine, scheduler, queue, job runner veya live agent execution değildir.
 20. Observability tasarımları `21-observability/` altında tutulur; runtime telemetry, logging stack, metrics backend, tracing backend, dashboard veya alert deployment değildir.
+21. Architecture completion review `22-architecture-completion-review/` altında tutulur; implementation izni vermez, blocker ve readiness değerlendirir.
+22. Product/UX deep-design tasarımları `23-product-ux-design/` altında tutulur; frontend implementation, component code veya production UI değildir.
