@@ -39,6 +39,7 @@ kanonik Tatil Modu mimari çalışmalarını toplar.
 - [Architecture Terminology Registry](architecture-terminology-registry.md)
 - [Memory Platform Boundary](memory-platform-boundary.md)
 - [Public Authority Layering](public-authority-layering.md)
+- [Evaluation Standards Hierarchy](evaluation-standards-hierarchy.md)
 
 ## Knowledge ayrımı
 
@@ -185,6 +186,14 @@ ARF-016 kararı: Public Authority sorumluluğu tek katmanda toplanmaz. Kaynak er
 Canonical public authority boundary takip noktası `[Public Authority Layering](public-authority-layering.md)` dosyasıdır.
 
 Public authority claim'leri hard constraint, soft warning, operational advisory veya source note olarak sınıflandırılır. Planner hard constraint olarak sınıflandırılmış resmi kuralı gevşetemez; kullanıcıya gösterilecek açıklama Final Plan Composer tarafından kaynak ve belirsizlik bilgisiyle taşınır.
+
+## Evaluation standards hierarchy ayrımı
+
+ARF-017 kararı: Evaluation standardı tek bir skor sistemi değildir. Safety, contract, hard constraint, evidence, domain quality, coherence, runtime ve regression katmanlarından oluşan hiyerarşik gate sistemidir.
+
+Canonical evaluation hiyerarşisi `[Evaluation Standards Hierarchy](evaluation-standards-hierarchy.md)` dosyasında tutulur.
+
+Evaluation sonuçları çelişirse daha üst sıradaki gate önceliklidir. Safety veya hard constraint failure, yüksek domain quality skoru ya da düşük latency ile telafi edilemez.
 
 ## Freeze durumu
 
