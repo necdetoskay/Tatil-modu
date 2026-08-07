@@ -1,7 +1,7 @@
 # 14 — Tool and Capability Design
 
 **Doküman türü:** canonical tool ve capability design alanı  
-**Durum:** aktif tasarım artifact alanı  
+**Durum:** first phase tamamlandı  
 **Kodlama durumu:** kapalı  
 **Prototype durumu:** kapalı  
 **Adapter entegrasyonu:** kapalı
@@ -106,11 +106,11 @@ out_of_scope:
 | 4 | Verification Capability Policy | [`04-verification-capability-policy.md`](04-verification-capability-policy.md) | drafted |
 | 5 | Evidence Emission Mapping | [`05-evidence-emission-mapping.md`](05-evidence-emission-mapping.md) | drafted |
 | 6 | Tool Trust and Freshness Model | [`06-tool-trust-and-freshness-model.md`](06-tool-trust-and-freshness-model.md) | drafted |
-| 7 | Provider and Adapter Boundary | `07-provider-and-adapter-boundary.md` | next |
-| 8 | Capability Failure and Fallback Policy | `08-capability-failure-and-fallback-policy.md` | planned |
-| 9 | Privacy Sensitive Capability Policy | `09-privacy-sensitive-capability-policy.md` | planned |
-| 10 | Cost Latency and Quota Policy | `10-cost-latency-and-quota-policy.md` | planned |
-| 11 | Tool Capability Completion Checklist | `11-tool-capability-completion-checklist.md` | planned |
+| 7 | Provider and Adapter Boundary | [`07-provider-and-adapter-boundary.md`](07-provider-and-adapter-boundary.md) | drafted |
+| 8 | Capability Failure and Fallback Policy | [`08-capability-failure-and-fallback-policy.md`](08-capability-failure-and-fallback-policy.md) | drafted |
+| 9 | Privacy Sensitive Capability Policy | [`09-privacy-sensitive-capability-policy.md`](09-privacy-sensitive-capability-policy.md) | drafted |
+| 10 | Cost Latency and Quota Policy | [`10-cost-latency-and-quota-policy.md`](10-cost-latency-and-quota-policy.md) | drafted |
+| 11 | Tool Capability Completion Checklist | [`11-tool-capability-completion-checklist.md`](11-tool-capability-completion-checklist.md) | drafted |
 
 ## Capability tasarım ilkeleri
 
@@ -206,10 +206,11 @@ evidence_connection:
 
 Capability sonucu yoksa veya başarısızsa `common-error-envelope.md` ile uyumlu hata/disclosure üretilir.
 
-## Current status
+## Kapanış kararı
 
 ```yaml
-tool_capability_design_state: active
+tool_capability_design_state: first_phase_completed
+tool_capability_design_first_phase_completed: true
 completed_artifacts:
   - 01-capability-design-overview.md
   - 02-capability-taxonomy.md
@@ -217,7 +218,24 @@ completed_artifacts:
   - 04-verification-capability-policy.md
   - 05-evidence-emission-mapping.md
   - 06-tool-trust-and-freshness-model.md
-next_artifact: 07-provider-and-adapter-boundary.md
+  - 07-provider-and-adapter-boundary.md
+  - 08-capability-failure-and-fallback-policy.md
+  - 09-privacy-sensitive-capability-policy.md
+  - 10-cost-latency-and-quota-policy.md
+  - 11-tool-capability-completion-checklist.md
+next_stage: docs/15-prompts/
+implementation_allowed: false
+prototype_allowed: false
+adapter_code_allowed: false
+provider_integration_allowed: false
+live_tool_call_allowed: false
+```
+
+## Current status
+
+```yaml
+tool_capability_design_state: first_phase_completed
+next_stage: docs/15-prompts/
 implementation_allowed: false
 prototype_allowed: false
 adapter_code_allowed: false
