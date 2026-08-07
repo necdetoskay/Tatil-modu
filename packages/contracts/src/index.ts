@@ -10,6 +10,7 @@ export * from './accommodation-fit.js';
 export * from './activity-fit.js';
 export * from './day-plan.js';
 export * from './verification-evidence.js';
+export * from './final-response.js';
 
 export const CONTRACTS_PACKAGE = '@tatil-modu/contracts' as const;
 
