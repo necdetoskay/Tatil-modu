@@ -42,6 +42,7 @@ It is intended to be used before coding an agentic system and again during imple
 | [10 — Evaluation, Fixtures and Regression](10-evaluation-fixtures-and-regression.md) | Defines layered evaluation gates, fixture-first testing, golden scenarios, regression and structured evaluation reports |
 | [11 — Observability, Errors and Audit](11-observability-errors-and-audit.md) | Defines traceable runs, stable error codes, audit events, redaction rules and operational metrics |
 | [12 — Agent Specification Template](12-agent-specification-template.md) | Defines the reusable pre-implementation template for every agent specification |
+| [13 — Implementation Readiness Checklist](13-implementation-readiness-checklist.md) | Defines the pre-implementation gate for architecture, contracts, fixtures, safety, tools, memory, evidence and observability |
 | [Examples — Tatil Modu Reference Implementation](examples/tatil-modu-reference-implementation.md) | Shows how the generic handbook maps to the Tatil Modu project |
 
 ## Foundational rule
