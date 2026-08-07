@@ -3,8 +3,9 @@
 ## Status
 ```yaml
 slice: day_plan_contract
-execution_status: pending_ci
-p0_failures_allowed: 0
+execution_status: pass
+workflow_run_id: 31211139820
+p0_failures: 0
 ```
 
 ## Scope
@@ -19,5 +20,5 @@ p0_failures_allowed: 0
 - day-count consistency
 - typecheck + boundaries + Vitest
 
-## Completion rule
-Bu kayıt yalnız GitHub Actions `Headless Core Gate` PASS sonrası `execution_status: pass` olarak güncellenir.
+## Evidence
+GitHub Actions `Headless Core Gate` run `31211139820` completed successfully with install, typecheck, package-boundary checks and Vitest all passing.
