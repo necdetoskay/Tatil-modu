@@ -118,5 +118,6 @@ completed_documents:
   - 04-agent-specification-workplan.md
   - 05-contract-schema-workplan.md
   - 06-fixture-and-evaluation-workplan.md
-next_document: 07-tool-and-capability-workplan.md
+  - 07-tool-and-capability-workplan.md
+next_document: 08-memory-and-privacy-workplan.md
 ```
