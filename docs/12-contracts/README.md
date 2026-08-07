@@ -2,158 +2,78 @@
 
 **Doküman türü:** canonical contract design alanı  
 **Durum:** first phase tamamlandı  
-**Kodlama durumu:** kapalı  
-**Prototype durumu:** kapalı
+**Runtime implementation durumu:** H1/L0 completion review in progress  
+**UI durumu:** kapalı
 
 ## Amaç
+Bu klasör Tatil Modu agent specification setinden çıkan canonical input/output sözleşmelerinin tasarım source-of-truth alanıdır.
 
-Bu klasör, Tatil Modu agent specification setinden çıkan input/output sözleşmelerini koddan önce tasarlamak için kullanılır.
-
-Bu alan runtime schema implementation değildir.
-
-Bu alanın amacı şudur:
-
-```text
-Agent'lar hangi veri yapısını alır, hangi veri yapısını üretir, hangi evidence ve validation kurallarıyla handoff yapar?
-```
+Runtime schema implementation ayrı olarak `packages/contracts/` altında yürütülür. Bu klasördeki canonical semantics değişmeden runtime schema keyfi davranış ekleyemez.
 
 ## Ana karar
-
 ```yaml
-implementation_allowed: false
-prototype_allowed: false
-runtime_allowed: false
-schema_code_allowed: false
-contract_design_required_before_coding: true
-source_of_truth: docs/12-contracts/
-input_source: docs/11-agent-specifications/
 contract_design_first_phase_completed: true
-next_stage: docs/13-fixtures-and-evaluation/
+runtime_schema_implementation_started: true
+runtime_schema_location: packages/contracts/
+implementation_execution_records: docs/26-headless-implementation/
+ui_development_allowed: false
+source_of_truth: docs/12-contracts/
 ```
-
-Bu klasörde TypeScript type, Zod schema, JSON Schema dosyası veya runtime validator yazılmaz.
-
-Önce contract tasarımı yapılır.
 
 ## İlk-phase contract seti
-
-| Sıra | Contract | Dosya | Durum |
+| Sıra | Contract | Dosya | Runtime H1 durumu |
 |---:|---|---|---|
-| 1 | Travel Request Contract | [`travel-request-contract.md`](travel-request-contract.md) | drafted |
-| 2 | Constraint Policy Contract | [`constraint-policy-contract.md`](constraint-policy-contract.md) | drafted |
-| 3 | Family Suitability Contract | [`family-suitability-contract.md`](family-suitability-contract.md) | drafted |
-| 4 | Destination Candidate Contract | [`destination-candidate-contract.md`](destination-candidate-contract.md) | drafted |
-| 5 | Route Logistics Contract | [`route-logistics-contract.md`](route-logistics-contract.md) | drafted |
-| 6 | Accommodation Fit Contract | [`accommodation-fit-contract.md`](accommodation-fit-contract.md) | drafted |
-| 7 | Activity Fit Contract | [`activity-fit-contract.md`](activity-fit-contract.md) | drafted |
-| 8 | Day Plan Contract | [`day-plan-contract.md`](day-plan-contract.md) | drafted |
-| 9 | Verification Evidence Contract | [`verification-evidence-contract.md`](verification-evidence-contract.md) | drafted |
-| 10 | Final Response Contract | [`final-response-contract.md`](final-response-contract.md) | drafted |
-| 11 | Common Evidence Envelope | [`common-evidence-envelope.md`](common-evidence-envelope.md) | drafted |
-| 12 | Common Error Envelope | [`common-error-envelope.md`](common-error-envelope.md) | drafted |
-| 13 | Contract Completion Checklist | [`contract-completion-checklist.md`](contract-completion-checklist.md) | completed |
+| 1 | Travel Request Contract | `travel-request-contract.md` | validated |
+| 2 | Constraint Policy Contract | `constraint-policy-contract.md` | validated |
+| 3 | Family Suitability Contract | `family-suitability-contract.md` | validated |
+| 4 | Destination Candidate Contract | `destination-candidate-contract.md` | validated |
+| 5 | Route Logistics Contract | `route-logistics-contract.md` | validated |
+| 6 | Accommodation Fit Contract | `accommodation-fit-contract.md` | validated |
+| 7 | Activity Fit Contract | `activity-fit-contract.md` | validated |
+| 8 | Day Plan Contract | `day-plan-contract.md` | validated |
+| 9 | Verification Evidence Contract | `verification-evidence-contract.md` | validated |
+| 10 | Final Response Contract | `final-response-contract.md` | validated |
+| 11 | Common Evidence Envelope | `common-evidence-envelope.md` | validated |
+| 12 | Common Error Envelope | `common-error-envelope.md` | validated |
+| 13 | Contract Completion Checklist | `contract-completion-checklist.md` | design complete / runtime review active |
 
-## Contract standardı
-
-Her contract dosyası aşağıdaki başlıkları içermelidir:
-
-1. Purpose
-2. Producer
-3. Consumer
-4. Input fields
-5. Output fields
-6. Required fields
-7. Optional fields
-8. Forbidden fields
-9. Evidence requirements
-10. Confidence rules
-11. Validation rules
-12. Failure modes
-13. Clarification states
-14. Example payload sketch
-15. Fixture requirements
-16. Backward compatibility notes
-17. Open design questions
-
-## Ortak envelope kararı
-
-Bütün agent handoff'ları çıplak veri taşımaz.
-
-Her contract aşağıdaki üst seviye envelope mantığıyla uyumlu olmalıdır:
+## Ortak contract ilkeleri
+Bütün runtime contract'lar version, producer/consumer semantics, traceability, evidence/confidence ve validation durumlarını canonical tasarımla uyumlu taşımalıdır.
 
 ```yaml
-envelope_required: true
-contract_version_required: true
-producer_agent_required: true
-consumer_agent_required: true
-trace_id_required: true
-evidence_summary_required_when_claims_exist: true
-confidence_required: true
-validation_status_required: true
-```
-
-## Evidence kuralı
-
-Plan, rota, saat, fiyat, otopark, hava, kadınlar plajı, tesis özelliği veya resmi kural içeren her iddia evidence ihtiyacı taşımalıdır.
-
-```yaml
-claim_without_evidence_marker: forbidden
+versioned_contracts_required: true
+traceability_required: true
+evidence_for_material_claims_required: true
 unverified_claim_as_fact: forbidden
-missing_evidence_must_be_visible: true
+hard_blocker_visibility_required: true
+hard_constraint_soft_preference_separation_required: true
+privacy_sensitive_claims_visible: true
 ```
 
-## Validation kuralı
-
-Contract validation sadece şekil kontrolü değildir.
-
-Validation şunları da kontrol eder:
-
-```text
-Hard constraint ihlali var mı?
-Evidence eksikliği karar kalitesini düşürüyor mu?
-Agent kendisine yasak alan üretmiş mi?
-Final kullanıcı cevabına taşınmaması gereken iç alan var mı?
-```
-
-## Contract yazım ilkeleri
-
-1. Contract isimleri agent isimlerine benzeyebilir ama agent'ın iç prompt'unu kopyalamaz.
-2. Contract sadece aktarılacak veriyi tanımlar.
-3. Runtime provider, API, database, UI component veya framework seçimi içermez.
-4. Evidence, confidence ve validation alanları contract'ın parçasıdır.
-5. Her contract fixture üretilebilir olacak kadar net yazılır.
-6. Geriye dönük uyumluluk için version alanı zorunludur.
-7. Clarification gerektiren durumlar explicit state olarak taşınır.
-
-## Contract completion
-
-Tamamlanma kararı `contract-completion-checklist.md` içinde kayıt altına alınmıştır.
-
-```yaml
-contract_completion_checklist: contract-completion-checklist.md
-contract_design_first_phase_completed: true
-```
+## Design → runtime governance
+1. Canonical contract semantiği `docs/12-contracts/` içinde tanımlanır.
+2. Runtime validator `packages/contracts/` altında uygulanır.
+3. Her önemli runtime dilimi fixture + negative assertions + CI execution evidence alır.
+4. Canonical doküman ile runtime schema çelişirse implementation değil design amendment/ADR düzeltilir.
+5. H1/L0 PASS toplu completion review sonrası verilir.
 
 ## Current status
-
 ```yaml
 contract_design_state: first_phase_completed
-completed_contracts:
-  - travel-request-contract.md
-  - constraint-policy-contract.md
-  - family-suitability-contract.md
-  - destination-candidate-contract.md
-  - route-logistics-contract.md
-  - accommodation-fit-contract.md
-  - activity-fit-contract.md
-  - day-plan-contract.md
-  - verification-evidence-contract.md
-  - final-response-contract.md
-  - common-evidence-envelope.md
-  - common-error-envelope.md
-  - contract-completion-checklist.md
-next_stage: docs/13-fixtures-and-evaluation/
-implementation_allowed: false
-prototype_allowed: false
-schema_code_allowed: false
+runtime_contract_slices_validated:
+  - travel_request
+  - common_evidence
+  - common_error
+  - constraint_policy
+  - family_suitability
+  - destination_candidate
+  - route_logistics
+  - accommodation_fit
+  - activity_fit
+  - day_plan
+  - verification_evidence
+  - final_response
+L0_completion_review: in_progress
+next_execution_stage_if_PASS: H2_deterministic_policy_core
+ui_development_allowed: false
 ```
