@@ -102,8 +102,8 @@ out_of_scope:
 |---:|---|---|---|
 | 1 | Capability Design Overview | [`01-capability-design-overview.md`](01-capability-design-overview.md) | drafted |
 | 2 | Capability Taxonomy | [`02-capability-taxonomy.md`](02-capability-taxonomy.md) | drafted |
-| 3 | Agent Capability Access Matrix | `03-agent-capability-access-matrix.md` | next |
-| 4 | Verification Capability Policy | `04-verification-capability-policy.md` | planned |
+| 3 | Agent Capability Access Matrix | [`03-agent-capability-access-matrix.md`](03-agent-capability-access-matrix.md) | drafted |
+| 4 | Verification Capability Policy | `04-verification-capability-policy.md` | next |
 | 5 | Evidence Emission Mapping | `05-evidence-emission-mapping.md` | planned |
 | 6 | Tool Trust and Freshness Model | `06-tool-trust-and-freshness-model.md` | planned |
 | 7 | Provider and Adapter Boundary | `07-provider-and-adapter-boundary.md` | planned |
@@ -213,7 +213,8 @@ tool_capability_design_state: active
 completed_artifacts:
   - 01-capability-design-overview.md
   - 02-capability-taxonomy.md
-next_artifact: 03-agent-capability-access-matrix.md
+  - 03-agent-capability-access-matrix.md
+next_artifact: 04-verification-capability-policy.md
 implementation_allowed: false
 prototype_allowed: false
 adapter_code_allowed: false
