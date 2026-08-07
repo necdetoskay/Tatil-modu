@@ -1,0 +1,73 @@
+{
+  "fixture_id": "TM-FS-HP-001",
+  "input": {
+    "contract_id": "family_suitability_contract",
+    "contract_version": "v1",
+    "producer_agent": "family_suitability_agent",
+    "trace_id": "TRACE-FS-001",
+    "created_at": "2026-08-07T19:00:00+03:00",
+    "candidate_ref": {
+      "type": "activity",
+      "id": "bursa_zoo_morning"
+    },
+    "family_suitability_summary": {
+      "overall_fit_band": "good",
+      "reason_codes": ["morning_energy_fit", "rest_after_activity_recommended"],
+      "main_risk": "parking_uncertain"
+    },
+    "child_age_fit": {
+      "children": [
+        { "age": 2, "fit_band": "moderate", "concerns": ["nap_after_visit_needed"] },
+        { "age": 6, "fit_band": "good", "concerns": [] }
+      ]
+    },
+    "toddler_fit": {
+      "fit_band": "moderate",
+      "nap_compatible": true,
+      "stroller_friendly": "unknown",
+      "long_wait_risk": "medium",
+      "toilet_break_need": "medium"
+    },
+    "older_child_fit": {
+      "fit_band": "good",
+      "engagement_level": "high",
+      "boredom_risk": "low",
+      "learning_or_play_value": "high"
+    },
+    "fatigue_risk": {
+      "level": "medium",
+      "drivers": ["long_walking_distance_possible"],
+      "mitigation": ["schedule_hotel_rest_after_lunch"]
+    },
+    "rest_fit": {
+      "midday_rest_possible": true,
+      "hotel_return_possible": true,
+      "low_pace_alternative_needed": false,
+      "rest_conflict_reason": null
+    },
+    "parent_burden": {
+      "level": "medium",
+      "drivers": ["parking_uncertain"]
+    },
+    "suitability_blockers": [],
+    "suitability_warnings": ["parking_uncertain"],
+    "recommended_adjustments": ["return_to_hotel_after_lunch"],
+    "evidence_markers": [
+      {
+        "claim": "parking_available",
+        "status": "unknown"
+      }
+    ],
+    "confidence": {
+      "level": "medium",
+      "reason": "parking and facility details still need verification"
+    },
+    "validation_status": "valid_with_warnings"
+  },
+  "expected": {
+    "valid": true,
+    "children": 2,
+    "fatigue_level": "medium",
+    "midday_rest_possible": true
+  }
+}
