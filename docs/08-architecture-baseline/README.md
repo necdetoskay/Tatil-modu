@@ -38,6 +38,7 @@ kanonik Tatil Modu mimari çalışmalarını toplar.
 - [Architecture Dependency Index](architecture-dependency-index.md)
 - [Architecture Terminology Registry](architecture-terminology-registry.md)
 - [Memory Platform Boundary](memory-platform-boundary.md)
+- [Public Authority Layering](public-authority-layering.md)
 
 ## Knowledge ayrımı
 
@@ -176,6 +177,14 @@ ARF-015 kararı: Memory; agent, planner veya Travel Knowledge Store içinde dağ
 Hiçbir expert agent canonical memory'ye doğrudan yazmaz. Agent ve planner bileşenleri memory write candidate üretebilir; kalıcı mutation yalnız Memory Platform validation, consent/policy check ve audit kaydı sonrasında yapılır.
 
 Travel Knowledge Store destinasyon/POI/otel/aktivite bilgisini tutar; Memory Platform kullanıcı ve aile bağlamını tutar. Bu iki store birbirinin yerine kullanılmaz.
+
+## Public Authority layering ayrımı
+
+ARF-016 kararı: Public Authority sorumluluğu tek katmanda toplanmaz. Kaynak erişimi Capability Platform'da, authority/freshness/evidence semantiği Data Source & Trust'ta, runtime taşıma Verification Platform'da, kural etkisi Policy / Constraint Layer'da, plan uygulaması Planner / Orchestrator'da ve kullanıcı açıklaması Final Plan Composer'da tutulur.
+
+Canonical public authority boundary takip noktası `[Public Authority Layering](public-authority-layering.md)` dosyasıdır.
+
+Public authority claim'leri hard constraint, soft warning, operational advisory veya source note olarak sınıflandırılır. Planner hard constraint olarak sınıflandırılmış resmi kuralı gevşetemez; kullanıcıya gösterilecek açıklama Final Plan Composer tarafından kaynak ve belirsizlik bilgisiyle taşınır.
 
 ## Freeze durumu
 
