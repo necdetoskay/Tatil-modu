@@ -37,6 +37,7 @@ Bu dosya dokümantasyonun ana giriş noktasıdır. Her konu için tek bir kanoni
 | `16-workflows/` | Koddan önce hazırlanacak E2E workflow, handoff ve orchestration tasarımları |
 | `17-decision-policy-engine/` | Koddan önce hazırlanacak decision policy, gate ve precedence tasarımları |
 | `18-memory-architecture/` | Koddan önce hazırlanacak memory architecture deep design tasarımları |
+| `19-quality-engine/` | Koddan önce hazırlanacak quality engine, review ve scoring tasarımları |
 
 ## Kanonik belge matrisi
 
@@ -55,6 +56,7 @@ Bu dosya dokümantasyonun ana giriş noktasıdır. Her konu için tek bir kanoni
 | Canonical prompt framework | [`15-prompts/README.md`](15-prompts/README.md) |
 | Canonical workflow design | [`16-workflows/README.md`](16-workflows/README.md) |
 | Canonical decision policy engine | [`17-decision-policy-engine/README.md`](17-decision-policy-engine/README.md) |
+| Canonical memory architecture | [`18-memory-architecture/README.md`](18-memory-architecture/README.md) |
 | Trip Intake Agent spec | [`11-agent-specifications/trip-intake-agent.md`](11-agent-specifications/trip-intake-agent.md) |
 | Pre-freeze agent listesi | [`02-agents/agent-catalog.md`](02-agents/agent-catalog.md) |
 | Agent template'i | [`02-agents/_templates/agent-specification-template.md`](02-agents/_templates/agent-specification-template.md) |
@@ -86,8 +88,8 @@ Bu dosya dokümantasyonun ana giriş noktasıdır. Her konu için tek bir kanoni
 | Prompt Framework | first phase tamamlandı; runtime prompt engine kapalı |
 | Workflows | first phase tamamlandı; runtime orchestration kapalı |
 | Decision Policy Engine | first phase tamamlandı; runtime policy engine kapalı |
-| Memory Architecture | sıradaki aşama; kod/prototype kapalı |
-| Quality Engine | bekliyor |
+| Memory Architecture | first phase tamamlandı; runtime memory store kapalı |
+| Quality Engine | sıradaki aşama; kod/prototype kapalı |
 | Orchestrator | bekliyor |
 | Observability üst katmanı | bekliyor |
 
@@ -109,4 +111,5 @@ Bu dosya dokümantasyonun ana giriş noktasıdır. Her konu için tek bir kanoni
 14. Prompt framework tasarımları `15-prompts/` altında tutulur; runtime prompt engine veya production prompt routing değildir.
 15. Workflow tasarımları `16-workflows/` altında tutulur; runtime orchestration, job runner veya production workflow engine değildir.
 16. Decision policy tasarımları `17-decision-policy-engine/` altında tutulur; runtime policy engine, rule evaluator veya scoring implementation değildir.
-17. Memory architecture tasarımları sıradaki aşamada ele alınacaktır; runtime memory store veya database implementation değildir.
+17. Memory architecture tasarımları `18-memory-architecture/` altında tutulur; runtime memory store, database schema veya vector store implementation değildir.
+18. Quality engine tasarımları sıradaki aşamada ele alınacaktır; runtime reviewer, scoring engine veya CI evaluator değildir.
