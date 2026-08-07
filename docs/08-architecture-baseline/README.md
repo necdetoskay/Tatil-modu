@@ -5,6 +5,7 @@ kanonik Tatil Modu mimari çalışmalarını toplar.
 
 ## Kapsam
 
+- [Travel Knowledge Store](travel-knowledge-store.md)
 - Verification Platform
 - Activity / Route / Hotel / Day Planner agentları
 - Budget Intelligence
@@ -32,6 +33,14 @@ kanonik Tatil Modu mimari çalışmalarını toplar.
 - Backup & Disaster Recovery
 - Version Management & Compatibility
 - Architecture Review & Freeze Plan
+
+## Knowledge ayrımı
+
+Bu baseline içindeki runtime seyahat bilgisi `Travel Knowledge Store` adıyla anılır.
+
+`Knowledge Platform` adı yalnız `docs/07-knowledge-platform/` altında tanımlanan kanonik ontology, claim, rule, formula, threshold, policy, prompt, schema, evaluation ve migration registry yönetişimi için kullanılır.
+
+Travel Knowledge Store, Knowledge Platform registry snapshot'larını tüketir; onların canonical ownership sorumluluğunu üstlenmez.
 
 ## Freeze durumu
 
