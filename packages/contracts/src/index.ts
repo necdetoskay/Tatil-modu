@@ -4,6 +4,7 @@ export * from './common-evidence.js';
 export * from './common-error.js';
 export * from './constraint-policy.js';
 export * from './family-suitability.js';
+export * from './destination-candidate.js';
 
 export const CONTRACTS_PACKAGE = '@tatil-modu/contracts' as const;
 
