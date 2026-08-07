@@ -60,8 +60,8 @@ Kadınlar plajı şartı olan senaryoda deniz önerisi nasıl güvenli taşını
 | 4 | Constraint Violation Fixture Pack | [`04-constraint-violation-fixture-pack.md`](04-constraint-violation-fixture-pack.md) | drafted |
 | 5 | Evidence Gap Fixture Pack | [`05-evidence-gap-fixture-pack.md`](05-evidence-gap-fixture-pack.md) | drafted |
 | 6 | Privacy Sensitive Beach Fixture Pack | [`06-privacy-sensitive-beach-fixture-pack.md`](06-privacy-sensitive-beach-fixture-pack.md) | drafted |
-| 7 | Route Logistics Fixture Pack | `07-route-logistics-fixture-pack.md` | next |
-| 8 | Day Plan Coherence Fixture Pack | `08-day-plan-coherence-fixture-pack.md` | planned |
+| 7 | Route Logistics Fixture Pack | [`07-route-logistics-fixture-pack.md`](07-route-logistics-fixture-pack.md) | drafted |
+| 8 | Day Plan Coherence Fixture Pack | `08-day-plan-coherence-fixture-pack.md` | next |
 | 9 | Final Response Quality Rubric | `09-final-response-quality-rubric.md` | planned |
 | 10 | Regression and Golden Baseline Policy | `10-regression-and-golden-baseline-policy.md` | planned |
 | 11 | Evaluation Completion Checklist | `11-evaluation-completion-checklist.md` | planned |
@@ -139,7 +139,8 @@ completed_artifacts:
   - 04-constraint-violation-fixture-pack.md
   - 05-evidence-gap-fixture-pack.md
   - 06-privacy-sensitive-beach-fixture-pack.md
-next_artifact: 07-route-logistics-fixture-pack.md
+  - 07-route-logistics-fixture-pack.md
+next_artifact: 08-day-plan-coherence-fixture-pack.md
 implementation_allowed: false
 prototype_allowed: false
 test_runner_code_allowed: false
