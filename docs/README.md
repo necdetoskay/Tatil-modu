@@ -2,39 +2,49 @@
 
 Bu dosya dokümantasyonun ana giriş noktasıdır. Her konu için tek bir kanonik belge kullanılır.
 
-## Architecture Review durumu
-**Güncel mimari durum:** Architecture Freeze öncesi kanonik baseline `08-architecture-baseline/` altında tutulur. Pre-implementation canonical deep-design katmanları `11–23` altında tamamlanmıştır; implementation izni henüz verilmemiştir.
+## Güncel durum
+Canonical pre-code design freeze **PASS**. `11–23` deep-design katmanları tamamlandı ve açık design blocker kalmadı. Sıradaki aşama `24-implementation-readiness/` altında implementation ve delivery planıdır.
+
+```yaml
+canonical_design_freeze: approved
+open_design_blockers: 0
+implementation_planning_allowed: true
+production_release_allowed: false
+live_provider_integration_allowed: false
+current_stage: implementation_readiness_and_delivery_plan
+```
 
 ## Klasör yapısı
 | Klasör | Sorumluluk |
 |---|---|
 | `00-governance/` | ADR'ler, mühendislik ilkeleri, karar logu ve terimler |
-| `01-architecture/` | Pre-freeze sistem mimarisi, handoff standardı ve veri güven politikası |
-| `02-agents/` | Pre-freeze agent katalog ve agent belgeleri |
-| `03-testing/` | Ortak agent test ve değerlendirme standardı |
-| `04-tools/` | Capability Platform, provider adapterları ve capability contract'ları |
-| `08-architecture-baseline/` | Architecture Freeze öncesi kanonik baseline |
-| `09-pre-implementation-design/` | Pre-code workplan ve freeze checklist alanı |
+| `01-architecture/` | Pre-freeze referans mimari belgeleri |
+| `02-agents/` | Pre-freeze agent katalog/referans belgeleri |
+| `03-testing/` | Ortak test/evaluation referansları |
+| `04-tools/` | Pre-freeze capability/tool referansları |
+| `08-architecture-baseline/` | Kanonik architecture baseline |
+| `09-pre-implementation-design/` | Pre-code workplan ve final design freeze kararı |
 | `10-product/` | Ürün vizyonu ve kapsam foundation |
 | `11-agent-specifications/` | Canonical agent specifications |
-| `12-contracts/` | Canonical handoff contract ve envelope tasarımları |
-| `13-fixtures-and-evaluation/` | Canonical fixture, golden scenario ve evaluation tasarımları |
-| `14-tool-and-capability-design/` | Tool, capability, adapter ve verification access tasarımları |
-| `15-prompts/` | Composable prompt framework tasarımları |
-| `16-workflows/` | E2E workflow ve orchestration tasarımları |
-| `17-decision-policy-engine/` | Decision policy, gate ve precedence tasarımları |
-| `18-memory-architecture/` | Memory architecture deep design |
-| `19-quality-engine/` | Quality engine, review ve scoring tasarımları |
-| `20-orchestrator/` | Orchestrator, coordination ve handoff routing tasarımları |
-| `21-observability/` | Observability, telemetry, traceability ve operational insight tasarımları |
-| `22-architecture-completion-review/` | Completion, ownership, gap ve freeze blocker review |
-| `23-product-ux-design/` | Canonical product interaction ve UX deep-design |
+| `12-contracts/` | Canonical handoff contracts |
+| `13-fixtures-and-evaluation/` | Fixture, golden scenario ve evaluation tasarımları |
+| `14-tool-and-capability-design/` | Tool/capability/provider boundary tasarımları |
+| `15-prompts/` | Prompt framework |
+| `16-workflows/` | E2E workflow tasarımları |
+| `17-decision-policy-engine/` | Policy, gate ve precedence tasarımları |
+| `18-memory-architecture/` | Memory/privacy tasarımı |
+| `19-quality-engine/` | Quality/review tasarımı |
+| `20-orchestrator/` | Orchestration/routing tasarımı |
+| `21-observability/` | Telemetry/traceability tasarımı |
+| `22-architecture-completion-review/` | Cross-layer completion ve blocker review |
+| `23-product-ux-design/` | Product interaction ve UX deep design |
+| `24-implementation-readiness/` | Implementation topology, sequence, testing, CI ve delivery planı |
 
 ## Kanonik belge matrisi
 | Konu | Tek kaynak |
 |---|---|
 | Architecture baseline | `08-architecture-baseline/README.md` |
-| Pre-implementation design / freeze | `09-pre-implementation-design/README.md` |
+| Pre-code freeze | `09-pre-implementation-design/10-pre-code-freeze-checklist.md` |
 | Product vision | `10-product/PRD-001-URUN-VIZYONU.md` |
 | Agent specifications | `11-agent-specifications/README.md` |
 | Contracts | `12-contracts/README.md` |
@@ -49,37 +59,28 @@ Bu dosya dokümantasyonun ana giriş noktasıdır. Her konu için tek bir kanoni
 | Observability | `21-observability/README.md` |
 | Architecture completion review | `22-architecture-completion-review/README.md` |
 | Product/UX deep design | `23-product-ux-design/README.md` |
+| Implementation readiness | `24-implementation-readiness/README.md` |
 
-## Mimari aşama durumu
+## Aşama durumu
 | Aşama | Durum |
 |---|---|
-| Architecture baseline | kanonik baseline mevcut |
-| Pre-implementation workplan | tamamlandı; eski freeze kararı yeniden değerlendirilecek |
-| Agent specifications | first phase tamamlandı |
-| Contracts | first phase tamamlandı |
-| Fixtures and evaluation | first phase tamamlandı |
-| Tool and capability design | first phase tamamlandı |
-| Prompt Framework | first phase tamamlandı |
-| Workflows | first phase tamamlandı |
-| Decision Policy Engine | first phase tamamlandı |
-| Memory Architecture | first phase tamamlandı |
-| Quality Engine | first phase tamamlandı |
-| Orchestrator | first phase tamamlandı |
-| Observability | first phase tamamlandı |
-| Architecture completion review | first phase tamamlandı; Product/UX blocker kapatıldı |
-| Product/UX deep design | first phase tamamlandı; frontend implementation kapalı |
-| Pre-code freeze reassessment | **sıradaki aşama** |
+| Canonical design `11–23` | tamamlandı |
+| Architecture completion review | tamamlandı |
+| Product/UX deep design | tamamlandı |
+| Pre-code freeze reassessment | **PASS** |
+| Implementation readiness & delivery plan | **aktif aşama** |
+| Production readiness | kapalı |
 
-## Source of truth kuralları
+## Source-of-truth kuralları
 1. Architecture ownership ve boundary kararlarında `08-architecture-baseline/` önceliklidir.
-2. Canonical deep-design artifact'ları `11–23` altındaki ilgili klasörde tutulur; eski workplan path'leri canonical içerik olarak kullanılmaz.
-3. Agent'lar provider çağırmaz; capability kullanır.
+2. Canonical deep-design artifact'ları `11–23` altındaki ilgili klasörde tutulur.
+3. Agent provider çağırmaz; capability kullanır.
 4. Agent'lar birbirini doğrudan çağırmaz; Orchestrator routing yapar.
 5. Hard constraint skorla telafi edilemez.
-6. Verification, evidence ve confidence ownership'i ilgili canonical platform/contractlarda kalır.
+6. Verification/evidence/confidence ownership'i canonical platform/contractlarda kalır.
 7. Canonical memory write yalnız Memory Platform ownership'indedir.
 8. Observability Audit Logger'ın yerine geçmez.
-9. Product/UX canonical kararları temsil eder; policy/evidence/ranking üretmez.
-10. README dosyaları ayrıntıyı kopyalamaz, ilgili canonical alana yönlendirir.
-11. `09-pre-implementation-design/10-pre-code-freeze-checklist.md` mevcut `11–23` canonical yapı üzerinden yeniden değerlendirilmeden implementation başlamaz.
-12. Ayrı bir pre-code freeze kararı verilene kadar application/frontend/backend/runtime/live-provider implementation kapalıdır.
+9. Product/UX policy/evidence/ranking üretmez; canonical sonucu temsil eder.
+10. Implementation canonical contract ve ownership sınırlarını değiştirecekse önce ADR/design amendment gerekir.
+11. Design freeze PASS production readiness anlamına gelmez.
+12. Live provider, persistent production memory ve deployment ayrı readiness gate'lerine tabidir.
