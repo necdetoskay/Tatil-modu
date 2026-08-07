@@ -3,7 +3,7 @@
 Bu dosya dokümantasyonun ana giriş noktasıdır. Her konu için tek bir kanonik belge kullanılır.
 
 ## Güncel durum
-Canonical pre-code design freeze **PASS**. `11–23` deep-design katmanları tamamlandı. Implementation stratejisi **Headless Core First** olarak sabitlendi; UI/frontend geliştirmesi headless acceptance gate PASS olmadan açılamaz.
+Canonical pre-code design freeze **PASS**. `11–23` deep-design katmanları tamamlandı. Implementation stratejisi **Headless Core First**; UI/frontend geliştirmesi Headless Core Acceptance Gate PASS olmadan açılamaz.
 
 ```yaml
 canonical_design_freeze: approved
@@ -15,7 +15,8 @@ ui_development_allowed: false
 headless_core_accepted: false
 production_release_allowed: false
 live_provider_integration_allowed: false
-current_stage: H0_repository_foundation
+current_stage: H0_repository_foundation_validation
+h1_allowed: false
 ```
 
 ## Klasör yapısı
@@ -44,13 +45,13 @@ current_stage: H0_repository_foundation
 | `23-product-ux-design/` | Product interaction ve UX deep design; implementation ertelendi |
 | `24-implementation-readiness/` | Headless core topology, sequence, testing, CI ve delivery planı |
 | `25-headless-test-architecture/` | Headless test suite, severity/gate, coverage, model eval ve UI Unlock mimarisi |
+| `26-headless-implementation/` | H0–H12 gerçek implementation ve execution evidence kayıt alanı |
 
 ## Kanonik belge matrisi
 | Konu | Tek kaynak |
 |---|---|
 | Architecture baseline | `08-architecture-baseline/README.md` |
 | Pre-code freeze | `09-pre-implementation-design/10-pre-code-freeze-checklist.md` |
-| Product vision | `10-product/PRD-001-URUN-VIZYONU.md` |
 | Agent specifications | `11-agent-specifications/README.md` |
 | Contracts | `12-contracts/README.md` |
 | Fixtures and evaluation | `13-fixtures-and-evaluation/README.md` |
@@ -62,11 +63,11 @@ current_stage: H0_repository_foundation
 | Quality Engine | `19-quality-engine/README.md` |
 | Orchestrator | `20-orchestrator/README.md` |
 | Observability | `21-observability/README.md` |
-| Architecture completion review | `22-architecture-completion-review/README.md` |
 | Product/UX deep design | `23-product-ux-design/README.md` |
 | Implementation readiness | `24-implementation-readiness/README.md` |
 | Headless test architecture | `25-headless-test-architecture/README.md` |
 | UI unlock gate | `25-headless-test-architecture/15-headless-core-acceptance-gate.md` |
+| Implementation execution | `26-headless-implementation/README.md` |
 
 ## Aşama durumu
 | Aşama | Durum |
@@ -75,7 +76,9 @@ current_stage: H0_repository_foundation
 | Pre-code freeze reassessment | **PASS** |
 | Headless test architecture | first phase tamamlandı |
 | Headless implementation readiness | first phase **PASS** |
-| H0 Repository Foundation | **aktif aşama** |
+| H0 Repository Foundation code | tamamlandı |
+| H0 execution validation | **bekliyor; PASS evidence zorunlu** |
+| H1 Contracts & Domain | H0 PASS olmadan kilitli |
 | Headless core acceptance | bekliyor |
 | UI readiness review | headless acceptance PASS sonrasına kilitli |
 | UI/frontend implementation | **kilitli** |
@@ -97,3 +100,4 @@ current_stage: H0_repository_foundation
 13. Real model/provider benchmark deterministic core test gate'inin yerine geçmez.
 14. Live provider, persistent production memory ve deployment ayrı readiness gate'lerine tabidir.
 15. H0–H11 sprintleri test-gated Definition of Done ile kapanır; feature code tek başına sprint completion değildir.
+16. Bir sprintin sonraki sprinti açabilmesi için gerçek test execution evidence gereklidir.
