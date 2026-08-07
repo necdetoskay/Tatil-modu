@@ -1,0 +1,19 @@
+{
+  "files": [],
+  "references": [
+    { "path": "apps/cli" },
+    { "path": "packages/contracts" },
+    { "path": "packages/domain" },
+    { "path": "packages/policy" },
+    { "path": "packages/capabilities" },
+    { "path": "packages/providers-mock" },
+    { "path": "packages/memory" },
+    { "path": "packages/agents" },
+    { "path": "packages/orchestrator" },
+    { "path": "packages/verification" },
+    { "path": "packages/quality" },
+    { "path": "packages/observability" },
+    { "path": "packages/test-fixtures" },
+    { "path": "packages/test-harness" }
+  ]
+}
