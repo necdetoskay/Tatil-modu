@@ -40,6 +40,7 @@ kanonik Tatil Modu mimari çalışmalarını toplar.
 - [Memory Platform Boundary](memory-platform-boundary.md)
 - [Public Authority Layering](public-authority-layering.md)
 - [Evaluation Standards Hierarchy](evaluation-standards-hierarchy.md)
+- [Architecture Baseline Staging Policy](architecture-baseline-staging-policy.md)
 
 ## Knowledge ayrımı
 
@@ -195,11 +196,18 @@ Canonical evaluation hiyerarşisi `[Evaluation Standards Hierarchy](evaluation-s
 
 Evaluation sonuçları çelişirse daha üst sıradaki gate önceliklidir. Safety veya hard constraint failure, yüksek domain quality skoru ya da düşük latency ile telafi edilemez.
 
+## Architecture baseline staging ayrımı
+
+ARF-018 kararı: `docs/08-architecture-baseline/` kalıcı canonical tree değildir. Bu klasör Architecture Freeze öncesi staging alanıdır.
+
+Canonical staging policy `[Architecture Baseline Staging Policy](architecture-baseline-staging-policy.md)` dosyasında tutulur.
+
+Architecture Freeze tamamlanana kadar ownership ve boundary çakışmalarında bu klasör geçici önceliklidir. Freeze tamamlandıktan sonra içerikler kalıcı canonical dokümantasyon alanlarına taşınır, bağlanır veya arşiv snapshot olarak işaretlenir.
+
 ## Freeze durumu
 
-Bu paket Architecture Freeze öncesi kanonik baseline'dır.
-`architecture-review/` altındaki checklist ve gap register, freeze incelemesinde
-kullanılacaktır.
+Bu paket Architecture Freeze öncesi staging baseline'dır.
 
-AI Agent Architecture Handbook, Architecture Freeze tamamlandıktan sonra
-hazırlanacaktır.
+`architecture-review/` altındaki checklist ve gap register freeze incelemesinde kullanılacaktır. Freeze tamamlandığında bu klasör kalıcı mimari kök olarak genişletilmeyecek; içeriği kalıcı dokümantasyon ağacına migrate edilecek, ilgili canonical dosyalara bağlanacak veya freeze snapshot olarak arşivlenecektir.
+
+AI Agent Architecture Handbook, Architecture Freeze tamamlandıktan sonra hazırlanacaktır.
