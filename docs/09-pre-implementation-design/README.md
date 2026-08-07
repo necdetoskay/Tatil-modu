@@ -115,5 +115,6 @@ completed_documents:
   - 01-design-completion-assessment.md
   - 02-system-blueprint-gap-analysis.md
   - 03-required-design-artifact-map.md
-next_document: 04-agent-specification-workplan.md
+  - 04-agent-specification-workplan.md
+next_document: 05-contract-schema-workplan.md
 ```
