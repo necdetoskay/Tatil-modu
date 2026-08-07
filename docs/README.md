@@ -9,12 +9,13 @@ Canonical pre-code design freeze **PASS**. `11–23` deep-design katmanları tam
 canonical_design_freeze: approved
 open_design_blockers: 0
 implementation_strategy: headless_core_first
-implementation_planning_allowed: true
+implementation_readiness_first_phase: PASS
+headless_core_implementation_allowed: true
 ui_development_allowed: false
 headless_core_accepted: false
 production_release_allowed: false
 live_provider_integration_allowed: false
-current_stage: headless_implementation_readiness
+current_stage: H0_repository_foundation
 ```
 
 ## Klasör yapısı
@@ -73,8 +74,9 @@ current_stage: headless_implementation_readiness
 | Canonical design `11–23` | tamamlandı |
 | Pre-code freeze reassessment | **PASS** |
 | Headless test architecture | first phase tamamlandı |
-| Headless implementation readiness | **aktif aşama** |
-| Headless core implementation | readiness tamamlanınca başlayacak |
+| Headless implementation readiness | first phase **PASS** |
+| H0 Repository Foundation | **aktif aşama** |
+| Headless core acceptance | bekliyor |
 | UI readiness review | headless acceptance PASS sonrasına kilitli |
 | UI/frontend implementation | **kilitli** |
 | Production readiness | kapalı |
@@ -94,3 +96,4 @@ current_stage: headless_implementation_readiness
 12. UI readiness review ayrıca PASS vermeden UI/frontend implementation başlayamaz.
 13. Real model/provider benchmark deterministic core test gate'inin yerine geçmez.
 14. Live provider, persistent production memory ve deployment ayrı readiness gate'lerine tabidir.
+15. H0–H11 sprintleri test-gated Definition of Done ile kapanır; feature code tek başına sprint completion değildir.
