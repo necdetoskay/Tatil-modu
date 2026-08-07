@@ -3,22 +3,30 @@
 **Doküman türü:** canonical implementation execution plan  
 **Amaç:** H0–H12 sprintlerinin gerçek kod, test ve execution evidence durumunu yönetmek.  
 **Plan seti:** complete  
-**Execution:** H0 validation pending
+**Execution:** H1 in progress
 
 ## Current state
 ```yaml
-current_sprint: H0_repository_foundation
-implementation_state: code_complete_validation_pending
+current_sprint: H1_contracts_and_domain
+implementation_state: in_progress
 implementation_plan_H0_H12: complete
+H0_repository_foundation: PASS
+H1_L0_overall: in_progress
+H1_validated_slices:
+  - travel_request_contract
+  - common_evidence_envelope
+  - common_error_envelope
+  - constraint_policy_contract
+H1_next_slice: family_suitability_contract
 ui_development_allowed: false
-h1_execution_allowed: false
+h2_execution_allowed: false
 ```
 
 ## Canonical sprint seti
 | # | Sprint | Belge | Gate |
 |---:|---|---|---|
-| 1 | H0 Repository Foundation | `01-H0-repository-foundation.md` | foundation execution |
-| 2 | H1 Contracts & Domain | `02-H1-contracts-domain.md` | L0 |
+| 1 | H0 Repository Foundation | `01-H0-repository-foundation.md` | PASS |
+| 2 | H1 Contracts & Domain | `02-H1-contracts-domain.md` | L0 — in progress |
 | 3 | H2 Policy Core | `03-H2-policy-core.md` | L1 |
 | 4 | H3 Capability & Mock Platform | `04-H3-capability-mock-platform.md` | L2 capability |
 | 5 | H4 Memory Core | `05-H4-memory-core.md` | L2 memory |
@@ -40,34 +48,33 @@ TEST WRITTEN ≠ TEST PASS
 ONLY EXECUTION EVIDENCE + GATE PASS → NEXT STAGE
 ```
 
-## H0 üretilen temel
-- pnpm workspace
-- strict TypeScript baseline
-- Vitest deterministic baseline
-- package boundary guard
-- headless CLI skeleton
-- canonical package skeletons
-- H0 repository invariant tests
-- GitHub Actions H0 gate
-- PR-based CI validation attempt
+## H0 evidence
+`pnpm test:h0` zinciri gerçek GitHub Actions koşusunda install + typecheck + boundary + Vitest PASS vermiştir.
 
-## H0 kapanış şartı
-```text
-pnpm install
-pnpm typecheck
-pnpm test:boundaries
-pnpm test
-# veya birleşik:
-pnpm test:h0
-```
+## H1 validated evidence
+### Slice 1 — Travel Request
+- runtime Zod schema
+- domain primitives
+- canonical JSON fixture
+- positive/negative assertions
+- CI PASS
 
-Connector üzerinden workflow run sonucu henüz görünür olmadığı için H0 PASS ilan edilmemiştir.
+### Slice 2 — Shared contracts + policy handoff
+- Common Evidence Envelope
+- Common Error Envelope
+- Constraint Policy Contract
+- canonical JSON fixtures
+- P0 assertions
+- CI run `31208968177` PASS
+
+## H1 henüz tamamlanmadı
+L0 ancak kalan canonical contracts runtime schema + fixture + negative tests + version/trace coverage ile PASS olduğunda kapanacaktır.
 
 ## Global progression
 ```text
-H0
+H0 PASS
  ↓
-H1 / L0
+H1 / L0 — ACTIVE
  ↓
 H2 + H3 + H4 / L1-L2
  ↓
@@ -87,8 +94,6 @@ UI Readiness Review
  ↓ PASS
 UI implementation unlock
 ```
-
-H12 real model/provider evaluation deterministic L0–L7 gate'lerinin yerine geçmez.
 
 ## Global rules
 1. P0 failure varsa progression durur.
