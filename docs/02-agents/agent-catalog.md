@@ -2,7 +2,9 @@
 
 ## 1. Katalog amacı
 
-Bu katalog sistemde planlanan agentları, görev sınırlarını ve bağımlılıklarını tanımlar.
+Bu katalog sistemde planlanan ilk agentları, görev sınırlarını ve bağımlılıklarını tanımlar.
+
+> **Canonical status:** Bu dosya pre-freeze/legacy referans katalogdur. Architecture Freeze için canonical aday agent ve platform sınırları docs/08-architecture-baseline/ altında tutulur. Bu katalog geçmiş kararları ve ilk agent ayrımını korur; yeni mimari isimlendirme veya ownership çakışmalarında docs/08-architecture-baseline/ önceliklidir.
 
 Agent sayısı başlangıçta bilinçli olarak sınırlı tutulur. Bir görev ancak bağımsız prompt, tool, sözleşme ve test ihtiyacı varsa ayrı agenta dönüştürülür.
 
