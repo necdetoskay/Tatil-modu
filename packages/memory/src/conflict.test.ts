@@ -4,7 +4,7 @@ import { InMemoryMemoryRepository, type MemoryRecord } from './core.js';
 const now = '2026-08-07T20:30:00Z';
 
 function record(overrides: Partial<MemoryRecord> & Pick<MemoryRecord, 'id' | 'key' | 'value'>): MemoryRecord {
-  return {
+  const base: MemoryRecord = {
     id: overrides.id,
     key: overrides.key,
     value: overrides.value,
@@ -14,11 +14,12 @@ function record(overrides: Partial<MemoryRecord> & Pick<MemoryRecord, 'id' | 'ke
     consentGranted: overrides.consentGranted ?? true,
     confidence: overrides.confidence ?? 1,
     createdAt: overrides.createdAt ?? '2026-08-07T20:00:00Z',
-    expiresAt: overrides.expiresAt,
     status: overrides.status ?? 'active',
-    provenance: overrides.provenance ?? { sourceType: 'conversation', sourceRef: 'turn-1', observedAt: '2026-08-07T20:00:00Z' },
-    supersedesId: overrides.supersedesId
+    provenance: overrides.provenance ?? { sourceType: 'conversation', sourceRef: 'turn-1', observedAt: '2026-08-07T20:00:00Z' }
   };
+  if (overrides.expiresAt !== undefined) base.expiresAt = overrides.expiresAt;
+  if (overrides.supersedesId !== undefined) base.supersedesId = overrides.supersedesId;
+  return base;
 }
 
 function write(repo: InMemoryMemoryRepository, memory: MemoryRecord) {
