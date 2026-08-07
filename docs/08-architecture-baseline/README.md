@@ -35,6 +35,7 @@ kanonik Tatil Modu mimari çalışmalarını toplar.
 - Architecture Review & Freeze Plan
 - [Architecture Freeze Required Artifact Inventory](freeze-required-artifact-inventory.md)
 - [Central Error Code Registry](error-code-registry.md)
+- [Architecture Dependency Index](architecture-dependency-index.md)
 
 ## Knowledge ayrımı
 
@@ -149,6 +150,14 @@ Error Code Registry şu semantiğin sahibidir:
 - provider-specific hata mapping kuralları.
 
 Katmanlar hata üretebilir; fakat yeni hata kodunu registry dışında tanımlayamaz.
+
+## Cross-reference / dependency metadata ayrımı
+
+ARF-013 kararı: Canonical mimari dokümanlar yalnız içerik taşımaz; hangi ARF kararına, hangi ownership boundary'ye ve hangi artifact'a bağlı oldukları da izlenebilir olmalıdır.
+
+Cross-reference ve dependency metadata için canonical takip noktası `[Architecture Dependency Index](architecture-dependency-index.md)` dosyasıdır.
+
+Yeni canonical agent, platform, schema, registry veya prompt dokümanı mümkün olduğunda owner, depends_on, related_artifacts, canonical_status ve architecture_review metadata'sı taşımalıdır.
 
 ## Freeze durumu
 
