@@ -34,7 +34,7 @@ Bu dosya dokümantasyonun ana giriş noktasıdır. Her konu için tek bir kanoni
 | `13-fixtures-and-evaluation/` | Koddan önce hazırlanacak canonical fixture, golden scenario ve evaluation tasarımları |
 | `14-tool-and-capability-design/` | Koddan önce hazırlanacak tool, capability, adapter ve verification access tasarımları |
 | `15-prompts/` | Ortak/composable prompt framework tasarımları |
-| `16-workflows/` | E2E ve agent iş akışları |
+| `16-workflows/` | Koddan önce hazırlanacak E2E workflow, handoff ve orchestration tasarımları |
 
 ## Kanonik belge matrisi
 
@@ -51,6 +51,7 @@ Bu dosya dokümantasyonun ana giriş noktasıdır. Her konu için tek bir kanoni
 | Canonical fixtures and evaluation | [`13-fixtures-and-evaluation/README.md`](13-fixtures-and-evaluation/README.md) |
 | Canonical tool and capability design | [`14-tool-and-capability-design/README.md`](14-tool-and-capability-design/README.md) |
 | Canonical prompt framework | [`15-prompts/README.md`](15-prompts/README.md) |
+| Canonical workflow design | [`16-workflows/README.md`](16-workflows/README.md) |
 | Trip Intake Agent spec | [`11-agent-specifications/trip-intake-agent.md`](11-agent-specifications/trip-intake-agent.md) |
 | Pre-freeze agent listesi | [`02-agents/agent-catalog.md`](02-agents/agent-catalog.md) |
 | Agent template'i | [`02-agents/_templates/agent-specification-template.md`](02-agents/_templates/agent-specification-template.md) |
@@ -80,8 +81,8 @@ Bu dosya dokümantasyonun ana giriş noktasıdır. Her konu için tek bir kanoni
 | Canonical fixtures and evaluation | first phase tamamlandı; kod/prototype/test runner kapalı |
 | Canonical tool and capability design | first phase tamamlandı; adapter/provider/live tool kapalı |
 | Prompt Framework | first phase tamamlandı; runtime prompt engine kapalı |
-| Workflows | sıradaki aşama; kod/prototype kapalı |
-| Decision Policy Engine | bekliyor |
+| Workflows | first phase tamamlandı; runtime orchestration kapalı |
+| Decision Policy Engine | sıradaki aşama; kod/prototype kapalı |
 | Memory Architecture | bekliyor |
 | Quality Engine | bekliyor |
 | Orchestrator | bekliyor |
@@ -103,4 +104,5 @@ Bu dosya dokümantasyonun ana giriş noktasıdır. Her konu için tek bir kanoni
 12. Canonical fixture ve evaluation tasarımları `13-fixtures-and-evaluation/` altında tutulur; test runner, CI veya otomasyon kodu değildir.
 13. Canonical tool ve capability tasarımları `14-tool-and-capability-design/` altında tutulur; gerçek tool çağrısı, adapter kodu veya provider entegrasyonu değildir.
 14. Prompt framework tasarımları `15-prompts/` altında tutulur; runtime prompt engine veya production prompt routing değildir.
-15. Workflow tasarımları `16-workflows/` altında tutulacaktır; runtime orchestration, job runner veya production workflow engine değildir.
+15. Workflow tasarımları `16-workflows/` altında tutulur; runtime orchestration, job runner veya production workflow engine değildir.
+16. Decision policy tasarımları sıradaki aşamada ele alınacaktır; runtime policy engine değildir.
