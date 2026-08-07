@@ -10,6 +10,10 @@ const fixtures = [
   { fixtureId: 'empty', fault: 'empty' as const }
 ];
 
+function isRouteData(value: unknown): value is { km: number } {
+  return typeof value === 'object' && value !== null && 'km' in value && typeof (value as { km?: unknown }).km === 'number';
+}
+
 describe('DeterministicMockProvider', () => {
   it('replays the same fixture deterministically', async () => {
     const provider = new DeterministicMockProvider(fixtures);
@@ -30,9 +34,11 @@ describe('DeterministicMockProvider', () => {
 
   it('returns normalized evidence envelope on success', async () => {
     const provider = new DeterministicMockProvider(fixtures);
-    const result = await provider.execute<{ km: number }>({ capability: 'route_lookup', traceId: 'trace-2', fixtureId: 'ok-route', payload: {} });
+    const result = await provider.execute({ capability: 'route_lookup', traceId: 'trace-2', fixtureId: 'ok-route', payload: {} });
     expect(result).toMatchObject({ ok: true, capability: 'route_lookup', traceId: 'trace-2' });
     if (result.ok) {
+      expect(isRouteData(result.data)).toBe(true);
+      if (!isRouteData(result.data)) throw new Error('expected route data');
       expect(result.data.km).toBe(42);
       expect(result.evidence[0]).toMatchObject({ sourceId: 'route-fixture', sourceType: 'mock', freshness: 'fresh' });
     }
