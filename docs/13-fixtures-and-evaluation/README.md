@@ -1,7 +1,7 @@
 # 13 — Fixtures and Evaluation
 
 **Doküman türü:** canonical fixture ve evaluation design alanı  
-**Durum:** aktif tasarım artifact alanı  
+**Durum:** first phase tamamlandı  
 **Kodlama durumu:** kapalı  
 **Prototype durumu:** kapalı
 
@@ -20,6 +20,8 @@ Agent + contract tasarımları hangi örnek senaryolarla, hangi kabul kriterleri
 ## Ana karar
 
 ```yaml
+fixture_evaluation_design_state: first_phase_completed
+fixture_evaluation_first_phase_completed: true
 implementation_allowed: false
 prototype_allowed: false
 runtime_allowed: false
@@ -29,6 +31,8 @@ source_of_truth: docs/13-fixtures-and-evaluation/
 input_sources:
   - docs/11-agent-specifications/
   - docs/12-contracts/
+next_stage: docs/14-tool-and-capability-design/
+first_next_artifact: docs/14-tool-and-capability-design/README.md
 ```
 
 Bu klasörde Playwright, Jest, Vitest, CI workflow, script, TypeScript, Zod veya runtime evaluator yazılmaz.
@@ -64,7 +68,7 @@ Kadınlar plajı şartı olan senaryoda deniz önerisi nasıl güvenli taşını
 | 8 | Day Plan Coherence Fixture Pack | [`08-day-plan-coherence-fixture-pack.md`](08-day-plan-coherence-fixture-pack.md) | drafted |
 | 9 | Final Response Quality Rubric | [`09-final-response-quality-rubric.md`](09-final-response-quality-rubric.md) | drafted |
 | 10 | Regression and Golden Baseline Policy | [`10-regression-and-golden-baseline-policy.md`](10-regression-and-golden-baseline-policy.md) | drafted |
-| 11 | Evaluation Completion Checklist | `11-evaluation-completion-checklist.md` | next |
+| 11 | Evaluation Completion Checklist | [`11-evaluation-completion-checklist.md`](11-evaluation-completion-checklist.md) | drafted |
 
 ## Evaluation hiyerarşisi
 
@@ -131,7 +135,7 @@ required_failure_modes:
 ## Current status
 
 ```yaml
-fixture_evaluation_design_state: active
+fixture_evaluation_design_state: first_phase_completed
 completed_artifacts:
   - 01-fixture-evaluation-overview.md
   - 02-golden-scenario-catalog.md
@@ -143,7 +147,9 @@ completed_artifacts:
   - 08-day-plan-coherence-fixture-pack.md
   - 09-final-response-quality-rubric.md
   - 10-regression-and-golden-baseline-policy.md
-next_artifact: 11-evaluation-completion-checklist.md
+  - 11-evaluation-completion-checklist.md
+next_stage: docs/14-tool-and-capability-design/
+first_next_artifact: docs/14-tool-and-capability-design/README.md
 implementation_allowed: false
 prototype_allowed: false
 test_runner_code_allowed: false
