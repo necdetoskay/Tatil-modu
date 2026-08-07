@@ -37,6 +37,7 @@ kanonik Tatil Modu mimari çalışmalarını toplar.
 - [Central Error Code Registry](error-code-registry.md)
 - [Architecture Dependency Index](architecture-dependency-index.md)
 - [Architecture Terminology Registry](architecture-terminology-registry.md)
+- [Memory Platform Boundary](memory-platform-boundary.md)
 
 ## Knowledge ayrımı
 
@@ -167,6 +168,14 @@ ARF-014 kararı: Platform, service, agent, planner, module, registry, store, gat
 Canonical terminoloji takip noktası `[Architecture Terminology Registry](architecture-terminology-registry.md)` dosyasıdır.
 
 Yeni canonical dokümanlarda bileşen türü mümkün olduğunda `component_type` metadata alanıyla belirtilmelidir. Bileşen bir görev yürütüyorsa `agent`, plan kararı veriyorsa `planner`, yalnız domain değerlendirmesi yapıyorsa `module`, ortak altyapı sağlıyorsa `platform`, canonical sözlük tutuyorsa `registry`, kalıcı veri tutuyorsa `store`, provider girişini normalize ediyorsa `gateway`, tekil provider entegrasyonunu temsil ediyorsa `adapter` olarak adlandırılır.
+
+## Memory Platform ayrımı
+
+ARF-015 kararı: Memory; agent, planner veya Travel Knowledge Store içinde dağınık tutulmaz. Kullanıcıya ve aileye ilişkin kalıcı, izinli, açıklanabilir ve yaşam döngüsü yönetilen bilgiler için canonical sınır `[Memory Platform Boundary](memory-platform-boundary.md)` dosyasıdır.
+
+Hiçbir expert agent canonical memory'ye doğrudan yazmaz. Agent ve planner bileşenleri memory write candidate üretebilir; kalıcı mutation yalnız Memory Platform validation, consent/policy check ve audit kaydı sonrasında yapılır.
+
+Travel Knowledge Store destinasyon/POI/otel/aktivite bilgisini tutar; Memory Platform kullanıcı ve aile bağlamını tutar. Bu iki store birbirinin yerine kullanılmaz.
 
 ## Freeze durumu
 
