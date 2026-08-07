@@ -1,7 +1,7 @@
 # 17 — Decision Policy Engine Design
 
 **Doküman türü:** canonical decision policy engine design alanı  
-**Durum:** aktif tasarım artifact alanı  
+**Durum:** first phase completed  
 **Kodlama durumu:** kapalı  
 **Prototype durumu:** kapalı  
 **Runtime policy engine:** kapalı
@@ -15,7 +15,8 @@ Bu alan runtime policy engine, scoring implementation, rule evaluator, DSL, prod
 ## Ana karar
 
 ```yaml
-decision_policy_design_state: active
+decision_policy_design_state: first_phase_completed
+decision_policy_design_first_phase_completed: true
 implementation_allowed: false
 prototype_allowed: false
 runtime_policy_engine_allowed: false
@@ -84,18 +85,18 @@ out_of_scope:
 
 | Sıra | Artifact | Dosya | Durum |
 |---:|---|---|---|
-| 1 | Decision Policy Overview | `01-decision-policy-overview.md` | next |
-| 2 | Policy Priority Hierarchy | `02-policy-priority-hierarchy.md` | planned |
-| 3 | Hard Constraint Gate Policy | `03-hard-constraint-gate-policy.md` | planned |
-| 4 | Soft Preference Ranking Policy | `04-soft-preference-ranking-policy.md` | planned |
-| 5 | Evidence Confidence Decision Policy | `05-evidence-confidence-decision-policy.md` | planned |
-| 6 | Family Suitability Decision Policy | `06-family-suitability-decision-policy.md` | planned |
-| 7 | Privacy Sensitive Decision Policy | `07-privacy-sensitive-decision-policy.md` | planned |
-| 8 | Route Radius Exception Policy | `08-route-radius-exception-policy.md` | planned |
-| 9 | Budget Decision Policy | `09-budget-decision-policy.md` | planned |
-| 10 | Retry Fallback Decision Policy | `10-retry-fallback-decision-policy.md` | planned |
-| 11 | Final Response Decision Policy | `11-final-response-decision-policy.md` | planned |
-| 12 | Decision Policy Completion Checklist | `12-decision-policy-completion-checklist.md` | planned |
+| 1 | Decision Policy Overview | [`01-decision-policy-overview.md`](01-decision-policy-overview.md) | drafted |
+| 2 | Policy Priority Hierarchy | [`02-policy-priority-hierarchy.md`](02-policy-priority-hierarchy.md) | drafted |
+| 3 | Hard Constraint Gate Policy | [`03-hard-constraint-gate-policy.md`](03-hard-constraint-gate-policy.md) | drafted |
+| 4 | Soft Preference Ranking Policy | [`04-soft-preference-ranking-policy.md`](04-soft-preference-ranking-policy.md) | drafted |
+| 5 | Evidence Confidence Decision Policy | [`05-evidence-confidence-decision-policy.md`](05-evidence-confidence-decision-policy.md) | drafted |
+| 6 | Family Suitability Decision Policy | [`06-family-suitability-decision-policy.md`](06-family-suitability-decision-policy.md) | drafted |
+| 7 | Privacy Sensitive Decision Policy | [`07-privacy-sensitive-decision-policy.md`](07-privacy-sensitive-decision-policy.md) | drafted |
+| 8 | Route Radius Exception Policy | [`08-route-radius-exception-policy.md`](08-route-radius-exception-policy.md) | drafted |
+| 9 | Budget Decision Policy | [`09-budget-decision-policy.md`](09-budget-decision-policy.md) | drafted |
+| 10 | Retry Fallback Decision Policy | [`10-retry-fallback-decision-policy.md`](10-retry-fallback-decision-policy.md) | drafted |
+| 11 | Final Response Decision Policy | [`11-final-response-decision-policy.md`](11-final-response-decision-policy.md) | drafted |
+| 12 | Decision Policy Completion Checklist | [`12-decision-policy-completion-checklist.md`](12-decision-policy-completion-checklist.md) | completed |
 
 ## Decision policy tasarım ilkeleri
 
@@ -113,9 +114,21 @@ out_of_scope:
 ## Current status
 
 ```yaml
-decision_policy_design_state: active
-completed_artifacts: []
-next_artifact: 01-decision-policy-overview.md
+decision_policy_design_state: first_phase_completed
+completed_artifacts:
+  - 01-decision-policy-overview.md
+  - 02-policy-priority-hierarchy.md
+  - 03-hard-constraint-gate-policy.md
+  - 04-soft-preference-ranking-policy.md
+  - 05-evidence-confidence-decision-policy.md
+  - 06-family-suitability-decision-policy.md
+  - 07-privacy-sensitive-decision-policy.md
+  - 08-route-radius-exception-policy.md
+  - 09-budget-decision-policy.md
+  - 10-retry-fallback-decision-policy.md
+  - 11-final-response-decision-policy.md
+  - 12-decision-policy-completion-checklist.md
+next_stage: docs/18-memory-architecture/
 implementation_allowed: false
 prototype_allowed: false
 runtime_policy_engine_allowed: false
