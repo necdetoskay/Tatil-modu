@@ -41,6 +41,7 @@ kanonik Tatil Modu mimari çalışmalarını toplar.
 - [Public Authority Layering](public-authority-layering.md)
 - [Evaluation Standards Hierarchy](evaluation-standards-hierarchy.md)
 - [Architecture Baseline Staging Policy](architecture-baseline-staging-policy.md)
+- [Architecture Freeze Closure Checklist](architecture-freeze-closure-checklist.md)
 
 ## Knowledge ayrımı
 
@@ -204,9 +205,25 @@ Canonical staging policy `[Architecture Baseline Staging Policy](architecture-ba
 
 Architecture Freeze tamamlanana kadar ownership ve boundary çakışmalarında bu klasör geçici önceliklidir. Freeze tamamlandıktan sonra içerikler kalıcı canonical dokümantasyon alanlarına taşınır, bağlanır veya arşiv snapshot olarak işaretlenir.
 
+## Freeze closure ayrımı
+
+ARF-001..ARF-018 kapsamındaki critical, high ve medium blocker seti kapanmıştır.
+
+Freeze kapanış değerlendirmesi için canonical takip noktası `[Architecture Freeze Closure Checklist](architecture-freeze-closure-checklist.md)` dosyasıdır.
+
+Bu checklist, handbook'a geçiş için gerekli kapanış kriterlerini, kalan riskleri ve freeze sonrası doküman akışını tanımlar.
+
 ## Freeze durumu
 
 Bu paket Architecture Freeze öncesi staging baseline'dır.
+
+```text
+critical_blockers: closed
+high_blockers: closed
+medium_blockers: closed
+freeze_state: closure_review
+next_gate: AI Agent Architecture Handbook
+```
 
 `architecture-review/` altındaki checklist ve gap register freeze incelemesinde kullanılacaktır. Freeze tamamlandığında bu klasör kalıcı mimari kök olarak genişletilmeyecek; içeriği kalıcı dokümantasyon ağacına migrate edilecek, ilgili canonical dosyalara bağlanacak veya freeze snapshot olarak arşivlenecektir.
 
