@@ -1,0 +1,50 @@
+{
+  "contract_id": "accommodation_fit_contract",
+  "contract_version": "v0.1",
+  "producer_agent": "accommodation_fit_agent",
+  "trace_id": "trace-af-001",
+  "validation_status": "valid_with_warnings",
+  "confidence": "medium",
+  "accommodation_summary": {
+    "candidate_count": 1,
+    "recommended_candidate_count": 1,
+    "blocked_candidate_count": 0
+  },
+  "accommodation_profiles": [
+    {
+      "accommodation_candidate_id": "acc-001",
+      "destination_candidate_id": "dest-bursa",
+      "accommodation_label": "thermal_family_hotel_candidate",
+      "accommodation_type": "thermal_hotel",
+      "family_fit_band": "high",
+      "budget_fit_band": "medium",
+      "rest_fit_band": "high",
+      "location_fit_band": "medium",
+      "verification_status": "needs_verification",
+      "confidence": "medium",
+      "facility_claims": {
+        "thermal_spa_claim": {
+          "value": "claimed",
+          "verification_status": "needs_verification",
+          "evidence_refs": []
+        },
+        "parking_claim": {
+          "value": null,
+          "verification_status": "unknown",
+          "evidence_refs": []
+        }
+      },
+      "hard_budget_limit_exceeded": false,
+      "user_approved_budget_override": false,
+      "family_hard_constraint_violation": false,
+      "blocked_reasons": [],
+      "risks": ["live_price_not_verified", "parking_unknown"]
+    }
+  ],
+  "excluded_accommodation_candidates": [],
+  "facility_verification_needs": ["acc-001-thermal-spa-status"],
+  "price_verification_needs": ["acc-001-current-price"],
+  "parking_verification_needs": ["acc-001-parking"],
+  "location_verification_needs": [],
+  "clarification_requirements": []
+}
