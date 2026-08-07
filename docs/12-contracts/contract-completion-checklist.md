@@ -1,170 +1,74 @@
 # Contract Completion Checklist
 
-**Doküman türü:** canonical contract completion checklist  
-**Durum:** tamamlandı  
-**Kodlama durumu:** kapalı  
-**Prototype durumu:** kapalı
+**Doküman türü:** canonical design + runtime completion checklist  
+**Durum:** runtime completion review active
 
 ## Amaç
+`docs/12-contracts/` canonical tasarımı ile `packages/contracts/` runtime implementasyonunun H1/L0 kapanışı öncesi tutarlı olup olmadığını kontrol etmek.
 
-Bu doküman, `docs/12-contracts/` altındaki ilk-phase contract tasarım setinin tamamlanma durumunu kontrol eder.
-
-Bu checklist runtime implementation, schema code veya validator tasarımı değildir.
-
-Bu dokümanın amacı şudur:
-
-```text
-Contract tasarım seti, agent specification setinden gelen handoff ihtiyaçlarını kodlamaya geçmeden önce yeterince açık tanımlıyor mu?
-```
-
-## Ana karar
-
-```yaml
-contract_completion_checklist_state: completed
-contract_design_first_phase: completed
-implementation_allowed: false
-prototype_allowed: false
-runtime_allowed: false
-schema_code_allowed: false
-next_design_stage_required: true
-```
-
-## Kapsam kontrolü
-
-| Alan | Dosya | Durum |
+## Design coverage
+| Alan | Canonical design | Runtime slice |
 |---|---|---|
-| Travel request canonical handoff | `travel-request-contract.md` | completed |
-| Constraint and policy classification | `constraint-policy-contract.md` | completed |
-| Family suitability output | `family-suitability-contract.md` | completed |
-| Destination candidate output | `destination-candidate-contract.md` | completed |
-| Route and logistics output | `route-logistics-contract.md` | completed |
-| Accommodation fit output | `accommodation-fit-contract.md` | completed |
-| Activity fit output | `activity-fit-contract.md` | completed |
-| Day plan draft output | `day-plan-contract.md` | completed |
-| Verification evidence report | `verification-evidence-contract.md` | completed |
-| Final response output | `final-response-contract.md` | completed |
-| Common evidence envelope | `common-evidence-envelope.md` | completed |
-| Common error envelope | `common-error-envelope.md` | completed |
+| Travel request | complete | validated |
+| Constraint/policy | complete | validated |
+| Family suitability | complete | validated |
+| Destination candidate | complete | validated |
+| Route/logistics | complete | validated |
+| Accommodation fit | complete | validated |
+| Activity fit | complete | validated |
+| Day plan | complete | validated |
+| Verification evidence | complete | validated |
+| Final response | complete | validated |
+| Common evidence | complete | validated |
+| Common error | complete | validated |
 
-## Zorunlu contract ilkeleri
-
-Aşağıdaki ilkeler tüm contract seti için tamamlanmış kabul edilir:
-
+## L0 mandatory checks
 ```yaml
-versioned_contracts_required: true
-producer_consumer_defined: true
-required_optional_forbidden_fields_defined: true
-evidence_fields_required_for_claims: true
-confidence_fields_required: true
-validation_status_required: true
-hard_constraint_soft_preference_separation_required: true
-privacy_sensitive_claims_visible: true
-unverified_claim_as_fact_forbidden: true
-runtime_implementation_forbidden: true
-schema_code_forbidden: true
+runtime_schema_exists_for_all_canonical_contracts: true
+positive_fixture_exists_for_each_primary_slice: true
+negative_assertions_exist: true
+contract_version_validation_present: true
+traceability_fields_present_where_required: true
+unverified_claim_as_fact_protected: true
+hard_blocker_visibility_protected: true
+privacy_sensitive_sea_rule_protected: true
+low_confidence_hard_blocker_protected: true
+forbidden_internal_fields_protected: true
+p0_failures_allowed: 0
 ```
 
-## Evidence ve doğrulama kontrolü
+## Cross-contract invariants
+1. Hard constraint upstream'ta kaybolamaz.
+2. Unverified material claim downstream'ta verified fact'a dönüşemez.
+3. Evidence gap Verification katmanına taşınır ve final response tarafından gizlenemez.
+4. Women-only beach şartı sea plan boyunca açık verification/disclosure zincirinde kalır.
+5. Toddler rest requirement Day Plan ve Final Response'ta korunur.
+6. Blocked status downstream'ta sessizce eligible/pass olamaz.
+7. Confidence hard blocker varken yüksek olamaz.
+8. Final Response yeni operasyonel fact icat edemez.
 
-Aşağıdaki claim türleri için evidence ihtiyacı contract setinde açıkça taşınır:
+## Execution evidence requirement
+Her runtime slice için GitHub Actions `Headless Core Gate` başarı kaydı veya eşdeğer execution evidence bulunmalıdır.
 
+H1 genel PASS ayrıca toplu L0 completion validation koşusu gerektirir.
+
+## H1 progression rule
 ```yaml
-evidence_required_for:
-  - opening_hours
-  - ticket_price
-  - accommodation_price
-  - live_availability
-  - parking_availability
-  - drive_time
-  - traffic_risk
-  - weather
-  - women_only_beach_status
-  - facility_features
-  - official_rules
-  - age_restrictions
-  - distance_or_radius_claim
+H2_unlocked_only_if:
+  all_runtime_slices_validated: true
+  cross_contract_review: pass
+  aggregate_L0_CI: pass
+  p0_failures: 0
 ```
 
-## Hard blocker kontrolü
-
-Aşağıdaki durumlar contract setinde görünür blocker veya error olarak taşınmalıdır:
-
+## Current status
 ```yaml
-hard_blocker_visibility_required_for:
-  - hard_constraint_violation
-  - privacy_requirement_unverified_for_sea_plan
-  - missing_required_family_profile
-  - impossible_date_or_duration
-  - unsupported_radius_exception_without_reason
-  - evidence_gap_for_final_critical_claim
-  - agent_scope_violation
+contract_design_first_phase: completed
+all_runtime_slices_implemented: true
+individual_slice_validation: completed
+cross_contract_review: in_progress
+aggregate_L0_CI: pending
+H1_L0: not_yet_passed
+H2: locked
+ui_development_allowed: false
 ```
-
-## Final response güvenliği
-
-Final kullanıcı cevabı için aşağıdaki kurallar tamamlanmış kabul edilir:
-
-```yaml
-final_response_rules:
-  unverified_claim_as_fact: forbidden
-  hard_blocker_hidden_from_user: forbidden
-  internal_trace_leaked_to_user: forbidden
-  hidden_chain_of_thought_leaked: forbidden
-  alternatives_required_when_plan_present: true
-  assumptions_visible_when_used: true
-  evidence_gaps_visible_when_material: true
-```
-
-## Kodlamaya geçiş kararı
-
-Bu contract setinin tamamlanması kodlamaya otomatik geçiş izni vermez.
-
-```yaml
-implementation_gate_after_contracts: closed
-reason: "Fixture, evaluation, tool capability, memory/privacy ve UI/UX flow tasarımları tamamlanmadan kodlamaya geçilmez."
-```
-
-## Bir sonraki tasarım aşaması
-
-Contract setinden sonra önerilen sıradaki alan:
-
-```text
-docs/13-fixtures-and-evaluation/
-```
-
-Bu alan şunları tasarlamalıdır:
-
-```yaml
-next_stage_scope:
-  - golden travel request fixtures
-  - hard constraint violation fixtures
-  - women only beach privacy fixtures
-  - family fatigue and rest fixtures
-  - route logistics uncertainty fixtures
-  - evidence gap fixtures
-  - final response quality fixtures
-  - regression acceptance criteria
-```
-
-## Tamamlanma kararı
-
-```yaml
-contract_design_state: first_phase_completed
-completed_contracts_count: 13
-next_stage: docs/13-fixtures-and-evaluation/
-implementation_allowed: false
-prototype_allowed: false
-schema_code_allowed: false
-```
-
-## Açık tasarım notları
-
-Bu aşamada açık kalan konular kodlama görevi değildir.
-
-Açık konular bir sonraki tasarım aşamalarında ele alınmalıdır:
-
-1. Fixture setlerinin örnek input/output detayları.
-2. Evaluation skor kartlarının kabul eşikleri.
-3. Tool capability mapping ve source trust sınıfları.
-4. Memory disclosure paketlerinin fixture etkisi.
-5. UI/UX akışında evidence ve belirsizlik gösterimi.
