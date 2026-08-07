@@ -3,8 +3,9 @@
 ## Status
 ```yaml
 slice: activity_fit_contract
-execution_status: pending_ci
+execution_status: pass
 p0_failures_allowed: 0
+workflow_run_id: 31210830347
 ```
 
 ## Scope
@@ -19,5 +20,14 @@ p0_failures_allowed: 0
 - low-confidence blocker prohibition
 - typecheck + boundaries + Vitest
 
-## Completion rule
-Bu kayıt yalnız GitHub Actions `Headless Core Gate` PASS sonrası `execution_status: pass` olarak güncellenir.
+## Execution evidence
+```yaml
+install: PASS
+typecheck: PASS
+boundary_guard: PASS
+vitest: PASS
+p0_failures: 0
+```
+
+## Decision
+Activity Fit runtime slice validated. Full H1/L0 remains in progress.
