@@ -29,6 +29,7 @@ Bu dosya dokümantasyonun ana giriş noktasıdır. Her konu için tek bir kanoni
 | `08-architecture-baseline/` | Architecture Freeze öncesi kanonik baseline, ARF kararları ve required artifact envanteri |
 | `09-pre-implementation-design/` | Kod/prototype başlamadan önce tamamlanacak Tatil Modu tasarım artifact'ları |
 | `10-product/` | Ürün vizyonu, kapsam ve kullanıcı yolculuğu |
+| `11-agent-specifications/` | Koddan önce hazırlanacak canonical agent specification dosyaları |
 | `15-prompts/` | Ortak/composable prompt kataloğu |
 | `16-workflows/` | E2E ve agent iş akışları |
 
@@ -42,6 +43,8 @@ Bu dosya dokümantasyonun ana giriş noktasıdır. Her konu için tek bir kanoni
 | Design completion assessment | [`09-pre-implementation-design/01-design-completion-assessment.md`](09-pre-implementation-design/01-design-completion-assessment.md) |
 | Ürün vizyonu | [`10-product/PRD-001-URUN-VIZYONU.md`](10-product/PRD-001-URUN-VIZYONU.md) |
 | Sistem mimarisi | [`08-architecture-baseline/README.md`](08-architecture-baseline/README.md) |
+| Canonical agent specifications | [`11-agent-specifications/README.md`](11-agent-specifications/README.md) |
+| Trip Intake Agent spec | [`11-agent-specifications/trip-intake-agent.md`](11-agent-specifications/trip-intake-agent.md) |
 | Pre-freeze agent listesi | [`02-agents/agent-catalog.md`](02-agents/agent-catalog.md) |
 | Agent template'i | [`02-agents/_templates/agent-specification-template.md`](02-agents/_templates/agent-specification-template.md) |
 | Test standardı | [`03-testing/agent-testing-evaluation-standard.md`](03-testing/agent-testing-evaluation-standard.md) |
@@ -64,7 +67,8 @@ Bu dosya dokümantasyonun ana giriş noktasıdır. Her konu için tek bir kanoni
 | Knowledge Platform | ARF-001 ile Travel Knowledge Store'dan ayrıştırıldı |
 | Architecture baseline | freeze öncesi kanonik kaynak |
 | Required artifact inventory | ARF-006 ile eklendi |
-| Pre-implementation design | aktif; kod/prototype kapalı |
+| Pre-implementation design | workplan tamamlandı; kod/prototype kapalı |
+| Canonical agent specifications | aktif; ilk spec Trip Intake Agent |
 | Decision Policy Engine | bekliyor |
 | Prompt Framework | bekliyor |
 | Memory Architecture | bekliyor |
@@ -83,3 +87,4 @@ Bu dosya dokümantasyonun ana giriş noktasıdır. Her konu için tek bir kanoni
 7. Provider isimleri agent contract'larına doğrudan yazılmaz; capability kimliği kullanılır.
 8. Data Source Architecture, Capability Platform runtime kurallarını tekrar etmez; güven ve evidence kararlarını tanımlar.
 9. Kodlama ve prototype, `09-pre-implementation-design/` altındaki tasarım artifact seti tamamlanmadan başlamaz.
+10. Canonical agent specification dosyaları `11-agent-specifications/` altında tutulur; `02-agents/` pre-freeze referans olarak kalır.
