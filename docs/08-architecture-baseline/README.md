@@ -59,6 +59,30 @@ Travel Intelligence bileşenleri domain assessment module olarak çalışır:
 
 Agentlar görev yürütür; Travel Intelligence modülleri görev kararlarını zenginleştiren değerlendirme katmanıdır.
 
+## Capability Platform / Tool Adapter ayrımı
+
+`Tool Adapter standardı` bağımsız bir platform değildir. Capability Platform / Tool Gateway altında kullanılan provider adapter sözleşmesidir.
+
+Capability Platform şu sorumlulukların sahibidir:
+
+- tool discovery ve capability registry,
+- permission ve policy enforcement,
+- timeout, retry, rate limit ve circuit breaker,
+- audit, observability ve cost tracking,
+- online/offline/mock provider seçimi,
+- tool response normalization ve error normalization.
+
+Tool Adapter standardı ise her provider entegrasyonunun uyması gereken alt seviye sözleşmeyi tanımlar:
+
+- request/response schema,
+- source metadata,
+- evidence handoff,
+- cache/TTL bilgisi,
+- mock implementation,
+- provider-specific failure mapping.
+
+Agentlar doğrudan provider adapter çağırmaz; Tool Gateway / Capability Platform üzerinden çağırır.
+
 ## Freeze durumu
 
 Bu paket Architecture Freeze öncesi kanonik baseline'dır.
