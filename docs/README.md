@@ -30,6 +30,7 @@ Bu dosya dokümantasyonun ana giriş noktasıdır. Her konu için tek bir kanoni
 | `09-pre-implementation-design/` | Kod/prototype başlamadan önce tamamlanacak Tatil Modu tasarım artifact'ları |
 | `10-product/` | Ürün vizyonu, kapsam ve kullanıcı yolculuğu |
 | `11-agent-specifications/` | Koddan önce hazırlanacak canonical agent specification dosyaları |
+| `12-contracts/` | Koddan önce hazırlanacak canonical handoff contract ve envelope tasarımları |
 | `15-prompts/` | Ortak/composable prompt kataloğu |
 | `16-workflows/` | E2E ve agent iş akışları |
 
@@ -44,6 +45,7 @@ Bu dosya dokümantasyonun ana giriş noktasıdır. Her konu için tek bir kanoni
 | Ürün vizyonu | [`10-product/PRD-001-URUN-VIZYONU.md`](10-product/PRD-001-URUN-VIZYONU.md) |
 | Sistem mimarisi | [`08-architecture-baseline/README.md`](08-architecture-baseline/README.md) |
 | Canonical agent specifications | [`11-agent-specifications/README.md`](11-agent-specifications/README.md) |
+| Canonical contracts | [`12-contracts/README.md`](12-contracts/README.md) |
 | Trip Intake Agent spec | [`11-agent-specifications/trip-intake-agent.md`](11-agent-specifications/trip-intake-agent.md) |
 | Pre-freeze agent listesi | [`02-agents/agent-catalog.md`](02-agents/agent-catalog.md) |
 | Agent template'i | [`02-agents/_templates/agent-specification-template.md`](02-agents/_templates/agent-specification-template.md) |
@@ -68,7 +70,8 @@ Bu dosya dokümantasyonun ana giriş noktasıdır. Her konu için tek bir kanoni
 | Architecture baseline | freeze öncesi kanonik kaynak |
 | Required artifact inventory | ARF-006 ile eklendi |
 | Pre-implementation design | workplan tamamlandı; kod/prototype kapalı |
-| Canonical agent specifications | aktif; ilk spec Trip Intake Agent |
+| Canonical agent specifications | first phase tamamlandı; kod/prototype kapalı |
+| Canonical contracts | aktif; ilk contract Travel Request |
 | Decision Policy Engine | bekliyor |
 | Prompt Framework | bekliyor |
 | Memory Architecture | bekliyor |
@@ -88,3 +91,4 @@ Bu dosya dokümantasyonun ana giriş noktasıdır. Her konu için tek bir kanoni
 8. Data Source Architecture, Capability Platform runtime kurallarını tekrar etmez; güven ve evidence kararlarını tanımlar.
 9. Kodlama ve prototype, `09-pre-implementation-design/` altındaki tasarım artifact seti tamamlanmadan başlamaz.
 10. Canonical agent specification dosyaları `11-agent-specifications/` altında tutulur; `02-agents/` pre-freeze referans olarak kalır.
+11. Canonical handoff contract tasarımları `12-contracts/` altında tutulur; schema code ve runtime validator değildir.
