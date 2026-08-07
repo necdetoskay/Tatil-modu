@@ -55,8 +55,8 @@ Kadınlar plajı şartı olan senaryoda deniz önerisi nasıl güvenli taşını
 | Sıra | Artifact | Dosya | Durum |
 |---:|---|---|---|
 | 1 | Fixture Evaluation Overview | [`01-fixture-evaluation-overview.md`](01-fixture-evaluation-overview.md) | drafted |
-| 2 | Golden Scenario Catalog | `02-golden-scenario-catalog.md` | next |
-| 3 | Family Travel Fixture Pack | `03-family-travel-fixture-pack.md` | planned |
+| 2 | Golden Scenario Catalog | [`02-golden-scenario-catalog.md`](02-golden-scenario-catalog.md) | drafted |
+| 3 | Family Travel Fixture Pack | `03-family-travel-fixture-pack.md` | next |
 | 4 | Constraint Violation Fixture Pack | `04-constraint-violation-fixture-pack.md` | planned |
 | 5 | Evidence Gap Fixture Pack | `05-evidence-gap-fixture-pack.md` | planned |
 | 6 | Privacy Sensitive Beach Fixture Pack | `06-privacy-sensitive-beach-fixture-pack.md` | planned |
@@ -134,7 +134,8 @@ required_failure_modes:
 fixture_evaluation_design_state: active
 completed_artifacts:
   - 01-fixture-evaluation-overview.md
-next_artifact: 02-golden-scenario-catalog.md
+  - 02-golden-scenario-catalog.md
+next_artifact: 03-family-travel-fixture-pack.md
 implementation_allowed: false
 prototype_allowed: false
 test_runner_code_allowed: false
