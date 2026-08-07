@@ -9,12 +9,11 @@ const verdictRank: Record<PolicyDecisionResult['status'], number> = {
 
 export type CandidatePolicyEvaluation = {
   status: PolicyDecisionResult['status'];
-  reason_codes: string[];
-  violated_hard_constraints: string[];
-  soft_preference_penalties: string[];
-  required_evidence: string[];
-  blockers: string[];
-  component_results: PolicyDecisionResult[];
+  reasonCodes: string[];
+  violatedHardConstraints: string[];
+  softPreferencePenalties: string[];
+  requiredEvidence: string[];
+  componentResults: PolicyDecisionResult[];
 };
 
 export function evaluateCandidatePolicy(results: readonly PolicyDecisionResult[]): CandidatePolicyEvaluation {
@@ -22,15 +21,14 @@ export function evaluateCandidatePolicy(results: readonly PolicyDecisionResult[]
     verdictRank[next.status] > verdictRank[current] ? next.status : current,
   'eligible');
 
-  const unique = (items: string[]) => [...new Set(items)];
+  const unique = (items: string[]) => [...new Set(items)].sort();
 
   return {
     status,
-    reason_codes: unique(results.flatMap((r) => r.reason_codes)),
-    violated_hard_constraints: unique(results.flatMap((r) => r.violated_hard_constraints)),
-    soft_preference_penalties: unique(results.flatMap((r) => r.soft_preference_penalties)),
-    required_evidence: unique(results.flatMap((r) => r.required_evidence)),
-    blockers: unique(results.flatMap((r) => r.blockers ?? [])),
-    component_results: [...results]
+    reasonCodes: unique(results.flatMap((r) => r.reasonCodes)),
+    violatedHardConstraints: unique(results.flatMap((r) => r.violatedHardConstraints)),
+    softPreferencePenalties: unique(results.flatMap((r) => r.softPreferencePenalties)),
+    requiredEvidence: unique(results.flatMap((r) => r.requiredEvidence)),
+    componentResults: [...results]
   };
 }
