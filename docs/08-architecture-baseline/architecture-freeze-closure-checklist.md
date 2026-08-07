@@ -2,7 +2,7 @@
 
 **Doküman türü:** Architecture Freeze kapanış checklist'i  
 **Teknik kod adı:** `architecture_freeze_closure_checklist`  
-**Sürüm:** 1.0 Taslak  
+**Sürüm:** 1.1 Taslak  
 **Tarih:** 2026-08-07  
 **Kapsam:** ARF-001 — ARF-018
 
@@ -21,7 +21,7 @@ critical_blockers: closed
 high_blockers: closed
 medium_blockers: closed
 freeze_state: closure_review
-next_gate: AI Agent Architecture Handbook
+next_gate: ai-agent-architecture-handbook/
 ```
 
 ## Kapanan ARF kararları
@@ -61,7 +61,7 @@ Architecture Freeze kapatılmadan önce aşağıdaki maddeler sağlanmalıdır:
 | FC-006 | Baseline README tüm ARF kararlarını bağlıyor | passed | ARF-001..018 bölümleri mevcut |
 | FC-007 | Artifact backlog görünür | passed | `freeze-required-artifact-inventory.md` |
 | FC-008 | Error / terminology / lifecycle / dependency registry var | passed | Registry dosyaları eklendi |
-| FC-009 | Handbook'a geçiş için açık next gate var | passed | AI Agent Architecture Handbook |
+| FC-009 | Handbook'a geçiş için açık next gate var | passed | `ai-agent-architecture-handbook/` |
 | FC-010 | Implementation'a geçmeden önce artifact dosya yolları kesinleştirilecek | pending | Handbook aşamasında detaylandırılacak |
 
 ## Freeze sonrası doküman akışı
@@ -75,7 +75,9 @@ Architecture Baseline Staging
         ↓
 Architecture Freeze Closure
         ↓
-AI Agent Architecture Handbook
+Generic AI Agent Architecture Handbook
+        ↓
+Tatil Modu Reference Implementation Mapping
         ↓
 Agent / Platform Contract Specs
         ↓
@@ -91,6 +93,7 @@ AI Agent Architecture Handbook'a geçmek için aşağıdaki şartlar yeterli kab
 - ARF-001..018 kapalı olmalı.
 - Root README güncel ürün vizyonunu anlatmalı.
 - Baseline klasörünün staging niteliği net olmalı.
+- Handbook'un Tatil Modu içine hapsolmaması için root seviyesinde generic klasör olarak konumlanması gerekir.
 - Agent, planner, module, platform, registry, store, gateway ve adapter ayrımı yapılmış olmalı.
 - Memory, public authority, evaluation, confidence, lifecycle ve error ownership net olmalı.
 - Eksik artifact'lar görünür backlog içinde izleniyor olmalı.
@@ -99,18 +102,23 @@ Bu şartlar sağlandığında handbook çalışması başlatılabilir.
 
 ## Handbook kapsamı
 
-Handbook şu alanları uygulamaya hazır hale getirmelidir:
+Generic handbook şu alanları uygulamaya hazır hale getirmelidir:
 
-1. Travel Orchestrator görev sınırı,
-2. agent catalog canonical vNext,
-3. planner/module/platform ayrımları,
-4. ACP envelope ve handoff contracts,
-5. tool/capability policy,
-6. memory disclosure packages,
-7. evidence ve verification result şemaları,
-8. public authority decision gates,
-9. evaluation fixtures ve golden scenarios,
-10. implementation sprint sıralaması.
+1. agent system purpose and scope,
+2. core design principles,
+3. component taxonomy,
+4. orchestration model,
+5. agent contract standard,
+6. memory disclosure and privacy rules,
+7. tool / capability / adapter model,
+8. evidence, verification and confidence semantics,
+9. policy, hard constraints and safety gates,
+10. evaluation fixtures and regression,
+11. observability, errors and audit,
+12. agent specification template,
+13. implementation readiness checklist.
+
+Tatil Modu bu handbook içinde yalnız reference implementation örneği olarak yer almalıdır.
 
 ## Freeze riskleri
 
@@ -127,4 +135,4 @@ Freeze kapanışı sonrası hâlâ risk sayılan konular:
 
 ARF-001..ARF-018 kapsamındaki mimari blocker seti kapatılmıştır.
 
-Bu checklist, Architecture Freeze kapanış incelemesi için başlangıç noktasıdır. Bu aşamadan sonra ana çıktı `AI Agent Architecture Handbook` olmalıdır.
+Bu checklist, Architecture Freeze kapanış incelemesi için başlangıç noktasıdır. Bu aşamadan sonra ana çıktı root seviyesindeki generic `ai-agent-architecture-handbook/` olmalıdır.
