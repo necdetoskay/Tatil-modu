@@ -1,7 +1,7 @@
 # 15 — Prompt Framework
 
 **Doküman türü:** canonical prompt framework design alanı  
-**Durum:** aktif tasarım artifact alanı  
+**Durum:** first phase completed  
 **Kodlama durumu:** kapalı  
 **Prototype durumu:** kapalı  
 **Runtime prompt engine:** kapalı
@@ -95,17 +95,17 @@ out_of_scope:
 
 | Sıra | Artifact | Dosya | Durum |
 |---:|---|---|---|
-| 1 | Prompt Framework Overview | `01-prompt-framework-overview.md` | next |
-| 2 | Prompt Layering Model | `02-prompt-layering-model.md` | planned |
-| 3 | Universal System Rules | `03-universal-system-rules.md` | planned |
-| 4 | Agent Role Prompt Template | `04-agent-role-prompt-template.md` | planned |
-| 5 | Task Instruction Patterns | `05-task-instruction-patterns.md` | planned |
-| 6 | Output Contract Prompting | `06-output-contract-prompting.md` | planned |
-| 7 | Evidence and Verification Prompting | `07-evidence-and-verification-prompting.md` | planned |
-| 8 | Hard Constraint and Safety Prompting | `08-hard-constraint-and-safety-prompting.md` | planned |
-| 9 | Prompt Versioning and Change Policy | `09-prompt-versioning-and-change-policy.md` | planned |
-| 10 | Prompt Evaluation and Regression Policy | `10-prompt-evaluation-and-regression-policy.md` | planned |
-| 11 | Prompt Framework Completion Checklist | `11-prompt-framework-completion-checklist.md` | planned |
+| 1 | Prompt Framework Overview | [`01-prompt-framework-overview.md`](01-prompt-framework-overview.md) | drafted |
+| 2 | Prompt Layering Model | [`02-prompt-layering-model.md`](02-prompt-layering-model.md) | drafted |
+| 3 | Universal System Rules | [`03-universal-system-rules.md`](03-universal-system-rules.md) | drafted |
+| 4 | Agent Role Prompt Template | [`04-agent-role-prompt-template.md`](04-agent-role-prompt-template.md) | drafted |
+| 5 | Task Instruction Patterns | [`05-task-instruction-patterns.md`](05-task-instruction-patterns.md) | drafted |
+| 6 | Output Contract Prompting | [`06-output-contract-prompting.md`](06-output-contract-prompting.md) | drafted |
+| 7 | Evidence and Verification Prompting | [`07-evidence-and-verification-prompting.md`](07-evidence-and-verification-prompting.md) | drafted |
+| 8 | Hard Constraint and Safety Prompting | [`08-hard-constraint-and-safety-prompting.md`](08-hard-constraint-and-safety-prompting.md) | drafted |
+| 9 | Prompt Versioning and Change Policy | [`09-prompt-versioning-and-change-policy.md`](09-prompt-versioning-and-change-policy.md) | drafted |
+| 10 | Prompt Evaluation and Regression Policy | [`10-prompt-evaluation-and-regression-policy.md`](10-prompt-evaluation-and-regression-policy.md) | drafted |
+| 11 | Prompt Framework Completion Checklist | [`11-prompt-framework-completion-checklist.md`](11-prompt-framework-completion-checklist.md) | drafted |
 
 ## Prompt tasarım ilkeleri
 
@@ -141,9 +141,21 @@ prompt_layers:
 ## Current status
 
 ```yaml
-prompt_framework_design_state: active
-completed_artifacts: []
-next_artifact: 01-prompt-framework-overview.md
+prompt_framework_design_state: first_phase_completed
+prompt_framework_first_phase_completed: true
+completed_artifacts:
+  - 01-prompt-framework-overview.md
+  - 02-prompt-layering-model.md
+  - 03-universal-system-rules.md
+  - 04-agent-role-prompt-template.md
+  - 05-task-instruction-patterns.md
+  - 06-output-contract-prompting.md
+  - 07-evidence-and-verification-prompting.md
+  - 08-hard-constraint-and-safety-prompting.md
+  - 09-prompt-versioning-and-change-policy.md
+  - 10-prompt-evaluation-and-regression-policy.md
+  - 11-prompt-framework-completion-checklist.md
+next_stage: docs/16-workflows/
 implementation_allowed: false
 prototype_allowed: false
 prompt_engine_allowed: false
