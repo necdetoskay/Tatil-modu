@@ -1,0 +1,17 @@
+{
+  "registry": "tatil-modu-architecture-gaps",
+  "version": "1.0.0",
+  "items": [],
+  "severities": [
+    "critical",
+    "high",
+    "medium",
+    "low"
+  ],
+  "statuses": [
+    "open",
+    "in_review",
+    "resolved",
+    "deferred"
+  ]
+}

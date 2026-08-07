@@ -1,0 +1,14 @@
+{
+  "registry": "tatil-modu-disaster-recovery",
+  "version": "1.0.0",
+  "assets": [],
+  "required_fields": [
+    "asset_id",
+    "backup_method",
+    "rpo",
+    "rto",
+    "restore_order",
+    "runbook_ref",
+    "last_restore_test"
+  ]
+}

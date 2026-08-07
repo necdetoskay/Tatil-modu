@@ -1,0 +1,12 @@
+{
+  "registry": "tatil-modu-component-versions",
+  "version": "1.0.0",
+  "components": [],
+  "compatibility_states": [
+    "compatible",
+    "compatible_with_adapter",
+    "deprecated",
+    "incompatible",
+    "unknown"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "review_id": "architecture_freeze_v1",
+  "status": "not_started",
+  "sections": {
+    "architecture": [],
+    "contracts": [],
+    "security": [],
+    "operations": [],
+    "evaluation": []
+  },
+  "allowed_results": [
+    "pass",
+    "pass_with_action",
+    "blocked",
+    "deferred"
+  ]
+}
