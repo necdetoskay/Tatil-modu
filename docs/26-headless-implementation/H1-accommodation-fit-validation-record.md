@@ -3,8 +3,9 @@
 ## Status
 ```yaml
 slice: accommodation_fit_contract
-execution_status: pending_ci
-p0_failures_allowed: 0
+execution_status: pass
+workflow_run_id: 31210387645
+p0_failures: 0
 ```
 
 ## Scope
@@ -18,5 +19,13 @@ p0_failures_allowed: 0
 - blocked accommodation reason requirement
 - typecheck + boundaries + Vitest
 
-## Completion rule
-Bu kayıt yalnız GitHub Actions `Headless Core Gate` PASS sonrası `execution_status: pass` olarak güncellenir.
+## Execution evidence
+```yaml
+install_dependencies: PASS
+typecheck: PASS
+boundary_guard: PASS
+vitest: PASS
+```
+
+## Decision
+Accommodation Fit runtime slice L0 validation açısından PASS. Bu kayıt H1 genel L0 gate'inin tamamlandığı anlamına gelmez.
