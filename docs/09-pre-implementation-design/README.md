@@ -114,5 +114,6 @@ prototype_state: blocked_by_design_completion
 completed_documents:
   - 01-design-completion-assessment.md
   - 02-system-blueprint-gap-analysis.md
-next_document: 03-required-design-artifact-map.md
+  - 03-required-design-artifact-map.md
+next_document: 04-agent-specification-workplan.md
 ```
