@@ -36,8 +36,8 @@ Bu klasör ise yeni, canonical, pre-code agent specification alanıdır.
 
 | Sıra | Agent | Dosya | Durum |
 |---:|---|---|---|
-| 1 | Trip Intake Agent | `trip-intake-agent.md` | in_progress |
-| 2 | Constraint & Policy Agent | `constraint-policy-agent.md` | planned |
+| 1 | Trip Intake Agent | [`trip-intake-agent.md`](trip-intake-agent.md) | drafted |
+| 2 | Constraint & Policy Agent | `constraint-policy-agent.md` | next |
 | 3 | Family Suitability Agent | `family-suitability-agent.md` | planned |
 | 4 | Destination Candidate Agent | `destination-candidate-agent.md` | planned |
 | 5 | Route & Logistics Agent | `route-logistics-agent.md` | planned |
@@ -81,7 +81,8 @@ Bu dosyalar yalnızca agent'ın davranış sözleşmesini tanımlar.
 
 ```yaml
 agent_specification_state: active
-completed_agent_specs: []
-next_agent_spec: trip-intake-agent.md
+completed_agent_specs:
+  - trip-intake-agent.md
+next_agent_spec: constraint-policy-agent.md
 implementation_allowed: false
 ```
