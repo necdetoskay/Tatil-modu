@@ -1,7 +1,7 @@
 # 12 — Contracts
 
 **Doküman türü:** canonical contract design alanı  
-**Durum:** aktif tasarım artifact alanı  
+**Durum:** first phase tamamlandı  
 **Kodlama durumu:** kapalı  
 **Prototype durumu:** kapalı
 
@@ -27,6 +27,8 @@ schema_code_allowed: false
 contract_design_required_before_coding: true
 source_of_truth: docs/12-contracts/
 input_source: docs/11-agent-specifications/
+contract_design_first_phase_completed: true
+next_stage: docs/13-fixtures-and-evaluation/
 ```
 
 Bu klasörde TypeScript type, Zod schema, JSON Schema dosyası veya runtime validator yazılmaz.
@@ -49,7 +51,7 @@ Bu klasörde TypeScript type, Zod schema, JSON Schema dosyası veya runtime vali
 | 10 | Final Response Contract | [`final-response-contract.md`](final-response-contract.md) | drafted |
 | 11 | Common Evidence Envelope | [`common-evidence-envelope.md`](common-evidence-envelope.md) | drafted |
 | 12 | Common Error Envelope | [`common-error-envelope.md`](common-error-envelope.md) | drafted |
-| 13 | Contract Completion Checklist | `contract-completion-checklist.md` | next |
+| 13 | Contract Completion Checklist | [`contract-completion-checklist.md`](contract-completion-checklist.md) | completed |
 
 ## Contract standardı
 
@@ -123,18 +125,19 @@ Final kullanıcı cevabına taşınmaması gereken iç alan var mı?
 6. Geriye dönük uyumluluk için version alanı zorunludur.
 7. Clarification gerektiren durumlar explicit state olarak taşınır.
 
-## İlk üretilen contract
+## Contract completion
 
-```text
-travel-request-contract.md
+Tamamlanma kararı `contract-completion-checklist.md` içinde kayıt altına alınmıştır.
+
+```yaml
+contract_completion_checklist: contract-completion-checklist.md
+contract_design_first_phase_completed: true
 ```
-
-Bu contract, `trip-intake-agent.md` çıktısının canonical biçimini tanımlar.
 
 ## Current status
 
 ```yaml
-contract_design_state: active
+contract_design_state: first_phase_completed
 completed_contracts:
   - travel-request-contract.md
   - constraint-policy-contract.md
@@ -148,7 +151,8 @@ completed_contracts:
   - final-response-contract.md
   - common-evidence-envelope.md
   - common-error-envelope.md
-next_contract: contract-completion-checklist.md
+  - contract-completion-checklist.md
+next_stage: docs/13-fixtures-and-evaluation/
 implementation_allowed: false
 prototype_allowed: false
 schema_code_allowed: false
