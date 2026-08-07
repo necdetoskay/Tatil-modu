@@ -44,6 +44,29 @@ export class CapabilityRegistry {
   }
 }
 
+async function executeWithTimeout(
+  provider: CapabilityProvider,
+  request: CapabilityRequest,
+  timeoutMs: number
+): Promise<CapabilityResult<unknown>> {
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  const timeout = new Promise<CapabilityResult<unknown>>((resolve) => {
+    timer = setTimeout(() => resolve({
+      ok: false,
+      capability: request.capability,
+      traceId: request.traceId,
+      code: 'PROVIDER_TIMEOUT',
+      retryable: true
+    }), timeoutMs);
+  });
+
+  try {
+    return await Promise.race([provider.execute(request), timeout]);
+  } finally {
+    if (timer) clearTimeout(timer);
+  }
+}
+
 export async function executeWithRegistry<TData = unknown>(
   registry: CapabilityRegistry,
   request: CapabilityRequest
@@ -54,7 +77,7 @@ export async function executeWithRegistry<TData = unknown>(
 
   for (const provider of providers) {
     for (let attempt = 1; attempt <= registration.retryPolicy.maxAttempts; attempt += 1) {
-      const result = await provider.execute(request);
+      const result = await executeWithTimeout(provider, request, registration.timeoutMs);
       lastResult = result;
       if (result.ok) return result as CapabilityResult<TData>;
       if (!registration.retryPolicy.retryableCodes.includes(result.code)) break;
