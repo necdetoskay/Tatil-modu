@@ -111,6 +111,7 @@ Cevap evet olduğu sürece kodlama başlamaz.
 design_state: active
 implementation_state: blocked_by_design_completion
 prototype_state: blocked_by_design_completion
+pre_code_freeze_decision: not_ready
 completed_documents:
   - 01-design-completion-assessment.md
   - 02-system-blueprint-gap-analysis.md
@@ -121,5 +122,7 @@ completed_documents:
   - 07-tool-and-capability-workplan.md
   - 08-memory-and-privacy-workplan.md
   - 09-ui-ux-flow-workplan.md
-next_document: 10-pre-code-freeze-checklist.md
+  - 10-pre-code-freeze-checklist.md
+next_stage: docs/11-agent-specifications/
+first_next_artifact: docs/11-agent-specifications/trip-intake-agent.md
 ```
