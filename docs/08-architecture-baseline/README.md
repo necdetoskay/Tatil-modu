@@ -42,6 +42,23 @@ Bu baseline içindeki runtime seyahat bilgisi `Travel Knowledge Store` adıyla a
 
 Travel Knowledge Store, Knowledge Platform registry snapshot'larını tüketir; onların canonical ownership sorumluluğunu üstlenmez.
 
+## Travel Intelligence ayrımı
+
+Bu baseline içinde `Budget Intelligence`, `Environmental Intelligence`, `Experience & Satisfaction` ve benzeri Travel Intelligence bileşenleri agent değildir.
+
+Travel Intelligence bileşenleri domain assessment module olarak çalışır:
+
+- kendi başına orkestrasyon yapmaz,
+- başka agent çağırmaz,
+- canonical veri sahipliği almaz,
+- kullanıcı hafızasına doğrudan yazmaz,
+- plan oluşturmaz,
+- Travel Orchestrator veya ilgili Planner tarafından çağrılır,
+- evidence ve verification durumunu input olarak tüketir,
+- karar destek skoru, risk, açıklama ve trade-off üretir.
+
+Agentlar görev yürütür; Travel Intelligence modülleri görev kararlarını zenginleştiren değerlendirme katmanıdır.
+
 ## Freeze durumu
 
 Bu paket Architecture Freeze öncesi kanonik baseline'dır.
