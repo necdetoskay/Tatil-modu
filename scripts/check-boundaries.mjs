@@ -1,7 +1,8 @@
 import { readFile, readdir } from 'node:fs/promises';
+import { fileURLToPath } from 'node:url';
 import { join } from 'node:path';
 
-const root = new URL('..', import.meta.url).pathname;
+const root = fileURLToPath(new URL('..', import.meta.url));
 const forbidden = [
   ['packages/agents', '@tatil-modu/providers-mock'],
   ['packages/agents', '../providers-mock'],
