@@ -58,8 +58,8 @@ Kadınlar plajı şartı olan senaryoda deniz önerisi nasıl güvenli taşını
 | 2 | Golden Scenario Catalog | [`02-golden-scenario-catalog.md`](02-golden-scenario-catalog.md) | drafted |
 | 3 | Family Travel Fixture Pack | [`03-family-travel-fixture-pack.md`](03-family-travel-fixture-pack.md) | drafted |
 | 4 | Constraint Violation Fixture Pack | [`04-constraint-violation-fixture-pack.md`](04-constraint-violation-fixture-pack.md) | drafted |
-| 5 | Evidence Gap Fixture Pack | `05-evidence-gap-fixture-pack.md` | next |
-| 6 | Privacy Sensitive Beach Fixture Pack | `06-privacy-sensitive-beach-fixture-pack.md` | planned |
+| 5 | Evidence Gap Fixture Pack | [`05-evidence-gap-fixture-pack.md`](05-evidence-gap-fixture-pack.md) | drafted |
+| 6 | Privacy Sensitive Beach Fixture Pack | `06-privacy-sensitive-beach-fixture-pack.md` | next |
 | 7 | Route Logistics Fixture Pack | `07-route-logistics-fixture-pack.md` | planned |
 | 8 | Day Plan Coherence Fixture Pack | `08-day-plan-coherence-fixture-pack.md` | planned |
 | 9 | Final Response Quality Rubric | `09-final-response-quality-rubric.md` | planned |
@@ -137,7 +137,8 @@ completed_artifacts:
   - 02-golden-scenario-catalog.md
   - 03-family-travel-fixture-pack.md
   - 04-constraint-violation-fixture-pack.md
-next_artifact: 05-evidence-gap-fixture-pack.md
+  - 05-evidence-gap-fixture-pack.md
+next_artifact: 06-privacy-sensitive-beach-fixture-pack.md
 implementation_allowed: false
 prototype_allowed: false
 test_runner_code_allowed: false
