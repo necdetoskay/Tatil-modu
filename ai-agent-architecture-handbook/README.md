@@ -36,6 +36,7 @@ It is intended to be used before coding an agentic system and again during imple
 | [04 — Agent Contract Standard](04-agent-contract-standard.md) | Minimum contract rules for agent input, output and handoff |
 | [05 — Orchestration Model](05-orchestration-model.md) | Defines how workflow coordination, routing, retries, privacy scope and decision reconciliation work |
 | [06 — Memory Disclosure and Privacy](06-memory-disclosure-and-privacy.md) | Defines scoped memory disclosure packages, privacy gates, memory mutation rules and audit requirements |
+| [07 — Tool Capability and Adapter Model](07-tool-capability-and-adapter-model.md) | Defines capability requests, tool gateway responsibilities, provider adapters, mock modes and tool evidence handoff |
 | [Examples — Tatil Modu Reference Implementation](examples/tatil-modu-reference-implementation.md) | Shows how the generic handbook maps to the Tatil Modu project |
 
 ## Foundational rule
