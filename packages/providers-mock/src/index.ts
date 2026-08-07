@@ -16,7 +16,7 @@ export class DeterministicMockProvider implements CapabilityProvider {
 
   constructor(private readonly fixtures: readonly MockFixture[]) {}
 
-  async execute<TData = unknown>(request: CapabilityRequest): Promise<CapabilityResult<TData>> {
+  async execute(request: CapabilityRequest): Promise<CapabilityResult<unknown>> {
     const fixture = this.fixtures.find((item) => item.fixtureId === request.fixtureId);
 
     if (!fixture) {
@@ -49,7 +49,7 @@ export class DeterministicMockProvider implements CapabilityProvider {
       ok: true,
       capability: request.capability,
       traceId: request.traceId,
-      data: fixture.data as TData,
+      data: fixture.data,
       evidence: (fixture.evidence ?? []).map((item) => ({ ...item, sourceType: 'mock' as const }))
     };
   }
