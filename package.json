@@ -1,0 +1,20 @@
+{
+  "name": "tatil-modu",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc -b",
+    "typecheck": "tsc -b --pretty false",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:boundaries": "node scripts/check-boundaries.mjs",
+    "test:h0": "pnpm typecheck && pnpm test:boundaries && pnpm test",
+    "headless": "tsx apps/cli/src/index.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "tsx": "^4.20.0",
+    "typescript": "^5.9.0",
+    "vitest": "^3.2.0"
+  }
+}
