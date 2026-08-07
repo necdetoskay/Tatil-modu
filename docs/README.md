@@ -3,15 +3,18 @@
 Bu dosya dokümantasyonun ana giriş noktasıdır. Her konu için tek bir kanonik belge kullanılır.
 
 ## Güncel durum
-Canonical pre-code design freeze **PASS**. `11–23` deep-design katmanları tamamlandı ve açık design blocker kalmadı. Sıradaki aşama `24-implementation-readiness/` altında implementation ve delivery planıdır.
+Canonical pre-code design freeze **PASS**. `11–23` deep-design katmanları tamamlandı. Implementation stratejisi **Headless Core First** olarak sabitlendi; UI/frontend geliştirmesi headless acceptance gate PASS olmadan açılamaz.
 
 ```yaml
 canonical_design_freeze: approved
 open_design_blockers: 0
+implementation_strategy: headless_core_first
 implementation_planning_allowed: true
+ui_development_allowed: false
+headless_core_accepted: false
 production_release_allowed: false
 live_provider_integration_allowed: false
-current_stage: implementation_readiness_and_delivery_plan
+current_stage: headless_implementation_readiness
 ```
 
 ## Klasör yapısı
@@ -37,8 +40,9 @@ current_stage: implementation_readiness_and_delivery_plan
 | `20-orchestrator/` | Orchestration/routing tasarımı |
 | `21-observability/` | Telemetry/traceability tasarımı |
 | `22-architecture-completion-review/` | Cross-layer completion ve blocker review |
-| `23-product-ux-design/` | Product interaction ve UX deep design |
-| `24-implementation-readiness/` | Implementation topology, sequence, testing, CI ve delivery planı |
+| `23-product-ux-design/` | Product interaction ve UX deep design; implementation ertelendi |
+| `24-implementation-readiness/` | Headless core topology, sequence, testing, CI ve delivery planı |
+| `25-headless-test-architecture/` | Headless test suite, severity/gate, coverage, model eval ve UI Unlock mimarisi |
 
 ## Kanonik belge matrisi
 | Konu | Tek kaynak |
@@ -60,15 +64,19 @@ current_stage: implementation_readiness_and_delivery_plan
 | Architecture completion review | `22-architecture-completion-review/README.md` |
 | Product/UX deep design | `23-product-ux-design/README.md` |
 | Implementation readiness | `24-implementation-readiness/README.md` |
+| Headless test architecture | `25-headless-test-architecture/README.md` |
+| UI unlock gate | `25-headless-test-architecture/15-headless-core-acceptance-gate.md` |
 
 ## Aşama durumu
 | Aşama | Durum |
 |---|---|
 | Canonical design `11–23` | tamamlandı |
-| Architecture completion review | tamamlandı |
-| Product/UX deep design | tamamlandı |
 | Pre-code freeze reassessment | **PASS** |
-| Implementation readiness & delivery plan | **aktif aşama** |
+| Headless test architecture | first phase tamamlandı |
+| Headless implementation readiness | **aktif aşama** |
+| Headless core implementation | readiness tamamlanınca başlayacak |
+| UI readiness review | headless acceptance PASS sonrasına kilitli |
+| UI/frontend implementation | **kilitli** |
 | Production readiness | kapalı |
 
 ## Source-of-truth kuralları
@@ -82,5 +90,7 @@ current_stage: implementation_readiness_and_delivery_plan
 8. Observability Audit Logger'ın yerine geçmez.
 9. Product/UX policy/evidence/ranking üretmez; canonical sonucu temsil eder.
 10. Implementation canonical contract ve ownership sınırlarını değiştirecekse önce ADR/design amendment gerekir.
-11. Design freeze PASS production readiness anlamına gelmez.
-12. Live provider, persistent production memory ve deployment ayrı readiness gate'lerine tabidir.
+11. Headless core L0–L7 acceptance gate'leri ve tüm P0 testleri geçmeden UI readiness review açılamaz.
+12. UI readiness review ayrıca PASS vermeden UI/frontend implementation başlayamaz.
+13. Real model/provider benchmark deterministic core test gate'inin yerine geçmez.
+14. Live provider, persistent production memory ve deployment ayrı readiness gate'lerine tabidir.
