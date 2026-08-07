@@ -1,0 +1,109 @@
+{
+  "fixture_id": "TM-TI-HP-001",
+  "fixture_version": "v1",
+  "agent_id": "trip_intake_agent",
+  "severity": "P0",
+  "input": {
+    "contract_id": "travel_request_contract",
+    "contract_version": "v1",
+    "producer_agent": "trip_intake_agent",
+    "trace_id": "TM-TRACE-TI-001",
+    "created_at": "2026-08-07T21:04:00+03:00",
+    "source_language": "tr",
+    "validation_status": "valid_with_missing_non_blocking_info",
+    "confidence": "high",
+    "evidence_summary": [
+      {
+        "type": "user_statement",
+        "reference": "user_message:1"
+      }
+    ],
+    "payload": {
+      "original_user_request": "Kocaeli'den 3 günlük, 2 yetişkin ve 6 ile 2 yaşlarında iki çocuk için tatil planı istiyorum. Kendi aracımız var, bütçe 30000 TL. Deniz önerilecekse kadınlar plajı mutlaka olsun, öğlen dinlenmek istiyoruz ve her gün alternatifler olsun.",
+      "normalized_request": "Kocaeli çıkışlı, 2 yetişkin ve 6/2 yaş çocuklu aile için 3 günlük, 30000 TL bütçeli, kendi araçlı, öğle dinlenmeli ve alternatifli tatil talebi.",
+      "travel_party": {
+        "adults": { "count": 2 },
+        "children": { "count": 2, "ages": [6, 2] }
+      },
+      "origin": {
+        "label": "Kocaeli",
+        "type": "city",
+        "confidence": "high"
+      },
+      "target_area": {
+        "label": null,
+        "type": "open_choice",
+        "allow_nearby_regions": true,
+        "confidence": "high"
+      },
+      "duration": {
+        "days": 3,
+        "confidence": "high"
+      },
+      "transport_mode": {
+        "mode": "own_car",
+        "confidence": "high"
+      },
+      "budget": {
+        "amount": 30000,
+        "currency": "TRY",
+        "scope": "total_trip",
+        "flexibility": "flexible",
+        "confidence": "high"
+      },
+      "privacy_preferences": {
+        "women_only_beach_required_when_sea_recommended": {
+          "value": true,
+          "sensitivity": "sensitive_preference",
+          "persistence_allowed_without_user_approval": false
+        }
+      },
+      "family_constraints": {
+        "toddler_friendly_required": true,
+        "midday_rest_required": true,
+        "low_fatigue_required": true
+      },
+      "logistics_preferences": {
+        "parking_considered": true,
+        "traffic_considered": true,
+        "max_radius_km": 150,
+        "far_option_requires_strong_justification": true
+      },
+      "hard_constraint_candidates": [
+        {
+          "id": "women_only_beach_required_when_sea_recommended",
+          "label": "Deniz önerisi yapılırsa kadınlar plajı olmalı",
+          "source_text": "Deniz önerilecekse kadınlar plajı mutlaka olsun",
+          "confidence": "high",
+          "requires_policy_agent_confirmation": true
+        },
+        {
+          "id": "midday_rest_required",
+          "label": "Öğle dinlenmesi gerekli",
+          "source_text": "öğlen dinlenmek istiyoruz",
+          "confidence": "high",
+          "requires_policy_agent_confirmation": true
+        }
+      ],
+      "missing_information": [
+        {
+          "field": "date_window",
+          "importance": "medium",
+          "reason": "Canlı hava ve çalışma saati doğrulaması için tarih gerekir."
+        }
+      ],
+      "ambiguity_notes": [],
+      "assumptions": []
+    }
+  },
+  "expected": {
+    "valid": true,
+    "contract_id": "travel_request_contract",
+    "contract_version": "v1",
+    "p0": {
+      "hard_constraint_candidates_preserved": true,
+      "sensitive_preference_not_persisted": true,
+      "missing_date_not_invented": true
+    }
+  }
+}
