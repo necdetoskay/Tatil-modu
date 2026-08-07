@@ -34,6 +34,7 @@ kanonik Tatil Modu mimari çalışmalarını toplar.
 - Version Management & Compatibility
 - Architecture Review & Freeze Plan
 - [Architecture Freeze Required Artifact Inventory](freeze-required-artifact-inventory.md)
+- [Central Error Code Registry](error-code-registry.md)
 
 ## Knowledge ayrımı
 
@@ -132,6 +133,22 @@ Kurallar:
 - Bir claim'in `verification_status` değeri agent maturity veya artifact readiness anlamına gelmez.
 - Lifecycle değerleri geriye dönük compatibility için registry'de versiyonlanır.
 - Yeni schema, prompt, registry ve agent contract'ları bu vocabulary ile uyumlu olmak zorundadır.
+
+## Error Code Registry ayrımı
+
+ARF-012 kararı: Hata kodları agent veya platform dokümanlarında dağınık biçimde tanımlanmaz. Merkezi hata kodu sözlüğü `[Central Error Code Registry](error-code-registry.md)` dosyasıdır.
+
+Error Code Registry şu semantiğin sahibidir:
+
+- error code formatı,
+- domain prefix sözlüğü,
+- severity sözlüğü,
+- kullanıcıya gösterim politikası,
+- retry policy,
+- audit gereksinimi,
+- provider-specific hata mapping kuralları.
+
+Katmanlar hata üretebilir; fakat yeni hata kodunu registry dışında tanımlayamaz.
 
 ## Freeze durumu
 
