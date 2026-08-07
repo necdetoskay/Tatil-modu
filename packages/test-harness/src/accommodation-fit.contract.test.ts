@@ -9,7 +9,7 @@ describe('H1 accommodation fit contract', () => {
 
   it('rejects a verified facility claim without evidence', () => {
     const input = structuredClone(fixture);
-    input.accommodation_profiles[0].facility_claims.thermal_spa_claim.verification_status = 'verified';
+    input.accommodation_profiles[0]!.facility_claims!.thermal_spa_claim!.verification_status = 'verified';
     expect(safeParseAccommodationFit(input).success).toBe(false);
   });
 
