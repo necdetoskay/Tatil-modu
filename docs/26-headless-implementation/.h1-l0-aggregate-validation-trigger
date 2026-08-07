@@ -1,0 +1,2 @@
+H1/L0 aggregate validation trigger.
+All current contract schemas, fixtures, negative assertions, typecheck and boundary checks must pass together on the current main baseline.
