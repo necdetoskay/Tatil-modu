@@ -1,5 +1,9 @@
 import { z } from 'zod';
 
+export * from './common-evidence.js';
+export * from './common-error.js';
+export * from './constraint-policy.js';
+
 export const CONTRACTS_PACKAGE = '@tatil-modu/contracts' as const;
 
 export const confidenceSchema = z.enum(['low', 'medium', 'high']);
@@ -152,5 +156,4 @@ export function safeParseTravelRequest(input: unknown) {
   return travelRequestEnvelopeSchema.safeParse(input);
 }
 
-// Reserved for later H1 contract implementations.
 export const sourceStampedBooleanSchema = sourceStampedValue(z.boolean());
