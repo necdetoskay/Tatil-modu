@@ -1,7 +1,7 @@
 # 11 — Agent Specifications
 
 **Doküman türü:** canonical agent specification alanı  
-**Durum:** aktif tasarım artifact alanı  
+**Durum:** first phase tamamlandı  
 **Kodlama durumu:** kapalı  
 **Prototype durumu:** kapalı
 
@@ -26,6 +26,7 @@ runtime_allowed: false
 agent_specs_required_before_coding: true
 source_of_truth: docs/11-agent-specifications/
 pre_freeze_reference: docs/02-agents/
+first_phase_agent_specs_completed: true
 ```
 
 `docs/02-agents/` pre-freeze referans olarak kalır.
@@ -45,7 +46,7 @@ Bu klasör ise yeni, canonical, pre-code agent specification alanıdır.
 | 7 | Activity Fit Agent | [`activity-fit-agent.md`](activity-fit-agent.md) | drafted |
 | 8 | Day Plan Composer Agent | [`day-plan-composer-agent.md`](day-plan-composer-agent.md) | drafted |
 | 9 | Verification & Evidence Agent | [`verification-evidence-agent.md`](verification-evidence-agent.md) | drafted |
-| 10 | Final Response Composer Agent | `final-response-composer-agent.md` | next |
+| 10 | Final Response Composer Agent | [`final-response-composer-agent.md`](final-response-composer-agent.md) | drafted |
 
 ## Agent specification standardı
 
@@ -80,7 +81,7 @@ Bu dosyalar yalnızca agent'ın davranış sözleşmesini tanımlar.
 ## Current status
 
 ```yaml
-agent_specification_state: active
+agent_specification_state: first_phase_completed
 completed_agent_specs:
   - trip-intake-agent.md
   - constraint-policy-agent.md
@@ -91,6 +92,8 @@ completed_agent_specs:
   - activity-fit-agent.md
   - day-plan-composer-agent.md
   - verification-evidence-agent.md
-next_agent_spec: final-response-composer-agent.md
+  - final-response-composer-agent.md
+next_stage: docs/12-contracts/
+first_next_artifact: docs/12-contracts/README.md
 implementation_allowed: false
 ```
