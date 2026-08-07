@@ -84,6 +84,31 @@ Tool Adapter standardı ise her provider entegrasyonunun uyması gereken alt sev
 
 Agentlar doğrudan provider adapter çağırmaz; Tool Gateway / Capability Platform üzerinden çağırır.
 
+## Confidence ownership ayrımı
+
+ARF-010 kararı: Confidence tek bir agentın veya tek bir platformun serbestçe ürettiği genel puan değildir. Confidence, ortak `Confidence Engine` semantiğiyle normalize edilen, evidence-bound ve açıklanabilir karar sinyalidir.
+
+Confidence Engine şu ortak semantiğin sahibidir:
+
+- confidence ölçeği ve aralıkları,
+- confidence label sözlüğü,
+- aggregation kuralları,
+- minimum evidence requirement,
+- uncertainty propagation,
+- downgrade / escalation kuralları,
+- explanation formatı,
+- confidence lifecycle ve audit alanları.
+
+Katmanlar kendi domain confidence girdilerini üretebilir; fakat canonical confidence semantiğini tekrar tanımlamaz:
+
+- Data Source & Trust, source confidence ve evidence strength girdilerini üretir.
+- Verification Platform, Data Source & Trust sonucunu verification confidence olarak taşır; authority/freshness/conflict algoritmalarını yeniden sahiplenmez.
+- Travel Intelligence modülleri suitability/risk confidence üretir; kaynak güveni yerine domain değerlendirme güvenini ifade eder.
+- Planner ve Orchestrator confidence değerlerini karar kapılarında kullanır; genel confidence ölçeğini değiştirmez.
+- Final Plan Composer confidence'ı kullanıcıya açıklanabilir uyarı, varsayım ve alternatif gerekçesi olarak sunar; yeni confidence hesaplama otoritesi değildir.
+
+Confidence değeri kanıtsız taşınamaz. Her confidence sinyali mümkün olduğunda Universal Evidence Model referansı, üreten katman, hesaplama zamanı ve açıklama ile birlikte taşınmalıdır.
+
 ## Freeze durumu
 
 Bu paket Architecture Freeze öncesi kanonik baseline'dır.
