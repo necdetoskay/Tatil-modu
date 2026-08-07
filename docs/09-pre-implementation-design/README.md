@@ -120,5 +120,6 @@ completed_documents:
   - 06-fixture-and-evaluation-workplan.md
   - 07-tool-and-capability-workplan.md
   - 08-memory-and-privacy-workplan.md
-next_document: 09-ui-ux-flow-workplan.md
+  - 09-ui-ux-flow-workplan.md
+next_document: 10-pre-code-freeze-checklist.md
 ```
