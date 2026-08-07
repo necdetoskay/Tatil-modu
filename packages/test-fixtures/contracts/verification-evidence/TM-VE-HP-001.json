@@ -1,0 +1,51 @@
+{
+  "report_id": "ver-001",
+  "contract_version": "1.0",
+  "generated_from_contracts": [
+    "day-plan-contract.md",
+    "activity-fit-contract.md",
+    "accommodation-fit-contract.md"
+  ],
+  "evidence_items": [
+    {
+      "evidence_item_id": "ev-women-beach-001",
+      "claim_id": "claim-women-beach-001",
+      "claim_text": "Sea alternative satisfies the women-only beach requirement.",
+      "claim_category": "women_only_beach_status",
+      "verification_status": "unverified",
+      "required_source_type": "official_or_operator_source",
+      "acceptable_source_types": ["municipality_page", "official_facility_page", "operator_page"],
+      "freshness_requirement": "current_season",
+      "user_visible_status": "must_show_as_unverified",
+      "confidence_impact": "high",
+      "blocking_level": "hard_blocker",
+      "notes": ["privacy_constraint_active"]
+    },
+    {
+      "evidence_item_id": "ev-price-001",
+      "claim_id": "claim-price-001",
+      "claim_text": "Hotel price is within the trip budget.",
+      "claim_category": "hotel_price",
+      "verification_status": "unverified",
+      "required_source_type": "booking_or_operator_source",
+      "acceptable_source_types": ["operator_page", "booking_provider"],
+      "freshness_requirement": "current_date_range",
+      "user_visible_status": "must_show_as_unverified",
+      "confidence_impact": "medium",
+      "blocking_level": "soft_warning",
+      "notes": []
+    }
+  ],
+  "unresolved_evidence_gaps": ["ev-women-beach-001", "ev-price-001"],
+  "hard_blockers": ["women_only_beach_required_but_status_unknown_for_sea_recommendation"],
+  "soft_warnings": ["hotel_price_unverified"],
+  "final_response_rules": [
+    "do_not_present_women_only_beach_claim_as_verified",
+    "show_price_as_requires_current_check"
+  ],
+  "confidence": {
+    "value": "low",
+    "reasons": ["hard_constraint_related_evidence_gap_exists"]
+  },
+  "validation_status": "blocked"
+}
