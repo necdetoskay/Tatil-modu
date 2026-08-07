@@ -32,6 +32,7 @@ Bu dosya dokümantasyonun ana giriş noktasıdır. Her konu için tek bir kanoni
 | `11-agent-specifications/` | Koddan önce hazırlanacak canonical agent specification dosyaları |
 | `12-contracts/` | Koddan önce hazırlanacak canonical handoff contract ve envelope tasarımları |
 | `13-fixtures-and-evaluation/` | Koddan önce hazırlanacak canonical fixture, golden scenario ve evaluation tasarımları |
+| `14-tool-and-capability-design/` | Koddan önce hazırlanacak tool, capability, adapter ve verification access tasarımları |
 | `15-prompts/` | Ortak/composable prompt kataloğu |
 | `16-workflows/` | E2E ve agent iş akışları |
 
@@ -48,6 +49,7 @@ Bu dosya dokümantasyonun ana giriş noktasıdır. Her konu için tek bir kanoni
 | Canonical agent specifications | [`11-agent-specifications/README.md`](11-agent-specifications/README.md) |
 | Canonical contracts | [`12-contracts/README.md`](12-contracts/README.md) |
 | Canonical fixtures and evaluation | [`13-fixtures-and-evaluation/README.md`](13-fixtures-and-evaluation/README.md) |
+| Canonical tool and capability design | `14-tool-and-capability-design/README.md` |
 | Trip Intake Agent spec | [`11-agent-specifications/trip-intake-agent.md`](11-agent-specifications/trip-intake-agent.md) |
 | Pre-freeze agent listesi | [`02-agents/agent-catalog.md`](02-agents/agent-catalog.md) |
 | Agent template'i | [`02-agents/_templates/agent-specification-template.md`](02-agents/_templates/agent-specification-template.md) |
@@ -74,7 +76,8 @@ Bu dosya dokümantasyonun ana giriş noktasıdır. Her konu için tek bir kanoni
 | Pre-implementation design | workplan tamamlandı; kod/prototype kapalı |
 | Canonical agent specifications | first phase tamamlandı; kod/prototype kapalı |
 | Canonical contracts | first phase tamamlandı; kod/prototype kapalı |
-| Canonical fixtures and evaluation | aktif; ilk artifact Fixture Evaluation Overview |
+| Canonical fixtures and evaluation | first phase tamamlandı; kod/prototype/test runner kapalı |
+| Canonical tool and capability design | sıradaki aşama; kod/prototype kapalı |
 | Decision Policy Engine | bekliyor |
 | Prompt Framework | bekliyor |
 | Memory Architecture | bekliyor |
@@ -96,3 +99,4 @@ Bu dosya dokümantasyonun ana giriş noktasıdır. Her konu için tek bir kanoni
 10. Canonical agent specification dosyaları `11-agent-specifications/` altında tutulur; `02-agents/` pre-freeze referans olarak kalır.
 11. Canonical handoff contract tasarımları `12-contracts/` altında tutulur; schema code ve runtime validator değildir.
 12. Canonical fixture ve evaluation tasarımları `13-fixtures-and-evaluation/` altında tutulur; test runner, CI veya otomasyon kodu değildir.
+13. Canonical tool ve capability tasarımları `14-tool-and-capability-design/` altında tutulacaktır; gerçek tool çağrısı, adapter kodu veya provider entegrasyonu değildir.
