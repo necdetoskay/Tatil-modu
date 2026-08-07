@@ -1,0 +1,65 @@
+{
+  "fixture_id": "TM-CONSTRAINT-POLICY-001",
+  "input": {
+    "contract_id": "constraint_policy_contract",
+    "contract_version": "v1",
+    "producer_agent": "constraint_policy_agent",
+    "trace_id": "TM-TRACE-001",
+    "created_at": "2026-08-07T18:15:00+03:00",
+    "input_contract_refs": ["travel_request_contract:v1"],
+    "validation_status": "valid_with_warnings",
+    "confidence": "high",
+    "evidence_summary": [],
+    "payload": {
+      "policy_summary": "Women-only beach is hard; low fatigue is soft.",
+      "hard_constraints": [
+        {
+          "constraint_id": "women_only_beach_required_when_sea_recommended",
+          "label": "Sea recommendations require a women-only beach",
+          "source": "user_statement",
+          "source_text": "eğer deniz önerisi verilecekse kadınlar plajı mutlaka olmalı",
+          "category": "privacy",
+          "applies_to": ["sea_activity", "beach_recommendation"],
+          "enforcement": "require_evidence_before_use",
+          "confidence": "high",
+          "evidence_requirement": "women_only_beach_verification_required",
+          "user_visible": true,
+          "can_be_overridden_by_user": true
+        }
+      ],
+      "soft_preferences": [
+        {
+          "preference_id": "low_fatigue_preferred",
+          "label": "Low-fatigue plan preferred",
+          "source": "user_statement",
+          "category": "family_fit",
+          "applies_to": ["route", "daily_plan"],
+          "ranking_effect": "boost",
+          "confidence": "high",
+          "user_visible": true
+        }
+      ],
+      "policy_warnings": [
+        {
+          "warning_id": "missing_date_window_limits_verification",
+          "label": "Date missing",
+          "severity": "caution",
+          "reason": "Weather and opening hours cannot be verified precisely.",
+          "affected_fields": ["date_window"],
+          "must_surface_to_user": true,
+          "blocks_final_plan": false
+        }
+      ],
+      "clarification_requirements": [],
+      "downstream_application_rules": {
+        "candidate_generation": { "must_apply_hard_constraints_before_ranking": true },
+        "ranking": { "soft_preferences_can_adjust_score": true, "soft_preferences_cannot_override_hard_constraints": true },
+        "final_response": { "must_surface_policy_warnings": true, "must_surface_user_visible_assumptions": true },
+        "verification": { "hard_constraint_evidence_gap_must_be_reported": true }
+      },
+      "assumptions_to_surface": [],
+      "validation_notes": []
+    }
+  },
+  "expected": { "valid": true }
+}
