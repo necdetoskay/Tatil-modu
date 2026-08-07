@@ -40,6 +40,7 @@ It is intended to be used before coding an agentic system and again during imple
 | [08 — Evidence, Verification and Confidence](08-evidence-verification-and-confidence.md) | Defines evidence envelopes, verification status, confidence semantics, conflict handling and decision impact |
 | [09 — Policy, Hard Constraints and Safety](09-policy-hard-constraints-and-safety.md) | Defines safety gates, hard constraint classification, candidate rejection rules and decision impact |
 | [10 — Evaluation, Fixtures and Regression](10-evaluation-fixtures-and-regression.md) | Defines layered evaluation gates, fixture-first testing, golden scenarios, regression and structured evaluation reports |
+| [11 — Observability, Errors and Audit](11-observability-errors-and-audit.md) | Defines traceable runs, stable error codes, audit events, redaction rules and operational metrics |
 | [Examples — Tatil Modu Reference Implementation](examples/tatil-modu-reference-implementation.md) | Shows how the generic handbook maps to the Tatil Modu project |
 
 ## Foundational rule
