@@ -63,8 +63,8 @@ Kadınlar plajı şartı olan senaryoda deniz önerisi nasıl güvenli taşını
 | 7 | Route Logistics Fixture Pack | [`07-route-logistics-fixture-pack.md`](07-route-logistics-fixture-pack.md) | drafted |
 | 8 | Day Plan Coherence Fixture Pack | [`08-day-plan-coherence-fixture-pack.md`](08-day-plan-coherence-fixture-pack.md) | drafted |
 | 9 | Final Response Quality Rubric | [`09-final-response-quality-rubric.md`](09-final-response-quality-rubric.md) | drafted |
-| 10 | Regression and Golden Baseline Policy | `10-regression-and-golden-baseline-policy.md` | next |
-| 11 | Evaluation Completion Checklist | `11-evaluation-completion-checklist.md` | planned |
+| 10 | Regression and Golden Baseline Policy | [`10-regression-and-golden-baseline-policy.md`](10-regression-and-golden-baseline-policy.md) | drafted |
+| 11 | Evaluation Completion Checklist | `11-evaluation-completion-checklist.md` | next |
 
 ## Evaluation hiyerarşisi
 
@@ -142,7 +142,8 @@ completed_artifacts:
   - 07-route-logistics-fixture-pack.md
   - 08-day-plan-coherence-fixture-pack.md
   - 09-final-response-quality-rubric.md
-next_artifact: 10-regression-and-golden-baseline-policy.md
+  - 10-regression-and-golden-baseline-policy.md
+next_artifact: 11-evaluation-completion-checklist.md
 implementation_allowed: false
 prototype_allowed: false
 test_runner_code_allowed: false
