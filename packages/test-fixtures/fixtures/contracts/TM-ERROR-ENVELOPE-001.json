@@ -1,0 +1,23 @@
+{
+  "fixture_id": "TM-ERROR-ENVELOPE-001",
+  "input": {
+    "error_id": "ERR-PRIVACY-001",
+    "error_type": "privacy_requirement_unverified",
+    "severity": "hard_blocker",
+    "source_contract": "activity_fit_contract",
+    "source_agent": "activity_fit_agent",
+    "affected_field": "privacy_requirement_status",
+    "affected_claim_id": "CLAIM-WOMEN-ONLY-BEACH-001",
+    "user_visible": true,
+    "user_message_required": true,
+    "internal_note_allowed": true,
+    "recovery_action": "require_verification",
+    "clarification_question": null,
+    "downstream_blocking": true,
+    "final_response_blocking": true,
+    "confidence_impact": "blocks_claim_confidence",
+    "related_evidence_gap_ids": ["GAP-WOMEN-ONLY-BEACH-001"],
+    "validation_status": "failed"
+  },
+  "expected": { "valid": true }
+}
