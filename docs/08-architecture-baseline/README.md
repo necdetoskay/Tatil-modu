@@ -36,6 +36,7 @@ kanonik Tatil Modu mimari çalışmalarını toplar.
 - [Architecture Freeze Required Artifact Inventory](freeze-required-artifact-inventory.md)
 - [Central Error Code Registry](error-code-registry.md)
 - [Architecture Dependency Index](architecture-dependency-index.md)
+- [Architecture Terminology Registry](architecture-terminology-registry.md)
 
 ## Knowledge ayrımı
 
@@ -158,6 +159,14 @@ ARF-013 kararı: Canonical mimari dokümanlar yalnız içerik taşımaz; hangi A
 Cross-reference ve dependency metadata için canonical takip noktası `[Architecture Dependency Index](architecture-dependency-index.md)` dosyasıdır.
 
 Yeni canonical agent, platform, schema, registry veya prompt dokümanı mümkün olduğunda owner, depends_on, related_artifacts, canonical_status ve architecture_review metadata'sı taşımalıdır.
+
+## Architecture terminology ayrımı
+
+ARF-014 kararı: Platform, service, agent, planner, module, registry, store, gateway ve adapter terimleri birbirinin yerine kullanılmaz.
+
+Canonical terminoloji takip noktası `[Architecture Terminology Registry](architecture-terminology-registry.md)` dosyasıdır.
+
+Yeni canonical dokümanlarda bileşen türü mümkün olduğunda `component_type` metadata alanıyla belirtilmelidir. Bileşen bir görev yürütüyorsa `agent`, plan kararı veriyorsa `planner`, yalnız domain değerlendirmesi yapıyorsa `module`, ortak altyapı sağlıyorsa `platform`, canonical sözlük tutuyorsa `registry`, kalıcı veri tutuyorsa `store`, provider girişini normalize ediyorsa `gateway`, tekil provider entegrasyonunu temsil ediyorsa `adapter` olarak adlandırılır.
 
 ## Freeze durumu
 
