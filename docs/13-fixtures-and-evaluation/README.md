@@ -62,8 +62,8 @@ Kadınlar plajı şartı olan senaryoda deniz önerisi nasıl güvenli taşını
 | 6 | Privacy Sensitive Beach Fixture Pack | [`06-privacy-sensitive-beach-fixture-pack.md`](06-privacy-sensitive-beach-fixture-pack.md) | drafted |
 | 7 | Route Logistics Fixture Pack | [`07-route-logistics-fixture-pack.md`](07-route-logistics-fixture-pack.md) | drafted |
 | 8 | Day Plan Coherence Fixture Pack | [`08-day-plan-coherence-fixture-pack.md`](08-day-plan-coherence-fixture-pack.md) | drafted |
-| 9 | Final Response Quality Rubric | `09-final-response-quality-rubric.md` | next |
-| 10 | Regression and Golden Baseline Policy | `10-regression-and-golden-baseline-policy.md` | planned |
+| 9 | Final Response Quality Rubric | [`09-final-response-quality-rubric.md`](09-final-response-quality-rubric.md) | drafted |
+| 10 | Regression and Golden Baseline Policy | `10-regression-and-golden-baseline-policy.md` | next |
 | 11 | Evaluation Completion Checklist | `11-evaluation-completion-checklist.md` | planned |
 
 ## Evaluation hiyerarşisi
@@ -141,7 +141,8 @@ completed_artifacts:
   - 06-privacy-sensitive-beach-fixture-pack.md
   - 07-route-logistics-fixture-pack.md
   - 08-day-plan-coherence-fixture-pack.md
-next_artifact: 09-final-response-quality-rubric.md
+  - 09-final-response-quality-rubric.md
+next_artifact: 10-regression-and-golden-baseline-policy.md
 implementation_allowed: false
 prototype_allowed: false
 test_runner_code_allowed: false
