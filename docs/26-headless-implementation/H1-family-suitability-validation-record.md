@@ -3,8 +3,12 @@
 ## Status
 ```yaml
 slice: family_suitability_contract
-execution_status: pending_ci
+execution_status: pass
 p0_failures_allowed: 0
+p0_failures_observed: 0
+workflow_run_id: 31209308636
+validation_branch: h1/family-suitability-validation
+validation_pr: 4
 ```
 
 ## Scope
@@ -16,8 +20,19 @@ p0_failures_allowed: 0
 - evidence requirement for verified facility claims
 - typecheck + boundaries + Vitest
 
-## Validation branch
-`h1/family-suitability-validation`
+## Execution evidence
+GitHub Actions `Headless Core Gate` run `31209308636` completed successfully.
 
-## Completion rule
-Bu kayıt yalnız GitHub Actions `Headless Core Gate` PASS sonrası `execution_status: pass` olarak güncellenir.
+Validated pipeline:
+```text
+install dependencies
+→ typecheck
+→ package boundaries
+→ Vitest suite
+→ PASS
+```
+
+## Result
+Family Suitability contract runtime slice is accepted for H1/L0 progression.
+
+Bu kayıt full H1/L0 completion anlamına gelmez; yalnız bu contract slice için execution evidence'dır.
