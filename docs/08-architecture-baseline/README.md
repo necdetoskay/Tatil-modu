@@ -33,6 +33,7 @@ kanonik Tatil Modu mimari çalışmalarını toplar.
 - Backup & Disaster Recovery
 - Version Management & Compatibility
 - Architecture Review & Freeze Plan
+- [Architecture Freeze Required Artifact Inventory](freeze-required-artifact-inventory.md)
 
 ## Knowledge ayrımı
 
