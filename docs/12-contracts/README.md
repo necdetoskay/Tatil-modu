@@ -40,8 +40,8 @@ Bu klasörde TypeScript type, Zod schema, JSON Schema dosyası veya runtime vali
 | 1 | Travel Request Contract | [`travel-request-contract.md`](travel-request-contract.md) | drafted |
 | 2 | Constraint Policy Contract | [`constraint-policy-contract.md`](constraint-policy-contract.md) | drafted |
 | 3 | Family Suitability Contract | [`family-suitability-contract.md`](family-suitability-contract.md) | drafted |
-| 4 | Destination Candidate Contract | `destination-candidate-contract.md` | next |
-| 5 | Route Logistics Contract | `route-logistics-contract.md` | planned |
+| 4 | Destination Candidate Contract | [`destination-candidate-contract.md`](destination-candidate-contract.md) | drafted |
+| 5 | Route Logistics Contract | `route-logistics-contract.md` | next |
 | 6 | Accommodation Fit Contract | `accommodation-fit-contract.md` | planned |
 | 7 | Activity Fit Contract | `activity-fit-contract.md` | planned |
 | 8 | Day Plan Contract | `day-plan-contract.md` | planned |
@@ -139,7 +139,8 @@ completed_contracts:
   - travel-request-contract.md
   - constraint-policy-contract.md
   - family-suitability-contract.md
-next_contract: destination-candidate-contract.md
+  - destination-candidate-contract.md
+next_contract: route-logistics-contract.md
 implementation_allowed: false
 prototype_allowed: false
 schema_code_allowed: false
