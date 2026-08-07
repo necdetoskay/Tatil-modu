@@ -2,15 +2,31 @@
 
 Bu dosya dokümantasyonun ana giriş noktasıdır. Her konu için tek bir kanonik belge kullanılır.
 
+## Architecture Review durumu
+
+**Güncel mimari durum:** Architecture Freeze öncesi kanonik baseline `08-architecture-baseline/` altında tutulur.
+
+`01-architecture/`, `02-agents/`, `03-testing/` ve `04-tools/` altındaki eski belgeler pre-freeze referans veya domain-spesifik çalışma belgeleri olabilir. Architecture Review sırasında isimlendirme, ownership veya platform sınırı çakışmalarında `08-architecture-baseline/` önceliklidir.
+
+İlk kritik Architecture Review blocker'ları kapatılmıştır:
+
+- ARF-001 — Knowledge Platform / Travel Knowledge Store ayrımı
+- ARF-002 — Verification Platform / Data Source & Trust ayrımı
+- ARF-003 — Initial Agent Catalog pre-freeze referans statüsü
+- ARF-004 — Travel Intelligence module / agent ayrımı
+- ARF-005 — Capability Platform / Tool Adapter ayrımı
+- ARF-006 — Freeze required artifact inventory
+
 ## Klasör yapısı
 
 | Klasör | Sorumluluk |
 |---|---|
 | `00-governance/` | ADR'ler, mühendislik ilkeleri, karar logu ve terimler |
-| `01-architecture/` | Sistem mimarisi, handoff standardı ve veri güven politikası |
-| `02-agents/` | Kanonik agent kataloğu, agent template'i ve agent belgeleri |
+| `01-architecture/` | Pre-freeze sistem mimarisi, handoff standardı ve veri güven politikası |
+| `02-agents/` | Pre-freeze agent katalog ve agent belgeleri |
 | `03-testing/` | Ortak agent test ve değerlendirme standardı |
 | `04-tools/` | Capability Platform, provider adapterları, runtime kontrolleri ve capability contract'ları |
+| `08-architecture-baseline/` | Architecture Freeze öncesi kanonik baseline, ARF kararları ve required artifact envanteri |
 | `10-product/` | Ürün vizyonu, kapsam ve kullanıcı yolculuğu |
 | `15-prompts/` | Ortak/composable prompt kataloğu |
 | `16-workflows/` | E2E ve agent iş akışları |
@@ -19,9 +35,11 @@ Bu dosya dokümantasyonun ana giriş noktasıdır. Her konu için tek bir kanoni
 
 | Konu | Tek kaynak |
 |---|---|
+| Architecture Freeze baseline | [`08-architecture-baseline/README.md`](08-architecture-baseline/README.md) |
+| Freeze required artifact inventory | [`08-architecture-baseline/freeze-required-artifact-inventory.md`](08-architecture-baseline/freeze-required-artifact-inventory.md) |
 | Ürün vizyonu | [`10-product/PRD-001-URUN-VIZYONU.md`](10-product/PRD-001-URUN-VIZYONU.md) |
-| Sistem mimarisi | [`01-architecture/system-overview.md`](01-architecture/system-overview.md) |
-| Agent listesi | [`02-agents/agent-catalog.md`](02-agents/agent-catalog.md) |
+| Sistem mimarisi | [`08-architecture-baseline/README.md`](08-architecture-baseline/README.md) |
+| Pre-freeze agent listesi | [`02-agents/agent-catalog.md`](02-agents/agent-catalog.md) |
 | Agent template'i | [`02-agents/_templates/agent-specification-template.md`](02-agents/_templates/agent-specification-template.md) |
 | Test standardı | [`03-testing/agent-testing-evaluation-standard.md`](03-testing/agent-testing-evaluation-standard.md) |
 | Handoff standardı | [`01-architecture/handoff-contract-standard.md`](01-architecture/handoff-contract-standard.md) |
@@ -35,11 +53,14 @@ Bu dosya dokümantasyonun ana giriş noktasıdır. Her konu için tek bir kanoni
 
 | Aşama | Durum |
 |---|---|
-| Governance foundation | büyük ölçüde tamamlandı |
+| Governance foundation | tamamlandı / pre-freeze referans |
 | Product vision | foundation tamamlandı |
-| Agent foundation | AG-001 ve AG-002 ayrıntılı |
-| Tool / Capability Architecture | architecture complete |
-| Data Source & Trust Architecture | sıradaki |
+| Agent foundation | pre-freeze referans; canonical sınırlar baseline altında |
+| Tool / Capability Architecture | ARF-005 ile boundary netleşti |
+| Data Source & Trust Architecture | ARF-002 ile Verification Platform'dan ayrıştırıldı |
+| Knowledge Platform | ARF-001 ile Travel Knowledge Store'dan ayrıştırıldı |
+| Architecture baseline | freeze öncesi kanonik kaynak |
+| Required artifact inventory | ARF-006 ile eklendi |
 | Decision Policy Engine | bekliyor |
 | Prompt Framework | bekliyor |
 | Memory Architecture | bekliyor |
@@ -49,10 +70,11 @@ Bu dosya dokümantasyonun ana giriş noktasıdır. Her konu için tek bir kanoni
 
 ## Source of truth kuralları
 
-1. Agent listesi başka belgelerde yeniden yazılmaz.
-2. Agent template'i yalnız `_templates` altında tutulur.
-3. ADR kararın nedenini açıklar; güncel katalog görevi görmez.
-4. README dosyaları ayrıntıyı kopyalamaz, kanonik belgeye yönlendirir.
-5. Taşınan belgelerin eski konumu kaldırılır.
-6. Provider isimleri agent contract'larına doğrudan yazılmaz; capability kimliği kullanılır.
-7. Data Source Architecture, Capability Platform runtime kurallarını tekrar etmez; güven ve evidence kararlarını tanımlar.
+1. Architecture Freeze öncesi mimari ownership ve boundary kararlarında `08-architecture-baseline/` önceliklidir.
+2. Agent listesi başka belgelerde yeniden yazılmaz; `02-agents/agent-catalog.md` pre-freeze referans kabul edilir.
+3. Agent template'i yalnız `_templates` altında tutulur.
+4. ADR kararın nedenini açıklar; güncel katalog görevi görmez.
+5. README dosyaları ayrıntıyı kopyalamaz, kanonik belgeye yönlendirir.
+6. Taşınan belgelerin eski konumu kaldırılır.
+7. Provider isimleri agent contract'larına doğrudan yazılmaz; capability kimliği kullanılır.
+8. Data Source Architecture, Capability Platform runtime kurallarını tekrar etmez; güven ve evidence kararlarını tanımlar.
