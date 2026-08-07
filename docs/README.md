@@ -49,7 +49,7 @@ Bu dosya dokümantasyonun ana giriş noktasıdır. Her konu için tek bir kanoni
 | Canonical agent specifications | [`11-agent-specifications/README.md`](11-agent-specifications/README.md) |
 | Canonical contracts | [`12-contracts/README.md`](12-contracts/README.md) |
 | Canonical fixtures and evaluation | [`13-fixtures-and-evaluation/README.md`](13-fixtures-and-evaluation/README.md) |
-| Canonical tool and capability design | `14-tool-and-capability-design/README.md` |
+| Canonical tool and capability design | [`14-tool-and-capability-design/README.md`](14-tool-and-capability-design/README.md) |
 | Trip Intake Agent spec | [`11-agent-specifications/trip-intake-agent.md`](11-agent-specifications/trip-intake-agent.md) |
 | Pre-freeze agent listesi | [`02-agents/agent-catalog.md`](02-agents/agent-catalog.md) |
 | Agent template'i | [`02-agents/_templates/agent-specification-template.md`](02-agents/_templates/agent-specification-template.md) |
@@ -77,7 +77,7 @@ Bu dosya dokümantasyonun ana giriş noktasıdır. Her konu için tek bir kanoni
 | Canonical agent specifications | first phase tamamlandı; kod/prototype kapalı |
 | Canonical contracts | first phase tamamlandı; kod/prototype kapalı |
 | Canonical fixtures and evaluation | first phase tamamlandı; kod/prototype/test runner kapalı |
-| Canonical tool and capability design | sıradaki aşama; kod/prototype kapalı |
+| Canonical tool and capability design | aktif; ilk artifact Capability Design Overview |
 | Decision Policy Engine | bekliyor |
 | Prompt Framework | bekliyor |
 | Memory Architecture | bekliyor |
