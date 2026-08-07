@@ -2,8 +2,8 @@
 
 **Doküman türü:** Freeze öncesi zorunlu artifact envanteri  
 **Teknik kod adı:** `freeze_required_artifact_inventory`  
-**Sürüm:** 1.0 Taslak  
-**Architecture Review:** ARF-006
+**Sürüm:** 1.1 Taslak  
+**Architecture Review:** ARF-006, ARF-012
 
 ## Amaç
 
@@ -37,7 +37,7 @@ deprecated
 | ARF6-003 | Family Graph Schema | JSON Schema | Profile / Memory boundary | required | Kişi, aile ve ilişki yapısı |
 | ARF6-004 | Trip Profile Schema | JSON Schema | Trip Profile Agent | drafted | Eski agent catalog içinde v1 çalışması var |
 | ARF6-005 | Trip Plan Schema | JSON Schema | Adaptive Day Planner / Orchestrator | required | Plan ve alternatif çıktıları |
-| ARF6-006 | Error Registry | Registry | Governance / Runtime | required | Merkezi hata kodları |
+| ARF6-006 | Error Registry | Registry | Governance / Runtime | implemented | [`error-code-registry.md`](error-code-registry.md) |
 | ARF6-007 | Prompt Registry Index | Registry | Knowledge Platform / Prompt Governance | required | Production prompt versiyonlama |
 | ARF6-008 | Tool Capability Registry | Registry | Capability Platform | required | Tool discovery ve izin modeli |
 | ARF6-009 | Verification Result Schema | JSON Schema | Verification Facade & Registry | required | Planner'a taşınan doğrulama sonucu |
@@ -61,3 +61,7 @@ Architecture Freeze öncesinde:
 ## ARF-006 kararı
 
 ARF-006 kapsamında eksik artifact'lar artık dağınık referans olarak bırakılmaz. Bu envanter freeze öncesi artifact backlog'unun canonical takip noktasıdır.
+
+## ARF-012 kararı
+
+ARF-012 kapsamında merkezi Error Registry artifact'ı [`error-code-registry.md`](error-code-registry.md) dosyasıyla oluşturulmuş ve `implemented` statüsüne alınmıştır.
