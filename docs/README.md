@@ -59,6 +59,7 @@ Bu dosya dokümantasyonun ana giriş noktasıdır. Her konu için tek bir kanoni
 | Canonical decision policy engine | [`17-decision-policy-engine/README.md`](17-decision-policy-engine/README.md) |
 | Canonical memory architecture | [`18-memory-architecture/README.md`](18-memory-architecture/README.md) |
 | Canonical quality engine | [`19-quality-engine/README.md`](19-quality-engine/README.md) |
+| Canonical orchestrator design | [`20-orchestrator/README.md`](20-orchestrator/README.md) |
 | Trip Intake Agent spec | [`11-agent-specifications/trip-intake-agent.md`](11-agent-specifications/trip-intake-agent.md) |
 | Pre-freeze agent listesi | [`02-agents/agent-catalog.md`](02-agents/agent-catalog.md) |
 | Agent template'i | [`02-agents/_templates/agent-specification-template.md`](02-agents/_templates/agent-specification-template.md) |
@@ -92,8 +93,8 @@ Bu dosya dokümantasyonun ana giriş noktasıdır. Her konu için tek bir kanoni
 | Decision Policy Engine | first phase tamamlandı; runtime policy engine kapalı |
 | Memory Architecture | first phase tamamlandı; runtime memory store kapalı |
 | Quality Engine | first phase tamamlandı; runtime reviewer/scoring engine kapalı |
-| Orchestrator | sıradaki aşama; kod/prototype kapalı |
-| Observability üst katmanı | bekliyor |
+| Orchestrator | first phase tamamlandı; runtime orchestration/live agent execution kapalı |
+| Observability üst katmanı | sıradaki aşama |
 
 ## Source of truth kuralları
 
@@ -115,4 +116,4 @@ Bu dosya dokümantasyonun ana giriş noktasıdır. Her konu için tek bir kanoni
 16. Decision policy tasarımları `17-decision-policy-engine/` altında tutulur; runtime policy engine, rule evaluator veya scoring implementation değildir.
 17. Memory architecture tasarımları `18-memory-architecture/` altında tutulur; runtime memory store, database schema veya vector store implementation değildir.
 18. Quality engine tasarımları `19-quality-engine/` altında tutulur; runtime reviewer, scoring engine, LLM judge veya CI evaluator değildir.
-19. Orchestrator tasarımları sıradaki aşamada ele alınacaktır; runtime orchestration veya live agent execution değildir.
+19. Orchestrator tasarımları `20-orchestrator/` altında tutulur; runtime orchestrator engine, scheduler, queue, job runner veya live agent execution değildir.
