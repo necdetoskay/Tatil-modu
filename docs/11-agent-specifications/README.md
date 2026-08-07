@@ -42,8 +42,8 @@ Bu klasör ise yeni, canonical, pre-code agent specification alanıdır.
 | 4 | Destination Candidate Agent | [`destination-candidate-agent.md`](destination-candidate-agent.md) | drafted |
 | 5 | Route & Logistics Agent | [`route-logistics-agent.md`](route-logistics-agent.md) | drafted |
 | 6 | Accommodation Fit Agent | [`accommodation-fit-agent.md`](accommodation-fit-agent.md) | drafted |
-| 7 | Activity Fit Agent | `activity-fit-agent.md` | next |
-| 8 | Day Plan Composer Agent | `day-plan-composer-agent.md` | planned |
+| 7 | Activity Fit Agent | [`activity-fit-agent.md`](activity-fit-agent.md) | drafted |
+| 8 | Day Plan Composer Agent | `day-plan-composer-agent.md` | next |
 | 9 | Verification & Evidence Agent | `verification-evidence-agent.md` | planned |
 | 10 | Final Response Composer Agent | `final-response-composer-agent.md` | planned |
 
@@ -88,6 +88,7 @@ completed_agent_specs:
   - destination-candidate-agent.md
   - route-logistics-agent.md
   - accommodation-fit-agent.md
-next_agent_spec: activity-fit-agent.md
+  - activity-fit-agent.md
+next_agent_spec: day-plan-composer-agent.md
 implementation_allowed: false
 ```
