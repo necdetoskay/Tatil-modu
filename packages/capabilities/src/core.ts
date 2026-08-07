@@ -16,6 +16,9 @@ export type CapabilityFaultCode =
   | 'PROVIDER_RATE_LIMIT'
   | 'PROVIDER_UNAVAILABLE'
   | 'MALFORMED_PROVIDER_PAYLOAD'
+  | 'PARTIAL_PROVIDER_PAYLOAD'
+  | 'CONTRADICTORY_PROVIDER_EVIDENCE'
+  | 'MISSING_PROVIDER_EVIDENCE'
   | 'EMPTY_RESULT';
 
 export interface CapabilityRequest<TPayload = unknown> {
