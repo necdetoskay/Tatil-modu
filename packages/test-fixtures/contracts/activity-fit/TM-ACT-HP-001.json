@@ -1,0 +1,77 @@
+{
+  "contract_id": "activity_fit_contract",
+  "contract_version": "v1",
+  "producer_agent": "activity_fit_agent",
+  "trace_id": "trace-act-hp-001",
+  "validation_status": "needs_verification",
+  "confidence": "medium",
+  "activity_summary": {
+    "total_candidates": 2,
+    "suitable_count": 1,
+    "conditional_count": 1,
+    "rejected_count": 0,
+    "verification_required_count": 2
+  },
+  "activity_profiles": [
+    {
+      "activity_id": "bursa_zoo_morning",
+      "activity_name": "Bursa Hayvanat Bahçesi",
+      "activity_type": "zoo",
+      "destination_id": "bursa",
+      "family_fit_band": "high",
+      "toddler_fit": "medium",
+      "older_child_fit": "high",
+      "fatigue_risk": "medium",
+      "weather_sensitivity": "medium",
+      "privacy_requirement_status": "not_applicable",
+      "accessibility_risk": "needs_verification",
+      "parking_access_risk": "needs_verification",
+      "time_window_fit": "morning_preferred",
+      "cost_sensitivity": "needs_verification",
+      "activity_blockers": [],
+      "activity_warnings": ["toddler_fatigue_possible_after_long_walk"],
+      "verification_needs": [
+        {"type":"opening_hours","priority":"medium","reason":"schedule_claim_not_verified"},
+        {"type":"ticket_price","priority":"medium","reason":"price_not_verified"},
+        {"type":"parking_availability","priority":"medium","reason":"parking_not_verified"}
+      ],
+      "recommended_usage": ["use_as_morning_block","follow_with_rest_or_light_option"],
+      "explanation_notes": ["family_relevance_high"],
+      "confidence": "medium",
+      "validation_status": "needs_verification",
+      "opening_hours_claim": {"value": null, "verification_status": "needs_verification", "evidence_refs": []},
+      "ticket_price_claim": {"value": null, "verification_status": "needs_verification", "evidence_refs": []},
+      "parking_claim": {"value": null, "verification_status": "needs_verification", "evidence_refs": []},
+      "hard_constraint_violation": false
+    },
+    {
+      "activity_id": "sea_beach_option",
+      "activity_type": "beach",
+      "destination_id": "coastal_area",
+      "family_fit_band": "conditional",
+      "toddler_fit": "medium",
+      "older_child_fit": "high",
+      "fatigue_risk": "medium",
+      "weather_sensitivity": "high",
+      "privacy_requirement_status": "verification_required",
+      "accessibility_risk": "needs_verification",
+      "parking_access_risk": "needs_verification",
+      "time_window_fit": "morning_preferred",
+      "cost_sensitivity": "unknown",
+      "activity_blockers": [],
+      "activity_warnings": ["women_only_beach_status_unverified_when_required"],
+      "verification_needs": [
+        {"type":"women_only_beach_status","priority":"high","reason":"sea_activity_requires_privacy_constraint_verification"},
+        {"type":"weather_suitability","priority":"high","reason":"weather_sensitive_activity"}
+      ],
+      "recommended_usage": ["do_not_schedule_until_privacy_verified"],
+      "explanation_notes": ["sea_option_conditional"],
+      "confidence": "low",
+      "validation_status": "needs_verification",
+      "women_only_beach_claim": {"value": null, "verification_status": "needs_verification", "evidence_refs": []},
+      "hard_constraint_violation": false
+    }
+  ],
+  "rejected_activity_candidates": [],
+  "clarification_requirements": []
+}
