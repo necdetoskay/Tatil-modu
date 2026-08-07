@@ -44,8 +44,8 @@ Bu klasör ise yeni, canonical, pre-code agent specification alanıdır.
 | 6 | Accommodation Fit Agent | [`accommodation-fit-agent.md`](accommodation-fit-agent.md) | drafted |
 | 7 | Activity Fit Agent | [`activity-fit-agent.md`](activity-fit-agent.md) | drafted |
 | 8 | Day Plan Composer Agent | [`day-plan-composer-agent.md`](day-plan-composer-agent.md) | drafted |
-| 9 | Verification & Evidence Agent | `verification-evidence-agent.md` | next |
-| 10 | Final Response Composer Agent | `final-response-composer-agent.md` | planned |
+| 9 | Verification & Evidence Agent | [`verification-evidence-agent.md`](verification-evidence-agent.md) | drafted |
+| 10 | Final Response Composer Agent | `final-response-composer-agent.md` | next |
 
 ## Agent specification standardı
 
@@ -90,6 +90,7 @@ completed_agent_specs:
   - accommodation-fit-agent.md
   - activity-fit-agent.md
   - day-plan-composer-agent.md
-next_agent_spec: verification-evidence-agent.md
+  - verification-evidence-agent.md
+next_agent_spec: final-response-composer-agent.md
 implementation_allowed: false
 ```
