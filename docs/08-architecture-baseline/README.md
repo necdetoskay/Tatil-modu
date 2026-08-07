@@ -109,6 +109,30 @@ Katmanlar kendi domain confidence girdilerini üretebilir; fakat canonical confi
 
 Confidence değeri kanıtsız taşınamaz. Her confidence sinyali mümkün olduğunda Universal Evidence Model referansı, üreten katman, hesaplama zamanı ve açıklama ile birlikte taşınmalıdır.
 
+## Lifecycle / status vocabulary ayrımı
+
+ARF-011 kararı: `status`, `state`, `lifecycle`, `maturity` ve `verification_status` aynı kavram gibi kullanılmaz. Her statü alanı kendi domain'inde tanımlanır ve alan adı domain niyetini açıkça taşır.
+
+Canonical statü grupları:
+
+| Grup | Alan adı | Sahip | Değerler | Kullanım |
+|---|---|---|---|---|
+| Doküman durumu | `document_status` | Governance / Documentation | `draft`, `review`, `approved`, `superseded`, `deprecated` | Dokümanın yayın ve geçerlilik durumu |
+| Artifact durumu | `artifact_status` | Architecture Freeze Artifact Inventory | `required`, `drafted`, `implemented`, `validated`, `deprecated` | Schema, registry, fixture ve test artifact takibi |
+| Agent olgunluğu | `agent_maturity` | Agent Catalog / Evaluation | `proposed`, `specified`, `contracted`, `fixture-tested`, `live-tested`, `production-ready`, `deprecated` | Agent geliştirme ve test seviyesi |
+| Runtime execution | `execution_state` | Orchestrator / Runtime | `queued`, `running`, `succeeded`, `failed`, `cancelled`, `blocked` | Çalışan iş veya agent run durumu |
+| Verification sonucu | `verification_status` | Verification Platform | `verified`, `likely`, `uncertain`, `rejected`, `stale` | Claim doğrulama sonucu |
+| Evidence durumu | `evidence_status` | Data Source & Trust | `fresh`, `usable`, `weak`, `conflicting`, `expired`, `missing` | Kanıtın kullanılabilirliği |
+| Plan karar durumu | `decision_state` | Planner / Orchestrator | `accepted`, `alternative`, `deferred`, `requires_user_input`, `rejected` | Plan içindeki karar kapısı sonucu |
+
+Kurallar:
+
+- Genel `status` alanı yeni contract'larda tek başına kullanılmaz; domain-specific alan adı seçilir.
+- Bir dokümanın `document_status` değeri runtime doğrulama sonucu gibi yorumlanamaz.
+- Bir claim'in `verification_status` değeri agent maturity veya artifact readiness anlamına gelmez.
+- Lifecycle değerleri geriye dönük compatibility için registry'de versiyonlanır.
+- Yeni schema, prompt, registry ve agent contract'ları bu vocabulary ile uyumlu olmak zorundadır.
+
 ## Freeze durumu
 
 Bu paket Architecture Freeze öncesi kanonik baseline'dır.
