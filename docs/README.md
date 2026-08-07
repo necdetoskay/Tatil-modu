@@ -39,6 +39,7 @@ Bu dosya dokümantasyonun ana giriş noktasıdır. Her konu için tek bir kanoni
 | `18-memory-architecture/` | Koddan önce hazırlanacak memory architecture deep design tasarımları |
 | `19-quality-engine/` | Koddan önce hazırlanacak quality engine, review ve scoring tasarımları |
 | `20-orchestrator/` | Koddan önce hazırlanacak orchestrator, coordination ve handoff routing tasarımları |
+| `21-observability/` | Koddan önce hazırlanacak observability, telemetry, traceability ve operational insight tasarımları |
 
 ## Kanonik belge matrisi
 
@@ -60,6 +61,7 @@ Bu dosya dokümantasyonun ana giriş noktasıdır. Her konu için tek bir kanoni
 | Canonical memory architecture | [`18-memory-architecture/README.md`](18-memory-architecture/README.md) |
 | Canonical quality engine | [`19-quality-engine/README.md`](19-quality-engine/README.md) |
 | Canonical orchestrator design | [`20-orchestrator/README.md`](20-orchestrator/README.md) |
+| Canonical observability design | [`21-observability/README.md`](21-observability/README.md) |
 | Trip Intake Agent spec | [`11-agent-specifications/trip-intake-agent.md`](11-agent-specifications/trip-intake-agent.md) |
 | Pre-freeze agent listesi | [`02-agents/agent-catalog.md`](02-agents/agent-catalog.md) |
 | Agent template'i | [`02-agents/_templates/agent-specification-template.md`](02-agents/_templates/agent-specification-template.md) |
@@ -94,7 +96,8 @@ Bu dosya dokümantasyonun ana giriş noktasıdır. Her konu için tek bir kanoni
 | Memory Architecture | first phase tamamlandı; runtime memory store kapalı |
 | Quality Engine | first phase tamamlandı; runtime reviewer/scoring engine kapalı |
 | Orchestrator | first phase tamamlandı; runtime orchestration/live agent execution kapalı |
-| Observability üst katmanı | sıradaki aşama |
+| Observability üst katmanı | first phase tamamlandı; runtime telemetry/logging/metrics/tracing kapalı |
+| Architecture completion review | sıradaki aşama |
 
 ## Source of truth kuralları
 
@@ -117,3 +120,4 @@ Bu dosya dokümantasyonun ana giriş noktasıdır. Her konu için tek bir kanoni
 17. Memory architecture tasarımları `18-memory-architecture/` altında tutulur; runtime memory store, database schema veya vector store implementation değildir.
 18. Quality engine tasarımları `19-quality-engine/` altında tutulur; runtime reviewer, scoring engine, LLM judge veya CI evaluator değildir.
 19. Orchestrator tasarımları `20-orchestrator/` altında tutulur; runtime orchestrator engine, scheduler, queue, job runner veya live agent execution değildir.
+20. Observability tasarımları `21-observability/` altında tutulur; runtime telemetry, logging stack, metrics backend, tracing backend, dashboard veya alert deployment değildir.
