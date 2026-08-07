@@ -117,5 +117,6 @@ completed_documents:
   - 03-required-design-artifact-map.md
   - 04-agent-specification-workplan.md
   - 05-contract-schema-workplan.md
-next_document: 06-fixture-and-evaluation-workplan.md
+  - 06-fixture-and-evaluation-workplan.md
+next_document: 07-tool-and-capability-workplan.md
 ```
