@@ -34,6 +34,7 @@ It is intended to be used before coding an agentic system and again during imple
 | [02 — Core Principles](02-core-principles.md) | Reusable design principles for agentic systems |
 | [03 — Component Taxonomy](03-component-taxonomy.md) | Canonical meaning of agent, planner, module, platform, store, registry, gateway and adapter |
 | [04 — Agent Contract Standard](04-agent-contract-standard.md) | Minimum contract rules for agent input, output and handoff |
+| [05 — Orchestration Model](05-orchestration-model.md) | Defines how workflow coordination, routing, retries, privacy scope and decision reconciliation work |
 | [Examples — Tatil Modu Reference Implementation](examples/tatil-modu-reference-implementation.md) | Shows how the generic handbook maps to the Tatil Modu project |
 
 ## Foundational rule
