@@ -27,6 +27,7 @@ Bu dosya dokümantasyonun ana giriş noktasıdır. Her konu için tek bir kanoni
 | `03-testing/` | Ortak agent test ve değerlendirme standardı |
 | `04-tools/` | Capability Platform, provider adapterları, runtime kontrolleri ve capability contract'ları |
 | `08-architecture-baseline/` | Architecture Freeze öncesi kanonik baseline, ARF kararları ve required artifact envanteri |
+| `09-pre-implementation-design/` | Kod/prototype başlamadan önce tamamlanacak Tatil Modu tasarım artifact'ları |
 | `10-product/` | Ürün vizyonu, kapsam ve kullanıcı yolculuğu |
 | `15-prompts/` | Ortak/composable prompt kataloğu |
 | `16-workflows/` | E2E ve agent iş akışları |
@@ -37,6 +38,8 @@ Bu dosya dokümantasyonun ana giriş noktasıdır. Her konu için tek bir kanoni
 |---|---|
 | Architecture Freeze baseline | [`08-architecture-baseline/README.md`](08-architecture-baseline/README.md) |
 | Freeze required artifact inventory | [`08-architecture-baseline/freeze-required-artifact-inventory.md`](08-architecture-baseline/freeze-required-artifact-inventory.md) |
+| Pre-implementation design alanı | [`09-pre-implementation-design/README.md`](09-pre-implementation-design/README.md) |
+| Design completion assessment | [`09-pre-implementation-design/01-design-completion-assessment.md`](09-pre-implementation-design/01-design-completion-assessment.md) |
 | Ürün vizyonu | [`10-product/PRD-001-URUN-VIZYONU.md`](10-product/PRD-001-URUN-VIZYONU.md) |
 | Sistem mimarisi | [`08-architecture-baseline/README.md`](08-architecture-baseline/README.md) |
 | Pre-freeze agent listesi | [`02-agents/agent-catalog.md`](02-agents/agent-catalog.md) |
@@ -61,6 +64,7 @@ Bu dosya dokümantasyonun ana giriş noktasıdır. Her konu için tek bir kanoni
 | Knowledge Platform | ARF-001 ile Travel Knowledge Store'dan ayrıştırıldı |
 | Architecture baseline | freeze öncesi kanonik kaynak |
 | Required artifact inventory | ARF-006 ile eklendi |
+| Pre-implementation design | aktif; kod/prototype kapalı |
 | Decision Policy Engine | bekliyor |
 | Prompt Framework | bekliyor |
 | Memory Architecture | bekliyor |
@@ -78,3 +82,4 @@ Bu dosya dokümantasyonun ana giriş noktasıdır. Her konu için tek bir kanoni
 6. Taşınan belgelerin eski konumu kaldırılır.
 7. Provider isimleri agent contract'larına doğrudan yazılmaz; capability kimliği kullanılır.
 8. Data Source Architecture, Capability Platform runtime kurallarını tekrar etmez; güven ve evidence kararlarını tanımlar.
+9. Kodlama ve prototype, `09-pre-implementation-design/` altındaki tasarım artifact seti tamamlanmadan başlamaz.
