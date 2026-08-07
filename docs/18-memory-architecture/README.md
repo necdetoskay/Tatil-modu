@@ -1,7 +1,7 @@
 # 18 — Memory Architecture Deep Design
 
 **Doküman türü:** canonical memory architecture deep design alanı  
-**Durum:** aktif tasarım artifact alanı  
+**Durum:** first phase tamamlandı  
 **Kodlama durumu:** kapalı  
 **Prototype durumu:** kapalı  
 **Runtime memory store:** kapalı
@@ -15,7 +15,8 @@ Bu alan database schema, vector store implementation, runtime memory write, prod
 ## Ana karar
 
 ```yaml
-memory_architecture_design_state: active
+memory_architecture_design_state: first_phase_completed
+memory_architecture_first_phase_completed: true
 implementation_allowed: false
 prototype_allowed: false
 runtime_memory_store_allowed: false
@@ -88,18 +89,18 @@ out_of_scope:
 
 | Sıra | Artifact | Dosya | Durum |
 |---:|---|---|---|
-| 1 | Memory Architecture Overview | `01-memory-architecture-overview.md` | next |
-| 2 | Memory Boundary and Ownership | `02-memory-boundary-and-ownership.md` | planned |
-| 3 | Memory Type Taxonomy | `03-memory-type-taxonomy.md` | planned |
-| 4 | Family Profile Memory Model | `04-family-profile-memory-model.md` | planned |
-| 5 | Preference and Constraint Memory Model | `05-preference-constraint-memory-model.md` | planned |
-| 6 | Privacy Sensitive Memory Policy | `06-privacy-sensitive-memory-policy.md` | planned |
-| 7 | Memory Read and Disclosure Package Policy | `07-memory-read-disclosure-package-policy.md` | planned |
-| 8 | Memory Write Commit Policy | `08-memory-write-commit-policy.md` | planned |
-| 9 | Memory Correction Deletion and Staleness Policy | `09-memory-correction-deletion-staleness-policy.md` | planned |
-| 10 | Trip History and Learning Memory Policy | `10-trip-history-learning-memory-policy.md` | planned |
-| 11 | Memory Evaluation and Regression Policy | `11-memory-evaluation-regression-policy.md` | planned |
-| 12 | Memory Architecture Completion Checklist | `12-memory-architecture-completion-checklist.md` | planned |
+| 1 | Memory Architecture Overview | [`01-memory-architecture-overview.md`](01-memory-architecture-overview.md) | drafted |
+| 2 | Memory Boundary and Ownership | [`02-memory-boundary-and-ownership.md`](02-memory-boundary-and-ownership.md) | drafted |
+| 3 | Memory Type Taxonomy | [`03-memory-type-taxonomy.md`](03-memory-type-taxonomy.md) | drafted |
+| 4 | Family Profile Memory Model | [`04-family-profile-memory-model.md`](04-family-profile-memory-model.md) | drafted |
+| 5 | Preference and Constraint Memory Model | [`05-preference-constraint-memory-model.md`](05-preference-constraint-memory-model.md) | drafted |
+| 6 | Privacy Sensitive Memory Policy | [`06-privacy-sensitive-memory-policy.md`](06-privacy-sensitive-memory-policy.md) | drafted |
+| 7 | Memory Read and Disclosure Package Policy | [`07-memory-read-disclosure-package-policy.md`](07-memory-read-disclosure-package-policy.md) | drafted |
+| 8 | Memory Write Commit Policy | [`08-memory-write-commit-policy.md`](08-memory-write-commit-policy.md) | drafted |
+| 9 | Memory Correction Deletion and Staleness Policy | [`09-memory-correction-deletion-staleness-policy.md`](09-memory-correction-deletion-staleness-policy.md) | drafted |
+| 10 | Trip History and Learning Memory Policy | [`10-trip-history-learning-memory-policy.md`](10-trip-history-learning-memory-policy.md) | drafted |
+| 11 | Memory Evaluation and Regression Policy | [`11-memory-evaluation-regression-policy.md`](11-memory-evaluation-regression-policy.md) | drafted |
+| 12 | Memory Architecture Completion Checklist | [`12-memory-architecture-completion-checklist.md`](12-memory-architecture-completion-checklist.md) | drafted |
 
 ## Memory tasarım ilkeleri
 
@@ -117,9 +118,22 @@ out_of_scope:
 ## Current status
 
 ```yaml
-memory_architecture_design_state: active
-completed_artifacts: []
-next_artifact: 01-memory-architecture-overview.md
+memory_architecture_design_state: first_phase_completed
+memory_architecture_first_phase_completed: true
+completed_artifacts:
+  - 01-memory-architecture-overview.md
+  - 02-memory-boundary-and-ownership.md
+  - 03-memory-type-taxonomy.md
+  - 04-family-profile-memory-model.md
+  - 05-preference-constraint-memory-model.md
+  - 06-privacy-sensitive-memory-policy.md
+  - 07-memory-read-disclosure-package-policy.md
+  - 08-memory-write-commit-policy.md
+  - 09-memory-correction-deletion-staleness-policy.md
+  - 10-trip-history-learning-memory-policy.md
+  - 11-memory-evaluation-regression-policy.md
+  - 12-memory-architecture-completion-checklist.md
+next_stage: docs/19-quality-engine/
 implementation_allowed: false
 prototype_allowed: false
 runtime_memory_store_allowed: false
