@@ -38,8 +38,8 @@ Bu klasörde TypeScript type, Zod schema, JSON Schema dosyası veya runtime vali
 | Sıra | Contract | Dosya | Durum |
 |---:|---|---|---|
 | 1 | Travel Request Contract | [`travel-request-contract.md`](travel-request-contract.md) | drafted |
-| 2 | Constraint Policy Contract | `constraint-policy-contract.md` | next |
-| 3 | Family Suitability Contract | `family-suitability-contract.md` | planned |
+| 2 | Constraint Policy Contract | [`constraint-policy-contract.md`](constraint-policy-contract.md) | drafted |
+| 3 | Family Suitability Contract | `family-suitability-contract.md` | next |
 | 4 | Destination Candidate Contract | `destination-candidate-contract.md` | planned |
 | 5 | Route Logistics Contract | `route-logistics-contract.md` | planned |
 | 6 | Accommodation Fit Contract | `accommodation-fit-contract.md` | planned |
@@ -123,7 +123,7 @@ Final kullanıcı cevabına taşınmaması gereken iç alan var mı?
 6. Geriye dönük uyumluluk için version alanı zorunludur.
 7. Clarification gerektiren durumlar explicit state olarak taşınır.
 
-## İlk üretilecek contract
+## İlk üretilen contract
 
 ```text
 travel-request-contract.md
@@ -137,7 +137,8 @@ Bu contract, `trip-intake-agent.md` çıktısının canonical biçimini tanımla
 contract_design_state: active
 completed_contracts:
   - travel-request-contract.md
-next_contract: constraint-policy-contract.md
+  - constraint-policy-contract.md
+next_contract: family-suitability-contract.md
 implementation_allowed: false
 prototype_allowed: false
 schema_code_allowed: false
