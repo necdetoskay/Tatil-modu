@@ -1,4 +1,4 @@
-# Tatil Modu — End-to-End Execution Pipeline Teknik Tasarımı
+﻿# Tatil Modu — End-to-End Execution Pipeline Teknik Tasarımı
 
 **Doküman türü:** Sistem yürütme ve orkestrasyon tasarımı
 **Teknik kod adı:** `travel_execution_pipeline`
@@ -19,7 +19,7 @@ Context Resolution
   ↓
 Profile & Policy
   ↓
-Knowledge & Discovery
+Travel Knowledge & Discovery
   ↓
 Verification
   ↓
@@ -68,7 +68,7 @@ Paralel çalışabilecek bileşenler:
 - Activity Discovery Agent
 - Hotel Discovery Agent
 - Public Authority Intelligence Agent
-- Knowledge Platform retrieval
+- Travel Knowledge Store retrieval
 - Environmental Intelligence Platform
 
 ## 6. Faz 4 — Verification

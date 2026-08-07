@@ -1,4 +1,4 @@
-# Tatil Modu — Implementation Blueprint
+﻿# Tatil Modu — Implementation Blueprint
 
 **Doküman türü:** Uygulama ve gerçekleştirme planı
 **Sürüm:** 1.0 Taslak
@@ -112,10 +112,11 @@ Araçlar:
 
 1. Observability Platform
 2. Memory Gateway
-3. Knowledge Registry
-4. Verification Registry
-5. Policy Enforcement
-6. Optimization contracts
+3. Knowledge Platform Registry Core
+4. Travel Knowledge Store contracts
+5. Verification Registry
+6. Policy Enforcement
+7. Optimization contracts
 
 Bu aşamada LLM gerekmez.
 
@@ -403,7 +404,7 @@ Contracts, repo, CI, observability skeleton
 Profile, Preference, Policy, Memory mock
 
 ### Sprint 2
-Activity Discovery + Knowledge mock
+Activity Discovery + Travel Knowledge Store mock
 
 ### Sprint 3
 Hotel + Route + Budget mock

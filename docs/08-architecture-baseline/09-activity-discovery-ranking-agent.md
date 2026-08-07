@@ -1,4 +1,4 @@
-# Tatil Modu — Activity Discovery & Ranking Agent Teknik Tasarımı
+﻿# Tatil Modu — Activity Discovery & Ranking Agent Teknik Tasarımı
 
 **Doküman türü:** Agent teknik tasarımı
 **Agent adı:** Activity Discovery & Ranking Agent
@@ -22,7 +22,7 @@ Temel soru:
 - Preference Agent
 - Policy Agent
 - Memory Platform
-- Knowledge Platform
+- Travel Knowledge Store
 - Verification Platform
 - Public Authority Intelligence Agent
 - Weather Agent
@@ -115,7 +115,7 @@ Ranked Activity Set
 
 ## 8. Discovery Kaynakları
 
-- Knowledge Platform
+- Travel Knowledge Store
 - resmî destinasyon siteleri
 - belediye ve valilik kaynakları
 - resmî tesis siteleri
@@ -311,4 +311,4 @@ Beklenen:
 - Benzer adaylar çeşitlendirilmiş setlerde sunulmalı.
 - Ana, düşük enerji, yüksek enerji ve yağmur setleri üretilebilmeli.
 - Karar nedenleri izlenebilir olmalı.
-- Mock Knowledge/Policy/Profile verileriyle bağımsız test edilebilmeli.
+- Mock Travel Knowledge Store/Policy/Profile verileriyle bağımsız test edilebilmeli.
