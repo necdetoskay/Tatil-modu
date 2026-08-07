@@ -1,0 +1,50 @@
+{
+  "contract_name": "day_plan_contract",
+  "contract_version": "0.1.0",
+  "producer_agent": "day_plan_composer_agent",
+  "trace_id": "trace-dp-001",
+  "request_id": "req-hs-001",
+  "traveler_group": {"adults": 2, "children": [{"age": 6}, {"age": 2}]},
+  "plan_summary": {
+    "total_days": 1,
+    "plan_style": "family_low_fatigue",
+    "contains_sea_activity": true,
+    "contains_privacy_sensitive_activity": true,
+    "verification_required_before_final": true
+  },
+  "daily_plans": [{
+    "day_number": 1,
+    "day_theme": "Düşük tempo ve deniz alternatifi",
+    "primary_plan": {
+      "morning_block": {"block_type": "activity", "candidate_refs": ["activity-zoo"], "notes": []},
+      "lunch_rest_block": {"block_type": "rest", "candidate_refs": [], "notes": ["2 yaş çocuk için öğle dinlenmesi"]},
+      "afternoon_block": {"block_type": "light_activity", "candidate_refs": ["activity-beach"], "notes": []},
+      "evening_block": {"block_type": "low_fatigue_evening", "candidate_refs": [], "notes": []}
+    },
+    "alternatives": [
+      {"alternative_id": "alt-weather", "alternative_type": "bad_weather", "replacement_blocks": ["afternoon_block"]},
+      {"alternative_id": "alt-fatigue", "alternative_type": "low_fatigue", "replacement_blocks": ["afternoon_block"]}
+    ],
+    "day_constraints_applied": ["toddler_rest_required", "women_only_beach_required_when_sea_recommended"],
+    "day_warnings": ["privacy status requires verification"],
+    "verification_needs": [{
+      "verification_id": "verify-beach-001",
+      "claim_type": "women_only_beach_status",
+      "affected_day": 1,
+      "affected_block": "afternoon_block",
+      "reason": "Deniz planı finalden önce kadınlar plajı statüsüyle doğrulanmalı",
+      "severity": "blocking",
+      "must_verify_before_final": true
+    }],
+    "confidence": {"value": "medium", "reasons": ["privacy verification pending"]},
+    "long_drive_day": true,
+    "weather_sensitive_day": true,
+    "contains_sea_activity": true,
+    "privacy_requirement_applies": true,
+    "hard_constraint_violation": false
+  }],
+  "global_plan_warnings": [],
+  "unresolved_questions": [],
+  "internal_notes_not_for_user": [],
+  "confidence": {"value": "medium", "reasons": ["verification pending"]}
+}
