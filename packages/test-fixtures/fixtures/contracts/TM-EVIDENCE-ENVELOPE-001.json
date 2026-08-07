@@ -1,0 +1,19 @@
+{
+  "fixture_id": "TM-EVIDENCE-ENVELOPE-001",
+  "input": {
+    "envelope_version": "0.1",
+    "claim_id": "claim_price_001",
+    "claim_text": "Otel fiyatı güncel olarak doğrulanmadı.",
+    "claim_type": "price_claim",
+    "claim_subject": "accommodation_price",
+    "source_summary": [],
+    "evidence_status": "needs_verification",
+    "verification_status": "required_not_started",
+    "confidence": { "value": "low", "reasons": ["live_price_not_checked"] },
+    "freshness": { "required": true, "checked_at": null, "expires_at": null, "staleness_risk": "unknown" },
+    "user_visibility": { "may_show_to_user": true, "must_disclose_uncertainty": true, "must_not_present_as_fact": true },
+    "blockers": ["exact_price_cannot_be_presented"],
+    "warnings": []
+  },
+  "expected": { "valid": true }
+}
