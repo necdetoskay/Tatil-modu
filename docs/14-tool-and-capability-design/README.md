@@ -105,8 +105,8 @@ out_of_scope:
 | 3 | Agent Capability Access Matrix | [`03-agent-capability-access-matrix.md`](03-agent-capability-access-matrix.md) | drafted |
 | 4 | Verification Capability Policy | [`04-verification-capability-policy.md`](04-verification-capability-policy.md) | drafted |
 | 5 | Evidence Emission Mapping | [`05-evidence-emission-mapping.md`](05-evidence-emission-mapping.md) | drafted |
-| 6 | Tool Trust and Freshness Model | `06-tool-trust-and-freshness-model.md` | next |
-| 7 | Provider and Adapter Boundary | `07-provider-and-adapter-boundary.md` | planned |
+| 6 | Tool Trust and Freshness Model | [`06-tool-trust-and-freshness-model.md`](06-tool-trust-and-freshness-model.md) | drafted |
+| 7 | Provider and Adapter Boundary | `07-provider-and-adapter-boundary.md` | next |
 | 8 | Capability Failure and Fallback Policy | `08-capability-failure-and-fallback-policy.md` | planned |
 | 9 | Privacy Sensitive Capability Policy | `09-privacy-sensitive-capability-policy.md` | planned |
 | 10 | Cost Latency and Quota Policy | `10-cost-latency-and-quota-policy.md` | planned |
@@ -216,7 +216,8 @@ completed_artifacts:
   - 03-agent-capability-access-matrix.md
   - 04-verification-capability-policy.md
   - 05-evidence-emission-mapping.md
-next_artifact: 06-tool-trust-and-freshness-model.md
+  - 06-tool-trust-and-freshness-model.md
+next_artifact: 07-provider-and-adapter-boundary.md
 implementation_allowed: false
 prototype_allowed: false
 adapter_code_allowed: false
