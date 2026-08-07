@@ -1,4 +1,12 @@
-# Tatil Modu — Agent System Overview
+# Tatil Modu — Pre-Freeze Agent System Overview
+
+## Architecture Review durumu
+
+**Canonical status:** Bu doküman pre-freeze mimari referanstır.
+
+Architecture Freeze öncesi güncel canonical baseline `../08-architecture-baseline/` altında tutulur. İsimlendirme, ownership, platform sınırı veya katman modeli çakışmalarında `../08-architecture-baseline/README.md` ve ilgili ARF kararları önceliklidir.
+
+Bu dosya eski agent akışını ve başlangıç tasarım niyetini korur; yeni mimari kararların tek kaynağı değildir.
 
 ## 1. Amaç
 
@@ -6,9 +14,50 @@ Tatil Modu, kullanıcının seyahat isteğini güncel ve doğrulanabilir veriler
 
 Sistem yalnızca yer listesi üretmez. Kullanıcı profili, tarih, bütçe, ulaşım, çocukların yaşları, özel ihtiyaçlar, hava, çalışma saatleri, yorum eğilimleri ve rota yükünü birlikte değerlendirir.
 
-## 2. Temel mimari yaklaşım
+## 2. Güncel mimari yönlendirme
 
-Sistem üç katmandan oluşur:
+Bu dokümandaki eski üç katmanlı anlatım artık canonical mimari modeli temsil etmez.
+
+Architecture Freeze öncesi canonical baseline şu katman ayrımını kullanır:
+
+```text
+Product / User Experience
+        ↓
+Orchestration & Runtime
+        ↓
+Domain Agents / Planners
+        ↓
+Travel Intelligence Modules
+        ↓
+Travel Knowledge Store
+        ↓
+Data Source & Trust
+        ↓
+Capability Platform / Tool Gateway
+        ↓
+Providers / Local / Offline / Fixtures
+
+Cross-cutting:
+Knowledge Platform
+Security
+Observability
+Evaluation
+Governance
+Configuration
+Data Lifecycle
+Version & Compatibility
+```
+
+Bu ayrım özellikle şu ARF kararlarına bağlıdır:
+
+- ARF-001 — Knowledge Platform ile Travel Knowledge Store ayrıdır.
+- ARF-002 — Verification Platform, Data Source & Trust'ın runtime façade katmanıdır.
+- ARF-004 — Travel Intelligence bileşenleri agent değil domain assessment module'dür.
+- ARF-005 — Tool Adapter standardı Capability Platform / Tool Gateway altında provider adapter sözleşmesidir.
+
+## 3. Eski üç katmanlı modelin durumu
+
+Önceki tasarım üç katmanlı özet kullanıyordu:
 
 ```text
 Kullanıcı ve Uygulama Katmanı
@@ -17,6 +66,8 @@ Orchestrator ve Karar Katmanı
             ↓
 Uzman Agentlar ve Tool Katmanı
 ```
+
+Bu model artık yalnızca tarihsel/pre-freeze sadeleştirme olarak korunur. Güncel mimaride agent, planner, intelligence module, knowledge store, trust layer ve capability platform ayrı ownership sınırlarına sahiptir.
 
 ### Kullanıcı ve uygulama katmanı
 
@@ -50,25 +101,25 @@ Uzman Agentlar ve Tool Katmanı
 
 gibi uzman görevleri yerine getirir.
 
-## 3. Tasarım ilkeleri
+## 4. Tasarım ilkeleri
 
-### 3.1 Agent yerine önce sözleşme
+### 4.1 Agent yerine önce sözleşme
 
 Her agent için önce giriş/çıkış şeması ve handoff sözleşmesi hazırlanır.
 
-### 3.2 Bağımsız test edilebilirlik
+### 4.2 Bağımsız test edilebilirlik
 
 Bir agentın testi sırasında diğer agentlar çalıştırılmak zorunda değildir. Gerekli veriler fixture olarak verilir.
 
-### 3.3 Tool-first doğrulama
+### 4.3 Tool-first doğrulama
 
 Güncel ve sayısal bilgiler LLM hafızasından değil uygun tool veya veri kaynağından alınır.
 
-### 3.4 Kaynak izlenebilirliği
+### 4.4 Kaynak izlenebilirliği
 
 Çalışma saati, fiyat, mesafe ve benzeri değişken bilgiler kaynak ve kontrol zamanı ile saklanır.
 
-### 3.5 Belirsizliği gizlememe
+### 4.5 Belirsizliği gizlememe
 
 Kesin olmayan bilgi:
 
@@ -79,7 +130,7 @@ Kesin olmayan bilgi:
 
 olarak açıkça işaretlenir.
 
-### 3.6 Deterministik kurallar ve LLM ayrımı
+### 4.6 Deterministik kurallar ve LLM ayrımı
 
 Hesaplama, tarih, bütçe, mesafe, çalışma saati ve şema kontrolleri mümkün olduğunca kodla yapılır.
 
@@ -92,7 +143,9 @@ LLM:
 
 gibi alanlarda kullanılır.
 
-## 4. İlk agent akışı
+## 5. Pre-freeze agent akışı
+
+Aşağıdaki akış tarihsel/pre-freeze agent ayrımını gösterir. Güncel canonical ownership için `../08-architecture-baseline/` kullanılmalıdır.
 
 ```text
 Trip Profile Agent
@@ -115,7 +168,7 @@ Verification & Quality Reviewer
 Final Plan Composer
 ```
 
-## 5. Agent çalıştırma politikası
+## 6. Agent çalıştırma politikası
 
 Her kullanıcı isteğinde tüm agentlar çalıştırılmaz.
 
@@ -129,7 +182,7 @@ Orchestrator:
 
 değerlendirerek gerekli agentları seçer.
 
-## 6. Tekrar planlama
+## 7. Tekrar planlama
 
 Plan şu durumlarda yeniden değerlendirilebilir:
 
@@ -140,7 +193,7 @@ Plan şu durumlarda yeniden değerlendirilebilir:
 - yol veya süre kısıtı oluştuğunda,
 - agent çıktıları arasında kritik çelişki bulunduğunda.
 
-## 7. İlk sürüm sınırı
+## 8. İlk sürüm sınırı
 
 İlk sürüm:
 
