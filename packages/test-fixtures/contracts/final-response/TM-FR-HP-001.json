@@ -1,0 +1,92 @@
+{
+  "contract_id": "final_response_contract",
+  "contract_version": "0.1.0",
+  "producer_agent": "final_response_composer_agent",
+  "trace_id": "trace-fr-001",
+  "validation_status": "blocked",
+  "upstream_verification_report_id": "ver-001",
+  "upstream_hard_blockers": ["women_only_beach_required_but_status_unknown_for_sea_recommendation"],
+  "upstream_final_response_rules": ["do_not_present_women_only_beach_claim_as_verified", "show_price_as_requires_current_check"],
+  "final_response": {
+    "response_title": "Kocaeli çıkışlı 3 günlük aile tatili taslağı",
+    "executive_summary": "2 yetişkin, 6 ve 2 yaş çocuk için düşük tempolu ve öğle dinlenmeli plan taslağı.",
+    "plan_overview": {
+      "duration_days": 3,
+      "travel_style": "family_low_fatigue",
+      "contains_sea_activity": true,
+      "privacy_constraint_active": true
+    },
+    "daily_plan_cards": [
+      {
+        "day_number": 1,
+        "day_theme": "Varış ve hafif tempo",
+        "primary_plan": {
+          "morning_block": {"title":"Yola çıkış","candidate_refs":[],"verification_needed":["route_drive_time"],"notes":[]},
+          "lunch_rest_block": {"title":"Öğle dinlenmesi","candidate_refs":[],"verification_needed":[],"notes":["2 yaş çocuk için dinlenme korunmalı."]},
+          "afternoon_block": {"title":"Hafif aktivite","candidate_refs":["act-001"],"verification_needed":["opening_hours"],"notes":[]},
+          "evening_block": {"title":"Erken akşam","candidate_refs":[],"verification_needed":[],"notes":[]}
+        },
+        "alternatives":[{"title":"Düşük yorgunluk alternatifi"},{"title":"Kapalı alan alternatifi"}],
+        "family_fit_notes":["Öğle dinlenmesi korundu."],
+        "verification_needed":["route_drive_time","opening_hours"],
+        "warnings":[]
+      },
+      {
+        "day_number": 2,
+        "day_theme": "Aile etkinliği",
+        "primary_plan": {
+          "morning_block": {"title":"Ana aktivite","candidate_refs":["act-002"],"verification_needed":[],"notes":[]},
+          "lunch_rest_block": {"title":"Öğle dinlenmesi","candidate_refs":[],"verification_needed":[],"notes":[]},
+          "afternoon_block": {"title":"Hafif gezi","candidate_refs":[],"verification_needed":[],"notes":[]},
+          "evening_block": {"title":"Dinlenme","candidate_refs":[],"verification_needed":[],"notes":[]}
+        },
+        "alternatives":[{"title":"Bütçe alternatifi"},{"title":"Düşük yorgunluk alternatifi"}],
+        "family_fit_notes":[],
+        "verification_needed":[],
+        "warnings":[]
+      },
+      {
+        "day_number": 3,
+        "day_theme": "Deniz alternatifi ve dönüş",
+        "primary_plan": {
+          "morning_block": {"title":"Deniz alternatifi","candidate_refs":["sea-001"],"verification_needed":["women_only_beach_status"],"notes":[]},
+          "lunch_rest_block": {"title":"Öğle dinlenmesi","candidate_refs":[],"verification_needed":[],"notes":[]},
+          "afternoon_block": {"title":"Dönüş","candidate_refs":[],"verification_needed":["route_drive_time"],"notes":[]},
+          "evening_block": {"title":"Evde dinlenme","candidate_refs":[],"verification_needed":[],"notes":[]}
+        },
+        "alternatives":[{"title":"Deniz yerine kapalı alan"},{"title":"Düşük yorgunluk alternatifi"}],
+        "family_fit_notes":[],
+        "verification_needed":["women_only_beach_status","route_drive_time"],
+        "warnings":["Kadınlar plajı durumu doğrulanmadı."]
+      }
+    ],
+    "verification_disclosures": [
+      {
+        "disclosure_id":"disc-001",
+        "claim_category":"women_only_beach_status",
+        "status":"unverified",
+        "message":"Kadınlar plajı durumu doğrulanmadan deniz alternatifi kesin öneri olarak kabul edilmemelidir.",
+        "source_evidence_item_ids":["ev-001"],
+        "must_verify_before_trip":true
+      },
+      {
+        "disclosure_id":"disc-002",
+        "claim_category":"hotel_price",
+        "status":"unverified",
+        "message":"Konaklama fiyatı güncel tarih aralığı için yeniden kontrol edilmelidir.",
+        "source_evidence_item_ids":["ev-002"],
+        "must_verify_before_trip":true
+      }
+    ],
+    "hard_blockers":["women_only_beach_required_but_status_unknown_for_sea_recommendation"],
+    "unresolved_questions":[],
+    "confidence_summary": {
+      "overall_confidence":"low",
+      "confidence_reasons":["Mahremiyetle ilgili hard constraint henüz doğrulanmadı."],
+      "low_confidence_sections":["deniz alternatifi"],
+      "user_should_verify_before_trip":["Kadınlar plajı statüsünü doğrulayın.","Fiyat ve müsaitliği güncel tarihler için kontrol edin."]
+    },
+    "assumption_notice": {"assumptions":["Özel araç kullanılacak.","2 yaş çocuk için öğle dinlenmesi korunacak."]},
+    "user_action_checklist":["Operasyonel bilgileri seyahat öncesi yeniden doğrulayın."]
+  }
+}
