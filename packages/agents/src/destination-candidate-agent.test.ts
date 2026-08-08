@@ -45,7 +45,8 @@ describe('Destination Candidate Agent L3', () => {
   });
 
   it('rejects out-of-radius candidate without justification', () => {
-    const result = runDestinationCandidateAgent({ requestId: 'TM-DEST-003', origin: 'Kocaeli', targetRegion: 'Balikesir', maxRadiusKm: 150, allowOutOfRadius: true, candidatePool: [{ ...pool[2], exceptionalReason: undefined }] });
+    const { exceptionalReason: _omitted, ...candidateWithoutReason } = pool[2];
+    const result = runDestinationCandidateAgent({ requestId: 'TM-DEST-003', origin: 'Kocaeli', targetRegion: 'Balikesir', maxRadiusKm: 150, allowOutOfRadius: true, candidatePool: [candidateWithoutReason] });
     expect(result.excludedRegions).toEqual([{ candidateId: 'far-exception', reason: 'exceptional_reason_required' }]);
   });
 
