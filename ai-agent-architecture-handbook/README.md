@@ -43,6 +43,7 @@ It is intended to be used before coding an agentic system and again during imple
 | [11 — Observability, Errors and Audit](11-observability-errors-and-audit.md) | Defines traceable runs, stable error codes, audit events, redaction rules and operational metrics |
 | [12 — Agent Specification Template](12-agent-specification-template.md) | Defines the reusable pre-implementation template for every agent specification |
 | [13 — Implementation Readiness Checklist](13-implementation-readiness-checklist.md) | Defines the pre-implementation gate for architecture, contracts, fixtures, safety, tools, memory, evidence and observability |
+| [14 — Universal Layered Test & Evaluation Framework (ULTEF)](14-universal-layered-test-evaluation-framework.md) | Defines the reusable L0–L9 testing standard for all software projects, with deterministic core, golden headless E2E, regression, provider evaluation, UI E2E and project-specific PX extensions |
 | [Examples — Tatil Modu Reference Implementation](examples/tatil-modu-reference-implementation.md) | Shows how the generic handbook maps to the Tatil Modu project |
 
 ## Foundational rule
@@ -87,11 +88,30 @@ ai-agent-architecture-handbook/
 
 This separation is intentional: the handbook is reusable; Tatil Modu is one product that applies it.
 
+## Cross-project testing standard
+
+All projects may adopt the Universal Layered Test & Evaluation Framework (ULTEF) as the common testing baseline.
+
+ULTEF preserves stable L0–L9 meanings across repositories while allowing project-specific `PX-*` extension gates. This makes test architecture comparable across projects without forcing every product to have the same domain-specific tests.
+
+Canonical rule:
+
+```text
+project delivery stage != test level
+
+implementation complete
++ required ULTEF gate PASS
++ execution evidence
++ P0 failures = 0
+→ progression eligible
+```
+
 ## Current status
 
 ```text
 document_status: draft
 scope: generic
 reference_implementation: Tatil Modu
-next_step: expand handbook sections into implementation-ready standards
+cross_project_test_standard: ULTEF
+next_step: apply ULTEF to additional repositories and refine project-specific extensions
 ```
