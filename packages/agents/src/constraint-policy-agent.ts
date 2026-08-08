@@ -2,7 +2,7 @@ export type ConstraintConfidence = 'high' | 'medium' | 'low';
 
 export interface ConstraintPolicyInput {
   requestId: string;
-  childrenAges?: number[];
+  childrenAges?: readonly number[];
   budgetAmount?: number;
   womenOnlyBeachRequired?: boolean;
   seaAllowed?: boolean;
