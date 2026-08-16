@@ -1,0 +1,1 @@
+Destination Candidate Agent validation covers primary/nearby/exceptional grouping, out-of-radius justification, privacy constraint carry-over, route evidence marking, low-fatigue conflict visibility, determinism, and strict isolation boundaries.
