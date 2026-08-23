@@ -23,6 +23,39 @@ describe('Mapbox live qualification gate', () => {
     });
   });
 
+  it('rejects a provider whose identity is not the Mapbox qualification target', async () => {
+    let called = false;
+    const wrongProvider: CapabilityProvider = {
+      providerId: 'not-mapbox',
+      async execute(request) {
+        called = true;
+        return {
+          ok: true,
+          capability: 'route_lookup',
+          traceId: request.traceId,
+          data: {
+            distanceKm: 132.45,
+            durationMinutes: 121,
+            trafficAware: true,
+            provider: MAPBOX_ROUTE_PROVIDER_ID
+          },
+          evidence: [{
+            sourceId: MAPBOX_ROUTE_PROVIDER_ID,
+            sourceType: 'provider',
+            observedAt: '2026-08-23T05:55:00.000Z',
+            freshness: 'fresh'
+          }]
+        };
+      }
+    };
+
+    const report = await qualifyMapboxRouteProvider(wrongProvider, 'trace-wrong-provider');
+    expect(called).toBe(false);
+    expect(report.status).toBe('FAIL');
+    expect(report.eligibleForActivation).toBe(false);
+    expect(report.checks).toContainEqual(expect.objectContaining({ id: 'provider_identity', status: 'FAIL' }));
+  });
+
   it('marks a plausible traffic-aware evidence-backed probe as eligible for activation', async () => {
     const provider = new StaticProvider((request) => ({
       ok: true,
