@@ -15,6 +15,7 @@ export type CapabilityFaultCode =
   | 'PROVIDER_TIMEOUT'
   | 'PROVIDER_RATE_LIMIT'
   | 'PROVIDER_UNAVAILABLE'
+  | 'PROVIDER_NOT_ACTIVE'
   | 'MALFORMED_PROVIDER_PAYLOAD'
   | 'PARTIAL_PROVIDER_PAYLOAD'
   | 'CONTRADICTORY_PROVIDER_EVIDENCE'
@@ -35,12 +36,27 @@ export interface CapabilityEvidence {
   freshness: 'fresh' | 'stale' | 'unknown';
 }
 
+export interface CapabilityExecutionAttempt {
+  providerId: string;
+  attempt: number;
+  outcome: 'success' | CapabilityFaultCode;
+  fallback: boolean;
+  durationMs?: number;
+}
+
+export interface CapabilityExecutionMeta {
+  selectedProviderId?: string;
+  fallbackUsed: boolean;
+  attempts: CapabilityExecutionAttempt[];
+}
+
 export interface CapabilitySuccess<TData = unknown> {
   ok: true;
   capability: CapabilityName;
   traceId: string;
   data: TData;
   evidence: CapabilityEvidence[];
+  execution?: CapabilityExecutionMeta;
 }
 
 export interface CapabilityFailure {
@@ -49,6 +65,7 @@ export interface CapabilityFailure {
   traceId: string;
   code: CapabilityFaultCode;
   retryable: boolean;
+  execution?: CapabilityExecutionMeta;
 }
 
 export type CapabilityResult<TData = unknown> = CapabilitySuccess<TData> | CapabilityFailure;
