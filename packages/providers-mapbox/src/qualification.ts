@@ -58,13 +58,30 @@ export async function qualifyMapboxRouteProvider(
   provider: CapabilityProvider,
   traceId = 'qualification-mapbox-route-v1'
 ): Promise<MapboxQualificationReport> {
+  const checks: MapboxQualificationCheck[] = [];
+
+  if (provider.providerId !== MAPBOX_ROUTE_PROVIDER_ID) {
+    checks.push(fail(
+      'provider_identity',
+      `Expected provider ${MAPBOX_ROUTE_PROVIDER_ID}, received ${provider.providerId}.`
+    ));
+    return {
+      providerId: MAPBOX_ROUTE_PROVIDER_ID,
+      status: 'FAIL',
+      eligibleForActivation: false,
+      checks,
+      traceId,
+      observedEvidenceIds: []
+    };
+  }
+
+  checks.push(pass('provider_identity', 'Provider identity matches the Mapbox qualification target.'));
+
   const result = await provider.execute({
     capability: 'route_lookup',
     traceId,
     payload: MAPBOX_KOCAELI_BURSA_PROBE
   });
-
-  const checks: MapboxQualificationCheck[] = [];
 
   checks.push(result.traceId === traceId
     ? pass('trace_preserved', 'Provider preserved the qualification trace id.')
