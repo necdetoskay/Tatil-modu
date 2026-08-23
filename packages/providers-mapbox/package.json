@@ -1,1 +1,13 @@
-{"name":"@tatil-modu/providers-mapbox","version":"0.0.0","private":true,"type":"module","exports":"./src/index.ts","dependencies":{"@tatil-modu/capabilities":"workspace:*"}}
+{
+  "name": "@tatil-modu/providers-mapbox",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./qualification": "./src/qualification.ts"
+  },
+  "dependencies": {
+    "@tatil-modu/capabilities": "workspace:*"
+  }
+}
