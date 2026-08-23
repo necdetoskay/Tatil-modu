@@ -43,7 +43,10 @@ export class CapabilityRegistry {
     qualificationStatus: ProviderQualificationStatus = 'DISCOVERED',
     versionOrCommit?: string
   ): void {
-    this.providers.set(provider.providerId, { provider, qualificationStatus, versionOrCommit });
+    const registration: ProviderRegistration = versionOrCommit === undefined
+      ? { provider, qualificationStatus }
+      : { provider, qualificationStatus, versionOrCommit };
+    this.providers.set(provider.providerId, registration);
   }
 
   setProviderQualification(providerId: string, qualificationStatus: ProviderQualificationStatus): void {
