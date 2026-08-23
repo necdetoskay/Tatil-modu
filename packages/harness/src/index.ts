@@ -1,3 +1,5 @@
+export * from './context-builder.js';
+
 export const HARNESS_PACKAGE = '@tatil-modu/harness' as const;
 
 export type HarnessExecutionMode = 'fixture' | 'hybrid' | 'live';
