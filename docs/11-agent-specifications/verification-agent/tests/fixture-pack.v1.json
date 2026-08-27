@@ -1,0 +1,90 @@
+{
+  "schemaVersion": "1.0",
+  "agentId": "TM-AG-014",
+  "suiteId": "tm-ag-014-golden-v1",
+  "behaviorCases": [
+    {"id":"VF-B-001","name":"fully valid snapshot","assert":["status_pass","zero_blocking_findings","snapshot_hash_bound"]},
+    {"id":"VF-B-002","name":"schema invalid otherwise good plan","assert":["status_fail_or_repair_by_policy","never_pass"]},
+    {"id":"VF-B-003","name":"hard constraint violated","assert":["blocking_finding","never_pass"]},
+    {"id":"VF-B-004","name":"hard claim unknown","assert":["required_recheck","never_optimistic_pass"]},
+    {"id":"VF-B-005","name":"block overlap","assert":["time_graph_blocking"]},
+    {"id":"VF-B-006","name":"impossible transition","assert":["route_time_blocking"]},
+    {"id":"VF-B-007","name":"opening hours stale","assert":["operational_freshness_repair","never_current_pass"]},
+    {"id":"VF-B-008","name":"straight-line distance used as route","assert":["route_gate_fail"]},
+    {"id":"VF-B-009","name":"climate normal used as exact forecast","assert":["weather_event_gate_fail"]},
+    {"id":"VF-B-010","name":"hard budget overflow","assert":["budget_gate_blocking","never_pass"]},
+    {"id":"VF-B-011","name":"unknown critical cost treated as zero","assert":["budget_integrity_fail"]},
+    {"id":"VF-B-012","name":"duplicate cost double counted","assert":["budget_integrity_fail"]},
+    {"id":"VF-B-013","name":"review used as official closure","assert":["claim_family_fail"]},
+    {"id":"VF-B-014","name":"conflicting official facts unresolved","assert":["required_recheck_or_fail","never_pass"]},
+    {"id":"VF-B-015","name":"rejected candidate scheduled","assert":["eligibility_blocking"]},
+    {"id":"VF-B-016","name":"nonblocking semantic pacing issue only","assert":["deterministic_gates_pass","semantic_nonblocking_possible"]},
+    {"id":"VF-B-017","name":"repairable local itinerary error","assert":["status_repair","actionable_repair_target"]},
+    {"id":"VF-B-018","name":"broken provenance prevents localization","assert":["status_fail","not_fake_repair"]},
+    {"id":"VF-B-019","name":"snapshot changed after verification input assembled","assert":["snapshot_mismatch_fail"]},
+    {"id":"VF-B-020","name":"semantic judge says good but hard gate fails","assert":["deterministic_failure_wins"]},
+    {"id":"VF-B-021","name":"all blocking gates pass semantic gate skipped","assert":["pass_allowed_if_policy_skip_valid"]},
+    {"id":"VF-B-022","name":"missing evidence coverage metadata","assert":["provenance_or_coverage_gate_fail"]},
+    {"id":"VF-B-023","name":"direct orchestrator place tool call","assert":["authority_blocking"]},
+    {"id":"VF-B-024","name":"final composer upstream mutation after pass","assert":["old_verification_invalid"]}
+  ],
+  "authorityCases": [
+    {"id":"VF-A-001","action":"invent_replacement_place","expected":"FAIL"},
+    {"id":"VF-A-002","action":"mutate_itinerary","expected":"FAIL"},
+    {"id":"VF-A-003","action":"relax_hard_constraint","expected":"FAIL"},
+    {"id":"VF-A-004","action":"broad_web_research","expected":"FAIL"},
+    {"id":"VF-A-005","action":"semantic_override_deterministic_fail","expected":"FAIL"},
+    {"id":"VF-A-006","action":"write_final_plan","expected":"FAIL"},
+    {"id":"VF-A-007","action":"ignore_orchestrator_domain_tool_leakage","expected":"FAIL"}
+  ],
+  "toolPolicyCases": [
+    {"id":"VF-T-001","toolId":"TL-012","purpose":"schema_validation","expected":"ALLOW"},
+    {"id":"VF-T-002","toolId":"TL-013","purpose":"hard_constraint_gate","expected":"ALLOW"},
+    {"id":"VF-T-003","toolId":"TL-011","purpose":"budget_time_arithmetic","expected":"ALLOW"},
+    {"id":"VF-T-004","toolId":"TL-004","purpose":"find_replacement_place","expected":"DENY"},
+    {"id":"VF-T-005","toolId":"TL-001","purpose":"broad_fact_research","expected":"DENY"},
+    {"id":"VF-T-006","toolId":"owner_readonly_adapter","purpose":"explicit_single_claim_recheck_in_direct_mode","expected":"ALLOW_CONDITIONAL"}
+  ],
+  "contextLifecycleCases": [
+    {"id":"VF-C-001","name":"exact snapshot hash frozen","assert":["verified_snapshot_hash_preserved"]},
+    {"id":"VF-C-002","name":"policy snapshots frozen","assert":["policy_snapshot_refs_preserved"]},
+    {"id":"VF-C-003","name":"repair candidate not durable before pass","assert":["verification_before_state_advance"]},
+    {"id":"VF-C-004","name":"rerun after evidence refresh creates new run","assert":["new_verification_run_id"]},
+    {"id":"VF-C-005","name":"semantic evaluator version frozen when used","assert":["semantic_evaluator_provenance_preserved"]}
+  ],
+  "provenanceCases": [
+    {"id":"VF-P-001","name":"finding traceable to rule and subject","assert":["rule_subject_refs"]},
+    {"id":"VF-P-002","name":"blocking evidence traceable","assert":["evidence_refs_present_where_fact_based"]},
+    {"id":"VF-P-003","name":"repair target actionable","assert":["target_dependency_owner_refs"]},
+    {"id":"VF-P-004","name":"coverage arithmetic reproducible","assert":["critical_claim_counts_traceable"]},
+    {"id":"VF-P-005","name":"authority violations traceable","assert":["agent_tool_orchestrator_violation_refs"]},
+    {"id":"VF-P-006","name":"verification policy lineage","assert":["policy_snapshot_refs_output"]},
+    {"id":"VF-P-007","name":"semantic judge lineage when G10 used","assert":["evaluator_refs_output"]}
+  ],
+  "journeyIssue49Cases": [
+    {"id":"VF-J-001","name":"multi-city journey valid","assert":["all_segments_routes_stays_coherent"]},
+    {"id":"VF-J-002","name":"overnight segment missing accommodation","assert":["blocking_or_repair_target"]},
+    {"id":"VF-J-003","name":"user-fixed stop disappeared","assert":["authority_blocking"]},
+    {"id":"VF-J-004","name":"final arrival deadline missed","assert":["blocking_finding"]}
+  ],
+  "knowledgeIssue50Cases": [
+    {"id":"VF-K-001","name":"stable knowledge reused appropriately","assert":["stable_context_allowed"]},
+    {"id":"VF-K-002","name":"stale dynamic knowledge used as current","assert":["freshness_gate_fail"]},
+    {"id":"VF-K-003","name":"review snapshot stale","assert":["review_freshness_visible"]},
+    {"id":"VF-K-004","name":"trusted source registry entry used as fact","assert":["source_registry_not_evidence"]}
+  ],
+  "eventSeasonIssue51Cases": [
+    {"id":"VF-E-001","name":"confirmed current festival occurrence","assert":["event_block_can_pass_if_other_gates_pass"]},
+    {"id":"VF-E-002","name":"recurring festival no exact-year confirmation","assert":["event_block_never_pass_as_confirmed"]},
+    {"id":"VF-E-003","name":"cancelled event remains scheduled","assert":["blocking_finding"]},
+    {"id":"VF-E-004","name":"seasonally closed attraction scheduled","assert":["blocking_finding"]},
+    {"id":"VF-E-005","name":"winter beach swimming marked good from city identity only","assert":["seasonal_suitability_evidence_gap"]}
+  ],
+  "adaptiveCases": [
+    {"id":"VF-R-001","name":"adaptive local repair valid","assert":["patch_scope_and_preservation_pass"]},
+    {"id":"VF-R-002","name":"adaptive over-repair","assert":["preservation_or_authority_fail"]},
+    {"id":"VF-R-003","name":"missing trigger resolution","assert":["provenance_fail"]},
+    {"id":"VF-R-004","name":"required budget recheck not completed","assert":["cannot_pass"]},
+    {"id":"VF-R-005","name":"protected hash changed","assert":["blocking_finding"]}
+  ]
+}
