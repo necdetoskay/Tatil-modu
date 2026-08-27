@@ -1,7 +1,7 @@
 # 11 — Agent Specifications
 
 **Doküman türü:** canonical agent specification alanı  
-**Durum:** canonical catalog v1.0 + ten golden agent packages  
+**Durum:** canonical catalog v1.0 + eleven golden agent packages  
 **Kodlama durumu:** kapalı  
 **Prototype durumu:** kapalı
 
@@ -43,7 +43,7 @@ canonical_catalog_date: 2026-08-27
 | TM-AG-008 | Transportation Agent | **golden package v1 ready** |
 | TM-AG-009 | Route Planner Agent | **golden package v1 ready** |
 | TM-AG-010 | Budget Agent | **golden package v1 ready** |
-| TM-AG-011 | Public Authority Intelligence Agent | pending |
+| TM-AG-011 | Public Authority Intelligence Agent | **golden package v1 ready** |
 | TM-AG-012 | Review Intelligence Agent | pending |
 | TM-AG-013 | Adaptive Itinerary Agent | pending |
 | TM-AG-014 | Verification Agent | pending |
@@ -204,15 +204,30 @@ mixed_currency_requires_evidence: true
 journey_issue_49_compatible: true
 knowledge_issue_50_shopping_compatible: true
 ```
+Fixture-driven contract gap:
+- unknown-cost severity → `budgetCriticality: CRITICAL | NON_CRITICAL` added end-to-end.
+
+### TM-AG-011 Public Authority Intelligence
+```yaml
+behavior_cases: 16
+authority_cases: 6
+tool_policy_cases: 6
+context_lifecycle_cases: 4
+provenance_cases: 7
+knowledge_issue_50_cases: 4
+claim_specific_authority: true
+unknown_is_valid_epistemic_result: true
+trusted_source_registry_first: true
+```
 Invariants:
 ```text
-knownTotal = LIVE + OFFICIAL
-projectedTotal = knownTotal + ESTIMATED
-UNKNOWN is never zero
-hard budget FAIL cannot become WITHIN_BUDGET
+registry entry != claim evidence
+no adequate official evidence → UNKNOWN
+unresolved authoritative conflict → UNKNOWN
+review experience != OfficialFact
 ```
 Fixture-driven contract gap:
-- unknown-cost severity required explicit modeling → `budgetCriticality: CRITICAL | NON_CRITICAL` added end-to-end.
+- single final lookup path could not explain fallback sequence → ordered `sourceLookupTrace[]` added.
 
 ## Eski first-phase specs
 
@@ -248,9 +263,10 @@ TM_AG_007_weather_package: completed
 TM_AG_008_transportation_package: completed
 TM_AG_009_route_planner_package: completed
 TM_AG_010_budget_package: completed
+TM_AG_011_public_authority_package: completed
 runtime_tests: pending
-next_agent_package: TM-AG-011
+next_agent_package: TM-AG-012
 implementation_allowed: false
 ```
 
-Bir sonraki paket `TM-AG-011 Public Authority Intelligence Agent` olacaktır. Issue #50'deki Trusted Travel Source Registry bu agent için birinci lookup noktası olacak; generic search yalnız coverage gap olduğunda devreye girecektir.
+Bir sonraki paket `TM-AG-012 Review Intelligence Agent` olacaktır. Issue #50'daki derived review snapshots bu agent için cache/knowledge-first girdi olacak; fresh raw/normalized review set gerektiğinde yalnız targeted refresh yapılacaktır.
