@@ -1,0 +1,124 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tatil-modu.local/schemas/adaptive-repair-result.v1.json",
+  "title": "AdaptiveRepairResult.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "repairId", "requestId", "originalItineraryRef", "planningPolicySnapshotId", "triggerRefs", "impactScope", "scopeEscalation", "patches", "repairedFragments", "preservationProofs", "invalidatedRefs", "verificationNeeds", "downstreamRecheckRequests", "repairStatus", "warnings"],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "repairId": { "type": "string", "minLength": 1 },
+    "requestId": { "type": "string", "minLength": 1 },
+    "originalItineraryRef": { "type": "string", "minLength": 1 },
+    "planningPolicySnapshotId": { "type": "string", "minLength": 1 },
+    "triggerRefs": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+    "impactScope": { "$ref": "#/$defs/impactScope" },
+    "scopeEscalation": { "$ref": "#/$defs/scopeEscalation" },
+    "patches": { "type": "array", "items": { "$ref": "#/$defs/patch" } },
+    "repairedFragments": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["dayFragments", "segmentFragments"],
+      "properties": {
+        "dayFragments": { "type": "array", "items": { "$ref": "#/$defs/fragment" } },
+        "segmentFragments": { "type": "array", "items": { "$ref": "#/$defs/fragment" } }
+      }
+    },
+    "preservationProofs": { "type": "array", "items": { "$ref": "#/$defs/preservationProof" } },
+    "invalidatedRefs": { "type": "array", "items": { "type": "string" } },
+    "verificationNeeds": { "type": "array", "items": { "$ref": "#/$defs/verificationNeed" } },
+    "downstreamRecheckRequests": { "type": "array", "items": { "$ref": "#/$defs/recheck" } },
+    "repairStatus": { "enum": ["REPAIRED", "PARTIAL", "BLOCKED", "NO_CHANGE_REQUIRED"] },
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  },
+  "$defs": {
+    "impactScope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["directlyAffectedBlockRefs", "directlyAffectedSegmentRefs", "dependentBlockRefs", "dependentSegmentRefs", "affectedDayRefs", "protectedUnchangedDayRefs"],
+      "properties": {
+        "directlyAffectedBlockRefs": { "type": "array", "items": { "type": "string" } },
+        "directlyAffectedSegmentRefs": { "type": "array", "items": { "type": "string" } },
+        "dependentBlockRefs": { "type": "array", "items": { "type": "string" } },
+        "dependentSegmentRefs": { "type": "array", "items": { "type": "string" } },
+        "affectedDayRefs": { "type": "array", "items": { "type": "string" } },
+        "protectedUnchangedDayRefs": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "scopeEscalation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["initialScope", "finalScope", "escalated", "reasonCode", "evidenceRefs", "dependencyRefs"],
+      "properties": {
+        "initialScope": { "enum": ["BLOCK", "LOCAL_SEQUENCE", "DAY", "JOURNEY_SEGMENT", "MULTI_DAY", "FULL_ITINERARY"] },
+        "finalScope": { "enum": ["BLOCK", "LOCAL_SEQUENCE", "DAY", "JOURNEY_SEGMENT", "MULTI_DAY", "FULL_ITINERARY"] },
+        "escalated": { "type": "boolean" },
+        "reasonCode": { "type": ["string", "null"] },
+        "evidenceRefs": { "type": "array", "items": { "type": "string" } },
+        "dependencyRefs": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "patch": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["patchId", "operation", "targetRef", "beforeRef", "afterRef", "reasonCodes", "triggerRefs", "constraintRefs", "evidenceRefs"],
+      "properties": {
+        "patchId": { "type": "string", "minLength": 1 },
+        "operation": { "enum": ["REPLACE_BLOCK", "REMOVE_BLOCK", "INSERT_BLOCK", "MOVE_BLOCK", "UPDATE_BLOCK_TIME", "REPLACE_ROUTE_LEG", "REPLACE_ACCOMMODATION", "UPDATE_JOURNEY_SEGMENT"] },
+        "targetRef": { "type": "string", "minLength": 1 },
+        "beforeRef": { "type": ["string", "null"] },
+        "afterRef": { "type": ["string", "null"] },
+        "reasonCodes": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+        "triggerRefs": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+        "constraintRefs": { "type": "array", "items": { "type": "string" } },
+        "evidenceRefs": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "fragment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["fragmentRef", "fragmentType", "beforeHash", "afterHash", "contentRef"],
+      "properties": {
+        "fragmentRef": { "type": "string", "minLength": 1 },
+        "fragmentType": { "enum": ["DAY", "JOURNEY_SEGMENT"] },
+        "beforeHash": { "type": ["string", "null"] },
+        "afterHash": { "type": "string", "minLength": 1 },
+        "contentRef": { "type": "string", "minLength": 1 }
+      }
+    },
+    "preservationProof": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["scopeRef", "beforeHash", "afterHash", "unchanged"],
+      "properties": {
+        "scopeRef": { "type": "string", "minLength": 1 },
+        "beforeHash": { "type": "string", "minLength": 1 },
+        "afterHash": { "type": "string", "minLength": 1 },
+        "unchanged": { "const": true }
+      }
+    },
+    "verificationNeed": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["needId", "claimType", "subjectRef", "affectsRefs", "severity"],
+      "properties": {
+        "needId": { "type": "string", "minLength": 1 },
+        "claimType": { "type": "string", "minLength": 1 },
+        "subjectRef": { "type": "string", "minLength": 1 },
+        "affectsRefs": { "type": "array", "items": { "type": "string" } },
+        "severity": { "enum": ["BLOCKING", "NON_BLOCKING"] }
+      }
+    },
+    "recheck": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["recheckId", "type", "scopeRefs", "required"],
+      "properties": {
+        "recheckId": { "type": "string", "minLength": 1 },
+        "type": { "enum": ["ROUTE_RECHECK", "BUDGET_RECHECK", "OFFICIAL_FACT_RECHECK", "WEATHER_RECHECK", "VERIFICATION_RECHECK"] },
+        "scopeRefs": { "type": "array", "items": { "type": "string" } },
+        "required": { "type": "boolean" }
+      }
+    }
+  }
+}
