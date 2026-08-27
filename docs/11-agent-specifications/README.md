@@ -1,7 +1,7 @@
 # 11 — Agent Specifications
 
 **Doküman türü:** canonical agent specification alanı  
-**Durum:** canonical catalog v1.0 + eleven golden agent packages  
+**Durum:** canonical catalog v1.0 + twelve golden agent packages  
 **Kodlama durumu:** kapalı  
 **Prototype durumu:** kapalı
 
@@ -44,7 +44,7 @@ canonical_catalog_date: 2026-08-27
 | TM-AG-009 | Route Planner Agent | **golden package v1 ready** |
 | TM-AG-010 | Budget Agent | **golden package v1 ready** |
 | TM-AG-011 | Public Authority Intelligence Agent | **golden package v1 ready** |
-| TM-AG-012 | Review Intelligence Agent | pending |
+| TM-AG-012 | Review Intelligence Agent | **golden package v1 ready** |
 | TM-AG-013 | Adaptive Itinerary Agent | pending |
 | TM-AG-014 | Verification Agent | pending |
 | TM-AG-015 | Explanation Agent | pending |
@@ -219,15 +219,32 @@ claim_specific_authority: true
 unknown_is_valid_epistemic_result: true
 trusted_source_registry_first: true
 ```
+Fixture-driven contract gap:
+- ordered source fallback provenance → `sourceLookupTrace[]` added.
+
+### TM-AG-012 Review Intelligence
+```yaml
+behavior_cases: 24
+authority_cases: 7
+tool_policy_cases: 7
+context_lifecycle_cases: 5
+provenance_cases: 7
+knowledge_issue_50_cases: 5
+single_review_never_general_fact: true
+prevalence_deterministic: true
+raw_review_retention_policy_required: true
+snapshot_lineage_required: true
+```
 Invariants:
 ```text
-registry entry != claim evidence
-no adequate official evidence → UNKNOWN
-unresolved authoritative conflict → UNKNOWN
 review experience != OfficialFact
+REUSED snapshot preserves original sample basis
+REFRESHED snapshot preserves base + new contribution lineage
+knowledge snapshot != freshness bypass
 ```
-Fixture-driven contract gap:
-- single final lookup path could not explain fallback sequence → ordered `sourceLookupTrace[]` added.
+Fixture-driven contract gaps:
+- base snapshot sample lineage → `snapshotLineage.baseSample`
+- refresh contribution provenance → `snapshotLineage.refreshContributions[]`
 
 ## Eski first-phase specs
 
@@ -264,9 +281,10 @@ TM_AG_008_transportation_package: completed
 TM_AG_009_route_planner_package: completed
 TM_AG_010_budget_package: completed
 TM_AG_011_public_authority_package: completed
+TM_AG_012_review_intelligence_package: completed
 runtime_tests: pending
-next_agent_package: TM-AG-012
+next_agent_package: TM-AG-013
 implementation_allowed: false
 ```
 
-Bir sonraki paket `TM-AG-012 Review Intelligence Agent` olacaktır. Issue #50'daki derived review snapshots bu agent için cache/knowledge-first girdi olacak; fresh raw/normalized review set gerektiğinde yalnız targeted refresh yapılacaktır.
+Bir sonraki paket `TM-AG-013 Adaptive Itinerary Agent` olacaktır. Bu paket targeted repair modelini ve Issue #49 multi-city journey, Issue #50 knowledge freshness, Issue #51 event/seasonal change trigger'larını birlikte ele alacaktır.
