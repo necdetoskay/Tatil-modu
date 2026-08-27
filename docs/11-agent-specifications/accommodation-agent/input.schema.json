@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tatil-modu.local/schemas/accommodation-agent-input.v1.json",
+  "title": "AccommodationAgentInput.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "requestId", "travelerProfileRef", "preferencePolicyRef", "stayRequest"],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "requestId": { "type": "string", "minLength": 1 },
+    "travelerProfileRef": { "type": "string", "minLength": 1 },
+    "preferencePolicyRef": { "type": "string", "minLength": 1 },
+    "destinationBriefRef": { "type": ["string", "null"] },
+    "journeySegmentRef": { "type": ["string", "null"] },
+    "stayRequest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["locationName", "checkIn", "checkOut", "adults", "childrenAges", "rooms", "stayRole"],
+      "properties": {
+        "locationName": { "type": "string", "minLength": 1 },
+        "checkIn": { "type": "string", "format": "date" },
+        "checkOut": { "type": "string", "format": "date" },
+        "adults": { "type": "integer", "minimum": 1 },
+        "childrenAges": { "type": "array", "items": { "type": "integer", "minimum": 0, "maximum": 17 } },
+        "rooms": { "type": "integer", "minimum": 1 },
+        "stayRole": { "enum": ["FINAL_DESTINATION", "OVERNIGHT_ONLY", "OVERNIGHT_AND_DAY", "MULTI_DAY"] },
+        "currency": { "type": ["string", "null"] }
+      }
+    },
+    "activeConstraints": {
+      "type": "array",
+      "default": [],
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["constraintId", "key", "kind", "operator", "value"],
+        "properties": {
+          "constraintId": { "type": "string", "minLength": 1 },
+          "key": { "type": "string", "minLength": 1 },
+          "kind": { "enum": ["HARD", "CONDITIONAL_HARD"] },
+          "operator": { "type": "string", "minLength": 1 },
+          "value": {},
+          "condition": { "type": ["object", "null"] }
+        }
+      }
+    },
+    "contextManifestId": { "type": ["string", "null"] }
+  }
+}
