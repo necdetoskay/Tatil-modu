@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tatil-modu.local/schemas/profile-agent-input.v1.json",
+  "title": "ProfileAgentInput.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "requestId", "tripRequest"],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "requestId": { "type": "string", "minLength": 1 },
+    "tripRequest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["userMessage"],
+      "properties": {
+        "userMessage": { "type": "string", "minLength": 1 },
+        "locale": { "type": ["string", "null"] },
+        "currentDate": { "type": ["string", "null"], "format": "date" }
+      }
+    },
+    "knownFacts": {
+      "type": "array",
+      "default": [],
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["factId", "fieldPath", "value", "sourceType", "sourceRef", "confidence"],
+        "properties": {
+          "factId": { "type": "string", "minLength": 1 },
+          "fieldPath": { "type": "string", "minLength": 1 },
+          "value": {},
+          "sourceType": { "enum": ["CONVERSATION_FACT", "MEMORY_DISCLOSURE"] },
+          "sourceRef": { "type": "string", "minLength": 1 },
+          "confidence": { "type": "number", "minimum": 0, "maximum": 1 }
+        }
+      }
+    },
+    "contextManifestId": { "type": ["string", "null"] }
+  }
+}
