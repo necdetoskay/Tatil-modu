@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tatil-modu.local/schemas/budget-agent-input.v1.json",
+  "title": "BudgetAgentInput.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "requestId", "draftItineraryRef", "targetCurrency", "costPolicySnapshotId", "costFacts", "budgetConstraints", "exchangeRateFacts"],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "requestId": { "type": "string", "minLength": 1 },
+    "draftItineraryRef": { "type": "string", "minLength": 1 },
+    "targetCurrency": { "type": "string", "minLength": 3, "maxLength": 3 },
+    "costPolicySnapshotId": { "type": "string", "minLength": 1 },
+    "costFacts": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/costFact" }
+    },
+    "budgetConstraints": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["constraintId", "scope", "maxAmount", "currency", "kind"],
+        "properties": {
+          "constraintId": { "type": "string", "minLength": 1 },
+          "scope": { "enum": ["OVERALL", "ACCOMMODATION", "ACTIVITY", "FOOD", "TRANSPORT", "DAILY", "MEAL", "SHOPPING", "OTHER"] },
+          "scopeRef": { "type": ["string", "null"] },
+          "maxAmount": { "type": "number", "minimum": 0 },
+          "currency": { "type": "string", "minLength": 3, "maxLength": 3 },
+          "kind": { "enum": ["HARD", "SOFT"] }
+        }
+      }
+    },
+    "exchangeRateFacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["exchangeRateRef", "fromCurrency", "toCurrency", "rate", "observedAt", "freshnessStatus", "sourceRefs"],
+        "properties": {
+          "exchangeRateRef": { "type": "string", "minLength": 1 },
+          "fromCurrency": { "type": "string", "minLength": 3, "maxLength": 3 },
+          "toCurrency": { "type": "string", "minLength": 3, "maxLength": 3 },
+          "rate": { "type": "number", "exclusiveMinimum": 0 },
+          "observedAt": { "type": "string", "format": "date-time" },
+          "freshnessStatus": { "enum": ["CURRENT", "STALE", "UNKNOWN"] },
+          "sourceRefs": { "type": "array", "minItems": 1, "items": { "type": "string" } }
+        }
+      }
+    },
+    "contextManifestId": { "type": ["string", "null"] }
+  },
+  "$defs": {
+    "costFact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["costFactId", "dedupeKey", "category", "itineraryRefs", "entityRef", "journeySegmentRef", "quantity", "unitAmount", "totalAmount", "currency", "priceStatus", "calculationMethod", "freshnessStatus", "contextValidity", "taxesFeesKnown", "sourceRefs"],
+      "properties": {
+        "costFactId": { "type": "string", "minLength": 1 },
+        "dedupeKey": { "type": "string", "minLength": 1 },
+        "category": { "enum": ["ACCOMMODATION", "ACTIVITY", "FOOD", "TRANSPORT", "FUEL", "TOLL", "PARKING", "TRANSIT", "FEE", "SHOPPING", "OTHER"] },
+        "itineraryRefs": { "type": "array", "items": { "type": "string" } },
+        "entityRef": { "type": ["string", "null"] },
+        "journeySegmentRef": { "type": ["string", "null"] },
+        "quantity": { "type": ["number", "null"], "minimum": 0 },
+        "unitAmount": { "type": ["number", "null"], "minimum": 0 },
+        "totalAmount": { "type": ["number", "null"], "minimum": 0 },
+        "currency": { "type": "string", "minLength": 3, "maxLength": 3 },
+        "priceStatus": { "enum": ["LIVE", "OFFICIAL", "ESTIMATED", "UNKNOWN"] },
+        "calculationMethod": { "enum": ["DIRECT", "QUANTITY_X_UNIT", "FORMULA", "UNKNOWN"] },
+        "calculationRef": { "type": ["string", "null"] },
+        "freshnessStatus": { "enum": ["CURRENT", "STALE", "UNKNOWN"] },
+        "contextValidity": { "enum": ["MATCHED", "MISMATCHED", "NOT_APPLICABLE", "UNKNOWN"] },
+        "taxesFeesKnown": { "type": ["boolean", "null"] },
+        "sourceRefs": { "type": "array", "items": { "type": "string" } }
+      }
+    }
+  }
+}
