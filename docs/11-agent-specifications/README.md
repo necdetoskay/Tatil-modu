@@ -1,7 +1,7 @@
 # 11 — Agent Specifications
 
 **Doküman türü:** canonical agent specification alanı  
-**Durum:** canonical catalog v1.0 + nine golden agent packages  
+**Durum:** canonical catalog v1.0 + ten golden agent packages  
 **Kodlama durumu:** kapalı  
 **Prototype durumu:** kapalı
 
@@ -42,7 +42,7 @@ canonical_catalog_date: 2026-08-27
 | TM-AG-007 | Weather Agent | **golden package v1 ready** |
 | TM-AG-008 | Transportation Agent | **golden package v1 ready** |
 | TM-AG-009 | Route Planner Agent | **golden package v1 ready** |
-| TM-AG-010 | Budget Agent | pending |
+| TM-AG-010 | Budget Agent | **golden package v1 ready** |
 | TM-AG-011 | Public Authority Intelligence Agent | pending |
 | TM-AG-012 | Review Intelligence Agent | pending |
 | TM-AG-013 | Adaptive Itinerary Agent | pending |
@@ -64,6 +64,8 @@ Her hazır paket şunları içerir:
 - `handoff-contracts.md`
 - `evaluation-rubric.md`
 - `tests/fixture-pack.v1.json`
+
+## Paket özetleri
 
 ### TM-AG-001 Profile
 ```yaml
@@ -141,11 +143,7 @@ review_analysis_delegated_to: TM-AG-012
 journey_issue_49_compatible: true
 knowledge_issue_50_compatible: true
 ```
-Invariant:
-```text
-regional local-taste knowledge != venue current menu fact
-knowledge hit != dynamic freshness bypass
-```
+Invariant: regional local-taste knowledge != venue current menu fact.
 
 ### TM-AG-007 Weather
 ```yaml
@@ -155,16 +153,11 @@ tool_policy_cases: 5
 context_lifecycle_cases: 4
 provenance_cases: 4
 forecast_vs_climate_normal_separated: true
-forecast_horizon_from_adapter_metadata: true
 provider_selected: false
 journey_issue_49_compatible: true
 knowledge_issue_50_compatible: true
 ```
-Invariant:
-```text
-FORECAST != CLIMATE_NORMAL
-weather signal != itinerary mutation
-```
+Invariant: `FORECAST != CLIMATE_NORMAL`; weather signal != itinerary mutation.
 
 ### TM-AG-008 Transportation
 ```yaml
@@ -178,15 +171,8 @@ straight_line_never_route_distance: true
 stop_selection_delegated_to: TM-AG-009
 corridor_value_research_delegated_to: TM-AG-003
 journey_issue_49_required: true
-knowledge_issue_50_compatible: true
 ```
-Invariant:
-```text
-Transportation computes logistics.
-Destination Research evaluates destination value.
-Route Planner decides schedule/order.
-```
-Contract gap: corridor relation threshold provenance'ı için `ruleSnapshotId` output schema'ya eklenmiştir.
+Contract gap: corridor relation threshold provenance'ı için `ruleSnapshotId` eklenmiştir.
 
 ### TM-AG-009 Route Planner
 ```yaml
@@ -198,20 +184,35 @@ provenance_cases: 6
 journey_issue_49_cases: 4
 journey_plan_and_daily_plan_unified: true
 user_fixed_stop_provenance_required: true
-hard_constraint_before_soft_optimization: true
 budget_calculation_delegated_to: TM-AG-010
 budget_repair_delegated_to: TM-AG-013
 ```
-Invariants:
-```text
-hard feasibility before semantic optimization
-JourneySegment + DailyPlan share one time graph
-user-fixed stop cannot disappear silently
-route fact missing != invented duration
-```
 Fixture-driven contract gaps:
 - user stop ownership provenance → `selectionOrigin + selectionSourceRef`
-- `BUDGET_ALTERNATIVE` removed from TM-AG-009 because total budget ownership is TM-AG-010; overflow repair is TM-AG-013.
+- `BUDGET_ALTERNATIVE` removed; total budget ownership TM-AG-010, overflow repair TM-AG-013.
+
+### TM-AG-010 Budget
+```yaml
+behavior_cases: 18
+authority_cases: 6
+tool_policy_cases: 6
+context_lifecycle_cases: 4
+provenance_cases: 5
+unknown_is_not_zero: true
+dedupe_required: true
+mixed_currency_requires_evidence: true
+journey_issue_49_compatible: true
+knowledge_issue_50_shopping_compatible: true
+```
+Invariants:
+```text
+knownTotal = LIVE + OFFICIAL
+projectedTotal = knownTotal + ESTIMATED
+UNKNOWN is never zero
+hard budget FAIL cannot become WITHIN_BUDGET
+```
+Fixture-driven contract gap:
+- unknown-cost severity required explicit modeling → `budgetCriticality: CRITICAL | NON_CRITICAL` added end-to-end.
 
 ## Eski first-phase specs
 
@@ -246,9 +247,10 @@ TM_AG_006_food_local_taste_package: completed
 TM_AG_007_weather_package: completed
 TM_AG_008_transportation_package: completed
 TM_AG_009_route_planner_package: completed
+TM_AG_010_budget_package: completed
 runtime_tests: pending
-next_agent_package: TM-AG-010
+next_agent_package: TM-AG-011
 implementation_allowed: false
 ```
 
-Bir sonraki paket `TM-AG-010 Budget Agent` olacaktır. Route Planner'ın seçtiği itinerary içindeki konaklama, aktivite, yemek, route/toll ve diğer maliyetler burada deterministic ledger'a dönüştürülecektir.
+Bir sonraki paket `TM-AG-011 Public Authority Intelligence Agent` olacaktır. Issue #50'deki Trusted Travel Source Registry bu agent için birinci lookup noktası olacak; generic search yalnız coverage gap olduğunda devreye girecektir.
