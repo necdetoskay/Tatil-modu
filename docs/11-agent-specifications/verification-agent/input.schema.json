@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tatil-modu.local/schemas/verification-input.v1.json",
+  "title": "VerificationInput.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "requestId", "snapshotRef", "snapshotHash", "policySnapshotRefs", "itineraryRef", "constraintRefs", "selectedCandidateRefs", "routeRefs", "weatherSignalRefs", "budgetLedgerRef", "officialFactRefs", "reviewSignalRefs", "eventRefs", "adaptiveRepairRef", "agentTraceRefs", "toolCallTraceRefs", "evidenceRefs"],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "requestId": { "type": "string", "minLength": 1 },
+    "snapshotRef": { "type": "string", "minLength": 1 },
+    "snapshotHash": { "type": "string", "minLength": 1 },
+    "policySnapshotRefs": { "type": "array", "items": { "type": "string" } },
+    "itineraryRef": { "type": "string", "minLength": 1 },
+    "constraintRefs": { "type": "array", "items": { "type": "string" } },
+    "selectedCandidateRefs": { "type": "array", "items": { "type": "string" } },
+    "routeRefs": { "type": "array", "items": { "type": "string" } },
+    "weatherSignalRefs": { "type": "array", "items": { "type": "string" } },
+    "budgetLedgerRef": { "type": ["string", "null"] },
+    "officialFactRefs": { "type": "array", "items": { "type": "string" } },
+    "reviewSignalRefs": { "type": "array", "items": { "type": "string" } },
+    "eventRefs": { "type": "array", "items": { "type": "string" } },
+    "adaptiveRepairRef": { "type": ["string", "null"] },
+    "agentTraceRefs": { "type": "array", "items": { "type": "string" } },
+    "toolCallTraceRefs": { "type": "array", "items": { "type": "string" } },
+    "evidenceRefs": { "type": "array", "items": { "type": "string" } },
+    "reverificationMode": { "enum": ["NONE", "OWNER_AGENT_REQUIRED", "DIRECT_READONLY_ALLOWED"] },
+    "contextManifestId": { "type": ["string", "null"] }
+  }
+}
