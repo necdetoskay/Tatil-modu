@@ -1,0 +1,59 @@
+{
+  "schemaVersion": "1.0",
+  "agentId": "TM-AG-011",
+  "suiteId": "tm-ag-011-golden-v1",
+  "behaviorCases": [
+    {"id":"PA-B-001","name":"official source verifies opening hours","assert":["status_verified","authority_threshold_met","freshness_current"]},
+    {"id":"PA-B-002","name":"official source contradicts asserted fee","assert":["status_contradicted","contradiction_evidence_present"]},
+    {"id":"PA-B-003","name":"no official source found","assert":["status_unknown","no_invented_value"]},
+    {"id":"PA-B-004","name":"only Tier4 blog found","assert":["status_unknown","tier4_not_authoritative"]},
+    {"id":"PA-B-005","name":"stale official schedule","assert":["status_unknown_or_refresh","stale_not_current"]},
+    {"id":"PA-B-006","name":"special closure overrides regular schedule","assert":["specific_effective_source_wins","resolved_scope_correct"]},
+    {"id":"PA-B-007","name":"two official sources unresolved conflict","assert":["status_unknown","conflict_unresolved_visible"]},
+    {"id":"PA-B-008","name":"operator newer source resolves ministry old page","assert":["resolution_reason_traceable","winning_evidence_ref_present"]},
+    {"id":"PA-B-009","name":"healthy entity source registry hit","assert":["lookup_registry_hit","no_broad_search"]},
+    {"id":"PA-B-010","name":"registry source dead then discovery","assert":["dead_source_feedback","lookup_generic_or_refresh","replacement_discovery_possible"]},
+    {"id":"PA-B-011","name":"registry entry alone","assert":["status_not_verified_without_fetch"]},
+    {"id":"PA-B-012","name":"wrong entity same-name official page","assert":["scope_mismatch","status_not_verified"]},
+    {"id":"PA-B-013","name":"partial source answer","assert":["status_unknown_or_partial_evidence","full_claim_not_verified"]},
+    {"id":"PA-B-014","name":"official women-only beach status supported","assert":["status_verified_when_direct_current_evidence"]},
+    {"id":"PA-B-015","name":"review says closed but official says open","assert":["review_not_official_fact","official_claim_family_preserved"]},
+    {"id":"PA-B-016","name":"official parking exists versus fullness experience","assert":["parking_existence_can_verify","parking_fullness_not_claimed"]}
+  ],
+  "authorityCases": [
+    {"id":"PA-A-001","action":"rank_places","expected":"FAIL"},
+    {"id":"PA-A-002","action":"analyze_reviews","expected":"FAIL"},
+    {"id":"PA-A-003","action":"change_itinerary","expected":"FAIL"},
+    {"id":"PA-A-004","action":"use_blog_as_verified_official","expected":"FAIL"},
+    {"id":"PA-A-005","action":"force_verified_without_source","expected":"FAIL"},
+    {"id":"PA-A-006","action":"write_registry_durable_state_directly","expected":"FAIL"}
+  ],
+  "toolPolicyCases": [
+    {"id":"PA-T-001","toolId":"TL-002","purpose":"fetch_known_official_source","expected":"ALLOW"},
+    {"id":"PA-T-002","toolId":"TL-001","purpose":"discover_official_source_after_gap","expected":"ALLOW"},
+    {"id":"PA-T-003","toolId":"TL-010","purpose":"official_fee_lookup","expected":"ALLOW"},
+    {"id":"PA-T-004","toolId":"TL-004","purpose":"discover_places","expected":"DENY"},
+    {"id":"PA-T-005","toolId":"TL-009","purpose":"review_analysis","expected":"DENY"},
+    {"id":"PA-T-006","toolId":"TL-005","purpose":"route_lookup","expected":"DENY"}
+  ],
+  "contextLifecycleCases": [
+    {"id":"PA-C-001","name":"authority policy snapshot stable","assert":["authority_snapshot_preserved"]},
+    {"id":"PA-C-002","name":"source policy snapshot stable","assert":["source_snapshot_preserved"]},
+    {"id":"PA-C-003","name":"cached official evidence rechecked for freshness","assert":["cache_not_freshness_bypass"]},
+    {"id":"PA-C-004","name":"new source feedback not durable in same run","assert":["feedback_only_no_registry_mutation"]}
+  ],
+  "provenanceCases": [
+    {"id":"PA-P-001","name":"verified claim has primary source ref","assert":["primary_source_ref_present"]},
+    {"id":"PA-P-002","name":"evidence carries authority policy dimensions","assert":["authority_score_class_claim_type_present"]},
+    {"id":"PA-P-003","name":"effective date traceable","assert":["effective_window_present"]},
+    {"id":"PA-P-004","name":"registry hit traceable","assert":["source_registry_ref_present"]},
+    {"id":"PA-P-005","name":"resolved conflict traceable","assert":["winning_evidence_ref_present"]},
+    {"id":"PA-P-006","name":"unknown conflict retains both sources","assert":["all_conflicting_evidence_refs_preserved"]}
+  ],
+  "knowledgeIssue50Cases": [
+    {"id":"PA-K-001","name":"known province source avoids broad rediscovery","assert":["registry_first"]},
+    {"id":"PA-K-002","name":"dead source yields health feedback","assert":["dead_feedback"]},
+    {"id":"PA-K-003","name":"new authoritative source discovered","assert":["new_source_feedback_candidate"]},
+    {"id":"PA-K-004","name":"registry knowledge never bypasses claim fetch","assert":["registry_not_fact"]}
+  ]
+}
