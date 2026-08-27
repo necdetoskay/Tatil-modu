@@ -45,7 +45,7 @@
     "journeySegment": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["segmentId", "fromRef", "toRef", "travelDate", "routeLegRef", "stopRole", "arrivalWindow", "departureWindow", "dailyPlanRefs", "accommodationRef", "sourceRefs", "constraintRefs"],
+      "required": ["segmentId", "fromRef", "toRef", "travelDate", "routeLegRef", "stopRole", "selectionOrigin", "selectionSourceRef", "arrivalWindow", "departureWindow", "dailyPlanRefs", "accommodationRef", "sourceRefs", "constraintRefs"],
       "properties": {
         "segmentId": { "type": "string", "minLength": 1 },
         "fromRef": { "type": "string", "minLength": 1 },
@@ -53,6 +53,8 @@
         "travelDate": { "type": "string", "format": "date" },
         "routeLegRef": { "type": "string", "minLength": 1 },
         "stopRole": { "enum": ["PASS_THROUGH", "SHORT_STOP", "HALF_DAY", "FULL_DAY", "OVERNIGHT_ONLY", "OVERNIGHT_AND_DAY", "MULTI_DAY", "FINAL_DESTINATION"] },
+        "selectionOrigin": { "enum": ["USER_FIXED", "USER_OPTIONAL", "PLANNER_SELECTED", "FINAL_DESTINATION"] },
+        "selectionSourceRef": { "type": "string", "minLength": 1 },
         "arrivalWindow": { "$ref": "#/$defs/nullableTimeWindow" },
         "departureWindow": { "$ref": "#/$defs/nullableTimeWindow" },
         "dailyPlanRefs": { "type": "array", "items": { "type": "string" } },
