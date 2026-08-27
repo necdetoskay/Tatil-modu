@@ -1,7 +1,7 @@
 # 11 — Agent Specifications
 
 **Doküman türü:** canonical agent specification alanı  
-**Durum:** canonical catalog v1.0 + first golden agent package  
+**Durum:** canonical catalog v1.0 + two golden agent packages  
 **Kodlama durumu:** kapalı  
 **Prototype durumu:** kapalı
 
@@ -15,17 +15,9 @@ Her agent kod yazılmadan önce net, test edilebilir ve authority sınırları b
 
 ## Source of truth
 
-Agent seti ve ownership için:
-
-- [`canonical-agent-contract-catalog.md`](canonical-agent-contract-catalog.md)
-
-Harness/test lifecycle için:
-
-- `docs/15-harness-and-orchestration/02-agent-contract-harness-baseline.md`
-
-Radar/DeepSeek Harness adoption kararları için:
-
-- `docs/15-harness-and-orchestration/01-radar-deepseek-harness-adoption-review.md`
+- Agent seti/ownership: [`canonical-agent-contract-catalog.md`](canonical-agent-contract-catalog.md)
+- Harness/test lifecycle: `docs/15-harness-and-orchestration/02-agent-contract-harness-baseline.md`
+- Radar/DeepSeek Harness adoption: `docs/15-harness-and-orchestration/01-radar-deepseek-harness-adoption-review.md`
 
 ```yaml
 implementation_allowed: false
@@ -42,7 +34,7 @@ canonical_catalog_date: 2026-08-27
 | ID | Agent | Paket durumu |
 |---|---|---|
 | TM-AG-001 | Profile Agent | **golden package v1 ready** |
-| TM-AG-002 | Preference & Policy Agent | pending |
+| TM-AG-002 | Preference & Policy Agent | **golden package v1 ready** |
 | TM-AG-003 | Destination Research Agent | pending |
 | TM-AG-004 | Place Intelligence Agent | pending |
 | TM-AG-005 | Accommodation Agent | pending |
@@ -59,9 +51,9 @@ canonical_catalog_date: 2026-08-27
 | TM-AG-016 | Final Composer Agent | pending |
 | TM-ORCH-001 | Travel Orchestrator | pending |
 
-## TM-AG-001 Golden Package
+## Golden package standardı
 
-`profile-agent/` şu artefaktları içerir:
+Her hazır paket şunları içerir:
 
 - `specification.md`
 - `input.schema.json`
@@ -74,7 +66,7 @@ canonical_catalog_date: 2026-08-27
 - `evaluation-rubric.md`
 - `tests/fixture-pack.v1.json`
 
-Fixture pack:
+### TM-AG-001 Profile
 
 ```yaml
 normal_and_edge_cases: 10
@@ -83,67 +75,37 @@ context_lifecycle_cases: 4
 provenance_cases: 2
 ```
 
-Bu paket diğer agentlar için golden template görevi görür.
+### TM-AG-002 Preference & Policy
+
+```yaml
+behavior_cases: 14
+authority_cases: 6
+context_lifecycle_cases: 4
+provenance_cases: 3
+conditional_hard_supported: true
+exception_policy_supported: true
+```
+
+TM-AG-002 fixture tasarımı sırasında `ExceptionPolicySet` ihtiyacı contract gap olarak yakalanmış ve output schema'ya eklenmiştir. Bu, golden package yönteminin beklenen çalışma biçimidir: fixture → contract gap → schema reconciliation.
 
 ## Önceki first-phase spec dosyaları
 
-Aşağıdaki dosyalar silinmez. Bunlar önceki tasarım çalışmasının kanıtıdır ve yeni kanonik katalogla reconciliation için kullanılacaktır:
-
-- `trip-intake-agent.md`
-- `constraint-policy-agent.md`
-- `family-suitability-agent.md`
-- `destination-candidate-agent.md`
-- `route-logistics-agent.md`
-- `accommodation-fit-agent.md`
-- `activity-fit-agent.md`
-- `day-plan-composer-agent.md`
-- `verification-evidence-agent.md`
-- `final-response-composer-agent.md`
-
-İsim veya ownership çakışmasında `canonical-agent-contract-catalog.md` önceliklidir.
+Eski spec dosyaları silinmez; tarihsel tasarım/reconciliation kaydıdır. İsim veya ownership çakışmasında `canonical-agent-contract-catalog.md` önceliklidir.
 
 ## Agent specification standardı
 
-Her kanonik agent için ayrı spec paketi en az şu alanları içermelidir:
+Her kanonik agent paketi en az şu davranış alanlarını kapsar:
 
-1. Purpose
-2. Non-goals
-3. Inputs
-4. Outputs
-5. Required context
-6. Forbidden context
-7. Dependencies
-8. Handoff rules
-9. Hard constraints
-10. Evidence requirements
-11. Confidence rules
-12. Failure modes
-13. Clarification triggers
-14. Fixture requirements
-15. Evaluation rubric
-16. Example contract sketch
-17. Open design questions
-18. Harness binding
-
-Ek zorunlu artefaktlar:
-
-- input/output schema,
-- authority policy,
-- tool policy,
-- source policy,
-- decision rules,
-- handoff contract,
-- machine-readable fixture pack.
-
-## İlgili kanonik belgeler
-
-- Tool sınıfları: `docs/04-tools/tool-catalog.md`
-- Veri güven/freshness: `docs/01-architecture/data-source-trust-policy.md`
-- ACP: `docs/08-architecture-baseline/18-agent-communication-protocol.md`
-- Contracts: `docs/12-contracts/`
-- Fixtures/evaluation: `docs/13-fixtures-and-evaluation/`
-- Tool/capability design: `docs/14-tool-and-capability-design/`
-- Harness baseline: `docs/15-harness-and-orchestration/`
+1. Purpose / Non-goals
+2. Inputs / Outputs
+3. Required / Forbidden context
+4. Dependencies / Handoff
+5. Hard constraints / invariants
+6. Evidence / confidence
+7. Failure / clarification
+8. Fixture/evaluation
+9. Authority/tool/source policy
+10. Context lifecycle/provenance binding
 
 ## Sonraki aşama
 
@@ -152,9 +114,10 @@ canonical_catalog: completed
 harness_adoption_review: completed
 harness_baseline: completed
 TM_AG_001_profile_package: completed
-TM_AG_001_runtime_tests: pending
-next_agent_package: TM-AG-002
+TM_AG_002_preference_policy_package: completed
+runtime_tests: pending
+next_agent_package: TM-AG-003
 implementation_allowed: false
 ```
 
-Bir sonraki tasarım paketi `TM-AG-002 Preference & Policy Agent` olacaktır. Runtime kodlama başlamadan önce M1 Harness runner sözleşmelerinin uygulanabilirlik planı ayrıca çıkarılacaktır.
+Bir sonraki paket `TM-AG-003 Destination Research Agent` olacaktır.
