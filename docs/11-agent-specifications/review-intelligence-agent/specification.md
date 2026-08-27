@@ -4,7 +4,7 @@
 |---|---|
 | Agent ID | TM-AG-012 |
 | Sürüm | 1.0 |
-| Durum | CANONICAL SPEC |
+| Durum | GOLDEN PACKAGE V1 READY |
 | Tarih | 2026-08-27 |
 
 ## 1. Purpose
@@ -58,10 +58,16 @@ Ana çıktı: `ReviewSignalSet.v1`.
 
 ```yaml
 entityRef: string
-window: object
+analysisWindow: object
 snapshotMode: REUSED | REFRESHED | COMPUTED
+inputSnapshotRef: string|null
+snapshotLineage:
+  baseSnapshotRef: string|null
+  baseSnapshotWindow: object|null
+  baseSample: object|null
+  refreshContributions: []
 sample:
-  rawCount: integer|null
+  rawCount: integer
   validCount: integer
   duplicateRemoved: integer
   suspectedSpamRemoved: integer
@@ -83,6 +89,7 @@ validSampleSize: integer
 prevalence: 0..1
 strength: 0..1
 confidence: 0..1
+confidenceBasis: object
 observationRefs: []
 sourceProviderRefs: []
 window: object
@@ -199,6 +206,16 @@ Fresh snapshot varken broad historical review pull gereksizdir.
 
 Precomputed snapshot current truth garantisi değildir; requested window/scope ile eşleşmelidir.
 
+### Snapshot lineage invariant
+
+`REUSED` ve `REFRESHED` output'lar provenance kaybetmez.
+
+- `REUSED`: base snapshot ref + base window + base sample zorunlu olarak izlenebilir olmalıdır.
+- `REFRESHED`: base snapshot provenance korunur ve yeni veri katkıları `refreshContributions[]` ile ayrı tutulur.
+- `COMPUTED`: base snapshot null olabilir; current run sample/evidence output'ta bulunur.
+
+Merged sample sayıları hangi snapshot ve hangi refresh contribution'larından geldiği açıklanamıyorsa FAIL.
+
 ## 15. Raw review retention policy
 
 Provider ToS/licensing kuralları önceliklidir.
@@ -236,13 +253,14 @@ Her signal analysis window ve freshness taşır. Eski snapshot güncel crowding/
 - `ENTITY_MISMATCH`
 - `WINDOW_MISMATCH`
 - `MISSING_SAMPLE_METADATA`
+- `MISSING_SNAPSHOT_LINEAGE`
 - `MISSING_PROVENANCE`
 - `PLACE_DISCOVERY_LEAKAGE`
 
 ## 19. Harness binding
 
 - R0 ReviewSignal schema
-- R1 sample/prevalence/dedupe/confidence rules
+- R1 sample/prevalence/dedupe/confidence/snapshot-lineage rules
 - R2 recorded review fixtures
 - R3 review provider adapter integration
 - R4 theme extraction semantic quality
@@ -254,11 +272,12 @@ Her signal analysis window ve freshness taşır. Eski snapshot güncel crowding/
 ## 20. Current status
 
 ```yaml
-agent_spec_status: canonical_v1
+agent_spec_status: golden_v1_ready
 implementation_allowed: false
 prototype_allowed: false
-schemas: pending
-policies: pending
-fixtures: pending
+schemas: completed
+policies: completed
+fixtures: completed
 knowledge_issue_50_review_snapshot_required: true
+snapshot_lineage_required: true
 ```
