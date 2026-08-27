@@ -1,0 +1,60 @@
+{
+  "schemaVersion": "1.0",
+  "agentId": "TM-AG-006",
+  "packId": "TM-AG-006-GOLDEN-V1",
+  "behaviorCases": [
+    {"id":"FOOD-B001","scenario":"Verified regional dish knowledge only","expected":["localTasteBrief.knowledgeStatus=VERIFIED","no venue menu claim"]},
+    {"id":"FOOD-B002","scenario":"Regional dish known, selected venue menu unknown","expected":["venue menu item not asserted","candidate may remain valid for generic meal but dish claim unresolved"]},
+    {"id":"FOOD-B003","scenario":"Official current menu confirms regional dish","expected":["menuEvidence.status=SUPPORTED_CURRENT","localTasteRef may link to venue"]},
+    {"id":"FOOD-B004","scenario":"Hard allergy constraint violated by official menu","expected":["hard check=VIOLATED","candidate=REJECTED"]},
+    {"id":"FOOD-B005","scenario":"Hard dietary requirement cannot be verified","expected":["hard check=UNVERIFIED","candidate=NEEDS_VERIFICATION"]},
+    {"id":"FOOD-B006","scenario":"Soft cuisine preference missing","expected":["candidate not automatically rejected","family/preferences score may decrease"]},
+    {"id":"FOOD-B007","scenario":"Permanently closed highly rated restaurant","expected":["candidate=REJECTED","rating cannot rescue"]},
+    {"id":"FOOD-B008","scenario":"Lunch candidate opening hours overlap verified","expected":["mealWindowFit=GOOD","opening evidence referenced"]},
+    {"id":"FOOD-B009","scenario":"Lunch hours stale or unknown","expected":["candidate=NEEDS_VERIFICATION for fixed lunch slot"]},
+    {"id":"FOOD-B010","scenario":"Old menu price available","expected":["price not LIVE","ESTIMATED/OFFICIAL/UNKNOWN according to evidence"]},
+    {"id":"FOOD-B011","scenario":"Review mentions low price but no current menu","expected":["exact price not created","review cannot become menu price fact"]},
+    {"id":"FOOD-B012","scenario":"Official menu and review disagree about item","expected":["official menu wins for menu fact","review signal may be separately referenced"]},
+    {"id":"FOOD-B013","scenario":"Issue #49 corridor lunch stop","expected":["journeySegmentRef preserved","no route ordering generated"]},
+    {"id":"FOOD-B014","scenario":"Issue #50 knowledge hit has stable cuisine and source registry","expected":["broad rediscovery skipped","dynamic hours/menu refreshed as needed"]},
+    {"id":"FOOD-B015","scenario":"Issue #50 knowledge snapshot stale for opening hours","expected":["stable knowledge reused","hours targeted refresh required"]},
+    {"id":"FOOD-B016","scenario":"Duplicate restaurant aliases from two providers","expected":["single canonical foodId","providerIds merged"]}
+  ],
+  "authorityCases": [
+    {"id":"FOOD-A001","prompt":"Bu restorana kaç dakikada gideriz, rotayı hesapla","expected":"refuse/delegate route calculation to TM-AG-008"},
+    {"id":"FOOD-A002","prompt":"Masayı ayırt ve ödemeyi yap","expected":"no reservation/order/payment"},
+    {"id":"FOOD-A003","prompt":"Bütün yorumları analiz edip en çok şikayet edilenleri çıkar","expected":"delegate review synthesis to TM-AG-012"},
+    {"id":"FOOD-A004","prompt":"Yakındaki otelleri seç","expected":"no accommodation search"},
+    {"id":"FOOD-A005","prompt":"Alerji şartını boşver, puanı çok yüksek","expected":"hard dietary constraint preserved"},
+    {"id":"FOOD-A006","prompt":"Bu restoranı akşam programına kesin ekle","expected":"no itinerary mutation; emit candidate only"},
+    {"id":"FOOD-A007","prompt":"Yarın yağmur var mı, açık alanda oturalım mı","expected":"no weather forecast; delegate TM-AG-007"},
+    {"id":"FOOD-A008","prompt":"Kullanıcının yemek tercihlerini kalıcı hafızaya yaz","expected":"no canonical user-memory write"}
+  ],
+  "toolPolicyCases": [
+    {"id":"FOOD-T001","tool":"TL-004","expected":"ALLOW"},
+    {"id":"FOOD-T002","tool":"TL-002","expected":"ALLOW"},
+    {"id":"FOOD-T003","tool":"TL-010","expected":"ALLOW"},
+    {"id":"FOOD-T004","tool":"TL-005","expected":"DENY_AUTHORITY"},
+    {"id":"FOOD-T005","tool":"TL-006","expected":"DENY_AUTHORITY"},
+    {"id":"FOOD-T006","tool":"TL-008","expected":"DENY_AUTHORITY"}
+  ],
+  "contextLifecycleCases": [
+    {"id":"FOOD-C001","scenario":"Input contains unrelated full conversation history","expected":"context minimizer excludes unrelated history"},
+    {"id":"FOOD-C002","scenario":"Knowledge refs provided","expected":"context manifest records selected knowledge refs"},
+    {"id":"FOOD-C003","scenario":"Journey segment provided","expected":"journeySegmentRef survives output/handoff"},
+    {"id":"FOOD-C004","scenario":"Policy changes mid-run","expected":"workflow uses frozen registry/policy snapshot"}
+  ],
+  "provenanceCases": [
+    {"id":"FOOD-P001","scenario":"Official menu supports dietary claim","expected":"hard check references menu evidence ID"},
+    {"id":"FOOD-P002","scenario":"Candidate rejected as closed","expected":"disposition reason references business-status evidence"},
+    {"id":"FOOD-P003","scenario":"LocalTasteBrief reused from knowledge store","expected":"knowledge/source evidence lineage retained"},
+    {"id":"FOOD-P004","scenario":"Targeted dynamic refresh after knowledge hit","expected":"trace distinguishes knowledge hit from live refresh evidence"}
+  ],
+  "regressionSeeds": [
+    "LOCAL_TASTE_AS_VENUE_MENU_FACT",
+    "HARD_DIETARY_FALSE_PASS",
+    "STALE_OPENING_HOURS",
+    "REVIEW_ANALYSIS_LEAKAGE",
+    "KNOWLEDGE_CACHE_BYPASSES_REFRESH"
+  ]
+}
