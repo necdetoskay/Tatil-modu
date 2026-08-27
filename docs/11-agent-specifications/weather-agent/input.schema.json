@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tatil-modu.local/schemas/weather-agent-input.v1.json",
+  "title": "WeatherAgentInput.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "requestId", "location", "timeWindow", "exposureType"],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "requestId": { "type": "string", "minLength": 1 },
+    "location": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["locationRef", "name", "latitude", "longitude"],
+      "properties": {
+        "locationRef": { "type": "string", "minLength": 1 },
+        "name": { "type": "string", "minLength": 1 },
+        "latitude": { "type": "number", "minimum": -90, "maximum": 90 },
+        "longitude": { "type": "number", "minimum": -180, "maximum": 180 }
+      }
+    },
+    "timeWindow": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["start", "end"],
+      "properties": {
+        "start": { "type": "string", "format": "date-time" },
+        "end": { "type": "string", "format": "date-time" }
+      }
+    },
+    "exposureType": { "enum": ["INDOOR", "OUTDOOR", "MIXED", "TRAVEL_LEG", "UNKNOWN"] },
+    "activityRef": { "type": ["string", "null"] },
+    "journeySegmentRef": { "type": ["string", "null"] },
+    "currentDateTime": { "type": ["string", "null"], "format": "date-time" },
+    "knowledgeRefs": { "type": "array", "items": { "type": "string" } },
+    "contextManifestId": { "type": ["string", "null"] }
+  }
+}
