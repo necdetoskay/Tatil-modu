@@ -9,12 +9,10 @@
 
 ## 1. Purpose
 
-Preference & Policy Agent, `TravelerProfile` ve `TripRequest` içindeki açık kullanıcı isteklerini yapılandırılmış `PreferenceSet` ve `ConstraintSet` haline getirir.
-
-Temel görev:
+Preference & Policy Agent, `TravelerProfile` ve `TripRequest` içindeki açık kullanıcı isteklerini yapılandırılmış `PreferenceSet`, `ConstraintSet` ve gerektiğinde `ExceptionPolicySet` haline getirir.
 
 ```text
-classify preference → classify constraint → detect condition/conflict → emit policy package
+classify preference → classify constraint → preserve condition → detect conflict/exception → emit policy package
 ```
 
 Bu agent plan üretmez ve aday araştırmaz.
@@ -37,21 +35,25 @@ Agent:
 - `TripRequest` içindeki user message ve açık preference cümleleri,
 - `TravelerProfile`,
 - izinli conversation facts,
-- ürünün kanonik constraint taxonomy/policy kuralları,
+- kanonik constraint taxonomy/policy kuralları,
+- `policyVersion`,
 - opsiyonel `contextManifestId`.
 
 ## 4. Outputs
 
-İki ana domain objesi üretir:
+Ana çıktılar:
 
-- `PreferenceSet`
-- `ConstraintSet`
+- `PreferenceSet` — soft/informational tercihleri taşır.
+- `ConstraintSet` — yalnız `HARD` ve `CONDITIONAL_HARD` kuralları taşır.
+- `ExceptionPolicySet` — açık kullanıcı izniyle bir soft target'ın hangi şartlarda aşılabileceğini taşır.
+- `conflicts[]`
+- `clarificationRequired[]`
 
-Her constraint en az:
+Constraint minimum shape:
 
 ```yaml
 constraintId: string
-kind: HARD | SOFT | CONDITIONAL_HARD
+kind: HARD | CONDITIONAL_HARD
 condition: object|null
 subject: string
 operator: string
@@ -61,7 +63,16 @@ confidence: 0..1
 evidenceRequired: boolean
 ```
 
-alanlarını taşır.
+Exception policy minimum shape:
+
+```yaml
+exceptionId: string
+targetKey: string
+mode: ALLOW_IF_EXCEPTIONAL_VALUE | ALLOW_WITH_USER_APPROVAL | ALLOW_WITH_JUSTIFICATION
+trigger: string
+requiresUserApproval: boolean
+sourceRefs: []
+```
 
 ## 5. Required context
 
@@ -90,7 +101,7 @@ alanlarını taşır.
 
 ## 8. Handoff rules
 
-Çıktı Orchestrator'a döner. Orchestrator yalnız gerekli constraint/preference alanlarını downstream agentlara disclosure olarak iletir.
+Çıktı Orchestrator'a döner. Orchestrator yalnız gerekli constraint/preference/exception alanlarını downstream agentlara disclosure olarak iletir.
 
 Raw user message her downstream agent'a otomatik olarak geçirilmez.
 
@@ -106,14 +117,13 @@ Hard constraint, ihlal edildiğinde adayın kabul edilemeyeceği veya açık kul
 - `midday_rest_required`
 - `max_daily_drive`
 - `max_distance_boundary`
-- `child_age_eligibility`
-- kullanıcının açık “mutlaka / zorunlu / olmazsa olmaz / istemiyorum” ifadelerinden türeyen kurallar.
+- açık “mutlaka / zorunlu / olmazsa olmaz / istemiyorum” ifadelerinden türeyen kurallar.
+
+Çocuk yaşı tek başına yeni bir hard preference üretmez; downstream eligibility değerlendirmesi için factual context'tir.
 
 ## 10. Conditional hard constraints
 
-Bazı kurallar yalnız bir koşul gerçekleştiğinde hard olur.
-
-Örnek:
+Bazı kurallar yalnız koşul gerçekleştiğinde hard olur.
 
 ```yaml
 constraintId: women_only_beach_when_beach
@@ -127,7 +137,7 @@ operator: equals
 value: true
 ```
 
-“Deniz önerilecekse kadınlar plajı mutlaka olmalı” cümlesi **genel olarak deniz zorunluluğu değildir**. Yalnız `activity.type == beach` olduğunda kadınlar plajı şartını aktif eder.
+“Deniz önerilecekse kadınlar plajı mutlaka olmalı” cümlesi **deniz zorunluluğu değildir**. Yalnız `activity.type == beach` olduğunda kadınlar plajı şartını aktif eder.
 
 ## 11. Soft preferences
 
@@ -144,122 +154,112 @@ Soft preference plan kalitesini etkiler ancak tek başına adayı otomatik redde
 - alternatifli günlük plan,
 - havuz/hamam tercihi.
 
-Kullanıcı açıkça “mutlaka” demişse ilgili preference otomatik soft kabul edilmez.
+## 12. Exception policies
 
-## 12. Constraint strength rules
+Kullanıcı bir hedefi tercih edip açıkça istisna tanımlarsa bu kural hard constraint'e çevrilmez.
 
-Öncelik sırası:
+Örnek:
 
-1. Açık negatif yasak: “istemiyorum / olmasın / kesinlikle değil” → `HARD` exclusion.
-2. Açık zorunluluk: “mutlaka / şart / zorunlu / olmazsa olmaz” → `HARD` veya koşulluysa `CONDITIONAL_HARD`.
-3. Açık tercih: “tercih ederim / iyi olur / mümkünse” → `SOFT`.
-4. Belirsiz ifade → `UNKNOWN`/clarification; sessizce hard veya soft'a çevrilmez.
+> “Tercihen 150 km içinde olsun ama gerçekten çok iyi bir yerse biraz aşabiliriz.”
 
-## 13. Evidence requirements
+Beklenen model:
+
+- soft preference: `preferred_distance_150km`
+- exception policy: `ALLOW_IF_EXCEPTIONAL_VALUE`
+- **hard `max_distance_boundary` oluşturulmaz.**
+
+Exception policy, downstream agent'a sınırı keyfî aşma yetkisi vermez; exception trigger ve gerekçe trace edilmelidir.
+
+## 13. Constraint strength rules
+
+1. Açık negatif yasak → `HARD` exclusion.
+2. Açık zorunluluk → `HARD` veya koşulluysa `CONDITIONAL_HARD`.
+3. Açık tercih → `SOFT`.
+4. Esnek hedef + açık istisna → `SOFT + ExceptionPolicy`.
+5. Belirsiz ifade → clarification; sessiz hard/soft tahmini yok.
+
+## 14. Evidence requirements
 
 Bu agent dış dünya evidence'ı toplamaz.
 
-Her preference/constraint için kaynak provenance taşır:
+Her preference/constraint/exception provenance taşır:
 
 - `USER_EXPLICIT`
 - `CONVERSATION_FACT`
 - `PROFILE_DERIVED`
 - `PRODUCT_POLICY`
 
-Dış dünya doğrulaması gerektiren constraint için yalnız `evidenceRequired=true` işaretlenir; örneğin kadınlar plajı statüsü veya accessibility facility claim'i bu agent tarafından doğrulanmaz.
+Dış dünya doğrulaması gerektiren constraint için `evidenceRequired=true` işaretlenir; doğrulama başka agent/capability işidir.
 
-## 14. Privacy-sensitive handling
+## 15. Privacy-sensitive handling
 
-Privacy-sensitive tercih:
-
-- yalnız seyahat planı için gerekli kapsamda temsil edilir,
+- yalnız görev için gerekli semantic constraint tutulur,
 - hassas kimlik çıkarımına dönüştürülmez,
 - canonical memory write yapılmaz,
-- downstream disclosure minimum alanla sınırlıdır,
-- “kadınlar plajı istiyor” bilgisinden din, ideoloji veya aile profili çıkarılamaz.
+- downstream disclosure minimum alanla sınırlıdır.
 
-## 15. Conflict rules
+## 16. Conflict rules
 
-Çelişki örnekleri:
+Çelişkili explicit statement'lar sessizce çözülmez. Yalnız kullanıcının daha yeni açık ifadesi eski tercihi açıkça değiştirdiğinde `LATEST_EXPLICIT_WINS` uygulanabilir; aksi halde clarification gerekir.
 
-- “150 km'yi geçmeyelim” + “gerekirse 200 km de olur”
-- “çok sakin plan” + “her gün 5-6 yer gezelim”
-- “bütçe en fazla 20.000 TL” + “otel bütçesi 25.000 TL olabilir”
-
-Agent bunları sessizce çözmez. `conflicts[]` ve gerekirse `clarificationRequired[]` üretir.
-
-## 16. Confidence rules
+## 17. Confidence rules
 
 - açık user statement: yüksek,
 - aynı conversation'dan açık fact: orta-yüksek,
-- profile'dan güvenli türetim: orta,
+- profile'dan güvenli factual türetim: orta,
 - yorum gerektiren/belirsiz ifade: düşük.
 
-Hard constraint confidence düşükse downstream'de “karşılandı” sayılamaz; clarification veya verification gerekir.
+Hard constraint confidence düşükse downstream'de “karşılandı” sayılamaz.
 
-## 17. Failure modes
+## 18. Failure modes
 
 - `HARD_TO_SOFT_DOWNGRADE`
 - `SOFT_TO_HARD_INVENTION`
 - `CONDITION_DROPPED`
+- `EXCEPTION_DROPPED`
 - `PRIVACY_OVERINFERENCE`
 - `PLANNING_LEAKAGE`
 - `TOOL_SCOPE_VIOLATION`
 - `CONFLICT_SILENTLY_RESOLVED`
 - `MISSING_PROVENANCE`
 
-## 18. Clarification triggers
+## 19. Clarification triggers
 
 - constraint strength belirsiz,
-- iki açık statement çelişkili,
+- açık statement'lar çelişkili,
 - sayı sınırının hard mı esnek mi olduğu anlaşılamıyor,
 - condition scope belirsiz,
-- kullanıcı “mümkünse” ve “mutlaka” gibi zıt sinyalleri aynı kural için kullanıyor.
+- exception trigger belirsiz.
 
-## 19. Fixture requirements
+## 20. Fixture coverage
 
-Minimum golden coverage:
+Golden pack:
 
-- happy path preference extraction,
-- explicit hard constraint,
-- conditional hard constraint,
-- explicit negative exclusion,
-- soft preference,
-- distance boundary,
-- budget limit,
-- conflict,
-- privacy-sensitive condition,
-- missing/ambiguous strength,
-- authority/tool leakage,
-- provenance/context lifecycle.
+- 14 davranış fixture'ı,
+- 6 authority testi,
+- 4 context lifecycle testi,
+- 3 provenance testi.
 
-## 20. Evaluation rubric
+Kaynak: `tests/fixture-pack.v1.json`.
+
+## 21. Evaluation rubric
 
 Hard fail:
 
-- hard constraint'i soft yapmak,
-- condition'ı düşürmek,
-- preference'dan yeni kişisel özellik çıkarmak,
-- dış dünya tool çağırmak,
-- yeni POI/plan üretmek,
-- provenance olmadan constraint üretmek.
+- hard→soft downgrade,
+- soft→hard invention,
+- condition veya explicit exception'ın kaybolması,
+- privacy over-inference,
+- dış tool çağrısı,
+- planning entity üretimi,
+- provenance eksikliği.
 
-Semantic kalite kriterleri:
-
-- doğru strength,
-- doğru condition scope,
-- minimum disclosure,
-- conflict görünürlüğü,
-- evidence requirement işaretleme.
-
-## 21. Contract sketch
+## 22. Contract sketch
 
 ```yaml
 agentId: TM-AG-002
 inputContract: preference-policy-input.v1
-outputContracts:
-  - preference-set.v1
-  - constraint-set.v1
+outputContract: preference-policy-output.v1
 allowedTools:
   - TL-012
   - TL-013
@@ -268,18 +268,25 @@ writesCanonicalMemory: false
 producesFinalUserResponse: false
 ```
 
-## 22. Open design questions
+## 23. Open design questions
 
-- Default 150 km davranışı ürün profili mi yoksa kullanıcıya özel preference mı olmalı?
-- Kullanıcı “çok iyi bir yerse sınır aşılabilir” dediğinde exception modeli nasıl taşınmalı?
-- Hard budget ile category budget çelişkisi için otomatik resolution yapılmalı mı?
+- Product-level default travel radius ayrıca bir policy katmanında mı tutulmalı?
+- Hard total budget ile category budget çelişkisi için hangi resolution kuralı kullanılmalı?
 
-## 23. Current status
+## 24. Current status
 
 ```yaml
 agent_spec_status: canonical_v1
+input_schema: complete
+output_schema: complete
+authority_policy: complete
+tool_policy: complete
+source_policy: complete
+decision_rules: complete
+handoff_contracts: complete
+evaluation_rubric: complete
+fixture_pack: complete
 implementation_allowed: false
 prototype_allowed: false
-fixture_pack: pending
-next: input_output_schema_and_policies
+next_agent: TM-AG-003
 ```
