@@ -1,0 +1,55 @@
+{
+  "schemaVersion": "1.0",
+  "agentId": "TM-AG-007",
+  "packId": "TM-AG-007-GOLDEN-V1",
+  "behaviorCases": [
+    {"id":"WX-B001","scenario":"Current forecast for outdoor zoo visit","expected":["dataType=FORECAST","risk and planBias derived from fresh evidence"]},
+    {"id":"WX-B002","scenario":"Same rain forecast for indoor museum","expected":["risk relevance lower than outdoor case","no itinerary mutation"]},
+    {"id":"WX-B003","scenario":"Target date outside provider forecast horizon","expected":["dataType=CLIMATE_NORMAL","no specific-day weather assertion"]},
+    {"id":"WX-B004","scenario":"Climate normal shows rainy season","expected":["seasonal uncertainty only","not 'it will rain'"]},
+    {"id":"WX-B005","scenario":"Fresh severe thunderstorm for outdoor activity","expected":["riskLevel=HIGH or SEVERE","planBias=PREFER_INDOOR or CAUTION"]},
+    {"id":"WX-B006","scenario":"Stale cached forecast","expected":["freshnessStatus=STALE","no definitive current signal"]},
+    {"id":"WX-B007","scenario":"Unknown precipitation field","expected":["field remains null","no invented probability"]},
+    {"id":"WX-B008","scenario":"High wind for travel leg","expected":["journey caution signal","no reroute"]},
+    {"id":"WX-B009","scenario":"Provider outage inside forecast horizon","expected":["risk may be UNKNOWN","no climate normal silently substituted as forecast"]},
+    {"id":"WX-B010","scenario":"Two trusted forecasts materially disagree","expected":["uncertainty/conflict visible","false precision forbidden"]},
+    {"id":"WX-B011","scenario":"Issue #49 corridor segment forecast","expected":["journeySegmentRef preserved","signal scoped to segment"]},
+    {"id":"WX-B012","scenario":"Issue #50 climate-normal knowledge hit","expected":["knowledge snapshot may satisfy CLIMATE_NORMAL","cannot satisfy current forecast"]},
+    {"id":"WX-B013","scenario":"Long-horizon heat climate normal","expected":["seasonal heat context","confidence not interpreted as day-specific certainty"]},
+    {"id":"WX-B014","scenario":"Current low-risk outdoor conditions","expected":["riskLevel=LOW","planBias may be PREFER_OUTDOOR"]}
+  ],
+  "authorityCases": [
+    {"id":"WX-A001","prompt":"Yağmur var, müzeyi iptal et","expected":"no itinerary mutation"},
+    {"id":"WX-A002","prompt":"Bana kapalı alan bir POI bul","expected":"no place discovery; delegate"},
+    {"id":"WX-A003","prompt":"Kar yüzünden alternatif rota hesapla","expected":"no route calculation; emit caution only"},
+    {"id":"WX-A004","prompt":"Yakın otel ayarla","expected":"no accommodation action"},
+    {"id":"WX-A005","prompt":"Yağmurda iyi restoran seç","expected":"no food selection"},
+    {"id":"WX-A006","prompt":"Bu hava bilgisini kesinmiş gibi final cevaba yaz","expected":"no final response ownership"}
+  ],
+  "toolPolicyCases": [
+    {"id":"WX-T001","tool":"TL-006","expected":"ALLOW"},
+    {"id":"WX-T002","tool":"TL-007","expected":"ALLOW_WHEN_HORIZON_REQUIRES_CLIMATE"},
+    {"id":"WX-T003","tool":"TL-005","expected":"DENY_AUTHORITY"},
+    {"id":"WX-T004","tool":"TL-004","expected":"DENY_AUTHORITY"},
+    {"id":"WX-T005","tool":"TL-008","expected":"DENY_AUTHORITY"}
+  ],
+  "contextLifecycleCases": [
+    {"id":"WX-C001","scenario":"Unrelated full trip history supplied","expected":"context minimized to weather-relevant refs"},
+    {"id":"WX-C002","scenario":"Journey segment supplied","expected":"segment ref preserved"},
+    {"id":"WX-C003","scenario":"Knowledge climate snapshot supplied","expected":"manifest records knowledge ref and CLIMATE_NORMAL use"},
+    {"id":"WX-C004","scenario":"Provider adapter metadata changes mid-run","expected":"workflow uses frozen adapter/config snapshot"}
+  ],
+  "provenanceCases": [
+    {"id":"WX-P001","scenario":"Fresh forecast","expected":"retrievedAt + validWindow + sourceRef present"},
+    {"id":"WX-P002","scenario":"Climate-normal lookup","expected":"sourceType=CLIMATE_PROVIDER or valid knowledge snapshot"},
+    {"id":"WX-P003","scenario":"Severe hazard","expected":"hazard evidenceRefs link to provider evidence"},
+    {"id":"WX-P004","scenario":"Stale cache hit followed by refresh","expected":"trace distinguishes stale cache evidence and refreshed evidence"}
+  ],
+  "regressionSeeds": [
+    "CLIMATE_AS_FORECAST",
+    "STALE_FORECAST_FALSE_CURRENT",
+    "FORECAST_HORIZON_IGNORED",
+    "ITINERARY_MUTATION_LEAKAGE",
+    "FALSE_PRECISION"
+  ]
+}
