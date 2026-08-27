@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tatil-modu.local/schemas/place-intelligence-input.v1.json",
+  "title": "PlaceIntelligenceInput.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "requestId", "travelerProfileRef", "preferencePolicyRef", "destinationBriefs"],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "requestId": { "type": "string", "minLength": 1 },
+    "travelerProfileRef": { "type": "string", "minLength": 1 },
+    "preferencePolicyRef": { "type": "string", "minLength": 1 },
+    "destinationBriefs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["destinationId", "name", "relationToTarget"],
+        "properties": {
+          "destinationId": { "type": "string", "minLength": 1 },
+          "name": { "type": "string", "minLength": 1 },
+          "relationToTarget": { "enum": ["primary", "nearby", "exceptional"] }
+        }
+      }
+    },
+    "visitWindow": {
+      "anyOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["startDate", "endDate"],
+          "properties": {
+            "startDate": { "type": "string", "format": "date" },
+            "endDate": { "type": "string", "format": "date" }
+          }
+        }
+      ]
+    },
+    "categoryScope": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "activeConstraints": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["constraintId", "key", "kind", "subject", "operator", "value", "condition"],
+        "properties": {
+          "constraintId": { "type": "string", "minLength": 1 },
+          "key": { "type": "string", "minLength": 1 },
+          "kind": { "enum": ["HARD", "CONDITIONAL_HARD"] },
+          "subject": { "type": "string", "minLength": 1 },
+          "operator": { "type": "string", "minLength": 1 },
+          "value": {},
+          "condition": { "type": ["object", "null"] }
+        }
+      }
+    },
+    "contextManifestId": { "type": ["string", "null"] }
+  }
+}
