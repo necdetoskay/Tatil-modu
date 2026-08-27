@@ -1,7 +1,7 @@
 # 11 — Agent Specifications
 
 **Doküman türü:** canonical agent specification alanı  
-**Durum:** canonical catalog v1.0 + three golden agent packages  
+**Durum:** canonical catalog v1.0 + four golden agent packages  
 **Kodlama durumu:** kapalı  
 **Prototype durumu:** kapalı
 
@@ -36,7 +36,7 @@ canonical_catalog_date: 2026-08-27
 | TM-AG-001 | Profile Agent | **golden package v1 ready** |
 | TM-AG-002 | Preference & Policy Agent | **golden package v1 ready** |
 | TM-AG-003 | Destination Research Agent | **golden package v1 ready** |
-| TM-AG-004 | Place Intelligence Agent | pending |
+| TM-AG-004 | Place Intelligence Agent | **golden package v1 ready** |
 | TM-AG-005 | Accommodation Agent | pending |
 | TM-AG-006 | Food & Local Taste Agent | pending |
 | TM-AG-007 | Weather Agent | pending |
@@ -101,7 +101,27 @@ route_validation_delegated_to: TM-AG-008
 place_discovery_delegated_to: TM-AG-004
 ```
 
-Contract gap: exceptional region adayının hangi exception policy'ye dayandığını göstermek için `exceptionPolicyRefs` alanı fixture/handoff incelemesinde ortaya çıkarılmış ve output schema'ya eklenmiştir.
+Contract gap: exceptional region adayının hangi exception policy'ye dayandığını göstermek için `exceptionPolicyRefs` alanı output schema'ya eklenmiştir.
+
+### TM-AG-004 Place Intelligence
+
+```yaml
+behavior_cases: 16
+authority_cases: 8
+tool_policy_cases: 6
+context_lifecycle_cases: 4
+provenance_cases: 4
+place_level_only: true
+hard_eligibility_separated_from_family_fit: true
+review_analysis_delegated_to: TM-AG-012
+route_calculation_delegated_to: TM-AG-008
+weather_delegated_to: TM-AG-007
+```
+
+Fixture/provenance incelemesinde iki contract gap kapatılmıştır:
+
+- `businessStatus` artık `value + evidenceRefs` taşır.
+- `eligibility.dispositionReasons[]` kararın nedenini doğrudan evidence'a bağlar.
 
 ## Eski first-phase specs
 
@@ -131,9 +151,10 @@ harness_baseline: completed
 TM_AG_001_profile_package: completed
 TM_AG_002_preference_policy_package: completed
 TM_AG_003_destination_research_package: completed
+TM_AG_004_place_intelligence_package: completed
 runtime_tests: pending
-next_agent_package: TM-AG-004
+next_agent_package: TM-AG-005
 implementation_allowed: false
 ```
 
-Bir sonraki paket `TM-AG-004 Place Intelligence Agent` olacaktır.
+Bir sonraki paket `TM-AG-005 Accommodation Agent` olacaktır.
