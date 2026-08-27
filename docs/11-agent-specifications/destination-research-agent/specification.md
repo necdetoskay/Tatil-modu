@@ -9,51 +9,51 @@
 
 ## 1. Purpose
 
-Destination Research Agent, seyahat profili ve policy/constraint paketini kullanarak hedef şehir/bölge ve anlamlı çevre bölgeler için **bölge seviyesinde seyahat intelligence** üretir.
+Destination Research Agent, seyahat profili ve policy/constraint paketini kullanarak hedef şehir/bölge ve anlamlı çevre bölgeler için **region-level seyahat intelligence** üretir.
 
 ```text
-scope target → discover regions → verify region-level facts → classify themes/seasonality → emit DestinationBrief[]
+scope target → discover regions → verify region facts → classify themes/seasonality → emit DestinationBriefSet
 ```
 
-## 2. Boundary
-
-Bu agent **region-level** çalışır.
+## 2. Authority boundary
 
 Yapar:
 - şehir/ilçe/bölge adaylarını keşfeder,
-- resmî turizm bağlamı ve bölgesel temaları çıkarır,
-- sezon/iklim bağlamını doğru veri türüyle taşır,
-- nearby/exceptional adayları gerekçelendirir,
-- hangi claim'lerin sonraki agentlarda doğrulanacağını işaretler.
+- resmî turizm ve seasonal guidance bağlamını araştırır,
+- stable geo identity oluşturur,
+- region-level experience theme çıkarır,
+- nearby/exceptional relation üretir,
+- downstream doğrulama ihtiyacını işaretler.
 
 Yapmaz:
-- tekil POI/otel/restoran listesi üretmez,
-- rota/sürüş süresi hesaplamaz,
-- günlük plan yapmaz,
-- canlı hava tahmini üretmez,
-- hard constraint'i karşılanmış saymaz,
-- final kullanıcı cevabı yazmaz.
+- tekil POI/otel/restoran listesi,
+- driving distance/time hesabı,
+- günlük itinerary,
+- live weather forecast,
+- hard constraint satisfaction kararı,
+- final kullanıcı cevabı.
 
 ## 3. Inputs
 
-- `TravelerProfile` (TM-AG-001)
-- `PreferencePolicyOutput` (TM-AG-002)
-- target/open-destination scope
-- trip date range varsa tarih bağlamı
-- allowed research radius/exception policy
+- TM-AG-001 `TravelerProfile.v1`
+- TM-AG-002 `PreferencePolicyOutput.v1`
+- `destinationScope`: fixed target veya open destination
+- date range varsa tarih bağlamı
+- active radius/exception policy
 - `contextManifestId`
 
 ## 4. Outputs
 
-Ana çıktı: `DestinationBriefSet`.
+`DestinationBriefSet.v1` üretir.
 
-Her `DestinationBrief` en az:
+Her brief:
 
 ```yaml
 destinationId: string
 name: string
 administrativeType: city | district | region | resort_area | nature_region | thermal_region | mixed
 relationToTarget: primary | nearby | exceptional
+exceptionPolicyRefs: []
 geoIdentity:
   latitude: number|null
   longitude: number|null
@@ -71,63 +71,69 @@ evidence: []
 confidence: 0..1
 ```
 
-## 5. Required context
+`relationToTarget=exceptional` ise `exceptionPolicyRefs` boş olamaz.
 
-- hedef/çıkış bilgisi,
+## 5. Required / forbidden context
+
+Required:
+- hedef/çıkış,
 - family/travel summary,
-- active hard/conditional constraints,
-- soft preferences ve exception policies,
-- source trust/freshness policy,
-- current date yalnız freshness değerlendirmesi için.
+- relevant constraints/preferences/exceptions,
+- source trust/freshness policy.
 
-## 6. Forbidden context
-
+Forbidden:
 - full conversation history,
 - unrelated personal data,
 - provider credentials,
 - hidden reasoning,
-- raw accommodation/POI/review feeds,
-- downstream route or itinerary decisions.
+- raw POI/accommodation/review feeds.
 
-## 7. Allowed tools
+## 6. Tool policy
 
-- `TL-001` Web Search — discovery.
-- `TL-002` Official Page Fetcher — region/tourism/resmî guidance verification.
-- `TL-003` Geocoding — stable geo identity.
-- `TL-007` Climate Normals — uzun dönem mevsim bağlamı.
-- `TL-014` Cache.
-- `TL-012` Schema Validator harness katmanında.
+Allowed:
+- `TL-001` Web Search
+- `TL-002` Official Page Fetcher
+- `TL-003` Geocoding
+- `TL-007` Climate Normals
+- `TL-014` Cache
+- harness için `TL-012` Schema Validator
 
-`TL-005` Directions & Distance Matrix bu agent'a yasaktır; gerçek yol mesafesi TM-AG-008'e aittir.
+Forbidden:
+- `TL-004` Place Search
+- `TL-005` Directions & Distance Matrix
+- `TL-006` Weather Forecast
+- `TL-008` Accommodation Search
+- `TL-009` Review Data Provider
+- `TL-010` Price & Fee Lookup
 
-## 8. Source policy summary
+## 7. Source policy
 
 Öncelik:
 
-1. Tier 1 resmî Bakanlık/valilik/belediye/turizm/korunan alan kaynakları.
-2. Tier 2 geocoding/climate structured provider.
-3. Tier 4 web yalnız discovery için; kritik region fact'i tek başına kesinleştiremez.
+1. Tier 1 resmî kaynak,
+2. Tier 2 structured geo/climate provider,
+3. Tier 3 ikincil bağlam,
+4. Tier 4 discovery-only.
 
-## 9. Target modes
+Tier 4-only claim `VERIFIED_REGION_CONTEXT` olamaz.
+
+## 8. Target modes
 
 ### Fixed target
-Kullanıcı hedef il/bölge verdiyse ana çalışma o hedef ve anlamlı çevresidir.
+Kullanıcının hedefi primary candidate'dır; open-destination selection yapılmaz.
 
 ### Open destination
-Kullanıcı destinasyon seçimini sisteme bırakmışsa agent bölge adayları üretebilir; her aday açık selection rationale ve evidence taşır.
+Her aday selection rationale ve evidence taşır.
 
-## 10. Radius and exception handling
+## 9. Radius / exception rules
 
-Bu agent route distance authority'sine sahip değildir.
+- driving radius bu agent tarafından doğrulanmaz,
+- radius constraint varsa `routeValidationRequired=true`,
+- geocoding koordinatı driving distance değildir,
+- exceptional candidate yalnız TM-AG-002 exception policy/delegation ile üretilebilir,
+- exceptional candidate ilgili `exceptionPolicyRefs` taşır.
 
-- `150 km` gibi driving radius hard constraint'i **karşılandı** diye işaretleyemez.
-- Candidate'ı `nearby` olarak keşfedebilir ancak `routeValidationRequired=true` taşır.
-- Açık `ExceptionPolicy` varsa exceptional aday üretebilir; exception gerekçesi source/provenance ile izlenir.
-- Düz çizgi mesafe sürüş mesafesi olarak sunulamaz.
-
-## 11. Experience themes
-
-Region-level theme taxonomy örnekleri:
+## 10. Region themes
 
 - `culture_history`
 - `nature`
@@ -138,51 +144,39 @@ Region-level theme taxonomy örnekleri:
 - `rural_scenic`
 - `urban_leisure`
 
-Bu theme'ler tekil POI önerisi değildir.
+Theme, POI önerisi değildir.
 
-## 12. Seasonality rules
+## 11. Seasonality
 
-- `TL-007 Climate Normals` sonucu **forecast değildir**.
-- Uzun dönem iklim verisi `CLIMATE_NORMAL` olarak açıkça etiketlenir.
-- Kısa vadeli hava kararı TM-AG-007 Weather Agent'a aittir.
-- Sezonluk resmî kapanış/erişim rehberi varsa `OFFICIAL_SEASONAL_GUIDANCE` olarak taşınır.
+- Climate Normal yalnız `CLIMATE_NORMAL`.
+- Kısa vadeli hava TM-AG-007'ye aittir.
+- Resmî sezonluk rehber `OFFICIAL_SEASONAL_GUIDANCE`.
 
-## 13. Constraint relevance
+## 12. Constraint relevance
 
-Agent aktif constraint'i yalnız bölge araştırma relevance'ı olarak taşır.
+Agent constraint'i satisfied ilan etmez; sonraki doğrulama ihtiyacını taşır.
 
 Örnek:
-- beach conditional-hard varsa `beach_coast` theme için `requires_place_level_privacy_verification`.
-- accessibility hard ise `requires_place_and_accommodation_accessibility_verification`.
-- drive radius hard ise `requires_route_validation`.
+- women-only beach conditional hard → `place_level_privacy_verification`
+- accessibility → `place_and_accommodation_accessibility_verification`
+- drive radius → `route_validation`
 
-Bu agent bu constraint'leri karşılanmış ilan etmez.
+## 13. Evidence / confidence
 
-## 14. Evidence requirements
-
-Region fact claim'leri evidence taşır:
+Her verified region claim evidence taşır:
 
 ```yaml
-Evidence:
-  evidenceId: string
-  claimType: string
-  sourceTier: 1 | 2 | 3 | 4
-  sourceRef: string
-  retrievedAt: datetime
-  freshnessStatus: CURRENT | STALE | UNKNOWN
+evidenceId: string
+claimType: string
+sourceTier: 1..4
+sourceRef: string
+retrievedAt: datetime
+freshnessStatus: CURRENT | STALE | UNKNOWN
 ```
 
-Discovery-only kaynağı final verified fact'e dönüşmez.
+Confidence source trust + freshness + completeness + conflict üzerinden belirlenir.
 
-## 15. Confidence
-
-Confidence; source trust + completeness + freshness + conflict durumuna göre hesaplanır.
-
-- official current direct region match → yüksek,
-- partial/secondary region context → orta,
-- discovery-only veya unresolved conflict → düşük.
-
-## 16. Failure modes
+## 14. Failure modes
 
 - `TARGET_SCOPE_AMBIGUOUS`
 - `UNVERIFIED_REGION_FACT`
@@ -194,64 +188,63 @@ Confidence; source trust + completeness + freshness + conflict durumuna göre he
 - `STALE_CRITICAL_CONTEXT`
 - `MISSING_PROVENANCE`
 
-## 17. Clarification triggers
+## 15. Handoff
 
-- target scope gerçekten belirsizse,
-- open destination için minimum coğrafi kapsam yoksa,
-- kullanıcının exception/radius ifadeleri TM-AG-002 tarafından unresolved gelmişse.
-
-Diğer eksikler `unresolvedClaims` olarak taşınabilir; agent gereksiz clarification üretmez.
-
-## 18. Handoff
-
-Çıktı Orchestrator'a döner.
-
-Başlıca downstream:
+Çıktı Orchestrator'a döner. Başlıca downstream:
 - TM-AG-004 Place Intelligence
 - TM-AG-005 Accommodation
 - TM-AG-006 Food
 - TM-AG-008 Transportation
 - TM-AG-014 Verification
 
-## 19. Evaluation
+## 16. Evaluation
 
 Hard fail:
-- tekil POI listesi üretmek,
-- driving duration/distance claim'i üretmek,
-- climate normal'i weather forecast olarak sunmak,
-- Tier 4 discovery kaynağını kritik resmî fact gibi kullanmak,
-- exception policy olmadan out-of-scope candidate'ı normal aday yapmak,
-- evidence'sız verified region fact üretmek.
+- named POI listesi,
+- drive duration/distance claim,
+- climate-as-forecast,
+- Tier4-only verified fact,
+- exceptional candidate without exception ref,
+- stale critical verified fact,
+- forbidden tool,
+- missing provenance.
 
-## 20. Contract sketch
+## 17. Golden fixture coverage
+
+```yaml
+behavior_cases: 14
+authority_cases: 7
+tool_policy_cases: 7
+context_lifecycle_cases: 4
+provenance_cases: 4
+```
+
+Fixture: `tests/fixture-pack.v1.json`.
+
+## 18. Contract sketch
 
 ```yaml
 agentId: TM-AG-003
 inputContract: destination-research-input.v1
 outputContract: destination-brief-set.v1
-allowedTools:
-  - TL-001
-  - TL-002
-  - TL-003
-  - TL-007
-  - TL-014
-forbiddenTools:
-  - TL-004
-  - TL-005
-  - TL-006
-  - TL-008
-  - TL-009
 writesCanonicalMemory: false
 producesFinalUserResponse: false
 ```
 
-## 21. Current status
+## 19. Current status
 
 ```yaml
 agent_spec_status: canonical_v1
+input_schema: complete
+output_schema: complete
+authority_policy: complete
+tool_policy: complete
+source_policy: complete
+decision_rules: complete
+handoff_contracts: complete
+evaluation_rubric: complete
+fixture_pack: complete
 implementation_allowed: false
 prototype_allowed: false
-schemas: pending
-policies: pending
-fixtures: pending
+next_agent: TM-AG-004
 ```
