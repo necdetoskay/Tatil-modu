@@ -4,7 +4,7 @@
   "title": "ReviewSignalSet.v1",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schemaVersion", "reviewAnalysisId", "requestId", "entityRef", "analysisWindow", "reviewQualityPolicySnapshotId", "licensePolicySnapshotId", "snapshotMode", "inputSnapshotRef", "sample", "dataCoverageStatus", "signals", "limitations", "retentionDecision", "snapshotWriteCandidate", "freshnessStatus", "overallConfidence"],
+  "required": ["schemaVersion", "reviewAnalysisId", "requestId", "entityRef", "analysisWindow", "reviewQualityPolicySnapshotId", "licensePolicySnapshotId", "snapshotMode", "inputSnapshotRef", "snapshotLineage", "sample", "dataCoverageStatus", "signals", "limitations", "retentionDecision", "snapshotWriteCandidate", "freshnessStatus", "overallConfidence"],
   "properties": {
     "schemaVersion": { "const": "1.0" },
     "reviewAnalysisId": { "type": "string", "minLength": 1 },
@@ -15,22 +15,8 @@
     "licensePolicySnapshotId": { "type": "string", "minLength": 1 },
     "snapshotMode": { "enum": ["REUSED", "REFRESHED", "COMPUTED"] },
     "inputSnapshotRef": { "type": ["string", "null"] },
-    "sample": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["rawCount", "windowEligibleCount", "entityMatchedCount", "validCount", "duplicateRemoved", "suspectedSpamRemoved", "unusableRemoved", "sourceCount", "sourceProviderRefs"],
-      "properties": {
-        "rawCount": { "type": "integer", "minimum": 0 },
-        "windowEligibleCount": { "type": "integer", "minimum": 0 },
-        "entityMatchedCount": { "type": "integer", "minimum": 0 },
-        "validCount": { "type": "integer", "minimum": 0 },
-        "duplicateRemoved": { "type": "integer", "minimum": 0 },
-        "suspectedSpamRemoved": { "type": "integer", "minimum": 0 },
-        "unusableRemoved": { "type": "integer", "minimum": 0 },
-        "sourceCount": { "type": "integer", "minimum": 0 },
-        "sourceProviderRefs": { "type": "array", "items": { "type": "string" } }
-      }
-    },
+    "snapshotLineage": { "$ref": "#/$defs/snapshotLineage" },
+    "sample": { "$ref": "#/$defs/sample" },
     "dataCoverageStatus": { "enum": ["SUFFICIENT", "LIMITED", "INSUFFICIENT"] },
     "signals": { "type": "array", "items": { "$ref": "#/$defs/reviewSignal" } },
     "limitations": { "type": "array", "items": { "type": "string" } },
@@ -61,6 +47,57 @@
       "properties": {
         "start": { "type": "string", "format": "date-time" },
         "end": { "type": "string", "format": "date-time" }
+      }
+    },
+    "sample": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["rawCount", "windowEligibleCount", "entityMatchedCount", "validCount", "duplicateRemoved", "suspectedSpamRemoved", "unusableRemoved", "sourceCount", "sourceProviderRefs"],
+      "properties": {
+        "rawCount": { "type": "integer", "minimum": 0 },
+        "windowEligibleCount": { "type": "integer", "minimum": 0 },
+        "entityMatchedCount": { "type": "integer", "minimum": 0 },
+        "validCount": { "type": "integer", "minimum": 0 },
+        "duplicateRemoved": { "type": "integer", "minimum": 0 },
+        "suspectedSpamRemoved": { "type": "integer", "minimum": 0 },
+        "unusableRemoved": { "type": "integer", "minimum": 0 },
+        "sourceCount": { "type": "integer", "minimum": 0 },
+        "sourceProviderRefs": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "snapshotLineage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["baseSnapshotRef", "baseSnapshotWindow", "baseSample", "refreshContributions"],
+      "properties": {
+        "baseSnapshotRef": { "type": ["string", "null"] },
+        "baseSnapshotWindow": {
+          "anyOf": [
+            { "type": "null" },
+            { "$ref": "#/$defs/timeWindow" }
+          ]
+        },
+        "baseSample": {
+          "anyOf": [
+            { "type": "null" },
+            { "$ref": "#/$defs/sample" }
+          ]
+        },
+        "refreshContributions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["contributionId", "window", "validCount", "sourceProviderRefs", "observationRefs"],
+            "properties": {
+              "contributionId": { "type": "string", "minLength": 1 },
+              "window": { "$ref": "#/$defs/timeWindow" },
+              "validCount": { "type": "integer", "minimum": 0 },
+              "sourceProviderRefs": { "type": "array", "items": { "type": "string" } },
+              "observationRefs": { "type": "array", "items": { "type": "string" } }
+            }
+          }
+        }
       }
     },
     "reviewSignal": {
