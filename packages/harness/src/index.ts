@@ -1,4 +1,5 @@
 export * from './agent-registry.js';
+export * from './contract-loader.js';
 export * from './context-builder.js';
 
 export const HARNESS_PACKAGE = '@tatil-modu/harness' as const;
