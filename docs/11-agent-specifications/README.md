@@ -1,7 +1,7 @@
 # 11 — Agent Specifications
 
 **Doküman türü:** canonical agent specification alanı  
-**Durum:** canonical catalog v1.0 + fourteen golden agent packages  
+**Durum:** canonical catalog v1.0 + fifteen golden agent packages  
 **Kodlama durumu:** kapalı  
 **Prototype durumu:** kapalı
 
@@ -47,7 +47,7 @@ canonical_catalog_date: 2026-08-27
 | TM-AG-012 | Review Intelligence Agent | **golden package v1 ready** |
 | TM-AG-013 | Adaptive Itinerary Agent | **golden package v1 ready** |
 | TM-AG-014 | Verification Agent | **golden package v1 ready** |
-| TM-AG-015 | Explanation Agent | pending |
+| TM-AG-015 | Explanation Agent | **golden package v1 ready** |
 | TM-AG-016 | Final Composer Agent | pending |
 | TM-ORCH-001 | Travel Orchestrator | pending |
 
@@ -272,16 +272,32 @@ deterministic_before_semantic: true
 zero_blocking_findings_required_for_pass: true
 verified_snapshot_hash_required: true
 ```
+Fixture-driven contract gap:
+- verification policy/evaluator lineage → `policySnapshotRefs[] + evaluatorRefs[]` added.
+
+### TM-AG-015 Explanation
+```yaml
+behavior_cases: 16
+adversarial_cases: 8
+authority_cases: 6
+tool_policy_cases: 5
+context_lifecycle_cases: 4
+provenance_cases: 5
+journey_issue_49_cases: 3
+knowledge_issue_50_cases: 2
+event_season_issue_51_cases: 3
+verified_input_only: true
+unsupported_asserted_claim_count_required: 0
+```
 Invariants:
 ```text
-G0..G9 blocking failure cannot be overridden by G10 semantic quality
-PASS requires zero blocking findings
-precomputed knowledge != current critical evidence
-review experience != OfficialFact
-adaptive REPAIRED != verified state advancement
+facts(explanation) ⊆ facts(verified snapshot/evidence)
+certainty cannot increase
+review experience != official fact
+recurring event != confirmed occurrence
 ```
 Fixture-driven contract gap:
-- verification policy/evaluator lineage missing from result → `policySnapshotRefs[] + evaluatorRefs[]` added.
+- generation/model/prompt lineage missing from bundle → `generationRefs[]` added.
 
 ## Eski first-phase specs
 
@@ -321,9 +337,10 @@ TM_AG_011_public_authority_package: completed
 TM_AG_012_review_intelligence_package: completed
 TM_AG_013_adaptive_itinerary_package: completed
 TM_AG_014_verification_package: completed
+TM_AG_015_explanation_package: completed
 runtime_tests: pending
-next_agent_package: TM-AG-015
+next_agent_package: TM-AG-016
 implementation_allowed: false
 ```
 
-Bir sonraki paket `TM-AG-015 Explanation Agent` olacaktır. Bu agent yalnız verified snapshot/trace/evidence üzerinden kullanıcıya gerekçe üretir; yeni fact, yeni karar veya yeni candidate eklemesi authority violation olacaktır.
+Bir sonraki paket `TM-AG-016 Final Composer Agent` olacaktır. Bu agent yalnız verified snapshot + verified explanation + budget/warnings verisini kullanıcıya sunar; renderer'dır, researcher değildir.
