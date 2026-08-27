@@ -1,7 +1,7 @@
 # 11 — Agent Specifications
 
 **Doküman türü:** canonical agent specification alanı  
-**Durum:** canonical catalog v1.0 + fifteen golden agent packages  
+**Durum:** canonical catalog v1.0 + **17/17 golden contract packages**  
 **Kodlama durumu:** kapalı  
 **Prototype durumu:** kapalı
 
@@ -48,8 +48,8 @@ canonical_catalog_date: 2026-08-27
 | TM-AG-013 | Adaptive Itinerary Agent | **golden package v1 ready** |
 | TM-AG-014 | Verification Agent | **golden package v1 ready** |
 | TM-AG-015 | Explanation Agent | **golden package v1 ready** |
-| TM-AG-016 | Final Composer Agent | pending |
-| TM-ORCH-001 | Travel Orchestrator | pending |
+| TM-AG-016 | Final Composer Agent | **golden package v1 ready** |
+| TM-ORCH-001 | Travel Orchestrator | **golden package v1 ready** |
 
 ## Golden package standardı
 
@@ -84,7 +84,7 @@ provenance_cases: 3
 conditional_hard_supported: true
 exception_policy_supported: true
 ```
-Contract gap: `ExceptionPolicySet` fixture tasarımında ortaya çıkarılmış ve schema'ya eklenmiştir.
+Fixture-driven gap: `ExceptionPolicySet` eklendi.
 
 ### TM-AG-003 Destination Research
 ```yaml
@@ -97,7 +97,7 @@ region_level_only: true
 route_validation_delegated_to: TM-AG-008
 place_discovery_delegated_to: TM-AG-004
 ```
-Contract gap: exceptional region adayının exception policy provenance'ı için `exceptionPolicyRefs` eklenmiştir.
+Fixture-driven gap: exceptional region provenance için `exceptionPolicyRefs`.
 
 ### TM-AG-004 Place Intelligence
 ```yaml
@@ -106,15 +106,12 @@ authority_cases: 8
 tool_policy_cases: 6
 context_lifecycle_cases: 4
 provenance_cases: 4
-place_level_only: true
 hard_eligibility_separated_from_family_fit: true
 review_analysis_delegated_to: TM-AG-012
 route_calculation_delegated_to: TM-AG-008
 weather_delegated_to: TM-AG-007
 ```
-Contract gaps:
-- `businessStatus` artık `value + evidenceRefs` taşır.
-- `eligibility.dispositionReasons[]` kararın nedenini evidence'a bağlar.
+Fixture-driven gaps: evidence-aware `businessStatus`; `eligibility.dispositionReasons[]`.
 
 ### TM-AG-005 Accommodation
 ```yaml
@@ -125,10 +122,9 @@ context_lifecycle_cases: 4
 provenance_cases: 4
 query_signature_required: true
 live_price_and_availability_freshness_required: true
-booking_and_payment_forbidden: true
 journey_issue_49_compatible: true
 ```
-Contract gap: stopover konaklamasının journey provenance'ı için `journeySegmentRef` query signature'a eklenmiştir.
+Fixture-driven gap: `journeySegmentRef` query signature lineage.
 
 ### TM-AG-006 Food & Local Taste
 ```yaml
@@ -139,7 +135,6 @@ context_lifecycle_cases: 4
 provenance_cases: 4
 local_taste_separated_from_venue_menu_fact: true
 hard_dietary_eligibility_before_family_fit: true
-review_analysis_delegated_to: TM-AG-012
 journey_issue_49_compatible: true
 knowledge_issue_50_compatible: true
 ```
@@ -168,11 +163,9 @@ context_lifecycle_cases: 4
 provenance_cases: 5
 route_corridor_discovery: true
 straight_line_never_route_distance: true
-stop_selection_delegated_to: TM-AG-009
-corridor_value_research_delegated_to: TM-AG-003
 journey_issue_49_required: true
 ```
-Contract gap: corridor relation threshold provenance'ı için `ruleSnapshotId` eklenmiştir.
+Fixture-driven gap: corridor relation threshold provenance → `ruleSnapshotId`.
 
 ### TM-AG-009 Route Planner
 ```yaml
@@ -187,9 +180,7 @@ user_fixed_stop_provenance_required: true
 budget_calculation_delegated_to: TM-AG-010
 budget_repair_delegated_to: TM-AG-013
 ```
-Fixture-driven contract gaps:
-- user stop ownership provenance → `selectionOrigin + selectionSourceRef`
-- `BUDGET_ALTERNATIVE` removed; total budget ownership TM-AG-010, overflow repair TM-AG-013.
+Fixture-driven gaps: `selectionOrigin + selectionSourceRef`; Budget alternative ownership removed from planner.
 
 ### TM-AG-010 Budget
 ```yaml
@@ -204,8 +195,7 @@ mixed_currency_requires_evidence: true
 journey_issue_49_compatible: true
 knowledge_issue_50_shopping_compatible: true
 ```
-Fixture-driven contract gap:
-- unknown-cost severity → `budgetCriticality: CRITICAL | NON_CRITICAL` added end-to-end.
+Fixture-driven gap: `budgetCriticality: CRITICAL | NON_CRITICAL`.
 
 ### TM-AG-011 Public Authority Intelligence
 ```yaml
@@ -219,8 +209,7 @@ claim_specific_authority: true
 unknown_is_valid_epistemic_result: true
 trusted_source_registry_first: true
 ```
-Fixture-driven contract gap:
-- ordered source fallback provenance → `sourceLookupTrace[]` added.
+Fixture-driven gap: ordered `sourceLookupTrace[]`.
 
 ### TM-AG-012 Review Intelligence
 ```yaml
@@ -235,9 +224,7 @@ prevalence_deterministic: true
 raw_review_retention_policy_required: true
 snapshot_lineage_required: true
 ```
-Fixture-driven contract gaps:
-- base snapshot sample lineage → `snapshotLineage.baseSample`
-- refresh contribution provenance → `snapshotLineage.refreshContributions[]`
+Fixture-driven gaps: `snapshotLineage.baseSample`; `snapshotLineage.refreshContributions[]`.
 
 ### TM-AG-013 Adaptive Itinerary
 ```yaml
@@ -254,8 +241,7 @@ preservation_proof_required: true
 trigger_resolution_trace_required: true
 verification_recheck_required_after_mutation: true
 ```
-Fixture-driven contract gap:
-- multiple/conflicting triggers needed per-trigger disposition → `triggerResolutions[]` added.
+Fixture-driven gap: `triggerResolutions[]` with `APPLIED | NO_EFFECT | DEFERRED | CONFLICTING`.
 
 ### TM-AG-014 Verification
 ```yaml
@@ -272,8 +258,7 @@ deterministic_before_semantic: true
 zero_blocking_findings_required_for_pass: true
 verified_snapshot_hash_required: true
 ```
-Fixture-driven contract gap:
-- verification policy/evaluator lineage → `policySnapshotRefs[] + evaluatorRefs[]` added.
+Fixture-driven gap: `policySnapshotRefs[] + evaluatorRefs[]`.
 
 ### TM-AG-015 Explanation
 ```yaml
@@ -289,15 +274,46 @@ event_season_issue_51_cases: 3
 verified_input_only: true
 unsupported_asserted_claim_count_required: 0
 ```
-Invariants:
-```text
-facts(explanation) ⊆ facts(verified snapshot/evidence)
-certainty cannot increase
-review experience != official fact
-recurring event != confirmed occurrence
+Fixture-driven gap: `generationRefs[]` for model/prompt/generation lineage.
+
+### TM-AG-016 Final Composer
+```yaml
+behavior_cases: 18
+adversarial_cases: 9
+authority_cases: 7
+tool_policy_cases: 5
+context_lifecycle_cases: 4
+provenance_cases: 6
+journey_issue_49_cases: 3
+knowledge_issue_50_cases: 2
+event_season_issue_51_cases: 4
+verified_input_only: true
+unsupported_entity_refs_required: 0
+unsupported_claim_refs_required: 0
+changed_verified_values_required: 0
+missing_mandatory_warnings_required: 0
 ```
-Fixture-driven contract gap:
-- generation/model/prompt lineage missing from bundle → `generationRefs[]` added.
+Invariants: renderer only; no fake alternatives; verified values and uncertainty are preserved exactly.
+
+### TM-ORCH-001 Travel Orchestrator
+```yaml
+behavior_cases: 20
+authority_cases: 9
+tool_policy_cases: 9
+context_lifecycle_cases: 6
+provenance_cases: 9
+journey_issue_49_cases: 4
+knowledge_issue_50_cases: 5
+event_season_issue_51_cases: 5
+state_gate_cases: 5
+direct_domain_tools_forbidden: true
+bounded_retry_and_repair_required: true
+verified_state_gate_required: true
+graph_revision_lineage_required: true
+```
+Fixture-driven gaps:
+- workflow/harness policy provenance → `harnessPolicySnapshotId`
+- handoff lineage → `producerAgentId + consumerAgentId + objectType + objectVersion + objectHash`.
 
 ## Eski first-phase specs
 
@@ -323,24 +339,12 @@ Her paket en az şunları kapsar:
 canonical_catalog: completed
 harness_adoption_review: completed
 harness_baseline: completed
-TM_AG_001_profile_package: completed
-TM_AG_002_preference_policy_package: completed
-TM_AG_003_destination_research_package: completed
-TM_AG_004_place_intelligence_package: completed
-TM_AG_005_accommodation_package: completed
-TM_AG_006_food_local_taste_package: completed
-TM_AG_007_weather_package: completed
-TM_AG_008_transportation_package: completed
-TM_AG_009_route_planner_package: completed
-TM_AG_010_budget_package: completed
-TM_AG_011_public_authority_package: completed
-TM_AG_012_review_intelligence_package: completed
-TM_AG_013_adaptive_itinerary_package: completed
-TM_AG_014_verification_package: completed
-TM_AG_015_explanation_package: completed
+all_16_specialist_packages: completed
+TM_ORCH_001_package: completed
+all_17_contract_packages: completed
+cross_contract_reconciliation_audit: in_progress
 runtime_tests: pending
-next_agent_package: TM-AG-016
 implementation_allowed: false
 ```
 
-Bir sonraki paket `TM-AG-016 Final Composer Agent` olacaktır. Bu agent yalnız verified snapshot + verified explanation + budget/warnings verisini kullanıcıya sunar; renderer'dır, researcher değildir.
+Bir sonraki zorunlu adım `17/17 cross-contract reconciliation audit`tir. Audit; agent ID/ownership, schema/handoff, tool authority, source authority, shared domain object semantics, Issue #49/#50/#51 etkileri ve harness/state-gate bütünlüğünü kontrol eder. Audit PASS olmadan runtime implementation açılmaz.
