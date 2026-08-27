@@ -1,7 +1,7 @@
 # 11 — Agent Specifications
 
 **Doküman türü:** canonical agent specification alanı  
-**Durum:** canonical catalog v1.0 + two golden agent packages  
+**Durum:** canonical catalog v1.0 + three golden agent packages  
 **Kodlama durumu:** kapalı  
 **Prototype durumu:** kapalı
 
@@ -35,7 +35,7 @@ canonical_catalog_date: 2026-08-27
 |---|---|---|
 | TM-AG-001 | Profile Agent | **golden package v1 ready** |
 | TM-AG-002 | Preference & Policy Agent | **golden package v1 ready** |
-| TM-AG-003 | Destination Research Agent | pending |
+| TM-AG-003 | Destination Research Agent | **golden package v1 ready** |
 | TM-AG-004 | Place Intelligence Agent | pending |
 | TM-AG-005 | Accommodation Agent | pending |
 | TM-AG-006 | Food & Local Taste Agent | pending |
@@ -86,15 +86,30 @@ conditional_hard_supported: true
 exception_policy_supported: true
 ```
 
-TM-AG-002 fixture tasarımı sırasında `ExceptionPolicySet` ihtiyacı contract gap olarak yakalanmış ve output schema'ya eklenmiştir. Bu, golden package yönteminin beklenen çalışma biçimidir: fixture → contract gap → schema reconciliation.
+Contract gap: `ExceptionPolicySet` fixture tasarımında ortaya çıkarılmış ve schema'ya eklenmiştir.
 
-## Önceki first-phase spec dosyaları
+### TM-AG-003 Destination Research
+
+```yaml
+behavior_cases: 14
+authority_cases: 7
+tool_policy_cases: 7
+context_lifecycle_cases: 4
+provenance_cases: 4
+region_level_only: true
+route_validation_delegated_to: TM-AG-008
+place_discovery_delegated_to: TM-AG-004
+```
+
+Contract gap: exceptional region adayının hangi exception policy'ye dayandığını göstermek için `exceptionPolicyRefs` alanı fixture/handoff incelemesinde ortaya çıkarılmış ve output schema'ya eklenmiştir.
+
+## Eski first-phase specs
 
 Eski spec dosyaları silinmez; tarihsel tasarım/reconciliation kaydıdır. İsim veya ownership çakışmasında `canonical-agent-contract-catalog.md` önceliklidir.
 
 ## Agent specification standardı
 
-Her kanonik agent paketi en az şu davranış alanlarını kapsar:
+Her paket en az şunları kapsar:
 
 1. Purpose / Non-goals
 2. Inputs / Outputs
@@ -115,9 +130,10 @@ harness_adoption_review: completed
 harness_baseline: completed
 TM_AG_001_profile_package: completed
 TM_AG_002_preference_policy_package: completed
+TM_AG_003_destination_research_package: completed
 runtime_tests: pending
-next_agent_package: TM-AG-003
+next_agent_package: TM-AG-004
 implementation_allowed: false
 ```
 
-Bir sonraki paket `TM-AG-003 Destination Research Agent` olacaktır.
+Bir sonraki paket `TM-AG-004 Place Intelligence Agent` olacaktır.
