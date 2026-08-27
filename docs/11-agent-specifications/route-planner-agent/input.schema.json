@@ -97,11 +97,12 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["locationRef", "stopRole", "fixedByUser"],
+        "required": ["locationRef", "stopRole", "fixedByUser", "selectionSourceRef"],
         "properties": {
           "locationRef": { "type": "string", "minLength": 1 },
           "stopRole": { "enum": ["PASS_THROUGH", "SHORT_STOP", "HALF_DAY", "FULL_DAY", "OVERNIGHT_ONLY", "OVERNIGHT_AND_DAY", "MULTI_DAY", "FINAL_DESTINATION"] },
           "fixedByUser": { "type": "boolean" },
+          "selectionSourceRef": { "type": "string", "minLength": 1 },
           "requestedDays": { "type": ["integer", "null"], "minimum": 1 }
         }
       }
