@@ -4,7 +4,7 @@
 |---|---|
 | Agent ID | TM-AG-015 |
 | Sürüm | 1.0 |
-| Durum | CANONICAL SPEC |
+| Durum | GOLDEN PACKAGE V1 READY |
 | Tarih | 2026-08-27 |
 
 ## 1. Purpose
@@ -49,10 +49,13 @@ verifiedSnapshotRef: string
 verifiedSnapshotHash: string
 verificationResultRef: string
 explanationPolicySnapshotId: string
+generationRefs: []
 blocks: ExplanationBlock[]
 unresolvedWarnings: []
 coverage: object
 ```
+
+`generationRefs[]` model/prompt/generation trace lineage'ını taşır.
 
 ## 5. ExplanationBlock
 
@@ -64,6 +67,7 @@ decisionRefs: []
 constraintRefs: []
 supportRefs: []
 assertedClaimRefs: []
+uncertaintyRefs: []
 text: string
 ```
 
@@ -102,10 +106,9 @@ Examples:
 
 Verified snapshot `UNKNOWN`, `ESTIMATED`, `PROVISIONAL` veya warning taşıyorsa Explanation kesinlik seviyesini yükseltemez.
 
-Examples:
-- `ESTIMATED` → “tahmini” kalmalı.
-- `UNKNOWN` → “bilinmiyor/doğrulanamadı” kalmalı.
-- conflicting evidence → conflict görünür kalmalı if approved for final display.
+- `ESTIMATED` → tahmini kalmalı.
+- `UNKNOWN` → bilinmiyor/doğrulanamadı kalmalı.
+- conflicting evidence → approved warning olarak görünür kalmalı.
 
 ## 10. Journey explanation — Issue #49
 
@@ -121,30 +124,32 @@ Ara şehir açıklaması şu verified ref ailelerine dayanabilir:
 
 ## 11. Knowledge explanation — Issue #50
 
-Precomputed knowledge kullanılmışsa Explanation bunu current live verification gibi sunamaz.
+Precomputed knowledge current live verification gibi sunulamaz.
 
-Örnek:
-- stable historical/local taste context açıklanabilir,
-- current opening hours ancak current verified evidence varsa kesin söylenebilir.
+Stable historical/local-taste context açıklanabilir; current opening hours ancak current verified evidence varsa kesin söylenebilir.
 
 ## 12. Event/season explanation — Issue #51
 
 - recurring festival identity ile confirmed occurrence ayrılır.
 - SEEK/AVOID plan bias decision refs üzerinden açıklanır.
 - climate normal ve current forecast ayrımı korunur.
-- “kış olduğu için deniz yasak” gibi kaba/unsupported açıklama yasaktır; activity-specific seasonal signal gerekir.
+- “kış olduğu için deniz yasak” gibi blanket açıklama yasaktır; activity-specific seasonal signal gerekir.
 
 ## 13. Claim support self-check
 
-Generation sonrası açıklamadaki fact-bearing claims extracted/normalized edilip `assertedClaimRefs[]` ile bağlanmalıdır.
+Generation sonrası fact-bearing claims extracted/normalized edilip `assertedClaimRefs[]` ile bağlanır.
 
 Her asserted claim için en az bir valid support ref gerekir.
 
 Unsupported asserted claim → block invalid; downstream'e geçemez.
 
-## 14. Allowed tools
+Output coverage invariant:
 
-Normalde dış dünya tool'u yok.
+```text
+unsupportedAssertedClaimCount = 0
+```
+
+## 14. Allowed tools
 
 Allowed:
 - `TL-012` Schema Validator
@@ -154,14 +159,18 @@ No Web/Places/Routes/Weather/Price/Review provider calls.
 
 ## 15. Provenance
 
-Her block en az:
+Her block:
 - subject refs,
 - decision refs,
 - support refs,
 - asserted claim refs
 ile trace edilebilir olmalıdır.
 
-Model/prompt version harness AgentTrace içinde tutulur; explanation policy snapshot output'ta korunur.
+Bundle ayrıca:
+- exact verified snapshot hash,
+- explanation policy snapshot,
+- `generationRefs[]`
+taşır.
 
 ## 16. Failure modes
 
@@ -175,6 +184,7 @@ Model/prompt version harness AgentTrace içinde tutulur; explanation policy snap
 - `CLIMATE_AS_FORECAST`
 - `VERIFIED_SNAPSHOT_MISMATCH`
 - `MISSING_SUPPORT_PROVENANCE`
+- `MISSING_GENERATION_PROVENANCE`
 
 ## 17. Harness binding
 
@@ -185,17 +195,19 @@ Model/prompt version harness AgentTrace içinde tutulur; explanation policy snap
 - R4 clarity/helpfulness semantic quality
 - R5 hallucination/uncertainty/claim-family attacks
 - R6 external research/new-decision authority leakage
-- R7 not normally needed; no live external research
+- R7 normally not needed; only live verified E2E rendering
 - R8 hallucination/explanation regressions
 
 ## 18. Current status
 
 ```yaml
-agent_spec_status: canonical_v1
+agent_spec_status: golden_v1_ready
 implementation_allowed: false
 prototype_allowed: false
-schemas: pending
-policies: pending
-fixtures: pending
+schemas: completed
+policies: completed
+fixtures: completed
 verified_input_only: true
+generation_provenance_required: true
+unsupported_asserted_claim_count_required: 0
 ```
