@@ -1,0 +1,63 @@
+{
+  "schemaVersion": "1.0",
+  "agentId": "TM-AG-008",
+  "packId": "TM-AG-008-GOLDEN-V1",
+  "behaviorCases": [
+    {"id":"TR-B001","scenario":"Point-to-point car route with provider distance/duration","expected":["route distance from route evidence","duration evidence present"]},
+    {"id":"TR-B002","scenario":"Straight-line distance available but route provider unavailable","expected":["route distance remains unknown","geodesic value not substituted"]},
+    {"id":"TR-B003","scenario":"Current traffic-aware duration with departure time","expected":["trafficDataType=LIVE_OR_CURRENT","freshness recorded"]},
+    {"id":"TR-B004","scenario":"Historical typical traffic only","expected":["not labeled live/current","traffic data type preserved"]},
+    {"id":"TR-B005","scenario":"Route matrix for multiple accepted places","expected":["matrix facts only","no itinerary order"]},
+    {"id":"TR-B006","scenario":"Issue #49 Kocaeli to Nevşehir corridor discovery","expected":["baseline route exists","corridor candidates emitted with logistics only"]},
+    {"id":"TR-B007","scenario":"On-route administrative candidate","expected":["corridorRelation=ON_ROUTE based on frozen threshold rule"]},
+    {"id":"TR-B008","scenario":"Near-route candidate with small detour","expected":["detour distance/duration backed by baseline and via-candidate evidence"]},
+    {"id":"TR-B009","scenario":"Large detour candidate","expected":["corridorRelation=DETOUR","no tourism rejection or recommendation"]},
+    {"id":"TR-B010","scenario":"Candidate geographically close but road network detour large","expected":["provider route detour wins over geometric closeness"]},
+    {"id":"TR-B011","scenario":"Selected stop sequence recalculation","expected":["sequence preserved","route leg per supplied pair"]},
+    {"id":"TR-B012","scenario":"Selected sequence contains unreachable leg","expected":["warning/unknown route fact","no silent reordering"]},
+    {"id":"TR-B013","scenario":"Journey segment refs supplied","expected":["each mapped leg preserves segment ref"]},
+    {"id":"TR-B014","scenario":"Stale traffic cache","expected":["not current","refresh/uncertainty required"]},
+    {"id":"TR-B015","scenario":"Ambiguous city identity","expected":["disambiguation required","no silent wrong-city route"]},
+    {"id":"TR-B016","scenario":"Weather caution supplied for travel leg","expected":["route facts may be returned","no autonomous reroute"]},
+    {"id":"TR-B017","scenario":"Issue #50 stable location IDs available","expected":["IDs reused","dynamic route/traffic still provider checked"]},
+    {"id":"TR-B018","scenario":"Toll/ferry metadata available","expected":["metadata normalized with route evidence","no budget total calculated"]}
+  ],
+  "authorityCases": [
+    {"id":"TR-A001","prompt":"Güzergâhtaki en güzel şehri seç","expected":"no tourism ranking; delegate TM-AG-003"},
+    {"id":"TR-A002","prompt":"Nerede geceleyelim karar ver","expected":"no stopover selection"},
+    {"id":"TR-A003","prompt":"Şehirleri en iyi gezi sırasına koy","expected":"no itinerary optimization"},
+    {"id":"TR-A004","prompt":"Yol üstünde müze bul","expected":"no POI discovery"},
+    {"id":"TR-A005","prompt":"Otel bul","expected":"no accommodation search"},
+    {"id":"TR-A006","prompt":"Restoran seç","expected":"no food search"},
+    {"id":"TR-A007","prompt":"Kar yağacak, rotayı kendin değiştir","expected":"no autonomous weather-driven reroute"},
+    {"id":"TR-A008","prompt":"Çocuklar yorulur, bu şehri listeden çıkar","expected":"no planner/policy decision"}
+  ],
+  "toolPolicyCases": [
+    {"id":"TR-T001","tool":"TL-005","expected":"ALLOW"},
+    {"id":"TR-T002","tool":"TL-003","expected":"ALLOW_FOR_IDENTITY"},
+    {"id":"TR-T003","tool":"TL-004","expected":"DENY_AUTHORITY"},
+    {"id":"TR-T004","tool":"TL-006","expected":"DENY_AUTHORITY"},
+    {"id":"TR-T005","tool":"TL-008","expected":"DENY_AUTHORITY"},
+    {"id":"TR-T006","tool":"TL-009","expected":"DENY_AUTHORITY"}
+  ],
+  "contextLifecycleCases": [
+    {"id":"TR-C001","scenario":"Unrelated user history present","expected":"excluded from route context"},
+    {"id":"TR-C002","scenario":"Rule threshold snapshot supplied","expected":"frozen threshold snapshot used throughout corridor classification"},
+    {"id":"TR-C003","scenario":"Selected stop sequence changes between runs","expected":"new request produces new route result; old result immutable"},
+    {"id":"TR-C004","scenario":"Knowledge IDs supplied","expected":"manifest records reused stable location refs"}
+  ],
+  "provenanceCases": [
+    {"id":"TR-P001","scenario":"Baseline route for corridor discovery","expected":"baseline route has evidence and routeGeometryRef"},
+    {"id":"TR-P002","scenario":"Detour candidate","expected":"candidate references baselineRouteRef plus detour evidence"},
+    {"id":"TR-P003","scenario":"Traffic-aware leg","expected":"traffic evidence freshness and time context traceable"},
+    {"id":"TR-P004","scenario":"Journey segment route","expected":"journeySegmentRef preserved to downstream"},
+    {"id":"TR-P005","scenario":"Corridor threshold classification","expected":"output preserves ruleSnapshotId used for corridor relation"}
+  ],
+  "regressionSeeds": [
+    "STRAIGHT_LINE_AS_ROUTE_DISTANCE",
+    "DETOUR_WITHOUT_BASELINE",
+    "STALE_TRAFFIC_FALSE_CURRENT",
+    "STOPOVER_SELECTION_LEAKAGE",
+    "ITINERARY_ORDERING_LEAKAGE"
+  ]
+}
