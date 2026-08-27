@@ -1,7 +1,7 @@
 # 11 — Agent Specifications
 
 **Doküman türü:** canonical agent specification alanı  
-**Durum:** canonical catalog v1.0 + five golden agent packages  
+**Durum:** canonical catalog v1.0 + six golden agent packages  
 **Kodlama durumu:** kapalı  
 **Prototype durumu:** kapalı
 
@@ -38,7 +38,7 @@ canonical_catalog_date: 2026-08-27
 | TM-AG-003 | Destination Research Agent | **golden package v1 ready** |
 | TM-AG-004 | Place Intelligence Agent | **golden package v1 ready** |
 | TM-AG-005 | Accommodation Agent | **golden package v1 ready** |
-| TM-AG-006 | Food & Local Taste Agent | pending |
+| TM-AG-006 | Food & Local Taste Agent | **golden package v1 ready** |
 | TM-AG-007 | Weather Agent | pending |
 | TM-AG-008 | Transportation Agent | pending |
 | TM-AG-009 | Route Planner Agent | pending |
@@ -118,10 +118,9 @@ route_calculation_delegated_to: TM-AG-008
 weather_delegated_to: TM-AG-007
 ```
 
-Fixture/provenance incelemesinde iki contract gap kapatılmıştır:
-
+Contract gaps:
 - `businessStatus` artık `value + evidenceRefs` taşır.
-- `eligibility.dispositionReasons[]` kararın nedenini doğrudan evidence'a bağlar.
+- `eligibility.dispositionReasons[]` kararın nedenini evidence'a bağlar.
 
 ### TM-AG-005 Accommodation
 
@@ -138,6 +137,28 @@ journey_issue_49_compatible: true
 ```
 
 Contract gap: Issue #49 stopover konaklama adayının journey segment provenance'ını korumak için `journeySegmentRef`, `stayQuerySignature` içine eklenmiştir.
+
+### TM-AG-006 Food & Local Taste
+
+```yaml
+behavior_cases: 16
+authority_cases: 8
+tool_policy_cases: 6
+context_lifecycle_cases: 4
+provenance_cases: 4
+local_taste_separated_from_venue_menu_fact: true
+hard_dietary_eligibility_before_family_fit: true
+review_analysis_delegated_to: TM-AG-012
+journey_issue_49_compatible: true
+knowledge_issue_50_compatible: true
+```
+
+Özel invariant:
+
+```text
+regional local-taste knowledge != venue current menu fact
+knowledge hit != dynamic freshness bypass
+```
 
 ## Eski first-phase specs
 
@@ -169,9 +190,10 @@ TM_AG_002_preference_policy_package: completed
 TM_AG_003_destination_research_package: completed
 TM_AG_004_place_intelligence_package: completed
 TM_AG_005_accommodation_package: completed
+TM_AG_006_food_local_taste_package: completed
 runtime_tests: pending
-next_agent_package: TM-AG-006
+next_agent_package: TM-AG-007
 implementation_allowed: false
 ```
 
-Bir sonraki paket `TM-AG-006 Food & Local Taste Agent` olacaktır.
+Bir sonraki paket `TM-AG-007 Weather Agent` olacaktır.
