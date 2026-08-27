@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tatil-modu.local/schemas/explanation-bundle.v1.json",
+  "title": "ExplanationBundle.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "explanationBundleId", "requestId", "verificationResultRef", "verifiedSnapshotRef", "verifiedSnapshotHash", "explanationPolicySnapshotId", "blocks", "unresolvedWarnings", "coverage"],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "explanationBundleId": { "type": "string", "minLength": 1 },
+    "requestId": { "type": "string", "minLength": 1 },
+    "verificationResultRef": { "type": "string", "minLength": 1 },
+    "verifiedSnapshotRef": { "type": "string", "minLength": 1 },
+    "verifiedSnapshotHash": { "type": "string", "minLength": 1 },
+    "explanationPolicySnapshotId": { "type": "string", "minLength": 1 },
+    "blocks": { "type": "array", "items": { "$ref": "#/$defs/block" } },
+    "unresolvedWarnings": { "type": "array", "items": { "type": "string" } },
+    "coverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["explainableRecordCount", "explainedRecordCount", "assertedClaimCount", "supportedAssertedClaimCount", "unsupportedAssertedClaimCount"],
+      "properties": {
+        "explainableRecordCount": { "type": "integer", "minimum": 0 },
+        "explainedRecordCount": { "type": "integer", "minimum": 0 },
+        "assertedClaimCount": { "type": "integer", "minimum": 0 },
+        "supportedAssertedClaimCount": { "type": "integer", "minimum": 0 },
+        "unsupportedAssertedClaimCount": { "const": 0 }
+      }
+    }
+  },
+  "$defs": {
+    "block": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["blockId", "type", "subjectRefs", "decisionRefs", "constraintRefs", "supportRefs", "assertedClaimRefs", "uncertaintyRefs", "text"],
+      "properties": {
+        "blockId": { "type": "string", "minLength": 1 },
+        "type": { "enum": ["WHY_SELECTED", "WHY_REJECTED", "TRADEOFF", "JOURNEY_STOP", "BUDGET", "WEATHER", "EVENT", "SEASONAL", "UNCERTAINTY", "ALTERNATIVE"] },
+        "subjectRefs": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+        "decisionRefs": { "type": "array", "items": { "type": "string" } },
+        "constraintRefs": { "type": "array", "items": { "type": "string" } },
+        "supportRefs": { "type": "array", "items": { "type": "string" } },
+        "assertedClaimRefs": { "type": "array", "items": { "type": "string" } },
+        "uncertaintyRefs": { "type": "array", "items": { "type": "string" } },
+        "text": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}
