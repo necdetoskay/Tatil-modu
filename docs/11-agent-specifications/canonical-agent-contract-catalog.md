@@ -3,83 +3,156 @@
 | Alan | Değer |
 |---|---|
 | Document ID | TM-AG-CATALOG-001 |
-| Sürüm | 1.0 |
-| Durum | CANONICAL |
+| Sürüm | **1.1** |
+| Durum | **CANONICAL / RECONCILED WITH 17 GOLDEN PACKAGES** |
 | Son güncelleme | 2026-08-27 |
 | Source of truth | `docs/11-agent-specifications/canonical-agent-contract-catalog.md` |
-| Pre-freeze referans | `docs/02-agents/agent-catalog.md` |
+| Package status | `docs/11-agent-specifications/README.md` |
+| Harness baseline | `docs/15-harness-and-orchestration/02-agent-contract-harness-baseline.md` |
 | Tool kataloğu | `docs/04-tools/tool-catalog.md` |
 | Kaynak güven politikası | `docs/01-architecture/data-source-trust-policy.md` |
 
 ## 1. Amaç
 
-Bu belge Tatil Modu uygulamasındaki agent mimarisinin kanonik sözleşmesini tanımlar.
+Bu belge Tatil Modu uygulamasındaki **16 specialist agent + Travel Orchestrator** setinin kanonik ownership ve üst-seviye davranış sözleşmesini tanımlar.
 
-Her agent için aşağıdakiler burada sabitlenir:
-
-- görev ve sorumluluk sınırı,
-- input/output domain objeleri,
-- izin verilen tool sınıfları,
-- izin verilen veri kaynakları,
-- authority envelope,
+Her agent için burada sabitlenenler:
+- görev/sorumluluk sınırı,
+- ana input/output domain objeleri,
+- tool sınıfları,
+- source/authority envelope,
 - yasak davranışlar,
-- invariant'lar,
-- temel PASS/FAIL test oracle'ları.
+- temel invariant ve PASS/FAIL oracle'ları.
 
-Bu belge runtime implementation değildir. Provider adapter, model, framework veya deployment ayrıntıları değişebilir; burada tanımlanan davranış sözleşmesi değişmez.
+Field-level schema, detailed rule, fixture, context ve provenance sözleşmeleri ilgili golden package altında kanoniktir.
 
-## 2. Ana mimari ilkeler
+## 2. Source-of-truth hiyerarşisi
 
-1. **Contract before code.** Agent kodlanmadan önce sözleşmesi test edilebilir olmalıdır.
-2. **Structured handoff.** Agentlar serbest metinle değil sürümlü domain objeleriyle haberleşir.
-3. **Tool-first facts.** Güncel/değişken gerçekler LLM hafızasından üretilmez; uygun tool ve evidence gerekir.
-4. **Authority envelope.** Her agent yalnız kendi karar alanında işlem yapabilir.
-5. **Deterministic before LLM.** Hesaplama, schema, constraint ve benzeri kurallar mümkün olduğunda deterministik tool ile yürütülür.
-6. **No silent degradation.** Fallback kaynak kalitesini sessizce düşüremez; confidence ve provenance güncellenir.
-7. **No invented facts.** Fiyat, çalışma saati, müsaitlik, rota süresi veya resmî politika uydurulamaz.
-8. **Targeted repair.** Bir hata yalnız etkilenen plan parçasını onarmalıdır; gereksiz tam yeniden üretim yapılmaz.
-9. **Evidence required.** Kritik iddialar provenance/evidence taşır.
-10. **Orchestrator coordinates; specialists decide.** Orchestrator uzman agent rolünü üstlenmez.
+```text
+1. canonical-agent-contract-catalog.md
+   → agent seti + ownership + high-level authority
 
-## 3. Ortak domain objeleri
+2. <agent>/input.schema.json + output.schema.json
+   → field-level data contract
+
+3. <agent>/authority/tool/source/decision/handoff policies
+   → operational envelope
+
+4. <agent>/tests/fixture-pack.v1.json
+   → replayable behavioral oracle
+
+5. README.md
+   → package completion/readiness state
+```
+
+Eski first-phase tekil `.md` spec'ler tarihsel referanstır; ownership kaynağı değildir.
+
+Bazı golden `specification.md` dosyalarının eski `Current status` bloklarında `pending` ifadesi kalmış olabilir. **Package completion state için yalnız README kanoniktir**; bu lokal metadata runtime/implementation readiness kararı vermez.
+
+## 3. Ana mimari ilkeler
+
+1. **Contract before code.**
+2. **Structured/versioned handoff.**
+3. **Tool-first current facts.**
+4. **Authority envelope.**
+5. **Deterministic before LLM.**
+6. **No silent degradation.**
+7. **No invented facts.**
+8. **Targeted repair.**
+9. **Evidence/provenance required.**
+10. **Context lifecycle is first-class.**
+11. **Harness quality is evaluated separately from model quality.**
+12. **Orchestrator coordinates; specialists decide.**
+13. **Verified state only.** Durable canonical trip state Verification PASS olmadan ilerlemez.
+14. **Knowledge-first does not mean freshness bypass.**
+15. **Recurring knowledge is not exact occurrence.**
+
+## 4. Ortak domain objeleri
+
+### 4.1 Core request/policy
 
 | Obje | Amaç |
 |---|---|
-| `TripRequest` | Kullanıcının ham tatil isteği |
-| `TravelerProfile` | Yolcular, yaşlar, araç ve hareket bağlamı |
-| `PreferenceSet` | Kullanıcı tercihleri |
-| `ConstraintSet` | Hard/soft kısıtlar |
-| `DestinationBrief` | Destinasyon/bölge intelligence özeti |
-| `PlaceCandidate` | Aktivite/ziyaret noktası adayı |
-| `AccommodationCandidate` | Konaklama adayı |
-| `FoodCandidate` | Restoran/yemek adayı |
-| `WeatherSignal` | Hava koşulu ve aktivite riski |
-| `RouteLeg` | A→B ulaşım bilgisi |
-| `DailyPlan` | Bir günlük zamanlanmış plan |
-| `BudgetLedger` | Maliyet kalemleri ve durumları |
-| `ReviewSignal` | Yorumlardan çıkarılmış tematik sinyal |
-| `OfficialFact` | Birincil/resmî kaynaktan doğrulanmış bilgi |
-| `Evidence` | Kaynak/provenance kaydı |
-| `VerificationResult` | PASS/FAIL/REPAIR doğrulama sonucu |
-| `Itinerary` | Çok günlük seyahat planı |
-| `AlternativePlan` | Değişen koşullar sonrası hedefli alternatif |
-| `AgentTrace` | Agent karar ve tool çağrı izi |
+| `TripRequest` | Kullanıcının ham seyahat isteği |
+| `TravelerProfile` | Yolcu/yaş/ulaşım bağlamı |
+| `PreferenceSet` | Soft tercihlerin normalize hali |
+| `ConstraintSet` | HARD/SOFT/CONDITIONAL_HARD kısıtlar |
+| `ExceptionPolicySet` | Soft hedeflerden kontrollü sapma koşulları |
+| `PreferencePolicyOutput` | TM-AG-002 üst-seviye handoff'u |
 
-### 3.1 Evidence minimum alanları
+### 4.2 Destination/place/stay/food
 
-```yaml
-Evidence:
-  sourceType: string
-  sourceName: string
-  sourceUrlOrId: string
-  retrievedAt: datetime
-  claim: string
-  confidence: number
-  freshness: string
-  authoritative: boolean
-```
+| Obje | Amaç |
+|---|---|
+| `DestinationBrief` / `DestinationBriefSet` | Bölge/şehir travel intelligence |
+| `PlaceCandidate` / `PlaceCandidateSet` | POI/aktivite adayları + eligibility |
+| `AccommodationCandidate` / `AccommodationCandidateSet` | Konaklama adayı + query/price/availability provenance |
+| `FoodCandidate` | İşletme bazlı yemek adayı |
+| `LocalTasteBrief` | Bölgesel/yöresel gastronomi bilgisi; venue current-menu fact değildir |
+| `FoodAndLocalTasteResult` | TM-AG-006 üst-seviye output |
 
-### 3.2 Fiyat durumları
+### 4.3 Weather/transport/journey
+
+| Obje | Amaç |
+|---|---|
+| `WeatherSignal` / `WeatherSignalSet` | FORECAST veya CLIMATE_NORMAL kaynaklı risk/suitability sinyali |
+| `RouteLeg` / `RouteMatrix` | Provider-backed ulaşım gerçeği |
+| `CorridorCityCandidate` | Route corridor lojistik adayı; tourism value değildir |
+| `TransportationResult` | Route legs/matrix/corridor output |
+| `JourneyPlan` | Issue #49 çok şehirli yolculuk planı |
+| `JourneySegment` | Şehirlerarası segment + stop role + selection provenance |
+| `DailyPlan` | Bir günlük gerçek zaman çizelgesi |
+| `DraftItinerary` | JourneyPlan + DailyPlan + alternatives/rejections/verification needs |
+
+### 4.4 Budget/evidence/intelligence
+
+| Obje | Amaç |
+|---|---|
+| `BudgetLedger` | known/projected/unknown maliyet ve limit değerlendirmesi |
+| `OfficialFact` | `VERIFIED|CONTRADICTED|UNKNOWN` claim-specific resmî doğrulama |
+| `ReviewSignal` | Aggregate experiential theme |
+| `ReviewSignalSet` | Sample/window/snapshot lineage taşıyan review intelligence output |
+| `Evidence` | Source/provenance kaydı |
+| `AgentTrace` / `DecisionTrace` / `ToolCallTrace` | Sistem-level observable provenance; hidden CoT değildir |
+
+### 4.5 Repair/verification/rendering
+
+| Obje | Amaç |
+|---|---|
+| `AdaptiveRepairResult` | Targeted repair impact/patch/preservation/trigger resolution |
+| `VerificationResult` | Gated `PASS|REPAIR|FAIL` |
+| `ExplanationBundle` | Verified fact subsetinden grounded rationale |
+| `FinalTravelPlan` | Verified yapıların kullanıcıya render edilmiş hali |
+| `OrchestrationResult` | Graph/node/handoff/retry/repair/state-gate workflow trace |
+
+### 4.6 Issue #50 background knowledge
+
+Bunlar runtime specialist ownership setinin dışında ayrı background subsystem tarafından üretilebilir/korunabilir:
+
+| Obje | Amaç |
+|---|---|
+| `TrustedSourceRegistryEntry` | Bir il/entity/claim ailesi için güvenilir lookup yolu |
+| `ReviewInsightSnapshot` | Derived review signal snapshot |
+| `LocalProductKnowledge` | Şehirle özdeş ürün/eşya/alışveriş bilgisi |
+| `TravelKnowledgeRecord` | Volatility/freshness/evidence-aware kalıcı travel knowledge |
+| `KnowledgeCoverageState` | İl/alan bazında coverage ve refresh önceliği |
+
+Background knowledge current dynamic fact yerine geçmez.
+
+### 4.7 Issue #51 event/season
+
+| Obje | Amaç |
+|---|---|
+| `RecurringEventKnowledge` | Festival/etkinliğin kalıcı kimliği ve tipik takvimi |
+| `EventOccurrence` | Belirli yıl/tarih için confirmed/cancelled/postponed occurrence |
+| `SeasonalSuitabilitySignal` | Activity-specific mevsim uygunluğu |
+| `EventImpactSignal` | Crowd/traffic/parking/accommodation ve SEEK/AVOID plan bias |
+
+`RecurringEventKnowledge != EventOccurrence`.
+
+## 5. Shared semantic states
+
+### 5.1 Monetary status
 
 ```text
 LIVE
@@ -88,32 +161,63 @@ ESTIMATED
 UNKNOWN
 ```
 
-`UNKNOWN` olan değer gerçek fiyat gibi sunulamaz.
+`UNKNOWN != 0`.
 
-## 4. Kaynak güven modeli
+### 5.2 Verification
 
-Bu katalog `docs/01-architecture/data-source-trust-policy.md` politikasını kullanır.
+```text
+PASS
+REPAIR
+FAIL
+```
 
-- **Tier 1:** resmî kurum, tesisin resmî sitesi, veri sahibinin API'si.
-- **Tier 2:** yetkili/lisanslı structured provider.
-- **Tier 3:** güvenilir yorum veya seyahat platformu.
-- **Tier 4:** genel web, blog, forum, sosyal içerik.
+### 5.3 Official fact
 
-Kritik ve değişken bilgiler yalnız Tier 4 ile kesinleştirilemez.
+```text
+VERIFIED
+CONTRADICTED
+UNKNOWN
+```
 
-### 4.1 V1 provider tercihleri
+`UNKNOWN` epistemik olarak geçerli sonuçtur.
 
-Bunlar provider adapter tercihleridir; agent sözleşmesinin kendisi değildir.
+### 5.4 Journey stop role — Issue #49
 
-- Place discovery/enrichment: Google Places tercih edilir.
-- Directions/traffic/distance matrix: Google Routes tercih edilir.
-- Accommodation live price/availability: Booking.com Demand API erişim varsa tercih edilir; erişim yoksa değer `UNKNOWN` kalabilir.
-- Türkiye kültür/müze/ören yeri doğrulaması: resmî Bakanlık/Kültür Portalı/MüzeKart ve ilgili kurum/işletme sayfaları önceliklidir.
-- Weather provider: adapter sözleşmesi sabit, somut provider ayrı kararla seçilecektir.
+```text
+PASS_THROUGH
+SHORT_STOP
+HALF_DAY
+FULL_DAY
+OVERNIGHT_ONLY
+OVERNIGHT_AND_DAY
+MULTI_DAY
+FINAL_DESTINATION
+```
 
-## 5. Tool sınıfları
+### 5.5 Event preference — Issue #51
 
-Mevcut `docs/04-tools/tool-catalog.md` kanoniktir.
+```text
+SEEK
+AVOID
+NEUTRAL
+UNKNOWN
+```
+
+## 6. Evidence/source trust
+
+Kaynak tiers:
+- Tier 1 primary/official/data-owner
+- Tier 2 authorized structured provider
+- Tier 3 experiential/review platform
+- Tier 4 discovery/general web
+
+Critical current facts Tier 4 ile kesinleştirilemez.
+
+Authority **claim-specific**tir; provider genel ünü claim authority yerine geçmez.
+
+Evidence en az source identity, retrievedAt, claim/scope, freshness ve confidence/authority ilişkisi taşımalıdır.
+
+## 7. Tool sınıfları
 
 - `TL-001` Web Search
 - `TL-002` Official Page Fetcher
@@ -130,410 +234,318 @@ Mevcut `docs/04-tools/tool-catalog.md` kanoniktir.
 - `TL-013` Rule Engine
 - `TL-014` Cache
 
-## 6. Kanonik agent seti
+Concrete provider seçimi adapter kararıdır; agent contract değildir. Weather provider henüz sabitlenmemiştir.
+
+## 8. Kanonik agent seti
 
 ### TM-AG-001 — Profile Agent
 
-**Mission:** `TripRequest` içindeki kullanıcı seyahat bağlamını yapılandırılmış `TravelerProfile` haline getirmek.
-
-**Input:** `TripRequest`, izinli kayıtlı kullanıcı bağlamı.  
-**Output:** `TravelerProfile`.  
-**Allowed tools:** `TL-012` yalnız schema doğrulama için; normal extraction için dış dünya tool'u yok.  
-**Allowed sources:** kullanıcı girdisi, izinli kayıtlı profil verisi.  
-**Authority:** profil alanlarını çıkarma/normalize etme.  
-**Forbidden:** web aramak, yaş/ulaşım/kişi sayısı uydurmak, politika üretmek, POI önermek.  
-**Invariant:** bilinmeyen alan bilinmiyor olarak kalır; tahmin gerçeğe çevrilemez.  
-**Primary oracle:** açıkça verilen yetişkin/çocuk yaşları, ulaşım ve hedef bire bir korunur; tool leakage = FAIL.
+**Mission:** TripRequest → `TravelerProfile`.  
+**Allowed tools:** TL-012 yalnız validation.  
+**Authority:** explicit kullanıcı/profile fact extraction/normalization.  
+**Forbidden:** external research, preference/policy üretimi, POI/otel/route önerisi.  
+**Invariant:** unknown stays unknown.
 
 ### TM-AG-002 — Preference & Policy Agent
 
-**Mission:** kullanıcı tercihlerini `PreferenceSet` ve hard/soft `ConstraintSet` haline getirmek.
-
-**Input:** `TripRequest`, `TravelerProfile`.  
-**Output:** `PreferenceSet`, `ConstraintSet`.  
-**Allowed tools:** `TL-012`, `TL-013`.  
-**Allowed sources:** kullanıcı girdisi ve açıkça kayıtlı tercih/politikalar.  
-**Authority:** kural sınıflandırma, şartlı kısıt üretme.  
-**Forbidden:** mekân bulmak, kullanıcının hard constraint'ini soft'a çevirmek, olmayan tercih uydurmak.  
-**Invariant:** kullanıcı tarafından “zorunlu/mutlaka/olmazsa olmaz” biçiminde verilen şartlar açık bir çelişki yoksa hard constraint olarak korunur.  
-**Primary oracle:** condition + requirement + strength doğru üretilecek; hard→soft downgrade = FAIL.
+**Mission:** TripRequest + profile → `PreferencePolicyOutput` (`PreferenceSet + ConstraintSet + ExceptionPolicySet`).  
+**Allowed tools:** TL-012, TL-013.  
+**Authority:** hard/soft/conditional policy classification.  
+**Forbidden:** discovery ve hard→soft downgrade.  
+**Key:** kadınlar plajı gibi koşullu zorunluluklar `CONDITIONAL_HARD`; “tercihen 150 km, çok iyiyse aşılabilir” soft + ExceptionPolicy'dir. Issue #51 event/crowd preference burada normalize edilir.
 
 ### TM-AG-003 — Destination Research Agent
 
-**Mission:** hedef destinasyon veya çevre bölgeler için seyahat intelligence üretmek.
-
-**Input:** `TripRequest`, `TravelerProfile`, `ConstraintSet`.  
-**Output:** `DestinationBrief[]`.  
-**Allowed tools:** `TL-001`, `TL-002`, `TL-003`, gerektiğinde `TL-007`, `TL-014`.  
-**Allowed sources:** Tier 1 resmî turizm/belediye/valilik kaynakları, Tier 2 structured geo/iklim sağlayıcıları, discovery için Tier 4.  
-**Authority:** bölge keşfi, alt bölge karşılaştırması, sezon/risk özeti.  
-**Forbidden:** günlük rota yazmak, otel seçmek, kesin hava tahmini yerine iklim normali kullanmak.  
-**Invariant:** uzak bölge önerisi constraint/radius gerekçesi taşımalıdır.  
-**Primary oracle:** güncel iddiaların evidence'ı vardır; climate-as-forecast = FAIL.
+**Mission:** city/region-level intelligence → `DestinationBriefSet`.  
+**Allowed tools:** TL-001, TL-002, TL-003, TL-007, TL-014.  
+**Authority:** region discovery/value/season context.  
+**Forbidden:** POI discovery, route duration, daily itinerary.  
+**Issue #49:** corridor city tourism value burada; corridor relation TM-AG-008'de.  
+**Issue #50/#51:** knowledge/event/season context current-fact bypass edemez.
 
 ### TM-AG-004 — Place Intelligence Agent
 
-**Mission:** gezilecek yer ve deneyim adaylarını bulmak, zenginleştirmek ve uygunluk sinyalleri üretmek.
-
-**Input:** `DestinationBrief`, `TravelerProfile`, `ConstraintSet`, tarih aralığı.  
-**Output:** `PlaceCandidate[]`.  
-**Allowed tools:** `TL-004`, `TL-002`, `TL-001`, `TL-003`, `TL-010`, `TL-014`.  
-**Allowed sources:** Tier 1 resmî işletme/kurum, Tier 2 place provider, gerektiğinde Tier 3/4 discovery.  
-**Authority:** candidate discovery, enrichment, eligibility/ranking sinyali.  
-**Forbidden:** günlük sıralama yapmak, otel rezervasyonu yapmak, çalışma saatini LLM hafızasından kesinleştirmek.  
-**Invariant:** `PlaceCandidate` en az stable place identity + konum + kategori + evidence taşır.  
-**Primary oracle:** hard constraint'e uymayan aday accepted set'e giremez; unsupported opening-hours claim = FAIL.
+**Mission:** place discovery/enrichment → `PlaceCandidateSet`.  
+**Allowed tools:** TL-004, TL-002, TL-001, TL-003, TL-010, TL-014.  
+**Authority:** stable identity, operational fields, hard eligibility, family-fit signal.  
+**Forbidden:** route scheduling/reservation.  
+**Invariant:** hard eligibility family-fit/rating'den önce.
 
 ### TM-AG-005 — Accommodation Agent
 
-**Mission:** aile, lokasyon, bütçe ve tarih koşullarına uygun konaklama adaylarını karşılaştırmak.
-
-**Input:** `TravelerProfile`, `DestinationBrief`, tarih aralığı, `ConstraintSet`.  
-**Output:** `AccommodationCandidate[]`.  
-**Allowed tools:** `TL-008`, `TL-004`, `TL-002`, `TL-009`, `TL-011`, `TL-014`.  
-**Allowed sources:** Tier 1 tesis sitesi, Tier 2 accommodation provider, Tier 3 review provider.  
-**Authority:** accommodation candidate discovery/ranking.  
-**Forbidden:** doğrulanmayan canlı fiyat/müsaitlik iddiası, rezervasyon veya ödeme.  
-**Invariant:** fiyat kaydı `LIVE|OFFICIAL|ESTIMATED|UNKNOWN` durumlarından birini taşır.  
-**Primary oracle:** erişim yoksa fiyat uydurmak yerine `UNKNOWN`; fake live price = FAIL.
+**Mission:** date/occupancy/location-aware stay candidates → `AccommodationCandidateSet`.  
+**Allowed tools:** TL-008, TL-004, TL-002, TL-009, TL-011, TL-014.  
+**Authority:** stay discovery/ranking.  
+**Forbidden:** fake live availability/price, booking/payment.  
+**Invariant:** live price binds exact query signature. Issue #49 `journeySegmentRef` korunur.
 
 ### TM-AG-006 — Food & Local Taste Agent
 
-**Mission:** rota alanına ve tercihlere uygun restoran/yemek/yerel tat adayları üretmek.
-
-**Input:** konum/rota alanı, `TravelerProfile`, `PreferenceSet`, `ConstraintSet`.  
-**Output:** `FoodCandidate[]`.  
-**Allowed tools:** `TL-004`, `TL-002`, `TL-001`, `TL-009`, `TL-010`, `TL-014`.  
-**Allowed sources:** Tier 1 işletme kaynakları, Tier 2 place provider, Tier 3 yorum kaynakları, discovery için Tier 4.  
-**Authority:** food candidate discovery/ranking.  
-**Forbidden:** günlük rota sırasını değiştirmek, doğrulanmamış menü/fiyatı kesinleştirmek.  
-**Invariant:** özel beslenme hard constraint'leri filtrelemeden önce uygulanır.  
-**Primary oracle:** hard dietary conflict accepted = FAIL.
+**Mission:** venue food candidates + regional gastronomy knowledge → `FoodAndLocalTasteResult`.  
+**Allowed tools:** TL-004, TL-002, TL-001, TL-009, TL-010, TL-014.  
+**Authority:** FoodCandidate eligibility/ranking + LocalTasteBrief.  
+**Forbidden:** route mutation; regional taste knowledge'dan venue current-menu fact çıkarımı.  
+**Issue #50:** yöresel lezzet background knowledge kullanılabilir, dynamic venue claims refresh ister.
 
 ### TM-AG-007 — Weather Agent
 
-**Mission:** lokasyon ve tarih için hava/iklim verisini aktivite risk sinyaline çevirmek.
-
-**Input:** location, datetime/date range, activity type.  
-**Output:** `WeatherSignal[]`.  
-**Allowed tools:** `TL-006`, ileri tarih için `TL-007`, `TL-014`.  
-**Allowed sources:** Tier 2 weather/climate provider.  
-**Authority:** weather risk ve indoor/outdoor preference signal üretmek.  
-**Forbidden:** planı tek başına iptal etmek/değiştirmek; iklim ortalamasını canlı tahmin olarak sunmak.  
-**Invariant:** forecast ve climate-normal veri türleri açıkça ayrılır.  
-**Primary oracle:** weather risk doğru; itinerary mutation = FAIL.
+**Mission:** `WeatherSignalSet`.  
+**Allowed tools:** TL-006, TL-007, TL-014.  
+**Authority:** weather/climate risk/plan-bias signal.  
+**Forbidden:** itinerary mutation.  
+**Invariant:** `FORECAST != CLIMATE_NORMAL`; provider horizon adapter metadata'sından gelir.
 
 ### TM-AG-008 — Transportation Agent
 
-**Mission:** iki veya daha fazla konum arasındaki ulaşım seçeneklerini, mesafe ve süreyi hesaplamak.
-
-**Input:** origin/destination, transport mode, datetime.  
-**Output:** `RouteLeg[]` veya route matrix.  
-**Allowed tools:** `TL-005`, gerektiğinde `TL-003`, `TL-014`.  
-**Allowed sources:** Tier 1/2 directions/traffic sağlayıcısı.  
-**Authority:** yol, trafik-aware süre ve ulaşım karşılaştırması.  
-**Forbidden:** günlük etkinlik sıralaması veya POI seçimi.  
-**Invariant:** sürüş süresi için düz çizgi mesafesi kullanılmaz.  
-**Primary oracle:** A→B ölçümü doğru adapter'dan gelir; itinerary ordering = FAIL.
+**Mission:** `TransportationResult` = route facts/matrix + Issue #49 corridor logistics.  
+**Allowed tools:** TL-005, TL-003, TL-014.  
+**Authority:** route distance/duration/traffic/corridor relation/detour.  
+**Forbidden:** stop tourism value veya day scheduling.  
+**Invariant:** straight-line distance route duration değildir.
 
 ### TM-AG-009 — Route Planner Agent
 
-**Mission:** aday yerleri çalışma saatleri, yol, trafik, aile temposu ve constraint'lere göre optimum günlük sıraya yerleştirmek.
-
-**Input:** `PlaceCandidate[]`, `RouteLeg[]/RouteMatrix`, `ConstraintSet`, `TravelerProfile`, accommodation context.  
-**Output:** `DailyPlan` / `Itinerary` taslağı.  
-**Allowed tools:** `TL-005`, `TL-011`, `TL-012`, `TL-013`, `TL-014`.  
-**Allowed sources:** yalnız girdilerdeki doğrulanmış facts + route provider sonuçları.  
-**Authority:** zamanlama, sıralama, süre slotları.  
-**Forbidden:** yeni POI uydurmak, hard constraint'i skorla telafi etmek.  
-**Invariant:** hard constraint violation bir “ceza puanı” değil rejection sebebidir.  
-**Primary oracle:** kapalı mekân slotu, impossible travel time veya hard constraint violation = FAIL.
+**Mission:** verified candidates/facts → `DraftItinerary` (`JourneyPlan + DailyPlan`).  
+**Allowed tools:** TL-005, TL-011, TL-012, TL-013, TL-014.  
+**Authority:** timing/order/stop role scheduling and feasible alternatives.  
+**Forbidden:** new POI discovery, hard constraint as score, total budget ownership.  
+**Invariant:** hard feasibility before semantic optimization; user-fixed selection origin preserved.
 
 ### TM-AG-010 — Budget Agent
 
-**Mission:** planın toplam ve kalem bazlı maliyetlerini deterministik olarak hesaplamak ve bütçe sınırını değerlendirmek.
-
-**Input:** `Itinerary`, accommodation/transport/fee records, `ConstraintSet`.  
-**Output:** `BudgetLedger`.  
-**Allowed tools:** `TL-010`, `TL-011`, `TL-013`, `TL-014`.  
-**Allowed sources:** doğrulanmış ücret kayıtları, Tier 1/2 fiyat sağlayıcıları.  
-**Authority:** maliyet hesabı, budget status ve belirsizlik.  
-**Forbidden:** bilinmeyen fiyatı gerçek fiyat yapmak, rota veya mekân seçmek.  
-**Invariant:** her parasal kalem provenance + `LIVE|OFFICIAL|ESTIMATED|UNKNOWN` statüsü taşır.  
-**Primary oracle:** arithmetic deterministik; fabricated amount = FAIL.
+**Mission:** selected itinerary costs → `BudgetLedger`.  
+**Allowed tools:** TL-010, TL-011, TL-012, TL-013, TL-014.  
+**Authority:** deterministic ledger/budget status.  
+**Forbidden:** alternative place/route selection.  
+**Invariants:** `UNKNOWN != 0`; dedupe; mixed currency needs evidence; critical unknown exposure explicit.  
+**Issue #50:** `SHOPPING` category supports local-product plans, but product knowledge is not current price.
 
 ### TM-AG-011 — Public Authority Intelligence Agent
 
-**Mission:** kritik iddiaları resmî/birincil kaynaklardan doğrulamak.
-
-**Input:** claim + entity/location + date context.  
-**Output:** `OfficialFact`.  
-**Allowed tools:** `TL-001`, `TL-002`, `TL-010`, `TL-014`.  
-**Allowed sources:** Tier 1 öncelikli: Bakanlık, belediye, valilik, milli park, müze, tesis/işletme resmî sayfası ve resmî tarife/duyuru.  
-**Authority:** `VERIFIED|CONTRADICTED|UNKNOWN` fact verification.  
-**Forbidden:** kullanıcı yorumu analizi, POI ranking, plan yazımı.  
-**Invariant:** resmî kanıt bulunamazsa `UNKNOWN`; guess yok.  
-**Primary oracle:** source mismatch veya unsupported `VERIFIED` = FAIL.
+**Mission:** claim-specific official verification → `OfficialFact`.  
+**Allowed tools:** TL-001, TL-002, TL-010, TL-014; TL-012 harness validation.  
+**Authority:** `VERIFIED|CONTRADICTED|UNKNOWN`.  
+**Forbidden:** review experience/ranking/planning.  
+**Issue #50:** Trusted Source Registry first; registry entry is lookup metadata, not fact evidence.  
+**Issue #51:** exact occurrence/seasonal closure/status verification.
 
 ### TM-AG-012 — Review Intelligence Agent
 
-**Mission:** normalize edilmiş yorumlardan pratik deneyim sinyalleri ve ortak temalar çıkarmak.
-
-**Input:** `ReviewRecordSet`, entity identity, analysis window.  
-**Output:** `ReviewSignal[]`.  
-**Allowed tools:** `TL-009`, `TL-011`, `TL-014`; duplicate/spam temizliği deterministik servis olarak kullanılabilir.  
-**Allowed sources:** Tier 3 review providers; gerektiğinde structured place review alanları.  
-**Authority:** trend/theme/signal/confidence üretmek.  
-**Forbidden:** tek yorumu gerçek kabul etmek, resmî fact üretmek.  
-**Invariant:** sample size, freshness ve source coverage confidence'a yansır.  
-**Primary oracle:** single-review→high-confidence fact = FAIL.
+**Mission:** normalized reviews → `ReviewSignalSet`.  
+**Allowed tools:** TL-009, TL-011, TL-014; TL-012 harness validation.  
+**Authority:** aggregate experiential themes/prevalence/confidence.  
+**Forbidden:** official fact.  
+**Invariant:** single review high-confidence general fact olamaz; dedupe/spam hygiene deterministic.  
+**Issue #50:** snapshot lineage + targeted refresh; raw review retention license-aware.
 
 ### TM-AG-013 — Adaptive Itinerary Agent
 
-**Mission:** yeni hava, kapanma, yoğunluk veya benzeri sinyal geldiğinde mevcut planı hedefli olarak onarmak.
-
-**Input:** `Itinerary` + change signal + relevant current evidence.  
-**Output:** `AlternativePlan` / repaired itinerary fragment.  
-**Allowed tools:** gerektiğinde `TL-004`, `TL-005`, `TL-006`, `TL-010`, `TL-011`, `TL-013`, `TL-014`.  
-**Allowed sources:** yalnız değişikliği doğrulamak ve alternatif parçayı yeniden planlamak için gerekli kaynaklar.  
-**Authority:** etkilenen gün/slot üzerinde targeted repair.  
-**Forbidden:** etkilenmeyen günleri gereksiz yeniden üretmek, hard constraint'i gevşetmek.  
-**Invariant:** minimal repair scope + before/after diff üretilebilir olmalıdır.  
-**Primary oracle:** tek günlük olay nedeniyle tüm 5 günlük planı sebepsiz değiştirmek = FAIL.
+**Mission:** verified change → `AdaptiveRepairResult`.  
+**Allowed tools:** TL-004, TL-005, TL-006, TL-010, TL-011, TL-012, TL-013, TL-014 only within repair scope.  
+**Authority:** targeted affected-scope mutation.  
+**Forbidden:** default full regeneration, user-fixed silent deletion, hard relaxation.  
+**Invariant:** impact scope + patch + preservation proof + trigger resolution + mandatory Verification recheck.  
+**Issue #49/#50/#51:** segment-aware repair, knowledge-first replacement, event/weather/season targeted triggers.
 
 ### TM-AG-014 — Verification Agent
 
-**Mission:** plan ve agent çıktılarında schema, evidence, constraint, saat, rota, bütçe ve tutarlılık kalite kapısını işletmek.
-
-**Input:** itinerary + selected candidates + budget + evidence + traces.  
-**Output:** `VerificationResult`.  
-**Allowed tools:** öncelikle `TL-012`, `TL-013`, `TL-011`; gerektiğinde yeniden doğrulama için ilgili read-only tool'lar.  
-**Allowed sources:** mevcut evidence; yalnız eksik/çelişkili kritik fact için yeniden doğrulama.  
-**Authority:** `PASS|FAIL|REPAIR` ve repair target üretmek.  
-**Forbidden:** nihai planı kendi başına yazmak veya yeni aday uydurmak.  
-**Invariant:** deterministic check mümkünse LLM judgement kullanılmaz.  
-**Primary oracle:** hard violation bulunan plan `PASS` alamaz; reviewer-generated POI = FAIL.
+**Mission:** candidate snapshot → `VerificationResult`.  
+**Primary tools:** TL-012, TL-013, TL-011; narrow owner-aligned read-only recheck only by explicit policy.  
+**Authority:** G0–G10 gates and actionable `PASS|REPAIR|FAIL`.  
+**Forbidden:** new candidate or itinerary mutation.  
+**Invariant:** zero blocking findings for PASS; deterministic failures semantic judge ile override edilemez; verified snapshot hash bound.
 
 ### TM-AG-015 — Explanation Agent
 
-**Mission:** doğrulanmış kararların nedenlerini kullanıcıya anlaşılır biçimde açıklamak.
-
-**Input:** verified decisions + `AgentTrace` + evidence summaries.  
-**Output:** explanation blocks.  
-**Allowed tools:** normalde yok; `TL-012` output validation için kullanılabilir.  
-**Allowed sources:** yalnız doğrulanmış plan ve decision trace.  
-**Authority:** gerekçe/karşılaştırma açıklaması.  
-**Forbidden:** yeni fact, yeni fiyat, yeni POI veya yeni karar eklemek.  
-**Invariant:** `facts(explanation) ⊆ facts(verified_plan/evidence)`.  
-**Primary oracle:** açıklamada yeni unsupported fact = FAIL.
+**Mission:** Verification PASS snapshot → `ExplanationBundle`.  
+**Allowed tools:** TL-012 / deterministic claim-support validator only.  
+**Authority:** grounded rationale rendering.  
+**Forbidden:** new fact/decision/candidate.  
+**Invariant:** `facts(explanation) ⊆ verified facts`; uncertainty cannot increase; generation/model/prompt lineage retained.
 
 ### TM-AG-016 — Final Composer Agent
 
-**Mission:** doğrulanmış yapılandırılmış çıktıları kullanıcıya sunulan nihai tatil planına dönüştürmek.
+**Mission:** verified structures + ExplanationBundle → `FinalTravelPlan`.  
+**Allowed tools:** TL-012 / deterministic render-binding validator only.  
+**Authority:** presentation.  
+**Forbidden:** research/planning/new alternatives/value changes/warning suppression.  
+**Invariant:** unsupported entity/claim, changed verified value, missing mandatory warning counts all zero.
 
-**Input:** verified itinerary, alternatives, budget, explanation, warnings.  
-**Output:** user-facing `FinalTravelPlan`.  
-**Allowed tools:** dış dünya tool'u yok; yalnız schema/format validator kullanılabilir.  
-**Allowed sources:** yalnız doğrulanmış upstream objeler.  
-**Authority:** sunum, düzenleme, özetleme.  
-**Forbidden:** web search, yeni mekân/fiyat/fact ekleme, doğrulanmış değeri değiştirme.  
-**Invariant:** composer renderer'dır; researcher değildir.  
-**Primary oracle:** tool call leakage veya upstream'de olmayan place = FAIL.
+## 9. TM-ORCH-001 — Travel Orchestrator
 
-## 7. TM-ORCH-001 — Travel Orchestrator
+**Mission:** TripRequest/workflow state → `OrchestrationResult`.  
+**Direct tools:** TL-012 and TL-014 orchestration metadata only.  
+**Authority:** registry resolution, capability graph, node selection, context/handoff validation, bounded retry/repair, quota guard, failure routing, VerifiedStateGate.  
+**Forbidden:** all specialist domain decisions and direct domain tools.  
+**Invariant:** `Orchestrator → Specialist → ToolGateway → Tool`; every graph mutation revisioned; every node attempt context/contract-bound; Verification PASS + matching snapshot required for durable state commit.  
+**Harness provenance:** `harnessPolicySnapshotId` required.  
+**Handoff provenance:** producer/consumer agent + object type/version/hash required.
 
-**Mission:** kullanıcı isteğini capability graph'a dönüştürmek, uzman agentları doğru sırada çalıştırmak, handoff'ları doğrulamak ve verification/repair döngüsünü yönetmek.
+## 10. Authority matrix
 
-**Input:** `TripRequest` + workflow state.  
-**Output:** orchestration trace + verified final pipeline result.  
-**Allowed tools:** `TL-012`, orchestration state/cache için `TL-014`; uzman domain dış dünya tool'larını doğrudan çağırmaz.  
-**Authority:** agent seçimi, dependency graph, retry/fallback, timeout, budget/cost guard, repair routing.  
-**Forbidden:** POI/otel/restoran araştırmak, rota hesaplamak, hava/fiyat fact'i üretmek, uzman kararını gizlice üstlenmek.  
-**Invariant:** normal dış-dünya erişimi `Orchestrator → Specialist Agent → Tool` biçimindedir; `Orchestrator → Domain Tool` authority violation sayılır.  
-**Primary oracle:** uzman tool'unu doğrudan çağırmak = FAIL; schema-invalid handoff'u downstream'e geçirmek = FAIL.
-
-## 8. Authority matrisi
-
-| Agent | Araştırabilir | Karar verebilir | Planı değiştirebilir | Final metin yazabilir |
+| Component | Research | Domain decision | Itinerary mutation | Final prose |
 |---|---:|---:|---:|---:|
-| Profile | Hayır | Profil | Hayır | Hayır |
-| Preference & Policy | Hayır | Constraint | Hayır | Hayır |
-| Destination Research | Evet | Bölge adayları | Hayır | Hayır |
-| Place Intelligence | Evet | POI adayları | Hayır | Hayır |
-| Accommodation | Evet | Konaklama adayları | Hayır | Hayır |
-| Food & Local Taste | Evet | Food adayları | Hayır | Hayır |
-| Weather | Evet | Risk sinyali | Hayır | Hayır |
-| Transportation | Evet | Route facts | Hayır | Hayır |
-| Route Planner | Sınırlı | Zamanlama/sıra | Evet, taslak | Hayır |
-| Budget | Sınırlı | Bütçe durumu | Hayır | Hayır |
-| Public Authority | Evet | Fact doğrulama | Hayır | Hayır |
-| Review Intelligence | Evet | Review signal | Hayır | Hayır |
-| Adaptive Itinerary | Sınırlı | Repair | Evet, hedefli | Hayır |
-| Verification | Sınırlı | PASS/FAIL/REPAIR | Hayır | Hayır |
-| Explanation | Hayır | Hayır | Hayır | Açıklama |
-| Final Composer | Hayır | Hayır | Hayır | Evet |
-| Orchestrator | Hayır | Workflow | Routing | Hayır |
+| Profile | No | Profile | No | No |
+| Preference & Policy | No | Constraint | No | No |
+| Destination Research | Yes | Region | No | No |
+| Place Intelligence | Yes | Place eligibility | No | No |
+| Accommodation | Yes | Stay candidate | No | No |
+| Food & Local Taste | Yes | Food/taste | No | No |
+| Weather | Yes | Weather signal | No | No |
+| Transportation | Yes | Route fact | No | No |
+| Route Planner | Limited | Time/order | Draft plan | No |
+| Budget | Limited | Budget | No | No |
+| Public Authority | Yes | OfficialFact | No | No |
+| Review Intelligence | Yes | ReviewSignal | No | No |
+| Adaptive Itinerary | Scope-limited | Repair | **Targeted** | No |
+| Verification | Recheck-limited | PASS/REPAIR/FAIL | No | No |
+| Explanation | No | No | No | Explanation only |
+| Final Composer | No | No | No | Yes |
+| Orchestrator | **No domain research** | Workflow only | Routing only | No |
 
-## 9. Kanonik execution graph
+## 11. Runtime execution graph
+
+Base path:
 
 ```text
 TripRequest
-   │
-   ▼
-TM-AG-001 Profile
-   │
-   ▼
-TM-AG-002 Preference & Policy
-   │
-   ▼
-TM-AG-003 Destination Research
-   │
-   ├──────────────┬──────────────┐
-   ▼              ▼              ▼
-TM-AG-004       TM-AG-005       TM-AG-006
-Places          Accommodation   Food
-   │              │              │
-   ├───────┬──────┴──────┬───────┘
-   ▼       ▼             ▼
-TM-AG-011 TM-AG-012    TM-AG-007
-Official  Reviews      Weather
-   │       │             │
-   └───────┴──────┬──────┘
-                  ▼
-             TM-AG-008
-           Transportation
-                  │
-                  ▼
-             TM-AG-009
-            Route Planner
-                  │
-                  ▼
-             TM-AG-010
-               Budget
-                  │
-                  ▼
-             TM-AG-014
-            Verification
-                  │
-            FAIL/REPAIR ──────► TM-AG-013 Adaptive Itinerary
-                  │                         │
-                  └───────────────◄─────────┘
-                  │ PASS
-          ┌───────┴────────┐
-          ▼                ▼
-     TM-AG-015         verified data
-     Explanation           │
-          └───────┬────────┘
-                  ▼
-             TM-AG-016
-           Final Composer
-
-TM-ORCH-001 bütün graph'ı koordine eder; domain tool'larını doğrudan kullanmaz.
+→ TM-AG-001 Profile
+→ TM-AG-002 Preference & Policy
+→ TM-AG-003 Destination Research
+→ parallel/conditional TM-AG-004 / 005 / 006 / 007 / 011 / 012
+→ TM-AG-008 Transportation
+→ TM-AG-009 Route Planner
+→ TM-AG-010 Budget
+→ TM-AG-014 Verification
+   ├─ REPAIR → owner rechecks → TM-AG-013 → affected rechecks → TM-AG-014
+   ├─ FAIL   → BLOCK/FAIL workflow
+   └─ PASS   → TM-AG-015 → TM-AG-016
 ```
 
-## 10. Ortak test merdiveni
+Issue #49 corridor enrichment, Issue #50 knowledge routing ve Issue #51 event/season capabilities conditional graph revisions/node selections olarak TM-ORCH-001 tarafından aktive edilir.
 
-Her agent aynı test seviyelerini desteklemelidir.
+## 12. Issue #49 canonical journey ownership
+
+```text
+TM-AG-008  → corridor logistics / detour facts
+TM-AG-003  → corridor-city tourism value
+User/TM-AG-002 → stop preferences/constraints
+TM-AG-004/005/006 → selected-stop enrichment
+TM-AG-008  → selected sequence route recalculation
+TM-AG-009  → stop role + JourneyPlan/DailyPlan scheduling
+TM-AG-013  → targeted journey repair
+TM-AG-014  → journey verification
+```
+
+No single agent owns all multi-city logic.
+
+## 13. Issue #50 canonical knowledge ownership
+
+Background subsystem proposal remains separate runtime lifecycle:
+- `TM-BG-001 Background Travel Knowledge Curator`
+- `TM-KS-001 Travel Knowledge Store`
+- `TM-SR-001 Trusted Travel Source Registry`
+- `TM-KQ-001 Knowledge Quality/Coverage Scheduler`
+
+These are backlog subsystem IDs, **not additional runtime TM-AG specialist agents yet**.
+
+Knowledge may precompute stable/yavaş değişen:
+- historical/cultural places,
+- local tastes,
+- local products,
+- trusted sources,
+- recurring review patterns,
+- recurring event identity/typical season.
+
+Runtime critical V2/V3 facts retain owner verification/freshness gates.
+
+## 14. Issue #51 event/season ownership
+
+```text
+TM-AG-002 → SEEK/AVOID/NEUTRAL + crowd/season preference
+TM-AG-003/004 → seasonal destination/place suitability context
+TM-AG-007 → climate/forecast weather distinction
+TM-AG-011 → exact event occurrence/official seasonal status
+TM-AG-012 → experiential crowd/queue/parking patterns
+TM-AG-008 → current route/traffic logistics
+TM-AG-009 → date-aware event/season scheduling
+TM-AG-013 → cancellation/postponement/crowd targeted repair
+TM-AG-014 → recurring-vs-occurrence and seasonal consistency gate
+```
+
+Yeni `Event Intelligence Agent` ancak ayrı contract/tool/lifecycle ihtiyacı kanıtlanırsa eklenir.
+
+## 15. Common RIVE/harness ladder
 
 | Seviye | Amaç |
 |---|---|
-| `R0 Contract` | Input/output schema ve required fields |
-| `R1 Deterministic` | Saf kural ve invariant'lar |
-| `R2 Fixture` | Kayıtlı tool cevaplarıyla bağımsız agent testi |
-| `R3 Tool Integration` | Gerçek adapter/tool sözleşmesi |
-| `R4 Semantic` | Görev kalitesi ve uygunluk |
-| `R5 Adversarial` | Eksik, çelişkili, stale ve bozuk veri |
-| `R6 Authority` | Agent sınır ihlali / tool leakage |
-| `R7 Live` | Güncel gerçek kaynaklarla kontrollü test |
-| `R8 Regression` | Geçmiş hata fixture'larının kalıcı testi |
+| R0 | Contract/schema/registry |
+| R1 | Deterministic invariants |
+| R2 | Fixture/replay |
+| R3 | Tool adapter integration |
+| R4 | Semantic quality |
+| R5 | Adversarial/missing/conflicting/stale |
+| R6 | Authority/tool/context leakage |
+| R7 | Controlled live |
+| R8 | Regression |
 
-Live test ilk doğrulama seviyesi değildir. Önce fixture/deterministic testler geçmelidir.
+Semantic evaluator hiçbir R0/R1/R6 hard failure'ı override edemez.
 
-## 11. Tool trace sözleşmesi
+## 16. System provenance
 
-Her dış tool çağrısı gözlemlenebilir olmalıdır.
+Every run/attempt must be traceable to:
+- agent ID + contract version/hash,
+- ContextManifest ref/hash,
+- model/prompt/runtime refs where applicable,
+- tool calls/evidence refs,
+- policy/evaluator refs,
+- upstream/downstream object refs/hashes,
+- graph revision/retry/repair lineage,
+- verification/state-commit refs.
+
+Hidden chain-of-thought is not required or stored; DecisionTrace contains observable input refs, applied rule refs, selections/rejections and reason codes.
+
+## 17. Legacy reconciliation
+
+Historical first-phase files remain for design history:
+
+| Önceki spec | Current ownership |
+|---|---|
+| `trip-intake-agent.md` | TM-AG-001 |
+| `constraint-policy-agent.md` | TM-AG-002 |
+| `family-suitability-agent.md` | TM-AG-001 + 002 + 004 |
+| `destination-candidate-agent.md` | TM-AG-003 |
+| `route-logistics-agent.md` | TM-AG-008 + 009 |
+| `accommodation-fit-agent.md` | TM-AG-005 |
+| `activity-fit-agent.md` | TM-AG-004 |
+| `day-plan-composer-agent.md` | TM-AG-009 + 013 |
+| `verification-evidence-agent.md` | TM-AG-011 + 014 |
+| `final-response-composer-agent.md` | TM-AG-015 + 016 |
+
+Conflict halinde v1.1 catalog + golden packages kazanır.
+
+## 18. New-agent gate
+
+Yeni agent ancak:
+- bağımsız ownership,
+- ayrı structured contract,
+- ayrı tool/authority lifecycle,
+- bağımsız fixture suite,
+- ayrı quality/confidence semantics
+kanıtlanırsa eklenebilir.
+
+Background worker veya capability her zaman runtime specialist agent olmak zorunda değildir.
+
+## 19. Current freeze state
 
 ```yaml
-ToolCall:
-  agentId: string
-  toolId: string
-  input: object
-  outputRef: string
-  timestamp: datetime
-  latencyMs: number
-  cost: number|null
-  cacheHit: boolean
-  status: string
-  evidenceRefs: []
+catalog_version: 1.1
+canonical_agent_count: 16
+canonical_orchestrator_count: 1
+golden_packages_ready: 17/17
+journey_issue_49_integrated: true
+knowledge_issue_50_integrated_as_backlog_subsystem_contract_input: true
+event_season_issue_51_integrated_as_backlog_capability_input: true
+cross_contract_reconciliation: in_progress
+runtime_implementation_allowed: false
 ```
-
-## 12. Ortak authority failure örnekleri
-
-Aşağıdakiler doğrudan test failure'dır:
-
-- Weather Agent'ın POI önermesi veya itinerary değiştirmesi.
-- Profile Agent'ın web araması yapması.
-- Place Intelligence Agent'ın otel rezervasyonu/ödeme yapması.
-- Route Planner'ın hard constraint'i sadece skor cezasına dönüştürmesi.
-- Budget Agent'ın fiyat uydurması.
-- Verification Agent'ın yeni mekân üretmesi.
-- Final Composer'ın web araması yapması veya yeni fact eklemesi.
-- Orchestrator'ın Place/Routes/Weather gibi domain tool'larını uzman agent yerine doğrudan çağırması.
-
-## 13. Eski canonical-draft setiyle reconciliation haritası
-
-`docs/11-agent-specifications/` içindeki 2026-08-27 öncesi ilk-phase dosyaları silinmez; önceki tasarım kanıtı olarak korunur ancak ownership açısından bu katalog önceliklidir.
-
-| Önceki spec | Yeni kanonik ownership |
-|---|---|
-| `trip-intake-agent.md` | TM-AG-001 Profile |
-| `constraint-policy-agent.md` | TM-AG-002 Preference & Policy |
-| `family-suitability-agent.md` | TM-AG-001 + TM-AG-002 + TM-AG-004 scoring responsibility |
-| `destination-candidate-agent.md` | TM-AG-003 Destination Research |
-| `route-logistics-agent.md` | TM-AG-008 Transportation + TM-AG-009 Route Planner |
-| `accommodation-fit-agent.md` | TM-AG-005 Accommodation |
-| `activity-fit-agent.md` | TM-AG-004 Place Intelligence |
-| `day-plan-composer-agent.md` | TM-AG-009 Route Planner + TM-AG-013 Adaptive Itinerary |
-| `verification-evidence-agent.md` | TM-AG-011 Public Authority + TM-AG-014 Verification |
-| `final-response-composer-agent.md` | TM-AG-015 Explanation + TM-AG-016 Final Composer |
-
-Bu reconciliation tamamlanana kadar eski spec dosyalarındaki isim/ownership çakışmalarında bu belge kazanır.
-
-## 14. Değişiklik yönetimi
-
-Yeni agent ancak aşağıdaki soruların tamamı olumluysa eklenebilir:
-
-- bağımsız ve net bir sorumluluk sınırı var mı,
-- ayrı input/output contract var mı,
-- farklı tool/model/prompt politikası gerekiyor mu,
-- bağımsız fixture testi yazılabilir mi,
-- ayrı authority envelope anlamlı mı,
-- ayrı confidence/quality metriği var mı?
-
-Agent sayısı keyfî biçimde artırılmaz.
-
-Bu katalogda görev sınırı veya ownership değişikliği mimari değişiklik sayılır ve sürüm artırımı gerektirir.
-
-## 15. Sonraki kanonikleştirme adımı
-
-Bu belge agent **catalog/contract baseline**'ını dondurur. Sonraki aşamada her `TM-AG-*` için ayrı specification paketi aşağıdaki alanlarla oluşturulur/güncellenir:
-
-1. Purpose
-2. Non-goals
-3. Inputs
-4. Outputs
-5. Required context
-6. Forbidden context
-7. Dependencies
-8. Handoff rules
-9. Hard constraints
-10. Evidence requirements
-11. Confidence rules
-12. Failure modes
-13. Clarification triggers
-14. Fixture requirements
-15. Evaluation rubric
-16. Example contract sketch
-17. Open design questions
-
-Bu paketler test harness'in agent bazında çalıştıracağı contract, fixture, adversarial, authority ve live testlerin kaynağı olacaktır.
