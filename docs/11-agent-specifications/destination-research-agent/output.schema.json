@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tatil-modu.local/schemas/destination-brief-set.v1.json",
+  "title": "DestinationBriefSet.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "requestId", "destinations", "researchWarnings", "overallConfidence"],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "requestId": { "type": "string", "minLength": 1 },
+    "destinations": { "type": "array", "items": { "$ref": "#/$defs/destinationBrief" } },
+    "researchWarnings": { "type": "array", "items": { "type": "string" } },
+    "overallConfidence": { "type": "number", "minimum": 0, "maximum": 1 }
+  },
+  "$defs": {
+    "destinationBrief": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["destinationId", "name", "administrativeType", "relationToTarget", "geoIdentity", "experienceThemes", "seasonality", "constraintRelevance", "routeValidationRequired", "researchStatus", "unresolvedClaims", "evidence", "confidence"],
+      "properties": {
+        "destinationId": { "type": "string", "minLength": 1 },
+        "name": { "type": "string", "minLength": 1 },
+        "administrativeType": { "enum": ["city", "district", "region", "resort_area", "nature_region", "thermal_region", "mixed"] },
+        "relationToTarget": { "enum": ["primary", "nearby", "exceptional"] },
+        "geoIdentity": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["latitude", "longitude", "evidenceRefs"],
+          "properties": {
+            "latitude": { "type": ["number", "null"], "minimum": -90, "maximum": 90 },
+            "longitude": { "type": ["number", "null"], "minimum": -180, "maximum": 180 },
+            "evidenceRefs": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        "experienceThemes": { "type": "array", "uniqueItems": true, "items": { "enum": ["culture_history", "nature", "beach_coast", "thermal_wellness", "family_attractions", "gastronomy", "rural_scenic", "urban_leisure"] } },
+        "seasonality": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["dataType", "summary", "evidenceRefs"],
+          "properties": {
+            "dataType": { "enum": ["CLIMATE_NORMAL", "OFFICIAL_SEASONAL_GUIDANCE", "NONE"] },
+            "summary": { "type": ["string", "null"] },
+            "evidenceRefs": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        "constraintRelevance": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["constraintKey", "status", "requiredNextCheck"],
+            "properties": {
+              "constraintKey": { "type": "string", "minLength": 1 },
+              "status": { "enum": ["RELEVANT", "NOT_APPLICABLE", "UNRESOLVED"] },
+              "requiredNextCheck": { "type": ["string", "null"] }
+            }
+          }
+        },
+        "routeValidationRequired": { "type": "boolean" },
+        "researchStatus": { "enum": ["VERIFIED_REGION_CONTEXT", "PARTIAL", "DISCOVERY_ONLY"] },
+        "unresolvedClaims": { "type": "array", "items": { "type": "string" } },
+        "evidence": { "type": "array", "items": { "$ref": "#/$defs/evidence" } },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["evidenceId", "claimType", "sourceTier", "sourceRef", "retrievedAt", "freshnessStatus"],
+      "properties": {
+        "evidenceId": { "type": "string", "minLength": 1 },
+        "claimType": { "type": "string", "minLength": 1 },
+        "sourceTier": { "type": "integer", "minimum": 1, "maximum": 4 },
+        "sourceRef": { "type": "string", "minLength": 1 },
+        "retrievedAt": { "type": "string", "format": "date-time" },
+        "freshnessStatus": { "enum": ["CURRENT", "STALE", "UNKNOWN"] }
+      }
+    }
+  }
+}
