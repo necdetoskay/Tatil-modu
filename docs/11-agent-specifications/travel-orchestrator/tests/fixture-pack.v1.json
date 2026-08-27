@@ -1,0 +1,95 @@
+{
+  "schemaVersion": "1.0",
+  "orchestratorId": "TM-ORCH-001",
+  "suiteId": "tm-orch-001-golden-v1",
+  "behaviorCases": [
+    {"id":"OR-B-001","name":"basic destination workflow","assert":["required_dependency_order","verification_before_explanation","completed_after_final_valid"]},
+    {"id":"OR-B-002","name":"parallel place accommodation food branch","assert":["parallel_only_after_dependencies","immutable_branch_outputs","valid_join"]},
+    {"id":"OR-B-003","name":"weather node selected for weather-sensitive dated plan","assert":["weather_selected_with_reason"]},
+    {"id":"OR-B-004","name":"weather node skipped when not materially required","assert":["weather_skipped_with_reason"]},
+    {"id":"OR-B-005","name":"invalid producer schema","assert":["handoff_blocked","consumer_not_run","failure_attribution_schema_or_handoff"]},
+    {"id":"OR-B-006","name":"transient provider failure retry","assert":["bounded_retry","attempt_incremented","failure_class_traceable"]},
+    {"id":"OR-B-007","name":"changed retry context","assert":["new_context_manifest","old_frozen_context_unchanged"]},
+    {"id":"OR-B-008","name":"authority violation in specialist","assert":["node_failed_or_blocked","no_invalid_handoff_forwarded"]},
+    {"id":"OR-B-009","name":"verification repair loop","assert":["repair_target_routed","adaptive_run","required_rechecks","verification_rerun"]},
+    {"id":"OR-B-010","name":"repair loop budget exhausted","assert":["no_unbounded_loop","terminal_blocked_or_failed"]},
+    {"id":"OR-B-011","name":"verification pass then explanation final","assert":["snapshot_hash_match","explanation_before_final"]},
+    {"id":"OR-B-012","name":"final composer structural failure","assert":["verified_domain_snapshot_not_mutated","render_retry_scope_only"]},
+    {"id":"OR-B-013","name":"missing mandatory provider prevents safe completion","assert":["terminal_blocked","no_silent_mandatory_skip"]},
+    {"id":"OR-B-014","name":"state commit with verification pass","assert":["commit_allowed_when_hash_matches"]},
+    {"id":"OR-B-015","name":"state commit with repair","assert":["commit_blocked"]},
+    {"id":"OR-B-016","name":"state commit without verification","assert":["commit_blocked"]},
+    {"id":"OR-B-017","name":"failed node attribution","assert":["failure_attribution_present","smallest_failing_scope_possible"]},
+    {"id":"OR-B-018","name":"conditional review analysis unnecessary","assert":["review_skipped_with_reason","no_unnecessary_provider_call"]},
+    {"id":"OR-B-019","name":"review analysis material to parking experience","assert":["review_selected_with_reason"]},
+    {"id":"OR-B-020","name":"registry contract hash mismatch","assert":["node_not_executed","terminal_blocked_or_failed"]}
+  ],
+  "authorityCases": [
+    {"id":"OR-A-001","action":"direct_web_search","expected":"FAIL"},
+    {"id":"OR-A-002","action":"direct_place_search","expected":"FAIL"},
+    {"id":"OR-A-003","action":"direct_route_lookup","expected":"FAIL"},
+    {"id":"OR-A-004","action":"direct_weather_lookup","expected":"FAIL"},
+    {"id":"OR-A-005","action":"choose_best_hotel_itself","expected":"FAIL"},
+    {"id":"OR-A-006","action":"mark_claim_verified_itself","expected":"FAIL"},
+    {"id":"OR-A-007","action":"mutate_itinerary_without_adaptive","expected":"FAIL"},
+    {"id":"OR-A-008","action":"commit_unverified_state","expected":"FAIL"},
+    {"id":"OR-A-009","action":"compose_final_before_pass","expected":"FAIL"}
+  ],
+  "toolPolicyCases": [
+    {"id":"OR-T-001","toolId":"TL-012","purpose":"handoff_schema_validation","expected":"ALLOW"},
+    {"id":"OR-T-002","toolId":"TL-014","purpose":"orchestration_checkpoint_metadata","expected":"ALLOW"},
+    {"id":"OR-T-003","toolId":"TL-001","purpose":"domain_search","expected":"DENY"},
+    {"id":"OR-T-004","toolId":"TL-004","purpose":"place_discovery","expected":"DENY"},
+    {"id":"OR-T-005","toolId":"TL-005","purpose":"route_calculation","expected":"DENY"},
+    {"id":"OR-T-006","toolId":"TL-006","purpose":"weather","expected":"DENY"},
+    {"id":"OR-T-007","toolId":"TL-008","purpose":"hotel_search","expected":"DENY"},
+    {"id":"OR-T-008","toolId":"TL-009","purpose":"review_analysis","expected":"DENY"},
+    {"id":"OR-T-009","toolId":"TL-010","purpose":"price_lookup","expected":"DENY"}
+  ],
+  "contextLifecycleCases": [
+    {"id":"OR-C-001","name":"one frozen manifest per node attempt","assert":["manifest_per_attempt","frozen_after_execution_start"]},
+    {"id":"OR-C-002","name":"retry same context","assert":["attempt_lineage_preserved","policy_allows_reuse_only_if_identical"]},
+    {"id":"OR-C-003","name":"retry changed context","assert":["new_manifest_ref","new_context_hash"]},
+    {"id":"OR-C-004","name":"whole workflow state dumped to specialist","assert":["context_scope_violation"]},
+    {"id":"OR-C-005","name":"redacted context trace","assert":["redaction_metadata_preserved"]},
+    {"id":"OR-C-006","name":"parallel nodes share mutable object","assert":["fail_shared_mutation","immutable_versioned_refs_required"]}
+  ],
+  "provenanceCases": [
+    {"id":"OR-P-001","name":"initial graph hash preserved","assert":["initial_graph_hash_present"]},
+    {"id":"OR-P-002","name":"graph revision on repair node activation","assert":["prior_new_hashes_present","trigger_refs_present"]},
+    {"id":"OR-P-003","name":"every node run binds contract and context","assert":["contract_hash_present","context_manifest_ref_present"]},
+    {"id":"OR-P-004","name":"every handoff binds producer consumer and object hash","assert":["handoff_lineage_complete"]},
+    {"id":"OR-P-005","name":"retry attempt lineage","assert":["prior_attempt_ref_or_attempt_number_traceable"]},
+    {"id":"OR-P-006","name":"repair loop lineage","assert":["verification_repair_adaptive_reverification_refs_complete"]},
+    {"id":"OR-P-007","name":"state commit lineage","assert":["candidate_hash_verification_ref_decision_present"]},
+    {"id":"OR-P-008","name":"failed run attribution","assert":["failure_class_component_agent_attempt_present"]},
+    {"id":"OR-P-009","name":"final status trace","assert":["final_verification_ref_and_final_plan_ref_consistent"]}
+  ],
+  "journeyIssue49Cases": [
+    {"id":"OR-J-001","name":"direct journey corridor disabled","assert":["corridor_nodes_skipped_with_reason"]},
+    {"id":"OR-J-002","name":"enriched corridor workflow","assert":["transport_corridor_before_destination_value","selected_stop_enrichment_before_route_recalc"]},
+    {"id":"OR-J-003","name":"user-fixed stop conflict after route change","assert":["no_silent_drop","adaptive_or_user_conflict_route"]},
+    {"id":"OR-J-004","name":"stopover hotel unavailable","assert":["targeted_accommodation_repair_path","unrelated_city_plan_preserved"]}
+  ],
+  "knowledgeIssue50Cases": [
+    {"id":"OR-K-001","name":"fresh knowledge hit","assert":["knowledge_hit_route","no_full_rediscovery"]},
+    {"id":"OR-K-002","name":"stale dynamic fact","assert":["targeted_refresh_owner_selected","verification_not_bypassed"]},
+    {"id":"OR-K-003","name":"coverage gap","assert":["full_discovery_selected_with_reason"]},
+    {"id":"OR-K-004","name":"trusted source registry exists","assert":["public_authority_registry_first_path_possible"]},
+    {"id":"OR-K-005","name":"background curator lifecycle","assert":["runtime_orchestrator_does_not_run_as_background_curator"]}
+  ],
+  "eventSeasonIssue51Cases": [
+    {"id":"OR-E-001","name":"event SEEK exact occurrence required","assert":["event_occurrence_verification_selected","recurring_memory_not_sufficient"]},
+    {"id":"OR-E-002","name":"event AVOID crowd material","assert":["review_or_event_impact_capabilities_selected_as_needed"]},
+    {"id":"OR-E-003","name":"winter trip seasonal planning","assert":["seasonal_context_selected","climate_not_exact_forecast"]},
+    {"id":"OR-E-004","name":"event cancelled after initial plan","assert":["official_recheck","adaptive_targeted_repair","verification_rerun"]},
+    {"id":"OR-E-005","name":"recurring event year unconfirmed","assert":["no_final_confirmed_event_without_exact_occurrence"]}
+  ],
+  "stateGateCases": [
+    {"id":"OR-S-001","verification":"PASS","hashMatch":true,"expected":"COMMIT_ALLOWED"},
+    {"id":"OR-S-002","verification":"PASS","hashMatch":false,"expected":"COMMIT_BLOCKED"},
+    {"id":"OR-S-003","verification":"REPAIR","hashMatch":true,"expected":"COMMIT_BLOCKED"},
+    {"id":"OR-S-004","verification":"FAIL","hashMatch":true,"expected":"COMMIT_BLOCKED"},
+    {"id":"OR-S-005","verification":"MISSING","hashMatch":false,"expected":"COMMIT_BLOCKED"}
+  ]
+}
