@@ -1,0 +1,151 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tatil-modu.local/schemas/draft-itinerary.v1.json",
+  "title": "DraftItinerary.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "itineraryId", "requestId", "planningPolicySnapshotId", "journeyPlan", "days", "alternatives", "rejectedCombinations", "verificationNeeds", "constraintSummary", "warnings", "overallConfidence"],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "itineraryId": { "type": "string", "minLength": 1 },
+    "requestId": { "type": "string", "minLength": 1 },
+    "planningPolicySnapshotId": { "type": "string", "minLength": 1 },
+    "journeyPlan": { "$ref": "#/$defs/journeyPlan" },
+    "days": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/dailyPlan" } },
+    "alternatives": { "type": "array", "items": { "$ref": "#/$defs/alternativePlan" } },
+    "rejectedCombinations": { "type": "array", "items": { "$ref": "#/$defs/rejectedCombination" } },
+    "verificationNeeds": { "type": "array", "items": { "$ref": "#/$defs/verificationNeed" } },
+    "constraintSummary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["hardConstraintRefs", "satisfiedRefs", "unresolvedRefs", "violatedRefs"],
+      "properties": {
+        "hardConstraintRefs": { "type": "array", "items": { "type": "string" } },
+        "satisfiedRefs": { "type": "array", "items": { "type": "string" } },
+        "unresolvedRefs": { "type": "array", "items": { "type": "string" } },
+        "violatedRefs": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "overallConfidence": { "type": "number", "minimum": 0, "maximum": 1 }
+  },
+  "$defs": {
+    "journeyPlan": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "originRef", "finalDestinationRef", "finalArrivalDeadline", "segments"],
+      "properties": {
+        "mode": { "enum": ["DIRECT", "ENRICHED_CORRIDOR"] },
+        "originRef": { "type": "string", "minLength": 1 },
+        "finalDestinationRef": { "type": "string", "minLength": 1 },
+        "finalArrivalDeadline": { "type": ["string", "null"], "format": "date-time" },
+        "segments": { "type": "array", "items": { "$ref": "#/$defs/journeySegment" } }
+      }
+    },
+    "journeySegment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["segmentId", "fromRef", "toRef", "travelDate", "routeLegRef", "stopRole", "arrivalWindow", "departureWindow", "dailyPlanRefs", "accommodationRef", "sourceRefs", "constraintRefs"],
+      "properties": {
+        "segmentId": { "type": "string", "minLength": 1 },
+        "fromRef": { "type": "string", "minLength": 1 },
+        "toRef": { "type": "string", "minLength": 1 },
+        "travelDate": { "type": "string", "format": "date" },
+        "routeLegRef": { "type": "string", "minLength": 1 },
+        "stopRole": { "enum": ["PASS_THROUGH", "SHORT_STOP", "HALF_DAY", "FULL_DAY", "OVERNIGHT_ONLY", "OVERNIGHT_AND_DAY", "MULTI_DAY", "FINAL_DESTINATION"] },
+        "arrivalWindow": { "$ref": "#/$defs/nullableTimeWindow" },
+        "departureWindow": { "$ref": "#/$defs/nullableTimeWindow" },
+        "dailyPlanRefs": { "type": "array", "items": { "type": "string" } },
+        "accommodationRef": { "type": ["string", "null"] },
+        "sourceRefs": { "type": "array", "items": { "type": "string" } },
+        "constraintRefs": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "dailyPlan": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["dayId", "date", "baseLocationRef", "blocks", "alternativeRefs", "totalTravelSeconds", "totalActivitySeconds", "constraintRefs", "warnings"],
+      "properties": {
+        "dayId": { "type": "string", "minLength": 1 },
+        "date": { "type": "string", "format": "date" },
+        "baseLocationRef": { "type": ["string", "null"] },
+        "blocks": { "type": "array", "items": { "$ref": "#/$defs/block" } },
+        "alternativeRefs": { "type": "array", "items": { "type": "string" } },
+        "totalTravelSeconds": { "type": "integer", "minimum": 0 },
+        "totalActivitySeconds": { "type": "integer", "minimum": 0 },
+        "constraintRefs": { "type": "array", "items": { "type": "string" } },
+        "warnings": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "block": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["blockId", "blockType", "start", "end", "entityRef", "routeLegRef", "journeySegmentRef", "sourceRefs", "constraintRefs", "verificationStatus"],
+      "properties": {
+        "blockId": { "type": "string", "minLength": 1 },
+        "blockType": { "enum": ["TRAVEL", "ACTIVITY", "MEAL", "REST", "CHECK_IN", "CHECK_OUT", "FREE_TIME"] },
+        "start": { "type": "string", "format": "date-time" },
+        "end": { "type": "string", "format": "date-time" },
+        "entityRef": { "type": ["string", "null"] },
+        "routeLegRef": { "type": ["string", "null"] },
+        "journeySegmentRef": { "type": ["string", "null"] },
+        "sourceRefs": { "type": "array", "items": { "type": "string" } },
+        "constraintRefs": { "type": "array", "items": { "type": "string" } },
+        "verificationStatus": { "enum": ["VERIFIED_INPUT", "NEEDS_VERIFICATION"] }
+      }
+    },
+    "alternativePlan": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["alternativeId", "type", "dayRef", "replacesBlockRefs", "replacementBlocks", "reasonCodes", "constraintRefs"],
+      "properties": {
+        "alternativeId": { "type": "string", "minLength": 1 },
+        "type": { "enum": ["WEATHER_ALTERNATIVE", "LOW_FATIGUE_ALTERNATIVE", "BUDGET_ALTERNATIVE", "ROUTE_ALTERNATIVE", "ACTIVITY_ALTERNATIVE"] },
+        "dayRef": { "type": "string", "minLength": 1 },
+        "replacesBlockRefs": { "type": "array", "items": { "type": "string" } },
+        "replacementBlocks": { "type": "array", "items": { "$ref": "#/$defs/block" } },
+        "reasonCodes": { "type": "array", "items": { "type": "string" } },
+        "constraintRefs": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "rejectedCombination": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["combinationId", "reasonCode", "constraintRefs", "entityRefs", "routeRefs", "evidenceRefs"],
+      "properties": {
+        "combinationId": { "type": "string", "minLength": 1 },
+        "reasonCode": { "type": "string", "minLength": 1 },
+        "constraintRefs": { "type": "array", "items": { "type": "string" } },
+        "entityRefs": { "type": "array", "items": { "type": "string" } },
+        "routeRefs": { "type": "array", "items": { "type": "string" } },
+        "evidenceRefs": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "verificationNeed": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["needId", "claimType", "entityRef", "affectsBlockRefs", "severity"],
+      "properties": {
+        "needId": { "type": "string", "minLength": 1 },
+        "claimType": { "type": "string", "minLength": 1 },
+        "entityRef": { "type": "string", "minLength": 1 },
+        "affectsBlockRefs": { "type": "array", "items": { "type": "string" } },
+        "severity": { "enum": ["BLOCKING", "NON_BLOCKING"] }
+      }
+    },
+    "nullableTimeWindow": {
+      "anyOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["start", "end"],
+          "properties": {
+            "start": { "type": "string", "format": "date-time" },
+            "end": { "type": "string", "format": "date-time" }
+          }
+        }
+      ]
+    }
+  }
+}
