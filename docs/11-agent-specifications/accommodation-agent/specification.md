@@ -67,6 +67,21 @@ Accommodation Agent journey sırasını belirlemez; yalnız Orchestrator/Route P
 
 Ana çıktı: `AccommodationCandidateSet`.
 
+Root output tek bir `stayQuerySignature` taşır ve bu signature içinde `journeySegmentRef` de korunur.
+
+```yaml
+stayQuerySignature:
+  locationName: string
+  checkIn: date
+  checkOut: date
+  adults: integer
+  childrenAges: []
+  rooms: integer
+  currency: string|null
+  stayRole: FINAL_DESTINATION | OVERNIGHT_ONLY | OVERNIGHT_AND_DAY | MULTI_DAY
+  journeySegmentRef: string|null
+```
+
 Her candidate:
 
 ```yaml
@@ -74,10 +89,11 @@ accommodationId: string
 providerIds: []
 name: string
 location: object
-stayQuerySignature: object
 availability:
   status: LIVE_AVAILABLE | LIVE_UNAVAILABLE | UNKNOWN
   retrievedAt: datetime|null
+  freshnessStatus: CURRENT | STALE | UNKNOWN
+  querySignatureMatch: boolean
   evidenceRefs: []
 priceQuote:
   status: LIVE | OFFICIAL | ESTIMATED | UNKNOWN
@@ -85,11 +101,14 @@ priceQuote:
   currency: string|null
   taxesFeesKnown: boolean|null
   retrievedAt: datetime|null
+  freshnessStatus: CURRENT | STALE | UNKNOWN
+  querySignatureMatch: boolean
   evidenceRefs: []
 occupancyFit:
   status: SATISFIED | VIOLATED | UNVERIFIED
+  childrenPolicyStatus: SATISFIED | VIOLATED | UNVERIFIED | NOT_APPLICABLE
   evidenceRefs: []
-facilities: object
+facilities: []
 policies: object
 eligibility:
   disposition: ACCEPTED | REJECTED | NEEDS_VERIFICATION
@@ -106,14 +125,16 @@ confidence: 0..1
 
 Live availability/price yalnız şu sorgu bağlamına aittir:
 
-- property,
+- property/location search context,
 - check-in/out,
 - adults,
 - children/ages provider desteklediği biçimde,
 - rooms/occupancy,
-- currency/booker context gerektiğinde.
+- currency/booker context gerektiğinde,
+- stay role,
+- journey segment varsa `journeySegmentRef`.
 
-Bir sorgunun LIVE fiyatı başka tarih/occupancy için yeniden kullanılamaz.
+Bir sorgunun LIVE fiyatı başka tarih/occupancy/segment için yeniden kullanılamaz.
 
 ## 7. Allowed tools
 
@@ -238,6 +259,8 @@ Downstream:
 - TM-AG-012 Review Intelligence: stable property entity ref.
 - TM-AG-014 Verification: full candidate/evidence package.
 
+For Issue #49 stopover stays, `journeySegmentRef` and `stayRole` must survive every handoff.
+
 ## 19. Harness binding
 
 - R0 schema/query-signature contract
@@ -253,11 +276,13 @@ Downstream:
 ## 20. Current status
 
 ```yaml
-agent_spec_status: canonical_v1
+agent_spec_status: golden_package_v1_ready
 implementation_allowed: false
 prototype_allowed: false
-schemas: pending
-policies: pending
-fixtures: pending
+schemas: completed
+policies: completed
+fixtures: completed
 journey_issue_49_compatible: true
+contract_gap_resolved:
+  - journeySegmentRef_preserved_in_stayQuerySignature
 ```
