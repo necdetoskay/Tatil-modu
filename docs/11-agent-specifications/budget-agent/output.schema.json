@@ -50,12 +50,13 @@
     "item": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["itemId", "sourceCostFactRef", "dedupeKey", "category", "itineraryRefs", "entityRef", "journeySegmentRef", "quantity", "unitAmount", "sourceAmount", "sourceCurrency", "normalizedAmount", "targetCurrency", "conversionRef", "priceStatus", "calculationMethod", "calculationRef", "freshnessStatus", "contextValidity", "taxesFeesKnown", "sourceRefs"],
+      "required": ["itemId", "sourceCostFactRef", "dedupeKey", "category", "budgetCriticality", "itineraryRefs", "entityRef", "journeySegmentRef", "quantity", "unitAmount", "sourceAmount", "sourceCurrency", "normalizedAmount", "targetCurrency", "conversionRef", "priceStatus", "calculationMethod", "calculationRef", "freshnessStatus", "contextValidity", "taxesFeesKnown", "sourceRefs"],
       "properties": {
         "itemId": { "type": "string", "minLength": 1 },
         "sourceCostFactRef": { "type": "string", "minLength": 1 },
         "dedupeKey": { "type": "string", "minLength": 1 },
         "category": { "enum": ["ACCOMMODATION", "ACTIVITY", "FOOD", "TRANSPORT", "FUEL", "TOLL", "PARKING", "TRANSIT", "FEE", "SHOPPING", "OTHER"] },
+        "budgetCriticality": { "enum": ["CRITICAL", "NON_CRITICAL"] },
         "itineraryRefs": { "type": "array", "items": { "type": "string" } },
         "entityRef": { "type": ["string", "null"] },
         "journeySegmentRef": { "type": ["string", "null"] },
