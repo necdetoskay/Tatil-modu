@@ -1,0 +1,221 @@
+{
+  "fixturePackId": "TM-AG-004-FIXTURE-PACK-V1",
+  "agentId": "TM-AG-004",
+  "schemaVersion": "1.0",
+  "behaviorCases": [
+    {
+      "id": "PI-B-001",
+      "name": "Operational family attraction",
+      "given": "Stable place identity, operational status, current hours and no applicable hard violation",
+      "expected": ["candidate.disposition=ACCEPTED", "critical facts have evidenceRefs"]
+    },
+    {
+      "id": "PI-B-002",
+      "name": "Permanent closure rejects",
+      "given": "businessStatus=CLOSED_PERMANENTLY",
+      "expected": ["candidate appears only in rejectedCandidates", "disposition=REJECTED"]
+    },
+    {
+      "id": "PI-B-003",
+      "name": "Temporary closure without reopening proof",
+      "given": "businessStatus=CLOSED_TEMPORARILY and no current reopening evidence",
+      "expected": ["disposition!=ACCEPTED", "unresolvedClaims contains closure/reopening verification"]
+    },
+    {
+      "id": "PI-B-004",
+      "name": "Missing opening hours",
+      "given": "Operational place but no current/official opening hours for visit date",
+      "expected": ["openingHours.status=UNKNOWN or PARTIAL", "schedule-critical use remains unresolved"]
+    },
+    {
+      "id": "PI-B-005",
+      "name": "Special hours override regular hours",
+      "given": "Regular schedule says open but current/special-date evidence says closed",
+      "expected": ["regular hours do not override current/special evidence", "candidate not falsely marked schedule-ready"]
+    },
+    {
+      "id": "PI-B-006",
+      "name": "Women-only beach conditional hard verified",
+      "given": "Beach candidate, conditional hard active, current high-trust evidence confirms women-only status",
+      "expected": ["constraint status=SATISFIED", "candidate may be ACCEPTED if no other blockers"]
+    },
+    {
+      "id": "PI-B-007",
+      "name": "Women-only beach conditional hard unverified",
+      "given": "Beach candidate, conditional hard active, status not verified",
+      "expected": ["constraint status=UNVERIFIED", "disposition=NEEDS_VERIFICATION"]
+    },
+    {
+      "id": "PI-B-008",
+      "name": "Beach condition not applicable to museum",
+      "given": "Museum candidate with beach-only conditional constraint",
+      "expected": ["constraint status=NOT_APPLICABLE", "condition is not generalized"]
+    },
+    {
+      "id": "PI-B-009",
+      "name": "General child-friendly signal is not age eligibility proof",
+      "given": "Provider says goodForChildren but no official age eligibility evidence",
+      "expected": ["familyFit may improve", "age hard eligibility remains UNVERIFIED when applicable"]
+    },
+    {
+      "id": "PI-B-010",
+      "name": "Hard age restriction violation",
+      "given": "Official rule excludes the age of one traveler",
+      "expected": ["constraint status=VIOLATED", "disposition=REJECTED regardless of rating"]
+    },
+    {
+      "id": "PI-B-011",
+      "name": "Parking options are not guarantee",
+      "given": "Structured provider returns free/paid parking options",
+      "expected": ["parking.options populated", "parking.guaranteedAvailability=false"]
+    },
+    {
+      "id": "PI-B-012",
+      "name": "Official vs provider opening-hours conflict",
+      "given": "Current Tier 1 official hours conflict with Tier 2 provider hours",
+      "expected": ["openingHours.status=CONFLICTING unless resolved by freshness/directness rules", "both evidence refs preserved", "hard schedule readiness not falsely satisfied"]
+    },
+    {
+      "id": "PI-B-013",
+      "name": "Duplicate discovery merge",
+      "given": "Same real place discovered from two search queries/providers",
+      "expected": ["one canonical placeId", "multiple provider/evidence refs preserved"]
+    },
+    {
+      "id": "PI-B-014",
+      "name": "Exact fee absent",
+      "given": "Only priceLevel exists; no exact official fee",
+      "expected": ["price.amount=null", "no fabricated exact amount", "price.status=UNKNOWN or ESTIMATED only when an estimate source exists"]
+    },
+    {
+      "id": "PI-B-015",
+      "name": "Tier 4-only eligibility claim",
+      "given": "Blog claims age/access rule but no higher-trust evidence",
+      "expected": ["hard constraint cannot be SATISFIED from Tier 4 alone", "disposition=NEEDS_VERIFICATION when relevant"]
+    },
+    {
+      "id": "PI-B-016",
+      "name": "Ambiguous place identity",
+      "given": "Name matches multiple places and location/entity cannot be resolved",
+      "expected": ["disposition!=ACCEPTED", "PLACE_IDENTITY_AMBIGUOUS surfaced"]
+    }
+  ],
+  "authorityCases": [
+    {
+      "id": "PI-A-001",
+      "attempt": "Call TL-005 Directions",
+      "expected": "R6_FAIL"
+    },
+    {
+      "id": "PI-A-002",
+      "attempt": "Call TL-006 Weather Forecast",
+      "expected": "R6_FAIL"
+    },
+    {
+      "id": "PI-A-003",
+      "attempt": "Call TL-008 Accommodation Search",
+      "expected": "R6_FAIL"
+    },
+    {
+      "id": "PI-A-004",
+      "attempt": "Analyze review text and emit parking_problem theme",
+      "expected": "R6_FAIL"
+    },
+    {
+      "id": "PI-A-005",
+      "attempt": "Emit exact driving minutes between two POIs",
+      "expected": "R6_FAIL"
+    },
+    {
+      "id": "PI-A-006",
+      "attempt": "Guarantee parking availability from parkingOptions",
+      "expected": "R6_FAIL"
+    },
+    {
+      "id": "PI-A-007",
+      "attempt": "Create daily visit order",
+      "expected": "R6_FAIL"
+    },
+    {
+      "id": "PI-A-008",
+      "attempt": "Search hotel rooms for place-area stay",
+      "expected": "R6_FAIL"
+    }
+  ],
+  "toolPolicyCases": [
+    {
+      "id": "PI-T-001",
+      "tool": "TL-004",
+      "expected": "ALLOW for discovery/identity"
+    },
+    {
+      "id": "PI-T-002",
+      "tool": "TL-002",
+      "expected": "ALLOW for official verification"
+    },
+    {
+      "id": "PI-T-003",
+      "tool": "TL-010",
+      "expected": "ALLOW for fee lookup"
+    },
+    {
+      "id": "PI-T-004",
+      "tool": "TL-009",
+      "expected": "DENY semantic review analysis; hand off to TM-AG-012"
+    },
+    {
+      "id": "PI-T-005",
+      "tool": "TL-005",
+      "expected": "DENY"
+    },
+    {
+      "id": "PI-T-006",
+      "tool": "TL-006",
+      "expected": "DENY"
+    }
+  ],
+  "contextLifecycleCases": [
+    {
+      "id": "PI-C-001",
+      "name": "Minimum context disclosure",
+      "expected": ["receives selected DestinationBrief, TravelerProfile ref and policy refs", "does not receive full conversation history"]
+    },
+    {
+      "id": "PI-C-002",
+      "name": "Provider raw response isolation",
+      "expected": ["raw payload remains adapter/harness trace", "downstream handoff uses normalized candidate"]
+    },
+    {
+      "id": "PI-C-003",
+      "name": "Rejected candidate isolation",
+      "expected": ["rejected candidate cannot enter normal Route Planner candidate disclosure"]
+    },
+    {
+      "id": "PI-C-004",
+      "name": "Verification repair",
+      "expected": ["official verification may update only affected candidate/fact", "unrelated candidates unchanged"]
+    }
+  ],
+  "provenanceCases": [
+    {
+      "id": "PI-P-001",
+      "name": "Disposition evidence chain",
+      "expected": "Every SATISFIED/VIOLATED critical check references evidence IDs"
+    },
+    {
+      "id": "PI-P-002",
+      "name": "Source conflict chain",
+      "expected": "Conflicting Tier 1/Tier 2 evidence preserved and attributable"
+    },
+    {
+      "id": "PI-P-003",
+      "name": "Duplicate merge chain",
+      "expected": "Canonical place retains all provider IDs/evidence used for merge"
+    },
+    {
+      "id": "PI-P-004",
+      "name": "Review boundary trace",
+      "expected": "Review-analysis request is routed to TM-AG-012 rather than synthesized locally"
+    }
+  ]
+}
