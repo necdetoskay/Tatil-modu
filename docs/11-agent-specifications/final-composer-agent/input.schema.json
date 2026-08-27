@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tatil-modu.local/schemas/final-composer-input.v1.json",
+  "title": "FinalComposerInput.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "requestId", "verificationResultRef", "verificationStatus", "verifiedSnapshotRef", "verifiedSnapshotHash", "itineraryRef", "alternativeRefs", "budgetLedgerRef", "explanationBundleRef", "explanationSnapshotHash", "warningRefs", "mandatoryWarningRefs", "finalRenderPolicySnapshotId", "locale"],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "requestId": { "type": "string", "minLength": 1 },
+    "verificationResultRef": { "type": "string", "minLength": 1 },
+    "verificationStatus": { "const": "PASS" },
+    "verifiedSnapshotRef": { "type": "string", "minLength": 1 },
+    "verifiedSnapshotHash": { "type": "string", "minLength": 1 },
+    "itineraryRef": { "type": "string", "minLength": 1 },
+    "alternativeRefs": { "type": "array", "items": { "type": "string" } },
+    "budgetLedgerRef": { "type": ["string", "null"] },
+    "explanationBundleRef": { "type": ["string", "null"] },
+    "explanationSnapshotHash": { "type": ["string", "null"] },
+    "warningRefs": { "type": "array", "items": { "type": "string" } },
+    "mandatoryWarningRefs": { "type": "array", "items": { "type": "string" } },
+    "finalRenderPolicySnapshotId": { "type": "string", "minLength": 1 },
+    "locale": { "type": "string", "minLength": 2 },
+    "presentationPreferences": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "verbosity": { "enum": ["COMPACT", "STANDARD", "DETAILED"] },
+        "showDecisionReasons": { "type": "boolean" },
+        "showBudgetBreakdown": { "type": "boolean" },
+        "showWarningsInline": { "type": "boolean" }
+      }
+    },
+    "contextManifestId": { "type": ["string", "null"] }
+  }
+}
