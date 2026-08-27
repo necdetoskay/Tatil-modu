@@ -4,7 +4,7 @@
   "title": "OfficialFact.v1",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schemaVersion", "officialFactId", "requestId", "claimRef", "subjectRef", "claimType", "authorityPolicySnapshotId", "sourcePolicySnapshotId", "status", "resolvedValue", "verificationScope", "sourceLookupPath", "sourceRegistryRefs", "primarySourceRefs", "evidence", "conflicts", "sourceFeedback", "freshnessStatus", "confidence"],
+  "required": ["schemaVersion", "officialFactId", "requestId", "claimRef", "subjectRef", "claimType", "authorityPolicySnapshotId", "sourcePolicySnapshotId", "status", "resolvedValue", "verificationScope", "sourceLookupPath", "sourceLookupTrace", "sourceRegistryRefs", "primarySourceRefs", "evidence", "conflicts", "sourceFeedback", "freshnessStatus", "confidence"],
   "properties": {
     "schemaVersion": { "const": "1.0" },
     "officialFactId": { "type": "string", "minLength": 1 },
@@ -40,6 +40,7 @@
       }
     },
     "sourceLookupPath": { "enum": ["REGISTRY_HIT", "REGISTRY_REFRESH", "GENERIC_DISCOVERY"] },
+    "sourceLookupTrace": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/lookupStep" } },
     "sourceRegistryRefs": { "type": "array", "items": { "type": "string" } },
     "primarySourceRefs": { "type": "array", "items": { "type": "string" } },
     "evidence": { "type": "array", "items": { "$ref": "#/$defs/evidence" } },
@@ -49,6 +50,19 @@
     "confidence": { "type": "number", "minimum": 0, "maximum": 1 }
   },
   "$defs": {
+    "lookupStep": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["stepIndex", "stepType", "sourceRef", "sourceRegistryRef", "outcome", "reasonCode"],
+      "properties": {
+        "stepIndex": { "type": "integer", "minimum": 0 },
+        "stepType": { "enum": ["REGISTRY_LOOKUP", "CACHE_LOOKUP", "OFFICIAL_FETCH", "GENERIC_DISCOVERY", "FEE_LOOKUP"] },
+        "sourceRef": { "type": ["string", "null"] },
+        "sourceRegistryRef": { "type": ["string", "null"] },
+        "outcome": { "enum": ["HIT", "MISS", "SUCCESS", "STALE", "DEAD", "SCOPE_MISMATCH", "ERROR", "SKIPPED"] },
+        "reasonCode": { "type": "string", "minLength": 1 }
+      }
+    },
     "evidence": {
       "type": "object",
       "additionalProperties": false,
