@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tatil-modu.local/schemas/food-local-taste-input.v1.json",
+  "title": "FoodLocalTasteInput.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "requestId", "locationContext", "travelerProfile", "policyContext", "mealWindow"],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "requestId": { "type": "string", "minLength": 1 },
+    "locationContext": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "scopeType"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "scopeType": { "enum": ["DESTINATION", "CORRIDOR_STOP", "PLACE_CLUSTER"] },
+        "destinationRef": { "type": ["string", "null"] },
+        "journeySegmentRef": { "type": ["string", "null"] }
+      }
+    },
+    "travelerProfile": { "type": "object" },
+    "policyContext": { "type": "object" },
+    "mealWindow": { "enum": ["breakfast", "lunch", "dinner", "snack", "flexible"] },
+    "dateTimeContext": { "type": ["string", "null"], "format": "date-time" },
+    "selectedPlaceRefs": { "type": "array", "items": { "type": "string" } },
+    "selectedAccommodationRef": { "type": ["string", "null"] },
+    "knowledgeRefs": { "type": "array", "items": { "type": "string" } },
+    "sourceRegistryRefs": { "type": "array", "items": { "type": "string" } },
+    "contextManifestId": { "type": ["string", "null"] }
+  }
+}
