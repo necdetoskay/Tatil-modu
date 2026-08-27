@@ -4,7 +4,7 @@
 |---|---|
 | Agent ID | TM-AG-008 |
 | Sürüm | 1.0 |
-| Durum | CANONICAL SPEC |
+| Durum | GOLDEN PACKAGE V1 |
 | Tarih | 2026-08-27 |
 
 ## 1. Purpose
@@ -24,12 +24,12 @@ locations + mode + time
 Yapar:
 - A→B route leg hesabı,
 - multi-point route matrix,
-- departure/arrival time bağlamında provider destekliyorsa traffic-aware duration,
+- traffic-aware duration provider destekliyorsa,
 - route geometry/corridor bağlamı,
 - Issue #49 `Route Corridor Discovery`,
-- corridor city candidate için detour km/dakika,
-- selected stopover sequence sonrası route recalculation,
-- toll/ferry/highway gibi provider route metadata'sı varsa provenance ile taşıma.
+- detour km/dakika,
+- supplied stop sequence route recalculation,
+- toll/ferry/highway metadata varsa provenance ile taşıma.
 
 Yapmaz:
 - hangi şehrin turistik olarak değerli olduğuna karar vermez,
@@ -42,14 +42,14 @@ Yapmaz:
 
 ## 3. Inputs
 
-- origin location
-- destination location veya location set
+- origin/destination veya location set
 - travel mode
-- departure/arrival datetime context if available
-- route request type
-- optional selected stopover refs
-- optional hard route-policy refs (yalnız evaluation metadata; policy ownership TM-AG-002)
-- optional journey plan / segment refs (Issue #49)
+- departure/arrival datetime context
+- request type
+- optional selected stop sequence refs
+- optional journey segment refs (Issue #49)
+- `ruleSnapshotId`
+- optional knowledge/location refs (Issue #50)
 - `contextManifestId`
 
 ## 4. Route request types
@@ -59,19 +59,21 @@ Yapmaz:
 - `CORRIDOR_DISCOVERY`
 - `STOP_SEQUENCE_RECALC`
 
-Transportation Agent request type dışındaki planlama işini üstlenmez.
-
 ## 5. Output
 
 Ana çıktı: `TransportationResult`.
 
 ```yaml
+requestType: string
+ruleSnapshotId: string|null
 routeLegs: RouteLeg[]
 matrixEntries: RouteMatrixEntry[]
 corridorCandidates: CorridorCityCandidate[]
 warnings: []
 overallConfidence: 0..1
 ```
+
+`ruleSnapshotId`, corridor classification threshold provenance'ını korur.
 
 ## 6. RouteLeg
 
@@ -87,22 +89,20 @@ trafficAwareDurationSeconds: integer|null
 departureTime: datetime|null
 arrivalTimeEstimate: datetime|null
 routeGeometryRef: string|null
-routeMetadata: object
 freshnessStatus: CURRENT | STALE | UNKNOWN
+routeMetadata: object
 evidence: []
 ```
 
-`distanceMeters` driving/transit route distance'dır; straight-line distance bu alana yazılamaz.
+`distanceMeters` route-provider yol mesafesidir; straight-line distance bu alana yazılamaz.
 
 ## 7. Route matrix
 
-Bir aday seti için pair-wise veya supported matrix result üretir. Matrix output plan sırası değildir; TM-AG-009 optimization girdisidir.
+Matrix output yalnız ulaşım gerçekleridir; TM-AG-009 için optimization girdisidir. Transportation matrix'ten kendi başına ziyaret sırası çıkarmaz.
 
 ## 8. Route Corridor Discovery — Issue #49
 
-Origin → final destination ana route geometry'si üzerinden anlamlı administrative city/province candidates bulunabilir.
-
-Her corridor candidate:
+Origin → final destination baseline route üzerinden corridor administrative candidates çıkarılır.
 
 ```yaml
 corridorCityId: string
@@ -111,6 +111,7 @@ name: string
 administrativeType: city | province | district
 corridorRelation: ON_ROUTE | NEAR_ROUTE | DETOUR
 routeProgressRatio: 0..1
+baselineRouteRef: string
 detourDistanceMeters: integer|null
 detourDurationSeconds: integer|null
 mainRouteEvidenceRefs: []
@@ -118,112 +119,79 @@ detourEvidenceRefs: []
 requiresDestinationResearch: true
 ```
 
-Transportation Agent yalnız lojistik relation/detour fact'i üretir.
+Transportation yalnız logistics relation/detour fact'i üretir; tourism/family value veya stop role üretmez.
 
-Şunları üretmez:
-- tourism value,
-- family value,
-- recommended stop role,
-- full-day/overnight decision.
+## 9. Corridor semantics
 
-Bunlar TM-AG-003/TM-AG-009 ownership'idir.
+- `ON_ROUTE`
+- `NEAR_ROUTE`
+- `DETOUR`
 
-## 9. Corridor candidate semantics
-
-- `ON_ROUTE`: candidate route corridor üzerinde/çok yakın; threshold canonical rule/config ile tanımlanır.
-- `NEAR_ROUTE`: küçük sapmayla erişilebilir.
-- `DETOUR`: anlamlı sapma gerektirir.
-
-Threshold değerleri agent prompt'unda uydurulmaz; registry/rule snapshot'tan gelir.
+Threshold değerleri frozen Rule Registry snapshot'ından gelir; prompt sezgisiyle uydurulmaz.
 
 ## 10. Detour invariant
 
-Detour:
-
 ```text
-route(origin → candidate → final)
+viaCandidate route
 minus
-baseline route(origin → final)
+baseline route
 ```
 
-veya provider/matrix eşdeğer yöntemle hesaplanır.
-
-Düz çizgi mesafe detour km/dakika yerine kullanılamaz.
+Detour distance/duration provider-backed route/matrix evidence ister. Geodesic yakınlık tek başına detour değildir.
 
 ## 11. Allowed tools
 
-- `TL-005` Directions & Distance Matrix — primary route capability.
-- `TL-003` Geocoding — location identity/disambiguation ve corridor administrative resolution gerektiğinde.
-- `TL-014` Cache — route/freshness-aware cache.
-- `TL-012` Schema Validator harness katmanında.
-- `TL-013` Rule Engine corridor thresholds / deterministic checks için.
+- `TL-005` Directions & Distance Matrix
+- `TL-003` Geocoding
+- `TL-014` Cache
+- `TL-012` Schema Validator
+- `TL-013` Rule Engine
 
-## 12. Forbidden tools / ownership
+## 12. Forbidden ownership
 
-- `TL-004` Place Search — place discovery TM-AG-004.
-- `TL-006` Weather — TM-AG-007.
-- `TL-008` Accommodation — TM-AG-005.
-- `TL-009` Review — TM-AG-012.
-- tourism research/search → TM-AG-003.
+- place discovery → TM-AG-004
+- weather → TM-AG-007
+- accommodation → TM-AG-005
+- review → TM-AG-012
+- tourism research/value → TM-AG-003
+- itinerary ordering → TM-AG-009
 
 ## 13. Traffic semantics
 
-Provider traffic-aware result destekliyorsa:
-- departure/arrival datetime context korunur,
-- traffic-aware duration ayrı alan olarak taşınır,
-- retrieval time/freshness evidence tutulur.
+Traffic-aware duration:
+- datetime context ile bağlanır,
+- freshness evidence taşır,
+- arrival guarantee değildir.
 
-Traffic-aware duration garanti edilmiş varış süresi değildir.
+`LIVE_OR_CURRENT` ile `HISTORICAL_OR_TYPICAL` ayrımı korunur.
 
-Historical/typical traffic ile live/current traffic aynı veri türü gibi sunulamaz.
+## 14. Stop sequence recalculation — Issue #49
 
-## 14. Distance semantics
+Kullanıcı/Route Planner bir stop sequence verdiyse Transportation bu sıranın route leg'lerini hesaplar; sırayı kendi başına değiştirmez.
 
-- route distance != straight-line distance.
-- `route distance` exact provider route output olduğunda evidence taşımalıdır.
-- approximate fallback varsa açık approximation status gerekir; exact route field'e sessizce yazılmaz.
+## 15. Journey provenance
 
-## 15. Stop sequence recalculation — Issue #49
+Bir leg belirli journey segmentine aitse `journeySegmentRef` korunur.
 
-Kullanıcı/Route Planner stopover seçtiğinde Transportation Agent verilen sırayı değerlendirebilir:
+Baseline route, detour route ve selected sequence evidence zinciri trace edilebilir olmalıdır.
 
-```text
-Kocaeli → Ankara → Aksaray → Nevşehir
-```
+## 16. Weather interaction
 
-ve her inter-city leg için route fact üretir.
+TM-AG-007 caution sinyali context olarak gelebilir. Transportation autonomous weather-driven reroute yapmaz.
 
-Transportation Agent sırayı kendi başına optimize etmez; request'te verilen sequence'i hesaplar veya matrix üretir.
+## 17. Knowledge compatibility — Issue #50
 
-## 16. Journey segment provenance
+Stable location/admin IDs reuse edilebilir; current route/traffic facts freshness gate'ini bypass edemez.
 
-Bir route leg belirli journey segmentine aitse `journeySegmentRef` korunur.
+## 18. Handoff
 
-Route evidence;
-- baseline route,
-- detour calculation,
-- selected stop sequence
-arasında trace edilebilir olmalıdır.
+- TM-AG-003: corridor logistic facts
+- TM-AG-009: route legs/matrix/corridor facts
+- TM-AG-010: route distance + toll/ferry metadata
+- TM-AG-013: repair-scope route recalculation
+- TM-AG-014: full route provenance
 
-## 17. Weather interaction
-
-TM-AG-007 travel-leg caution sinyali sağlayabilir. Transportation Agent weather nedeniyle reroute kararını kendi başına vermez; desteklenen route options varsa facts olarak döndürebilir, seçim TM-AG-009/TM-AG-013'e aittir.
-
-## 18. Knowledge compatibility — Issue #50
-
-Travel Knowledge Store stable location/admin identities ve known source/geo refs sağlayabilir.
-
-Ancak dynamic traffic/current route restrictions knowledge snapshot'tan current fact olarak alınmaz. Route provider/freshness gate gerekir.
-
-## 19. Handoff
-
-- TM-AG-003 Destination Research: corridor city location refs + logistic relation only.
-- TM-AG-009 Route Planner: RouteLeg/Matrix/Corridor facts.
-- TM-AG-010 Budget: distance/toll/ferry route metadata where supported.
-- TM-AG-013 Adaptive: affected route legs/matrix for repair.
-- TM-AG-014 Verification: full route evidence/freshness.
-
-## 20. Failure modes
+## 19. Failure modes
 
 - `STRAIGHT_LINE_AS_ROUTE_DISTANCE`
 - `TRAFFIC_DURATION_FALSE_GUARANTEE`
@@ -235,28 +203,46 @@ Ancak dynamic traffic/current route restrictions knowledge snapshot'tan current 
 - `STALE_TRAFFIC_FALSE_CURRENT`
 - `MISSING_ROUTE_PROVENANCE`
 - `JOURNEY_SEGMENT_REF_DROPPED`
+- `RULE_SNAPSHOT_PROVENANCE_DROPPED`
 
-## 21. Harness binding
+## 20. Harness binding
 
 - R0 route/corridor schema
-- R1 route-vs-straight-line, detour formula, provenance rules
+- R1 route-vs-geodesic, detour formula, provenance
 - R2 recorded route/matrix fixtures
 - R3 route/geocode adapter integration
-- R4 corridor candidate semantic quality
+- R4 corridor semantic quality
 - R5 stale traffic/provider outage/ambiguous geocode/extreme detour
 - R6 tourism/stop-selection/itinerary/place authority leakage
 - R7 controlled live route/matrix
 - R8 regressions
 
+## 21. Golden package coverage
+
+```yaml
+behavior_cases: 18
+authority_cases: 8
+tool_policy_cases: 6
+context_lifecycle_cases: 4
+provenance_cases: 5
+route_corridor_discovery: true
+rule_snapshot_provenance: true
+journey_issue_49_required: true
+knowledge_issue_50_compatible: true
+```
+
+Fixture-driven contract gap:
+- `ruleSnapshotId` output schema'ya eklenmiştir; corridor relation kararının hangi threshold snapshot'ıyla üretildiği artık replay edilebilir.
+
 ## 22. Current status
 
 ```yaml
-agent_spec_status: canonical_v1
+agent_spec_status: golden_package_v1
 implementation_allowed: false
 prototype_allowed: false
-schemas: pending
-policies: pending
-fixtures: pending
-journey_issue_49_required: true
-knowledge_issue_50_compatible: true
+schemas: completed
+policies: completed
+fixtures: completed
+runtime_tests: pending
+next_agent_package: TM-AG-009
 ```
