@@ -1,7 +1,7 @@
 # 11 — Agent Specifications
 
 **Doküman türü:** canonical agent specification alanı  
-**Durum:** first phase tamamlandı  
+**Durum:** canonical catalog v1.0 donduruldu  
 **Kodlama durumu:** kapalı  
 **Prototype durumu:** kapalı
 
@@ -11,46 +11,71 @@ Bu klasör, Tatil Modu için kodlamaya geçmeden önce her agent'ın görevini, 
 
 Bu alan runtime implementation değildir.
 
-Bu alanın amacı şudur:
-
 ```text
-Her agent kod yazılmadan önce kağıt üzerinde net, test edilebilir ve sınırları belli hale gelsin.
+Her agent kod yazılmadan önce kağıt üzerinde net, test edilebilir ve authority sınırları belli hale gelmelidir.
 ```
 
-## Ana karar
+## Source of truth
+
+Agent seti, ownership, authority envelope, tool izinleri, veri kaynakları ve ortak test seviyeleri için tek kanonik belge:
+
+- [`canonical-agent-contract-catalog.md`](canonical-agent-contract-catalog.md)
 
 ```yaml
 implementation_allowed: false
 prototype_allowed: false
 runtime_allowed: false
 agent_specs_required_before_coding: true
-source_of_truth: docs/11-agent-specifications/
+source_of_truth: docs/11-agent-specifications/canonical-agent-contract-catalog.md
 pre_freeze_reference: docs/02-agents/
-first_phase_agent_specs_completed: true
+canonical_catalog_version: 1.0
+canonical_catalog_date: 2026-08-27
 ```
 
-`docs/02-agents/` pre-freeze referans olarak kalır.
+## Kanonik agent seti
 
-Bu klasör ise yeni, canonical, pre-code agent specification alanıdır.
+| ID | Agent |
+|---|---|
+| TM-AG-001 | Profile Agent |
+| TM-AG-002 | Preference & Policy Agent |
+| TM-AG-003 | Destination Research Agent |
+| TM-AG-004 | Place Intelligence Agent |
+| TM-AG-005 | Accommodation Agent |
+| TM-AG-006 | Food & Local Taste Agent |
+| TM-AG-007 | Weather Agent |
+| TM-AG-008 | Transportation Agent |
+| TM-AG-009 | Route Planner Agent |
+| TM-AG-010 | Budget Agent |
+| TM-AG-011 | Public Authority Intelligence Agent |
+| TM-AG-012 | Review Intelligence Agent |
+| TM-AG-013 | Adaptive Itinerary Agent |
+| TM-AG-014 | Verification Agent |
+| TM-AG-015 | Explanation Agent |
+| TM-AG-016 | Final Composer Agent |
+| TM-ORCH-001 | Travel Orchestrator |
 
-## İlk-phase agent seti
+Ayrıntılı mission, input/output, tool, data source, authority, forbidden action, invariant ve test oracle tanımları kanonik katalogdadır.
 
-| Sıra | Agent | Dosya | Durum |
-|---:|---|---|---|
-| 1 | Trip Intake Agent | [`trip-intake-agent.md`](trip-intake-agent.md) | drafted |
-| 2 | Constraint & Policy Agent | [`constraint-policy-agent.md`](constraint-policy-agent.md) | drafted |
-| 3 | Family Suitability Agent | [`family-suitability-agent.md`](family-suitability-agent.md) | drafted |
-| 4 | Destination Candidate Agent | [`destination-candidate-agent.md`](destination-candidate-agent.md) | drafted |
-| 5 | Route & Logistics Agent | [`route-logistics-agent.md`](route-logistics-agent.md) | drafted |
-| 6 | Accommodation Fit Agent | [`accommodation-fit-agent.md`](accommodation-fit-agent.md) | drafted |
-| 7 | Activity Fit Agent | [`activity-fit-agent.md`](activity-fit-agent.md) | drafted |
-| 8 | Day Plan Composer Agent | [`day-plan-composer-agent.md`](day-plan-composer-agent.md) | drafted |
-| 9 | Verification & Evidence Agent | [`verification-evidence-agent.md`](verification-evidence-agent.md) | drafted |
-| 10 | Final Response Composer Agent | [`final-response-composer-agent.md`](final-response-composer-agent.md) | drafted |
+## Önceki first-phase spec dosyaları
+
+Aşağıdaki dosyalar silinmez. Bunlar önceki tasarım çalışmasının kanıtıdır ve yeni kanonik katalogla reconciliation için kullanılacaktır:
+
+- `trip-intake-agent.md`
+- `constraint-policy-agent.md`
+- `family-suitability-agent.md`
+- `destination-candidate-agent.md`
+- `route-logistics-agent.md`
+- `accommodation-fit-agent.md`
+- `activity-fit-agent.md`
+- `day-plan-composer-agent.md`
+- `verification-evidence-agent.md`
+- `final-response-composer-agent.md`
+
+İsim veya ownership çakışmasında `canonical-agent-contract-catalog.md` önceliklidir.
 
 ## Agent specification standardı
 
-Her agent spec dosyası aşağıdaki başlıkları içermelidir:
+Her kanonik agent için ayrı spec paketi aşağıdaki başlıkları içermelidir:
 
 1. Purpose
 2. Non-goals
@@ -70,30 +95,25 @@ Her agent spec dosyası aşağıdaki başlıkları içermelidir:
 16. Example contract sketch
 17. Open design questions
 
-## Kritik kural
+## İlgili kanonik belgeler
 
-Agent specification dosyaları kod değildir.
+- Tool sınıfları: `docs/04-tools/tool-catalog.md`
+- Veri güven/freshness: `docs/01-architecture/data-source-trust-policy.md`
+- Handoff standardı: `docs/01-architecture/handoff-contract-standard.md`
+- Contracts: `docs/12-contracts/`
+- Fixtures/evaluation: `docs/13-fixtures-and-evaluation/`
+- Tool/capability design: `docs/14-tool-and-capability-design/`
 
-Bu dosyalarda provider implementation, API çağrısı, UI component, runtime queue, database table veya execution framework tasarlanmaz.
-
-Bu dosyalar yalnızca agent'ın davranış sözleşmesini tanımlar.
-
-## Current status
+## Sonraki aşama
 
 ```yaml
-agent_specification_state: first_phase_completed
-completed_agent_specs:
-  - trip-intake-agent.md
-  - constraint-policy-agent.md
-  - family-suitability-agent.md
-  - destination-candidate-agent.md
-  - route-logistics-agent.md
-  - accommodation-fit-agent.md
-  - activity-fit-agent.md
-  - day-plan-composer-agent.md
-  - verification-evidence-agent.md
-  - final-response-composer-agent.md
-next_stage: docs/12-contracts/
-first_next_artifact: docs/12-contracts/README.md
+canonical_catalog: completed
+individual_spec_reconciliation: pending
+input_output_schema_freeze: pending
+tool_policy_freeze: pending
+fixture_matrix: pending
+authority_tests: pending
 implementation_allowed: false
 ```
+
+Bir sonraki çalışma, `TM-AG-001` ile başlayarak her agent için ayrı specification + schema + tool policy + fixture + authority test paketini kanonik katalogla uyumlu hale getirmektir.
