@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tatil-modu.local/schemas/adaptive-itinerary-input.v1.json",
+  "title": "AdaptiveItineraryInput.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "requestId", "itinerarySnapshot", "changeSignals", "planningPolicySnapshotId", "hardConstraints", "userFixedRefs", "candidatePool", "routeFacts", "budgetRepairNeeds", "verificationRepairTargets"],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "requestId": { "type": "string", "minLength": 1 },
+    "itinerarySnapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["itineraryRef", "snapshotHash", "dayRefs", "segmentRefs", "blockRefs"],
+      "properties": {
+        "itineraryRef": { "type": "string", "minLength": 1 },
+        "snapshotHash": { "type": "string", "minLength": 1 },
+        "dayRefs": { "type": "array", "items": { "type": "string" } },
+        "segmentRefs": { "type": "array", "items": { "type": "string" } },
+        "blockRefs": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "changeSignals": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/changeSignal" }
+    },
+    "planningPolicySnapshotId": { "type": "string", "minLength": 1 },
+    "hardConstraints": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["constraintId", "kind", "key", "condition", "operator", "value"],
+        "properties": {
+          "constraintId": { "type": "string", "minLength": 1 },
+          "kind": { "enum": ["HARD", "CONDITIONAL_HARD"] },
+          "key": { "type": "string", "minLength": 1 },
+          "condition": { "type": ["object", "null"] },
+          "operator": { "type": "string", "minLength": 1 },
+          "value": {}
+        }
+      }
+    },
+    "userFixedRefs": { "type": "array", "items": { "type": "string" } },
+    "candidatePool": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["candidateRef", "candidateType", "locationRef", "disposition", "freshnessStatus", "evidenceRefs"],
+        "properties": {
+          "candidateRef": { "type": "string", "minLength": 1 },
+          "candidateType": { "enum": ["PLACE", "ACCOMMODATION", "FOOD", "EVENT", "OTHER"] },
+          "locationRef": { "type": ["string", "null"] },
+          "disposition": { "enum": ["ACCEPTED", "REJECTED", "NEEDS_VERIFICATION"] },
+          "freshnessStatus": { "enum": ["CURRENT", "STALE", "UNKNOWN"] },
+          "evidenceRefs": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+    "routeFacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["routeLegRef", "fromRef", "toRef", "durationSeconds", "freshnessStatus", "evidenceRefs"],
+        "properties": {
+          "routeLegRef": { "type": "string", "minLength": 1 },
+          "fromRef": { "type": "string", "minLength": 1 },
+          "toRef": { "type": "string", "minLength": 1 },
+          "durationSeconds": { "type": ["integer", "null"], "minimum": 0 },
+          "freshnessStatus": { "enum": ["CURRENT", "STALE", "UNKNOWN"] },
+          "evidenceRefs": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+    "budgetRepairNeeds": { "type": "array", "items": { "$ref": "#/$defs/repairTarget" } },
+    "verificationRepairTargets": { "type": "array", "items": { "$ref": "#/$defs/repairTarget" } },
+    "contextManifestId": { "type": ["string", "null"] }
+  },
+  "$defs": {
+    "changeSignal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["changeSignalId", "triggerType", "subjectRef", "affectedRefHints", "observedAt", "freshnessStatus", "verificationStatus", "evidenceRefs"],
+      "properties": {
+        "changeSignalId": { "type": "string", "minLength": 1 },
+        "triggerType": { "enum": ["WEATHER_RISK_CHANGED", "PLACE_CLOSED", "OPENING_HOURS_CHANGED", "ROUTE_DISRUPTION", "ACCOMMODATION_UNAVAILABLE", "BUDGET_OVERFLOW", "EVENT_CANCELLED", "EVENT_POSTPONED", "EVENT_CROWD_IMPACT_CHANGED", "SEASONAL_OPERATION_CHANGED", "USER_PLAN_CHANGE", "VERIFICATION_REPAIR_TARGET", "CRITICAL_EVIDENCE_STALE"] },
+        "subjectRef": { "type": "string", "minLength": 1 },
+        "affectedRefHints": { "type": "array", "items": { "type": "string" } },
+        "observedAt": { "type": "string", "format": "date-time" },
+        "freshnessStatus": { "enum": ["CURRENT", "STALE", "UNKNOWN"] },
+        "verificationStatus": { "enum": ["VERIFIED", "PARTIAL", "CONFLICTING", "UNKNOWN", "USER_EXPLICIT"] },
+        "evidenceRefs": { "type": "array", "items": { "type": "string" } },
+        "payload": {}
+      }
+    },
+    "repairTarget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["repairTargetId", "reasonCode", "affectedRefs", "severity", "evidenceRefs"],
+      "properties": {
+        "repairTargetId": { "type": "string", "minLength": 1 },
+        "reasonCode": { "type": "string", "minLength": 1 },
+        "affectedRefs": { "type": "array", "items": { "type": "string" } },
+        "severity": { "enum": ["BLOCKING", "NON_BLOCKING"] },
+        "evidenceRefs": { "type": "array", "items": { "type": "string" } }
+      }
+    }
+  }
+}
