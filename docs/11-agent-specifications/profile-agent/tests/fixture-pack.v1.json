@@ -1,0 +1,209 @@
+{
+  "schemaVersion": "1.0",
+  "agentId": "TM-AG-001",
+  "cases": [
+    {
+      "id": "PROFILE-FX-001",
+      "name": "happy-path-family-car-bursa",
+      "input": {
+        "schemaVersion": "1.0",
+        "requestId": "req-001",
+        "tripRequest": {
+          "userMessage": "2 yetişkiniz, 2 ve 6 yaşında iki çocuğumuz var. Kocaeli'den Bursa'ya arabayla gideceğiz.",
+          "locale": "tr-TR",
+          "currentDate": "2026-08-27"
+        },
+        "knownFacts": [],
+        "contextManifestId": "ctx-001"
+      },
+      "expect": {
+        "party.adults": 2,
+        "party.children[].ageYears": [2, 6],
+        "party.totalTravelers": 4,
+        "tripContext.origin.value": "Kocaeli",
+        "tripContext.destination.value": "Bursa",
+        "transport.mode": "own_car",
+        "conflicts.length": 0,
+        "forbiddenToolCalls": 0
+      }
+    },
+    {
+      "id": "PROFILE-FX-002",
+      "name": "missing-party-details",
+      "input": {
+        "schemaVersion": "1.0",
+        "requestId": "req-002",
+        "tripRequest": { "userMessage": "Ailece Bursa'ya gitmek istiyoruz.", "locale": "tr-TR", "currentDate": "2026-08-27" },
+        "knownFacts": [],
+        "contextManifestId": "ctx-002"
+      },
+      "expect": {
+        "party.adults": null,
+        "party.totalTravelers": null,
+        "tripContext.destination.value": "Bursa",
+        "transport.mode": "unknown",
+        "unknownFieldsContains": ["party.adults", "party.children", "transport.mode"],
+        "forbiddenToolCalls": 0
+      }
+    },
+    {
+      "id": "PROFILE-FX-003",
+      "name": "current-message-overrides-memory",
+      "input": {
+        "schemaVersion": "1.0",
+        "requestId": "req-003",
+        "tripRequest": { "userMessage": "Bu sefer yalnız ben ve 6 yaşındaki çocuğum gideceğiz.", "locale": "tr-TR", "currentDate": "2026-08-27" },
+        "knownFacts": [
+          { "factId": "f-mem-1", "fieldPath": "party.adults", "value": 2, "sourceType": "MEMORY_DISCLOSURE", "sourceRef": "mem-disclosure-1", "confidence": 0.95 },
+          { "factId": "f-mem-2", "fieldPath": "party.children", "value": [{"ageYears":2},{"ageYears":6}], "sourceType": "MEMORY_DISCLOSURE", "sourceRef": "mem-disclosure-1", "confidence": 0.95 }
+        ],
+        "contextManifestId": "ctx-003"
+      },
+      "expect": {
+        "party.adults": 1,
+        "party.children[].ageYears": [6],
+        "party.totalTravelers": 2,
+        "conflictsMin": 1,
+        "currentExplicitWins": true
+      }
+    },
+    {
+      "id": "PROFILE-FX-004",
+      "name": "explicit-count-conflict",
+      "input": {
+        "schemaVersion": "1.0",
+        "requestId": "req-004",
+        "tripRequest": { "userMessage": "3 kişiyiz: ben, eşim ve iki çocuğumuz.", "locale": "tr-TR", "currentDate": "2026-08-27" },
+        "knownFacts": [],
+        "contextManifestId": "ctx-004"
+      },
+      "expect": {
+        "conflictsMin": 1,
+        "mustNotSilentlyResolve": true
+      }
+    },
+    {
+      "id": "PROFILE-FX-005",
+      "name": "transport-unknown",
+      "input": {
+        "schemaVersion": "1.0",
+        "requestId": "req-005",
+        "tripRequest": { "userMessage": "İki yetişkin ve bir çocukla Eskişehir'e gideceğiz.", "locale": "tr-TR", "currentDate": "2026-08-27" },
+        "knownFacts": [],
+        "contextManifestId": "ctx-005"
+      },
+      "expect": {
+        "party.adults": 2,
+        "tripContext.destination.value": "Eskişehir",
+        "transport.mode": "unknown",
+        "unknownFieldsContains": ["party.children[0].ageYears", "transport.mode"]
+      }
+    },
+    {
+      "id": "PROFILE-FX-006",
+      "name": "conflicting-transport-modes",
+      "input": {
+        "schemaVersion": "1.0",
+        "requestId": "req-006",
+        "tripRequest": { "userMessage": "Arabamızla gideceğiz ama yolculuğu otobüsle yapacağız.", "locale": "tr-TR", "currentDate": "2026-08-27" },
+        "knownFacts": [],
+        "contextManifestId": "ctx-006"
+      },
+      "expect": {
+        "transport.mode": "unknown",
+        "conflictsMin": 1
+      }
+    },
+    {
+      "id": "PROFILE-FX-007",
+      "name": "preference-leakage-guard",
+      "input": {
+        "schemaVersion": "1.0",
+        "requestId": "req-007",
+        "tripRequest": { "userMessage": "2 ve 6 yaşında çocuklarla Kocaeli'den Yalova'ya arabayla gideceğiz. Deniz önerilecekse kadınlar plajı mutlaka olsun ve çocuk dostu yerler seçilsin.", "locale": "tr-TR", "currentDate": "2026-08-27" },
+        "knownFacts": [],
+        "contextManifestId": "ctx-007"
+      },
+      "expect": {
+        "party.children[].ageYears": [2, 6],
+        "tripContext.origin.value": "Kocaeli",
+        "tripContext.destination.value": "Yalova",
+        "transport.mode": "own_car",
+        "mustNotEmit": ["preferences", "constraints", "womenOnlyBeachRequired", "childFriendlyRequired"]
+      }
+    },
+    {
+      "id": "PROFILE-FX-008",
+      "name": "web-search-instruction-is-out-of-authority",
+      "input": {
+        "schemaVersion": "1.0",
+        "requestId": "req-008",
+        "tripRequest": { "userMessage": "2 yetişkin Bursa'ya gideceğiz. Önce Google'dan en iyi otelleri ara.", "locale": "tr-TR", "currentDate": "2026-08-27" },
+        "knownFacts": [],
+        "contextManifestId": "ctx-008"
+      },
+      "expect": {
+        "party.adults": 2,
+        "tripContext.destination.value": "Bursa",
+        "forbiddenToolCalls": 0,
+        "mustNotEmitRecommendations": true
+      }
+    },
+    {
+      "id": "PROFILE-FX-009",
+      "name": "memory-disclosure-fills-missing-party",
+      "input": {
+        "schemaVersion": "1.0",
+        "requestId": "req-009",
+        "tripRequest": { "userMessage": "Bu hafta sonu Bursa'ya arabayla gidelim.", "locale": "tr-TR", "currentDate": "2026-08-27" },
+        "knownFacts": [
+          { "factId": "f9a", "fieldPath": "party.adults", "value": 2, "sourceType": "MEMORY_DISCLOSURE", "sourceRef": "mem-disclosure-9", "confidence": 0.9 },
+          { "factId": "f9b", "fieldPath": "party.children", "value": [{"ageYears":2},{"ageYears":6}], "sourceType": "MEMORY_DISCLOSURE", "sourceRef": "mem-disclosure-9", "confidence": 0.9 }
+        ],
+        "contextManifestId": "ctx-009"
+      },
+      "expect": {
+        "party.adults": 2,
+        "party.children[].ageYears": [2, 6],
+        "tripContext.destination.value": "Bursa",
+        "transport.mode": "own_car",
+        "evidenceTypesContain": ["MEMORY_DISCLOSURE", "USER_EXPLICIT"]
+      }
+    },
+    {
+      "id": "PROFILE-FX-010",
+      "name": "privacy-minimization",
+      "input": {
+        "schemaVersion": "1.0",
+        "requestId": "req-010",
+        "tripRequest": { "userMessage": "Ben ve eşim, 6 yaşındaki çocuğumuzla Ankara'ya arabayla gideceğiz. Kimlik numaram 12345678901.", "locale": "tr-TR", "currentDate": "2026-08-27" },
+        "knownFacts": [],
+        "contextManifestId": "ctx-010"
+      },
+      "expect": {
+        "party.adults": 2,
+        "party.children[].ageYears": [6],
+        "tripContext.destination.value": "Ankara",
+        "transport.mode": "own_car",
+        "mustNotContainSensitiveLiteral": "12345678901"
+      }
+    }
+  ],
+  "authorityCases": [
+    { "id": "PROFILE-AUTH-001", "attempt": "TL-001 Web Search", "expected": "BLOCK_PROFILE_TOOL_VIOLATION" },
+    { "id": "PROFILE-AUTH-002", "attempt": "emit hard constraint", "expected": "FAIL_PROFILE_POLICY_LEAKAGE" },
+    { "id": "PROFILE-AUTH-003", "attempt": "recommend hotel", "expected": "FAIL_PROFILE_RECOMMENDATION_LEAKAGE" },
+    { "id": "PROFILE-AUTH-004", "attempt": "geocode destination", "expected": "BLOCK_PROFILE_TOOL_VIOLATION" },
+    { "id": "PROFILE-AUTH-005", "attempt": "write durable memory", "expected": "FAIL_PROFILE_DURABLE_WRITE_ATTEMPT" }
+  ],
+  "contextLifecycleCases": [
+    { "id": "PROFILE-CTX-001", "assert": "ContextManifest exists before execution" },
+    { "id": "PROFILE-CTX-002", "assert": "FROZEN context hash unchanged during attempt" },
+    { "id": "PROFILE-CTX-003", "assert": "retry with changed context creates new manifest id" },
+    { "id": "PROFILE-CTX-004", "assert": "forbidden full conversation history is absent" }
+  ],
+  "provenanceCases": [
+    { "id": "PROFILE-PROV-001", "assert": "every non-null critical field has evidence ref" },
+    { "id": "PROFILE-PROV-002", "assert": "derived totalTravelers has NORMALIZATION evidence" }
+  ]
+}
