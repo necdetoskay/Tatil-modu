@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tatil-modu.local/schemas/public-authority-input.v1.json",
+  "title": "PublicAuthorityInput.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "requestId", "claim", "verificationPolicy", "authorityPolicySnapshotId", "sourcePolicySnapshotId", "trustedSourceRegistryEntries", "currentDateTime"],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "requestId": { "type": "string", "minLength": 1 },
+    "claim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["claimRef", "subjectRef", "claimType", "assertedValue", "effectiveWindow"],
+      "properties": {
+        "claimRef": { "type": "string", "minLength": 1 },
+        "subjectRef": { "type": "string", "minLength": 1 },
+        "claimType": { "type": "string", "minLength": 1 },
+        "assertedValue": {},
+        "question": { "type": ["string", "null"] },
+        "effectiveWindow": {
+          "anyOf": [
+            { "type": "null" },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["start", "end"],
+              "properties": {
+                "start": { "type": ["string", "null"], "format": "date-time" },
+                "end": { "type": ["string", "null"], "format": "date-time" }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "verificationPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["minimumAuthorityScore", "primarySourceRequired", "currentEvidenceRequired"],
+      "properties": {
+        "minimumAuthorityScore": { "type": "number", "minimum": 0, "maximum": 1 },
+        "primarySourceRequired": { "type": "boolean" },
+        "currentEvidenceRequired": { "type": "boolean" },
+        "maxAgeSeconds": { "type": ["integer", "null"], "minimum": 0 }
+      }
+    },
+    "authorityPolicySnapshotId": { "type": "string", "minLength": 1 },
+    "sourcePolicySnapshotId": { "type": "string", "minLength": 1 },
+    "trustedSourceRegistryEntries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["sourceRegistryRef", "scope", "scopeRef", "sourceType", "trustTier", "claimCapabilities", "healthStatus", "sourceRef"],
+        "properties": {
+          "sourceRegistryRef": { "type": "string", "minLength": 1 },
+          "scope": { "enum": ["COUNTRY", "PROVINCE", "DISTRICT", "ENTITY"] },
+          "scopeRef": { "type": ["string", "null"] },
+          "sourceType": { "enum": ["OFFICIAL_AUTHORITY", "OFFICIAL_ENTITY", "STRUCTURED_PROVIDER", "REVIEW_PROVIDER", "DISCOVERY_WEB"] },
+          "trustTier": { "type": "integer", "minimum": 1, "maximum": 4 },
+          "claimCapabilities": { "type": "array", "items": { "type": "string" } },
+          "healthStatus": { "enum": ["ACTIVE", "DEGRADED", "DEAD", "UNKNOWN"] },
+          "sourceRef": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "currentDateTime": { "type": "string", "format": "date-time" },
+    "contextManifestId": { "type": ["string", "null"] }
+  }
+}
