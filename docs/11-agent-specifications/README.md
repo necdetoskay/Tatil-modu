@@ -1,9 +1,9 @@
 # 11 — Agent Specifications
 
 **Doküman türü:** canonical agent specification alanı  
-**Durum:** canonical catalog v1.0 + **17/17 golden contract packages**  
-**Kodlama durumu:** kapalı  
-**Prototype durumu:** kapalı
+**Durum:** canonical catalog v1.1 + **17/17 golden contract packages + reconciliation PASS**  
+**Kodlama durumu:** runtime kapalı; **M1 harness implementation/test scaffolding açık**  
+**Prototype durumu:** domain runtime kapalı
 
 ## Amaç
 
@@ -16,18 +16,22 @@ Her agent kod yazılmadan önce net, test edilebilir ve authority sınırları b
 ## Source of truth
 
 - Agent seti/ownership: [`canonical-agent-contract-catalog.md`](canonical-agent-contract-catalog.md)
+- Cross-contract audit: [`contract-reconciliation-audit-v1.md`](contract-reconciliation-audit-v1.md)
 - Harness/test lifecycle: `docs/15-harness-and-orchestration/02-agent-contract-harness-baseline.md`
 - Radar/DeepSeek Harness adoption: `docs/15-harness-and-orchestration/01-radar-deepseek-harness-adoption-review.md`
 
 ```yaml
-implementation_allowed: false
-prototype_allowed: false
-runtime_allowed: false
-agent_specs_required_before_coding: true
+runtime_implementation_allowed: false
+m1_harness_implementation_allowed: true
+live_provider_tests_as_first_step: false
+agent_specs_required_before_runtime: true
 source_of_truth: docs/11-agent-specifications/canonical-agent-contract-catalog.md
-canonical_catalog_version: 1.0
+canonical_catalog_version: 1.1
 canonical_catalog_date: 2026-08-27
+cross_contract_reconciliation: PASS
 ```
+
+> Package readiness için bu README kanoniktir. Bazı erken oluşturulmuş `specification.md` dosyalarındaki lokal `Current status` blokları stale olabilir ve readiness kararını override etmez.
 
 ## Kanonik agent seti ve paket durumu
 
@@ -65,286 +69,89 @@ Her hazır paket şunları içerir:
 - `evaluation-rubric.md`
 - `tests/fixture-pack.v1.json`
 
-## Paket özetleri
+## Önemli fixture-driven contract düzeltmeleri
 
-### TM-AG-001 Profile
-```yaml
-normal_and_edge_cases: 10
-authority_cases: 5
-context_lifecycle_cases: 4
-provenance_cases: 2
+| Component | Fixture ile yakalanan ana gap |
+|---|---|
+| TM-AG-002 | `ExceptionPolicySet` |
+| TM-AG-003 | exceptional destination `exceptionPolicyRefs` |
+| TM-AG-004 | evidence-aware business status/rejection reasons |
+| TM-AG-005 | journey segment query lineage |
+| TM-AG-008 | corridor `ruleSnapshotId` |
+| TM-AG-009 | user stop `selectionOrigin + selectionSourceRef`; budget ownership ayrımı |
+| TM-AG-010 | `budgetCriticality` |
+| TM-AG-011 | ordered `sourceLookupTrace[]` |
+| TM-AG-012 | `snapshotLineage.baseSample + refreshContributions[]` |
+| TM-AG-013 | per-trigger `triggerResolutions[]` |
+| TM-AG-014 | verification `policySnapshotRefs[] + evaluatorRefs[]` |
+| TM-AG-015 | explanation `generationRefs[]` |
+| TM-ORCH-001 | `harnessPolicySnapshotId` + complete handoff object lineage |
+
+## Ortak invariant özeti
+
+```text
+unknown stays unknown
+hard constraint before soft score
+regional taste knowledge != current venue menu
+FORECAST != CLIMATE_NORMAL
+straight-line distance != route duration
+UNKNOWN price != 0
+OfficialFact != ReviewSignal
+small change → smallest justified repair
+zero blocking findings → required for Verification PASS
+facts(explanation) ⊆ verified facts
+facts(final) ⊆ verified snapshot + verified explanation
+Orchestrator → Specialist → ToolGateway → Tool
+Verification PASS + matching hash → durable commit
 ```
 
-### TM-AG-002 Preference & Policy
-```yaml
-behavior_cases: 14
-authority_cases: 6
-context_lifecycle_cases: 4
-provenance_cases: 3
-conditional_hard_supported: true
-exception_policy_supported: true
-```
-Fixture-driven gap: `ExceptionPolicySet` eklendi.
+## Backlog integration status
 
-### TM-AG-003 Destination Research
-```yaml
-behavior_cases: 14
-authority_cases: 7
-tool_policy_cases: 7
-context_lifecycle_cases: 4
-provenance_cases: 4
-region_level_only: true
-route_validation_delegated_to: TM-AG-008
-place_discovery_delegated_to: TM-AG-004
-```
-Fixture-driven gap: exceptional region provenance için `exceptionPolicyRefs`.
+### Issue #49 — Route-to-Destination Journey
+Integrated into TM-AG-002/003/004/005/006/008/009/010/013/014 and TM-ORCH-001 contracts.
 
-### TM-AG-004 Place Intelligence
-```yaml
-behavior_cases: 16
-authority_cases: 8
-tool_policy_cases: 6
-context_lifecycle_cases: 4
-provenance_cases: 4
-hard_eligibility_separated_from_family_fit: true
-review_analysis_delegated_to: TM-AG-012
-route_calculation_delegated_to: TM-AG-008
-weather_delegated_to: TM-AG-007
-```
-Fixture-driven gaps: evidence-aware `businessStatus`; `eligibility.dispositionReasons[]`.
+### Issue #50 — Background Travel Knowledge Curator
+Integrated as knowledge-first/freshness/source-registry interface. Background subsystem itself remains backlog and does not add a runtime TM-AG agent yet.
 
-### TM-AG-005 Accommodation
-```yaml
-behavior_cases: 16
-authority_cases: 7
-tool_policy_cases: 6
-context_lifecycle_cases: 4
-provenance_cases: 4
-query_signature_required: true
-live_price_and_availability_freshness_required: true
-journey_issue_49_compatible: true
-```
-Fixture-driven gap: `journeySegmentRef` query signature lineage.
+### Issue #51 — Seasonal & Event Intelligence
+Integrated into preference, destination/place/weather, official/review, transportation, planning, adaptive, verification and orchestration contracts. Exact occurrence remains distinct from recurring knowledge.
 
-### TM-AG-006 Food & Local Taste
-```yaml
-behavior_cases: 16
-authority_cases: 8
-tool_policy_cases: 6
-context_lifecycle_cases: 4
-provenance_cases: 4
-local_taste_separated_from_venue_menu_fact: true
-hard_dietary_eligibility_before_family_fit: true
-journey_issue_49_compatible: true
-knowledge_issue_50_compatible: true
-```
-Invariant: regional local-taste knowledge != venue current menu fact.
+## Cross-contract reconciliation
 
-### TM-AG-007 Weather
-```yaml
-behavior_cases: 14
-authority_cases: 6
-tool_policy_cases: 5
-context_lifecycle_cases: 4
-provenance_cases: 4
-forecast_vs_climate_normal_separated: true
-provider_selected: false
-journey_issue_49_compatible: true
-knowledge_issue_50_compatible: true
-```
-Invariant: `FORECAST != CLIMATE_NORMAL`; weather signal != itinerary mutation.
+Audit: `contract-reconciliation-audit-v1.md`
 
-### TM-AG-008 Transportation
 ```yaml
-behavior_cases: 18
-authority_cases: 8
-tool_policy_cases: 6
-context_lifecycle_cases: 4
-provenance_cases: 5
-route_corridor_discovery: true
-straight_line_never_route_distance: true
-journey_issue_49_required: true
+agent_ids: PASS
+ownership: PASS
+shared_domain_objects: PASS_AFTER_CATALOG_1_1
+handoffs: PASS_AT_CONTRACT_LEVEL
+tool_authority: PASS_AT_CONTRACT_LEVEL
+source_authority: PASS
+context_provenance: PASS
+journey_issue_49: PASS
+knowledge_issue_50: PASS_AS_INTERFACE
+event_season_issue_51: PASS_AS_INTERFACE
+verified_state_gate: PASS_AT_CONTRACT_LEVEL
+m1_harness_entry: ALLOWED
+runtime_implementation: BLOCKED_UNTIL_EXECUTABLE_M1_GATES
 ```
-Fixture-driven gap: corridor relation threshold provenance → `ruleSnapshotId`.
-
-### TM-AG-009 Route Planner
-```yaml
-behavior_cases: 22
-authority_cases: 9
-tool_policy_cases: 7
-context_lifecycle_cases: 5
-provenance_cases: 6
-journey_issue_49_cases: 4
-journey_plan_and_daily_plan_unified: true
-user_fixed_stop_provenance_required: true
-budget_calculation_delegated_to: TM-AG-010
-budget_repair_delegated_to: TM-AG-013
-```
-Fixture-driven gaps: `selectionOrigin + selectionSourceRef`; Budget alternative ownership removed from planner.
-
-### TM-AG-010 Budget
-```yaml
-behavior_cases: 18
-authority_cases: 6
-tool_policy_cases: 6
-context_lifecycle_cases: 4
-provenance_cases: 5
-unknown_is_not_zero: true
-dedupe_required: true
-mixed_currency_requires_evidence: true
-journey_issue_49_compatible: true
-knowledge_issue_50_shopping_compatible: true
-```
-Fixture-driven gap: `budgetCriticality: CRITICAL | NON_CRITICAL`.
-
-### TM-AG-011 Public Authority Intelligence
-```yaml
-behavior_cases: 16
-authority_cases: 6
-tool_policy_cases: 6
-context_lifecycle_cases: 4
-provenance_cases: 7
-knowledge_issue_50_cases: 4
-claim_specific_authority: true
-unknown_is_valid_epistemic_result: true
-trusted_source_registry_first: true
-```
-Fixture-driven gap: ordered `sourceLookupTrace[]`.
-
-### TM-AG-012 Review Intelligence
-```yaml
-behavior_cases: 24
-authority_cases: 7
-tool_policy_cases: 7
-context_lifecycle_cases: 5
-provenance_cases: 7
-knowledge_issue_50_cases: 5
-single_review_never_general_fact: true
-prevalence_deterministic: true
-raw_review_retention_policy_required: true
-snapshot_lineage_required: true
-```
-Fixture-driven gaps: `snapshotLineage.baseSample`; `snapshotLineage.refreshContributions[]`.
-
-### TM-AG-013 Adaptive Itinerary
-```yaml
-behavior_cases: 24
-authority_cases: 8
-tool_policy_cases: 7
-context_lifecycle_cases: 5
-provenance_cases: 7
-journey_issue_49_cases: 4
-knowledge_issue_50_cases: 3
-event_season_issue_51_cases: 5
-targeted_repair_required: true
-preservation_proof_required: true
-trigger_resolution_trace_required: true
-verification_recheck_required_after_mutation: true
-```
-Fixture-driven gap: `triggerResolutions[]` with `APPLIED | NO_EFFECT | DEFERRED | CONFLICTING`.
-
-### TM-AG-014 Verification
-```yaml
-behavior_cases: 24
-authority_cases: 7
-tool_policy_cases: 6
-context_lifecycle_cases: 5
-provenance_cases: 7
-journey_issue_49_cases: 4
-knowledge_issue_50_cases: 4
-event_season_issue_51_cases: 5
-adaptive_cases: 5
-deterministic_before_semantic: true
-zero_blocking_findings_required_for_pass: true
-verified_snapshot_hash_required: true
-```
-Fixture-driven gap: `policySnapshotRefs[] + evaluatorRefs[]`.
-
-### TM-AG-015 Explanation
-```yaml
-behavior_cases: 16
-adversarial_cases: 8
-authority_cases: 6
-tool_policy_cases: 5
-context_lifecycle_cases: 4
-provenance_cases: 5
-journey_issue_49_cases: 3
-knowledge_issue_50_cases: 2
-event_season_issue_51_cases: 3
-verified_input_only: true
-unsupported_asserted_claim_count_required: 0
-```
-Fixture-driven gap: `generationRefs[]` for model/prompt/generation lineage.
-
-### TM-AG-016 Final Composer
-```yaml
-behavior_cases: 18
-adversarial_cases: 9
-authority_cases: 7
-tool_policy_cases: 5
-context_lifecycle_cases: 4
-provenance_cases: 6
-journey_issue_49_cases: 3
-knowledge_issue_50_cases: 2
-event_season_issue_51_cases: 4
-verified_input_only: true
-unsupported_entity_refs_required: 0
-unsupported_claim_refs_required: 0
-changed_verified_values_required: 0
-missing_mandatory_warnings_required: 0
-```
-Invariants: renderer only; no fake alternatives; verified values and uncertainty are preserved exactly.
-
-### TM-ORCH-001 Travel Orchestrator
-```yaml
-behavior_cases: 20
-authority_cases: 9
-tool_policy_cases: 9
-context_lifecycle_cases: 6
-provenance_cases: 9
-journey_issue_49_cases: 4
-knowledge_issue_50_cases: 5
-event_season_issue_51_cases: 5
-state_gate_cases: 5
-direct_domain_tools_forbidden: true
-bounded_retry_and_repair_required: true
-verified_state_gate_required: true
-graph_revision_lineage_required: true
-```
-Fixture-driven gaps:
-- workflow/harness policy provenance → `harnessPolicySnapshotId`
-- handoff lineage → `producerAgentId + consumerAgentId + objectType + objectVersion + objectHash`.
 
 ## Eski first-phase specs
 
-Eski spec dosyaları silinmez; tarihsel tasarım/reconciliation kaydıdır. İsim veya ownership çakışmasında `canonical-agent-contract-catalog.md` önceliklidir.
+Eski tekil `.md` dosyaları tarihsel tasarım/reconciliation kaydıdır. İsim veya ownership çakışmasında `canonical-agent-contract-catalog.md` v1.1 ve golden package sözleşmeleri önceliklidir.
 
-## Agent specification standardı
-
-Her paket en az şunları kapsar:
-1. Purpose / Non-goals
-2. Inputs / Outputs
-3. Required / Forbidden context
-4. Dependencies / Handoff
-5. Hard constraints / invariants
-6. Evidence / confidence
-7. Failure / clarification
-8. Fixture/evaluation
-9. Authority/tool/source policy
-10. Context lifecycle/provenance binding
-
-## Sonraki aşama
+## Sonraki aşama — M1 Executable Agent Contract Harness
 
 ```yaml
-canonical_catalog: completed
-harness_adoption_review: completed
-harness_baseline: completed
-all_16_specialist_packages: completed
-TM_ORCH_001_package: completed
-all_17_contract_packages: completed
-cross_contract_reconciliation_audit: in_progress
-runtime_tests: pending
-implementation_allowed: false
+M1_1_agent_registry: next
+M1_2_contract_loader_R0: pending
+M1_3_deterministic_runner_R1: pending
+M1_4_fixture_runner_R2: pending
+M1_5_tool_gateway_authority_R6: pending
+M1_6_context_trace: pending
+M1_7_failure_attribution_RIVE: pending
+M1_8_verified_state_gate: pending
+M1_9_full_17_package_sweep: pending
 ```
 
-Bir sonraki zorunlu adım `17/17 cross-contract reconciliation audit`tir. Audit; agent ID/ownership, schema/handoff, tool authority, source authority, shared domain object semantics, Issue #49/#50/#51 etkileri ve harness/state-gate bütünlüğünü kontrol eder. Audit PASS olmadan runtime implementation açılmaz.
+M1 tamamlanana kadar gerçek domain runtime implementation ve live provider-first test akışı açılmaz. M1 için gerçek web/Places/Routes/Weather/Booking çağrısı gerekmez.
