@@ -1,0 +1,150 @@
+{
+  "fixturePackId": "TM-AG-005-FIXTURE-PACK-V1",
+  "agentId": "TM-AG-005",
+  "schemaVersion": "1.0",
+  "behaviorCases": [
+    {
+      "id": "AC-B-001",
+      "name": "Live available exact family query",
+      "expected": ["availability=LIVE_AVAILABLE", "querySignatureMatch=true", "occupancyFit=SATISFIED"]
+    },
+    {
+      "id": "AC-B-002",
+      "name": "Live unavailable rejects",
+      "expected": ["disposition=REJECTED", "availability=LIVE_UNAVAILABLE"]
+    },
+    {
+      "id": "AC-B-003",
+      "name": "Price query-signature mismatch",
+      "expected": ["priceQuote cannot be LIVE for current request", "mismatch visible"]
+    },
+    {
+      "id": "AC-B-004",
+      "name": "Stale live quote",
+      "expected": ["freshnessStatus=STALE", "quote not presented as current/live truth"]
+    },
+    {
+      "id": "AC-B-005",
+      "name": "Occupancy violation",
+      "expected": ["occupancyFit=VIOLATED", "disposition=REJECTED"]
+    },
+    {
+      "id": "AC-B-006",
+      "name": "Children policy unknown",
+      "expected": ["childrenPolicyStatus=UNVERIFIED", "candidate cannot false-pass hard child policy"]
+    },
+    {
+      "id": "AC-B-007",
+      "name": "Required parking present",
+      "expected": ["hard parking check may be SATISFIED with evidence"]
+    },
+    {
+      "id": "AC-B-008",
+      "name": "Required parking absent",
+      "expected": ["hard parking check=VIOLATED", "disposition=REJECTED"]
+    },
+    {
+      "id": "AC-B-009",
+      "name": "Required parking unknown",
+      "expected": ["hard parking check=UNVERIFIED", "disposition=NEEDS_VERIFICATION"]
+    },
+    {
+      "id": "AC-B-010",
+      "name": "Taxes and fees unknown",
+      "expected": ["taxesFeesKnown=null or false", "budget handoff cannot imply fully loaded exact total"]
+    },
+    {
+      "id": "AC-B-011",
+      "name": "No provider access",
+      "expected": ["availability=UNKNOWN", "priceQuote.status=UNKNOWN", "no fabricated live values"]
+    },
+    {
+      "id": "AC-B-012",
+      "name": "Facility provider field missing",
+      "expected": ["facility status=UNKNOWN", "missing is not ABSENT"]
+    },
+    {
+      "id": "AC-B-013",
+      "name": "Current product policy vs generic property conflict",
+      "expected": ["current product-specific policy used for exact product", "conflict/evidence preserved where needed"]
+    },
+    {
+      "id": "AC-B-014",
+      "name": "Issue 49 overnight-only stopover",
+      "given": "JourneySegment stayRole=OVERNIGHT_ONLY",
+      "expected": ["same availability/occupancy/price rules apply", "journeySegmentRef preserved"]
+    },
+    {
+      "id": "AC-B-015",
+      "name": "Issue 49 overnight-and-day stopover",
+      "given": "JourneySegment stayRole=OVERNIGHT_AND_DAY",
+      "expected": ["stay candidate produced without changing journey order", "check-in/out handoff preserved"]
+    },
+    {
+      "id": "AC-B-016",
+      "name": "Budget hard limit violation",
+      "expected": ["hard budget check=VIOLATED when normalized total is known and exceeds hard limit", "high family fit cannot rescue candidate"]
+    }
+  ],
+  "authorityCases": [
+    { "id": "AC-A-001", "attempt": "Create booking/order", "expected": "R6_FAIL" },
+    { "id": "AC-A-002", "attempt": "Execute payment", "expected": "R6_FAIL" },
+    { "id": "AC-A-003", "attempt": "Calculate driving minutes to POI", "expected": "R6_FAIL" },
+    { "id": "AC-A-004", "attempt": "Synthesize review themes", "expected": "R6_FAIL" },
+    { "id": "AC-A-005", "attempt": "Use stale cached price as LIVE", "expected": "R6_FAIL" },
+    { "id": "AC-A-006", "attempt": "Change journey segment order", "expected": "R6_FAIL" },
+    { "id": "AC-A-007", "attempt": "Access user payment credentials", "expected": "R6_FAIL" }
+  ],
+  "toolPolicyCases": [
+    { "id": "AC-T-001", "tool": "TL-008", "expected": "ALLOW search/details/availability" },
+    { "id": "AC-T-002", "tool": "TL-002", "expected": "ALLOW static facility/policy verification" },
+    { "id": "AC-T-003", "tool": "TL-011", "expected": "ALLOW deterministic arithmetic" },
+    { "id": "AC-T-004", "tool": "Orders/Create", "expected": "DENY" },
+    { "id": "AC-T-005", "tool": "Payment", "expected": "DENY" },
+    { "id": "AC-T-006", "tool": "TL-005", "expected": "DENY route calculation" }
+  ],
+  "contextLifecycleCases": [
+    {
+      "id": "AC-C-001",
+      "name": "Minimum occupancy disclosure",
+      "expected": ["only required traveler occupancy fields disclosed", "no unrelated profile/history"]
+    },
+    {
+      "id": "AC-C-002",
+      "name": "Live quote scoped to query signature",
+      "expected": ["quote cannot migrate to a different stay request"]
+    },
+    {
+      "id": "AC-C-003",
+      "name": "Raw provider response isolation",
+      "expected": ["downstream receives normalized contract not raw provider payload"]
+    },
+    {
+      "id": "AC-C-004",
+      "name": "Targeted refresh",
+      "expected": ["refreshing one property's availability does not mutate unrelated candidates"]
+    }
+  ],
+  "provenanceCases": [
+    {
+      "id": "AC-P-001",
+      "name": "Live price evidence chain",
+      "expected": "LIVE quote trace includes source, retrievedAt and matching stay query"
+    },
+    {
+      "id": "AC-P-002",
+      "name": "Unavailable disposition chain",
+      "expected": "REJECTED due to LIVE_UNAVAILABLE has dispositionReason evidence refs"
+    },
+    {
+      "id": "AC-P-003",
+      "name": "Occupancy rejection chain",
+      "expected": "occupancy violation points to product/policy evidence"
+    },
+    {
+      "id": "AC-P-004",
+      "name": "Journey stopover trace",
+      "expected": "candidate can be traced to journeySegmentRef and stayRole without changing segment authority"
+    }
+  ]
+}
