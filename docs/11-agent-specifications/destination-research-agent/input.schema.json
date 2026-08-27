@@ -39,8 +39,28 @@
   },
   "allOf": [
     {
-      "if": { "properties": { "destinationScope": { "properties": { "mode": { "const": "FIXED_TARGET" } } } } },
-      "then": { "properties": { "destinationScope": { "required": ["targetName"] } } }
+      "if": {
+        "properties": {
+          "destinationScope": {
+            "type": "object",
+            "properties": {
+              "mode": { "const": "FIXED_TARGET" }
+            },
+            "required": ["mode"]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "destinationScope": {
+            "type": "object",
+            "required": ["targetName"],
+            "properties": {
+              "targetName": { "type": "string", "minLength": 1 }
+            }
+          }
+        }
+      }
     }
   ]
 }
