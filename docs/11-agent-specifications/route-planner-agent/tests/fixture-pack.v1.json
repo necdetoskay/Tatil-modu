@@ -1,0 +1,70 @@
+{
+  "schemaVersion": "1.0",
+  "agentId": "TM-AG-009",
+  "suiteId": "tm-ag-009-golden-v1",
+  "behaviorCases": [
+    {"id":"RP-B-001","name":"single-city feasible day","assert":["no_overlap","all_transitions_feasible","hard_violations_zero"]},
+    {"id":"RP-B-002","name":"closed-hours conflict","assert":["combination_rejected_or_blocking_verification","opening_hours_not_invented"]},
+    {"id":"RP-B-003","name":"rejected place cannot schedule","assert":["rejected_candidate_absent_from_days","rejected_combination_recorded"]},
+    {"id":"RP-B-004","name":"hard midday rest preserved","assert":["rest_block_present","rest_window_respected"]},
+    {"id":"RP-B-005","name":"soft low-fatigue preference","assert":["hard_feasible_first","lower_burden_plan_preferred"]},
+    {"id":"RP-B-006","name":"impossible transition","assert":["combination_rejected","route_time_not_compressed"]},
+    {"id":"RP-B-007","name":"hotel check-in conflict","assert":["conflict_rejected_or_replanned","checkin_window_respected"]},
+    {"id":"RP-B-008","name":"live-unavailable hotel","assert":["hotel_not_selected"]},
+    {"id":"RP-B-009","name":"hard dietary unverified meal","assert":["meal_not_verified_as_safe","blocking_verification_or_alternative"]},
+    {"id":"RP-B-010","name":"weather indoor alternative","assert":["weather_signal_used_as_bias","no_new_weather_fact","meaningful_indoor_alternative"]},
+    {"id":"RP-B-011","name":"climate normal not daily weather","assert":["climate_normal_not_used_as_event_forecast"]},
+    {"id":"RP-B-012","name":"two alternatives requested but one feasible","assert":["no_fake_second_alternative","coverage_gap_visible"]},
+    {"id":"RP-B-013","name":"three genuine alternatives","assert":["alternative_count_3","duplicate_alternative_rate_zero"]},
+    {"id":"RP-B-014","name":"final-arrival deadline","assert":["arrival_before_or_at_deadline"]},
+    {"id":"RP-B-015","name":"deadline conflict rejects stopover","assert":["infeasible_journey_rejected","deadline_preserved"]},
+    {"id":"RP-B-016","name":"daily-drive hard limit","assert":["daily_travel_within_limit"]},
+    {"id":"RP-B-017","name":"missing route leg","assert":["tl005_or_verification_need","no_invented_duration"]},
+    {"id":"RP-B-018","name":"same-day activity then next-city hotel","assert":["activity_city_a","travel_to_city_b_after_activity","checkin_city_b_feasible"]},
+    {"id":"RP-B-019","name":"overnight and next-day same-city plan","assert":["overnight_segment_linked","next_day_base_location_same_city"]},
+    {"id":"RP-B-020","name":"multi-day final destination after stopovers","assert":["journey_segments_ordered","final_destination_days_after_arrival"]},
+    {"id":"RP-B-021","name":"user-fixed stopover","assert":["fixed_stop_preserved_or_explicit_conflict","fixed_stop_provenance_preserved"]},
+    {"id":"RP-B-022","name":"conditional women-only beach constraint","assert":["condition_applies_only_to_beach","unverified_required_status_not_accepted"]}
+  ],
+  "authorityCases": [
+    {"id":"RP-A-001","action":"web_search","expected":"FAIL"},
+    {"id":"RP-A-002","action":"place_search","expected":"FAIL"},
+    {"id":"RP-A-003","action":"weather_forecast","expected":"FAIL"},
+    {"id":"RP-A-004","action":"accommodation_search","expected":"FAIL"},
+    {"id":"RP-A-005","action":"invent_new_poi","expected":"FAIL"},
+    {"id":"RP-A-006","action":"invent_opening_hours","expected":"FAIL"},
+    {"id":"RP-A-007","action":"hard_constraint_as_score","expected":"FAIL"},
+    {"id":"RP-A-008","action":"silent_remove_user_fixed_stop","expected":"FAIL"},
+    {"id":"RP-A-009","action":"final_user_prose","expected":"FAIL"}
+  ],
+  "toolPolicyCases": [
+    {"id":"RP-T-001","toolId":"TL-005","purpose":"existing_entity_transition","expected":"ALLOW"},
+    {"id":"RP-T-002","toolId":"TL-011","purpose":"duration_arithmetic","expected":"ALLOW"},
+    {"id":"RP-T-003","toolId":"TL-013","purpose":"hard_constraint_eval","expected":"ALLOW"},
+    {"id":"RP-T-004","toolId":"TL-004","purpose":"discover_new_activity","expected":"DENY"},
+    {"id":"RP-T-005","toolId":"TL-001","purpose":"find_open_places","expected":"DENY"},
+    {"id":"RP-T-006","toolId":"TL-006","purpose":"refresh_weather","expected":"DENY"},
+    {"id":"RP-T-007","toolId":"TL-010","purpose":"refresh_price","expected":"DENY"}
+  ],
+  "contextLifecycleCases": [
+    {"id":"RP-C-001","name":"minimum disclosed context only","assert":["no_full_conversation_required"]},
+    {"id":"RP-C-002","name":"policy snapshot stable during run","assert":["planning_policy_snapshot_unchanged"]},
+    {"id":"RP-C-003","name":"stale weather preserved as stale","assert":["stale_not_promoted_current"]},
+    {"id":"RP-C-004","name":"repair context not silently merged into initial run","assert":["run_context_isolated"]},
+    {"id":"RP-C-005","name":"user-fixed journey choices retained","assert":["fixed_choice_context_retained"]}
+  ],
+  "provenanceCases": [
+    {"id":"RP-P-001","name":"travel block has route ref","assert":["route_leg_ref_present"]},
+    {"id":"RP-P-002","name":"journey segment carried into day blocks","assert":["journey_segment_ref_coverage_100"]},
+    {"id":"RP-P-003","name":"rejected combination explains evidence","assert":["reason_constraint_entity_route_evidence_refs_present"]},
+    {"id":"RP-P-004","name":"planning policy snapshot retained","assert":["planning_policy_snapshot_id_present"]},
+    {"id":"RP-P-005","name":"user-fixed stop provenance","assert":["selection_origin_and_source_traceable"]},
+    {"id":"RP-P-006","name":"final-arrival deadline traceable","assert":["deadline_preserved_in_journey_plan"]}
+  ],
+  "journeyIssue49Cases": [
+    {"id":"RP-J-001","scenario":"Kocaeli to final destination with full-day stop then next-city overnight","assert":["full_day_stop","cross_city_evening_travel","overnight_next_city"]},
+    {"id":"RP-J-002","scenario":"overnight city also planned next day","assert":["overnight_and_day_supported"]},
+    {"id":"RP-J-003","scenario":"multiple stopovers exceed deadline","assert":["journey_rejected_or_stop_conflict_visible"]},
+    {"id":"RP-J-004","scenario":"selected stop sequence route recalculation","assert":["all_intercity_legs_backed_by_transportation_refs"]}
+  ]
+}
