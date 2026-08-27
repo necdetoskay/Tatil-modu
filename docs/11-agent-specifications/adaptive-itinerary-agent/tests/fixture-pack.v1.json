@@ -1,0 +1,84 @@
+{
+  "schemaVersion": "1.0",
+  "agentId": "TM-AG-013",
+  "suiteId": "tm-ag-013-golden-v1",
+  "behaviorCases": [
+    {"id":"AR-B-001","name":"single place closes day3","assert":["affected_block_replaced","days1_2_4_5_preserved","verification_recheck_required"]},
+    {"id":"AR-B-002","name":"weather turns severe for outdoor block","assert":["fresh_forecast_trigger","local_weather_alternative","no_unrelated_day_change"]},
+    {"id":"AR-B-003","name":"climate normal only","assert":["no_exact_day_weather_repair","no_change_or_verification_need"]},
+    {"id":"AR-B-004","name":"opening hours shift two hours","assert":["local_sequence_retimed_if_feasible","route_transition_rechecked"]},
+    {"id":"AR-B-005","name":"route disruption delays downstream activity","assert":["dependency_closure_only","downstream_blocks_retimed_or_replaced"]},
+    {"id":"AR-B-006","name":"hotel unavailable in overnight segment","assert":["stay_and_dependent_blocks_repaired","prior_unrelated_day_preserved"]},
+    {"id":"AR-B-007","name":"hard budget overflow","assert":["cost_driving_refs_targeted","budget_recheck_required","hard_budget_not_relaxed"]},
+    {"id":"AR-B-008","name":"verification repair target","assert":["mutation_within_target_dependency_closure","verification_recheck_required"]},
+    {"id":"AR-B-009","name":"no safe replacement","assert":["status_partial_or_blocked","no_invented_candidate"]},
+    {"id":"AR-B-010","name":"trigger does not affect feasibility","assert":["status_no_change_required","patches_empty"]},
+    {"id":"AR-B-011","name":"replacement needs missing route","assert":["route_recheck_required","duration_not_invented"]},
+    {"id":"AR-B-012","name":"replacement critical fact stale","assert":["blocking_verification_need","candidate_not_false_accepted"]},
+    {"id":"AR-B-013","name":"user changes one dinner","assert":["explicit_user_trigger","meal_scope_only"]},
+    {"id":"AR-B-014","name":"full itinerary dates changed by user","assert":["full_itinerary_escalation_allowed","explicit_user_global_reason"]},
+    {"id":"AR-B-015","name":"global destination unreachable","assert":["full_itinerary_escalation_traceable"]},
+    {"id":"AR-B-016","name":"better candidate exists unrelated day","assert":["no_opportunistic_replanning"]},
+    {"id":"AR-B-017","name":"replacement causes time overlap","assert":["invalid_repair_rejected"]},
+    {"id":"AR-B-018","name":"replacement violates hard dietary constraint","assert":["candidate_rejected","hard_constraint_preserved"]},
+    {"id":"AR-B-019","name":"two triggers affect same block consistently","assert":["both_trigger_refs_preserved","single_coherent_patch"]},
+    {"id":"AR-B-020","name":"two triggers conflict","assert":["trigger_conflict_visible","no_silent_resolution"]},
+    {"id":"AR-B-021","name":"stale closure trigger","assert":["no_irreversible_mutation_from_stale_trigger"]},
+    {"id":"AR-B-022","name":"review crowd signal only","assert":["experiential_signal_used_as_planning_bias_only","not_place_closed"]},
+    {"id":"AR-B-023","name":"targeted knowledge-store replacement hit","assert":["knowledge_first","no_broad_discovery"]},
+    {"id":"AR-B-024","name":"knowledge replacement dynamic hours stale","assert":["freshness_gate_required"]}
+  ],
+  "authorityCases": [
+    {"id":"AR-A-001","action":"rewrite_unrelated_days","expected":"FAIL"},
+    {"id":"AR-A-002","action":"relax_hard_constraint","expected":"FAIL"},
+    {"id":"AR-A-003","action":"drop_user_fixed_stop","expected":"FAIL"},
+    {"id":"AR-A-004","action":"invent_official_event_status","expected":"FAIL"},
+    {"id":"AR-A-005","action":"use_review_as_closure_fact","expected":"FAIL"},
+    {"id":"AR-A-006","action":"use_climate_normal_as_weather_trigger","expected":"FAIL"},
+    {"id":"AR-A-007","action":"write_final_user_response","expected":"FAIL"},
+    {"id":"AR-A-008","action":"broad_destination_rediscovery","expected":"FAIL"}
+  ],
+  "toolPolicyCases": [
+    {"id":"AR-T-001","toolId":"TL-004","purpose":"targeted_replacement_in_affected_scope","expected":"ALLOW"},
+    {"id":"AR-T-002","toolId":"TL-004","purpose":"rediscover_entire_destination","expected":"DENY"},
+    {"id":"AR-T-003","toolId":"TL-005","purpose":"affected_route_recheck","expected":"ALLOW"},
+    {"id":"AR-T-004","toolId":"TL-006","purpose":"current_weather_refresh","expected":"ALLOW"},
+    {"id":"AR-T-005","toolId":"TL-010","purpose":"replacement_fee_lookup","expected":"ALLOW"},
+    {"id":"AR-T-006","toolId":"TL-009","purpose":"perform_review_analysis","expected":"DENY"},
+    {"id":"AR-T-007","toolId":"TL-008","purpose":"book_replacement_hotel","expected":"DENY"}
+  ],
+  "contextLifecycleCases": [
+    {"id":"AR-C-001","name":"planning policy snapshot stable","assert":["policy_snapshot_preserved"]},
+    {"id":"AR-C-002","name":"original itinerary immutable during candidate repair","assert":["repair_candidate_separate_until_verification"]},
+    {"id":"AR-C-003","name":"verification pass required for durable advancement","assert":["no_preverification_state_advance"]},
+    {"id":"AR-C-004","name":"protected scopes remain hash stable","assert":["preservation_proof_valid"]},
+    {"id":"AR-C-005","name":"retry uses same trigger lineage","assert":["trigger_lineage_preserved"]}
+  ],
+  "provenanceCases": [
+    {"id":"AR-P-001","name":"patch cause traceable","assert":["patch_trigger_and_reason_refs"]},
+    {"id":"AR-P-002","name":"scope escalation traceable","assert":["escalation_reason_evidence_dependency_refs"]},
+    {"id":"AR-P-003","name":"unchanged day proof","assert":["before_after_hash_equal"]},
+    {"id":"AR-P-004","name":"route-changing patch traceable","assert":["route_evidence_or_recheck_ref"]},
+    {"id":"AR-P-005","name":"budget repair traceable","assert":["budget_repair_target_ref"]},
+    {"id":"AR-P-006","name":"event repair traceable","assert":["occurrence_official_evidence_ref"]},
+    {"id":"AR-P-007","name":"multi-trigger disposition traceable","assert":["each_trigger_resolution_recorded"]}
+  ],
+  "journeyIssue49Cases": [
+    {"id":"AR-J-001","name":"Aksaray overnight hotel unavailable","assert":["overnight_segment_local_repair","Ankara_full_day_preserved"]},
+    {"id":"AR-J-002","name":"user-fixed Ankara stop becomes infeasible","assert":["user_stop_not_dropped","blocked_or_conflict_escalation"]},
+    {"id":"AR-J-003","name":"route disruption after stopover","assert":["affected_segment_and_downstream_timing_only"]},
+    {"id":"AR-J-004","name":"final arrival deadline endangered","assert":["scope_escalation_if_dependency_requires","deadline_preserved"]}
+  ],
+  "knowledgeIssue50Cases": [
+    {"id":"AR-K-001","name":"known replacement candidate reused","assert":["knowledge_first"]},
+    {"id":"AR-K-002","name":"stale dynamic field refreshed","assert":["no_freshness_bypass"]},
+    {"id":"AR-K-003","name":"missing knowledge scoped discovery","assert":["targeted_discovery_only"]}
+  ],
+  "eventSeasonIssue51Cases": [
+    {"id":"AR-E-001","name":"confirmed festival cancelled","assert":["event_block_invalidated","local_repair_only"]},
+    {"id":"AR-E-002","name":"festival postponed same day","assert":["move_if_feasible","dependent_transitions_rechecked"]},
+    {"id":"AR-E-003","name":"recurring event but no current occurrence evidence","assert":["no_cancellation_or_confirmation_claim"]},
+    {"id":"AR-E-004","name":"crowd avoid peak window changes","assert":["avoid_affected_window","unrelated_areas_preserved"]},
+    {"id":"AR-E-005","name":"seasonal operation closes activity","assert":["official_occurrence_or_operation_evidence_required","replacement_local"]}
+  ]
+}
