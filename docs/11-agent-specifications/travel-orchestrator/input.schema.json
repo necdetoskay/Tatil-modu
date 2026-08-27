@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tatil-modu.local/schemas/travel-orchestrator-input.v1.json",
+  "title": "TravelOrchestratorInput.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "workflowId", "tripRequestRef", "registrySnapshotId", "orchestrationPolicySnapshotId", "runBudget", "featureContext", "initialWorkingStateRefs"],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "workflowId": { "type": "string", "minLength": 1 },
+    "tripRequestRef": { "type": "string", "minLength": 1 },
+    "registrySnapshotId": { "type": "string", "minLength": 1 },
+    "orchestrationPolicySnapshotId": { "type": "string", "minLength": 1 },
+    "runBudget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["maxWallClockMs", "maxNodeAttempts", "maxRepairLoops", "maxToolCalls", "maxModelTokens", "maxEstimatedCost"],
+      "properties": {
+        "maxWallClockMs": { "type": "integer", "minimum": 1 },
+        "maxNodeAttempts": { "type": "integer", "minimum": 1 },
+        "maxRepairLoops": { "type": "integer", "minimum": 0 },
+        "maxToolCalls": { "type": "integer", "minimum": 0 },
+        "maxModelTokens": { "type": ["integer", "null"], "minimum": 0 },
+        "maxEstimatedCost": { "type": ["number", "null"], "minimum": 0 }
+      }
+    },
+    "featureContext": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["journeyEnrichmentMode", "knowledgeRoutingMode", "tripDatesAvailable", "eventPreferenceMode"],
+      "properties": {
+        "journeyEnrichmentMode": { "enum": ["DIRECT_ONLY", "OPTIONAL_CORRIDOR", "ENRICHED_CORRIDOR"] },
+        "knowledgeRoutingMode": { "enum": ["KNOWLEDGE_FIRST", "DISCOVERY_FIRST", "AUTO"] },
+        "tripDatesAvailable": { "type": "boolean" },
+        "eventPreferenceMode": { "enum": ["SEEK", "AVOID", "NEUTRAL", "UNKNOWN"] },
+        "crowdTolerance": { "enum": ["LOW", "MEDIUM", "HIGH", "UNKNOWN"] }
+      }
+    },
+    "initialWorkingStateRefs": { "type": "array", "items": { "type": "string" } },
+    "priorWorkflowCheckpointRef": { "type": ["string", "null"] },
+    "contextManifestId": { "type": ["string", "null"] }
+  }
+}
