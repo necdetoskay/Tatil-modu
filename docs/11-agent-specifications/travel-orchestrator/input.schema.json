@@ -4,13 +4,14 @@
   "title": "TravelOrchestratorInput.v1",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schemaVersion", "workflowId", "tripRequestRef", "registrySnapshotId", "orchestrationPolicySnapshotId", "runBudget", "featureContext", "initialWorkingStateRefs"],
+  "required": ["schemaVersion", "workflowId", "tripRequestRef", "registrySnapshotId", "orchestrationPolicySnapshotId", "harnessPolicySnapshotId", "runBudget", "featureContext", "initialWorkingStateRefs"],
   "properties": {
     "schemaVersion": { "const": "1.0" },
     "workflowId": { "type": "string", "minLength": 1 },
     "tripRequestRef": { "type": "string", "minLength": 1 },
     "registrySnapshotId": { "type": "string", "minLength": 1 },
     "orchestrationPolicySnapshotId": { "type": "string", "minLength": 1 },
+    "harnessPolicySnapshotId": { "type": "string", "minLength": 1 },
     "runBudget": {
       "type": "object",
       "additionalProperties": false,
