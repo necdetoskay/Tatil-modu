@@ -1,0 +1,183 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tatil-modu.local/schemas/place-candidate-set.v1.json",
+  "title": "PlaceCandidateSet.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "requestId", "candidates", "rejectedCandidates", "researchWarnings", "overallConfidence"],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "requestId": { "type": "string", "minLength": 1 },
+    "candidates": { "type": "array", "items": { "$ref": "#/$defs/placeCandidate" } },
+    "rejectedCandidates": { "type": "array", "items": { "$ref": "#/$defs/placeCandidate" } },
+    "researchWarnings": { "type": "array", "items": { "type": "string" } },
+    "overallConfidence": { "type": "number", "minimum": 0, "maximum": 1 }
+  },
+  "$defs": {
+    "placeCandidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["placeId", "providerPlaceIds", "name", "location", "categories", "businessStatus", "operationalFacts", "eligibility", "familyFit", "aggregateSignals", "constraintRefs", "evidence", "unresolvedClaims", "confidence"],
+      "properties": {
+        "placeId": { "type": "string", "minLength": 1 },
+        "providerPlaceIds": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["provider", "id"],
+            "properties": {
+              "provider": { "type": "string", "minLength": 1 },
+              "id": { "type": "string", "minLength": 1 }
+            }
+          }
+        },
+        "name": { "type": "string", "minLength": 1 },
+        "officialUrl": { "type": ["string", "null"] },
+        "location": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["latitude", "longitude", "formattedAddress", "evidenceRefs"],
+          "properties": {
+            "latitude": { "type": ["number", "null"], "minimum": -90, "maximum": 90 },
+            "longitude": { "type": ["number", "null"], "minimum": -180, "maximum": 180 },
+            "formattedAddress": { "type": ["string", "null"] },
+            "evidenceRefs": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        "categories": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string" } },
+        "businessStatus": { "enum": ["OPERATIONAL", "CLOSED_TEMPORARILY", "CLOSED_PERMANENTLY", "FUTURE_OPENING", "UNKNOWN"] },
+        "operationalFacts": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["openingHours", "price", "parking", "accessibility"],
+          "properties": {
+            "openingHours": { "$ref": "#/$defs/openingHoursFact" },
+            "price": { "$ref": "#/$defs/priceFact" },
+            "parking": { "$ref": "#/$defs/parkingFact" },
+            "accessibility": { "$ref": "#/$defs/accessibilityFact" }
+          }
+        },
+        "eligibility": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["disposition", "hardConstraintChecks"],
+          "properties": {
+            "disposition": { "enum": ["ACCEPTED", "REJECTED", "NEEDS_VERIFICATION"] },
+            "hardConstraintChecks": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["constraintId", "status", "evidenceRefs"],
+                "properties": {
+                  "constraintId": { "type": "string", "minLength": 1 },
+                  "status": { "enum": ["SATISFIED", "VIOLATED", "UNVERIFIED", "NOT_APPLICABLE"] },
+                  "evidenceRefs": { "type": "array", "items": { "type": "string" } },
+                  "reasonCode": { "type": ["string", "null"] }
+                }
+              }
+            }
+          }
+        },
+        "familyFit": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["band", "childAgeSignals", "fatigueRisk", "indoorOutdoor", "estimatedVisitDurationMinutes", "reasonCodes"],
+          "properties": {
+            "band": { "enum": ["EXCELLENT", "GOOD", "CONDITIONAL", "WEAK", "UNKNOWN"] },
+            "childAgeSignals": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["ageYears", "fit", "basis"],
+                "properties": {
+                  "ageYears": { "type": ["integer", "null"], "minimum": 0, "maximum": 17 },
+                  "fit": { "enum": ["GOOD", "CONDITIONAL", "WEAK", "UNKNOWN"] },
+                  "basis": { "enum": ["OFFICIAL_ELIGIBILITY", "STRUCTURED_PROVIDER_SIGNAL", "HEURISTIC", "UNKNOWN"] }
+                }
+              }
+            },
+            "fatigueRisk": { "enum": ["LOW", "MEDIUM", "HIGH", "UNKNOWN"] },
+            "indoorOutdoor": { "enum": ["INDOOR", "OUTDOOR", "MIXED", "UNKNOWN"] },
+            "estimatedVisitDurationMinutes": { "type": ["integer", "null"], "minimum": 1 },
+            "reasonCodes": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        "aggregateSignals": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["rating", "userRatingCount", "reviewDataAvailable", "reviewAnalysisRef"],
+          "properties": {
+            "rating": { "type": ["number", "null"], "minimum": 0, "maximum": 5 },
+            "userRatingCount": { "type": ["integer", "null"], "minimum": 0 },
+            "reviewDataAvailable": { "type": "boolean" },
+            "reviewAnalysisRef": { "type": ["string", "null"] }
+          }
+        },
+        "constraintRefs": { "type": "array", "items": { "type": "string" } },
+        "evidence": { "type": "array", "items": { "$ref": "#/$defs/evidence" } },
+        "unresolvedClaims": { "type": "array", "items": { "type": "string" } },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 }
+      }
+    },
+    "openingHoursFact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "dataType", "value", "evidenceRefs"],
+      "properties": {
+        "status": { "enum": ["SUPPORTED", "PARTIAL", "CONFLICTING", "STALE", "UNKNOWN"] },
+        "dataType": { "enum": ["CURRENT", "REGULAR", "OFFICIAL_SCHEDULE", "NONE"] },
+        "value": { "type": ["object", "null"] },
+        "evidenceRefs": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "priceFact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "amount", "currency", "evidenceRefs"],
+      "properties": {
+        "status": { "enum": ["LIVE", "OFFICIAL", "ESTIMATED", "UNKNOWN"] },
+        "amount": { "type": ["number", "null"], "minimum": 0 },
+        "currency": { "type": ["string", "null"] },
+        "evidenceRefs": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "parkingFact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "options", "guaranteedAvailability", "evidenceRefs"],
+      "properties": {
+        "status": { "enum": ["SUPPORTED", "PARTIAL", "CONFLICTING", "UNKNOWN"] },
+        "options": { "type": "array", "items": { "type": "string" } },
+        "guaranteedAvailability": { "const": false },
+        "evidenceRefs": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "accessibilityFact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "features", "evidenceRefs"],
+      "properties": {
+        "status": { "enum": ["SUPPORTED", "PARTIAL", "CONFLICTING", "UNKNOWN"] },
+        "features": { "type": "array", "items": { "type": "string" } },
+        "evidenceRefs": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["evidenceId", "claimType", "sourceTier", "sourceRef", "retrievedAt", "freshnessStatus"],
+      "properties": {
+        "evidenceId": { "type": "string", "minLength": 1 },
+        "claimType": { "type": "string", "minLength": 1 },
+        "sourceTier": { "type": "integer", "minimum": 1, "maximum": 4 },
+        "sourceRef": { "type": "string", "minLength": 1 },
+        "retrievedAt": { "type": "string", "format": "date-time" },
+        "freshnessStatus": { "enum": ["CURRENT", "STALE", "UNKNOWN"] },
+        "valueRef": { "type": ["string", "null"] }
+      }
+    }
+  }
+}
