@@ -4,7 +4,7 @@
 |---|---|
 | Agent ID | TM-AG-016 |
 | Sürüm | 1.0 |
-| Durum | CANONICAL SPEC |
+| Durum | GOLDEN PACKAGE V1 READY |
 | Tarih | 2026-08-27 |
 
 ## 1. Purpose
@@ -26,11 +26,6 @@ Final Composer renderer'dır; researcher/planner değildir.
 
 ```text
 facts(final_plan) ⊆ facts(verified_snapshot + verified_explanation)
-```
-
-ve:
-
-```text
 final values = verified structured values
 ```
 
@@ -39,9 +34,9 @@ final values = verified structured values
 - VerificationResult with `status=PASS`
 - `verifiedSnapshotRef + verifiedSnapshotHash`
 - verified Itinerary/JourneyPlan/DailyPlan refs
-- verified AlternativePlan refs
-- verified BudgetLedger ref
-- ExplanationBundle ref with matching snapshot hash
+- verified alternatives
+- verified BudgetLedger
+- ExplanationBundle with matching snapshot hash
 - verified warnings/uncertainty refs
 - locale/presentation preferences
 - final-render policy snapshot
@@ -49,16 +44,21 @@ final values = verified structured values
 
 ## 4. Output
 
-Ana çıktı: `FinalTravelPlan.v1`.
+`FinalTravelPlan.v1` carries:
+- verification/snapshot binding,
+- final render policy snapshot,
+- `renderGenerationRefs[]`,
+- section-level subject/source/claim/value/warning bindings,
+- deterministic `renderValidation`.
 
 Suggested sections:
 - trip summary,
 - journey/multi-city summary,
 - day-by-day plan,
 - alternatives,
-- accommodation/food highlights if present,
-- budget summary,
-- event/season/weather notes where verified,
+- accommodation/food/local experience highlights,
+- budget,
+- event/season/weather notes,
 - warnings/unknowns,
 - decision explanations.
 
@@ -66,92 +66,91 @@ Suggested sections:
 
 Composer cannot:
 - add new POI/restaurant/hotel/event,
-- add an alternative missing upstream,
+- add missing alternative,
 - change time/order,
 - change route duration/distance,
 - change price status/value,
-- change event occurrence status,
-- turn estimate into exact,
-- turn unknown into known,
-- turn ReviewSignal into OfficialFact.
+- change event status,
+- estimate→exact,
+- unknown→known,
+- ReviewSignal→OfficialFact.
 
 ## 6. Alternative rendering
 
-If product preference asks for 2–3 alternatives/day but verified upstream has fewer safe alternatives:
+Fewer verified alternatives than desired product target:
 - render available alternatives,
 - render approved coverage warning if present,
-- never invent filler alternatives.
+- never fabricate filler alternative.
 
 ## 7. Journey rendering — Issue #49
 
-Final plan may render:
-- origin/final destination,
-- intermediate stop roles,
-- full-day/overnight segments,
-- selected accommodation refs,
-- route/time summary.
+May render verified origin/destination, intermediate stop roles, full-day/overnight segments, stay refs and route/time summary.
 
-User-fixed vs planner-selected stop meaning must not be reversed.
+User-fixed vs planner-selected semantics cannot be reversed.
 
 ## 8. Knowledge/local experience — Issue #50
 
-Verified stable local-taste/local-product/historical context may be shown as context/highlight if included in verified snapshot/explanation.
-
-Current operational/shop price claims require verified current evidence upstream.
+Verified stable local-taste/local-product/historical context may be shown. Current operational/shop price claims require verified current evidence upstream.
 
 ## 9. Event/season — Issue #51
 
-- confirmed event occurrence can be displayed as confirmed.
-- recurring-only knowledge must be worded as recurring/typical, not confirmed for current year.
-- SEEK/AVOID rationale can be shown from ExplanationBundle.
-- seasonal suitability must remain activity-specific.
-- climate-normal and forecast language remain distinct.
+- confirmed occurrence can be shown confirmed,
+- recurring-only knowledge remains recurring/typical,
+- SEEK/AVOID rationale from verified explanation,
+- seasonal suitability remains activity-specific,
+- climate normal and forecast remain distinct.
 
 ## 10. Budget rendering
 
-Preserve:
+Preserve exact verified:
 - knownTotal,
 - projectedTotal,
 - unknown exposure,
-- `LIVE | OFFICIAL | ESTIMATED | UNKNOWN` semantics,
+- `LIVE | OFFICIAL | ESTIMATED | UNKNOWN`,
 - currency.
 
-Do not sum or recalculate differently from verified BudgetLedger.
+No alternate recalculation.
 
 ## 11. Warning/uncertainty rendering
 
-Final Composer cannot suppress a warning marked mandatory-for-display by verified policy.
-
-Warnings may be formatted/shortened only if semantic meaning/severity is preserved.
+Mandatory-for-display warning cannot be suppressed or downgraded.
 
 ## 12. Explanation rendering
 
-ExplanationBundle blocks may be:
-- placed near relevant day/decision,
-- summarized without new claim,
-- omitted only when presentation policy permits.
-
-Any final fact-bearing explanation still must be supported by verified refs.
+Explanation blocks may be placed/summarized only without new factual claim or meaning change.
 
 ## 13. Allowed tools
 
+- `TL-012` Schema Validator
+- deterministic render-binding/value-preservation validator
+
 No external-world tool.
 
-Allowed:
-- `TL-012` Schema Validator
-- deterministic render-binding/value-preservation validator.
+## 14. Render validation invariants
 
-## 14. Provenance
+Output requires:
+
+```yaml
+unsupportedEntityRefCount: 0
+unsupportedClaimRefCount: 0
+changedVerifiedValueCount: 0
+missingMandatoryWarningCount: 0
+snapshotMatch: true
+```
+
+Any nonzero/failure blocks output.
+
+## 15. Provenance
 
 Final output binds:
-- verification result ref,
+- verification result,
 - verified snapshot ref/hash,
-- explanation bundle ref,
-- final render policy snapshot,
+- explanation bundle,
+- render policy,
 - render generation refs,
-- section-level source/binding refs.
+- section-level binding refs.
 
-## 15. Failure modes
+## 16. Failure modes
 
 - `NEW_FACT_IN_FINAL`
 - `NEW_CANDIDATE_IN_FINAL`
@@ -166,7 +165,7 @@ Final output binds:
 - `EXTERNAL_TOOL_LEAKAGE`
 - `MISSING_RENDER_PROVENANCE`
 
-## 16. Harness binding
+## 17. Harness binding
 
 - R0 FinalTravelPlan schema
 - R1 exact value/snapshot/ref/warning preservation
@@ -174,18 +173,19 @@ Final output binds:
 - R3 schema/render-binding validator
 - R4 readability/organization semantic quality
 - R5 hallucination/value/uncertainty/warning attacks
-- R6 external research/planning authority leakage
-- R7 live only as final stage of verified E2E
+- R6 external research/planning leakage
+- R7 terminal stage of live verified E2E
 - R8 final-render regressions
 
-## 17. Current status
+## 18. Current status
 
 ```yaml
-agent_spec_status: canonical_v1
+agent_spec_status: golden_v1_ready
 implementation_allowed: false
 prototype_allowed: false
-schemas: pending
-policies: pending
-fixtures: pending
+schemas: completed
+policies: completed
+fixtures: completed
 verified_input_only: true
+render_validation_required: true
 ```
