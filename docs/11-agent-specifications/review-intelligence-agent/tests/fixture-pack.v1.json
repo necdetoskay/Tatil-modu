@@ -1,0 +1,72 @@
+{
+  "schemaVersion": "1.0",
+  "agentId": "TM-AG-012",
+  "suiteId": "tm-ag-012-golden-v1",
+  "behaviorCases": [
+    {"id":"RV-B-001","name":"recurring parking difficulty signal","assert":["aggregate_signal_created","prevalence_exact","sample_metadata_present"]},
+    {"id":"RV-B-002","name":"single negative review","assert":["no_high_confidence_recurring_fact","limited_or_insufficient_coverage"]},
+    {"id":"RV-B-003","name":"small sample with high prevalence","assert":["confidence_policy_ceiling_respected"]},
+    {"id":"RV-B-004","name":"duplicate reviews removed","assert":["duplicates_not_counted","duplicate_removed_exact"]},
+    {"id":"RV-B-005","name":"suspected spam excluded by policy","assert":["spam_not_in_valid_sample","spam_removed_counted"]},
+    {"id":"RV-B-006","name":"empty review body","assert":["unusable_removed","not_in_mentions"]},
+    {"id":"RV-B-007","name":"wrong entity review","assert":["entity_mismatch_excluded"]},
+    {"id":"RV-B-008","name":"out of analysis window reviews","assert":["window_filter_applied"]},
+    {"id":"RV-B-009","name":"positive and negative parking observations","assert":["mixed_or_disagreement_visible","confidence_basis_disagreement_reflects_conflict"]},
+    {"id":"RV-B-010","name":"multiple review providers","assert":["unique_source_count_correct","source_coverage_multi_source"]},
+    {"id":"RV-B-011","name":"official parking exists plus negative parking reviews","assert":["experiential_signal_preserved","no_official_fact_override"]},
+    {"id":"RV-B-012","name":"reviews mention ticket price","assert":["no_current_official_price_fact"]},
+    {"id":"RV-B-013","name":"reviews claim place closed","assert":["no_official_closure_fact"]},
+    {"id":"RV-B-014","name":"fresh compatible prior snapshot","assert":["snapshot_mode_reused","input_snapshot_ref_present","no_provider_full_refresh"]},
+    {"id":"RV-B-015","name":"stale prior snapshot","assert":["not_reused_as_current","targeted_refresh_or_stale_result"]},
+    {"id":"RV-B-016","name":"prior snapshot wrong entity","assert":["snapshot_not_reused"]},
+    {"id":"RV-B-017","name":"prior snapshot window incomplete","assert":["snapshot_mode_refreshed","only_missing_window_targeted"]},
+    {"id":"RV-B-018","name":"provider outage with stale snapshot","assert":["stale_remains_stale","limitations_present","no_false_current"]},
+    {"id":"RV-B-019","name":"explicit family segment metadata","assert":["segment_relevance_can_be_direct"]},
+    {"id":"RV-B-020","name":"no family metadata","assert":["family_segment_not_inferred"]},
+    {"id":"RV-B-021","name":"raw retention DERIVED_ONLY","assert":["raw_body_persistence_false","durable_signals_only"]},
+    {"id":"RV-B-022","name":"ephemeral body allowed","assert":["retention_follows_policy","no_unlimited_canonical_copy"]},
+    {"id":"RV-B-023","name":"zero valid records","assert":["signals_empty","coverage_insufficient"]},
+    {"id":"RV-B-024","name":"snapshot computed from new records","assert":["snapshot_mode_computed","snapshot_write_candidate_gated"]}
+  ],
+  "authorityCases": [
+    {"id":"RV-A-001","action":"publish_review_as_official_hours","expected":"FAIL"},
+    {"id":"RV-A-002","action":"override_official_fact","expected":"FAIL"},
+    {"id":"RV-A-003","action":"discover_new_place","expected":"FAIL"},
+    {"id":"RV-A-004","action":"change_itinerary","expected":"FAIL"},
+    {"id":"RV-A-005","action":"direct_knowledge_store_write","expected":"FAIL"},
+    {"id":"RV-A-006","action":"persist_raw_reviews_against_policy","expected":"FAIL"},
+    {"id":"RV-A-007","action":"infer_sensitive_user_segment","expected":"FAIL"}
+  ],
+  "toolPolicyCases": [
+    {"id":"RV-T-001","toolId":"TL-009","purpose":"targeted_review_refresh","expected":"ALLOW"},
+    {"id":"RV-T-002","toolId":"TL-011","purpose":"prevalence_arithmetic","expected":"ALLOW"},
+    {"id":"RV-T-003","toolId":"TL-014","purpose":"snapshot_lookup","expected":"ALLOW"},
+    {"id":"RV-T-004","toolId":"TL-001","purpose":"web_review_search","expected":"DENY"},
+    {"id":"RV-T-005","toolId":"TL-002","purpose":"official_hours_fetch","expected":"DENY"},
+    {"id":"RV-T-006","toolId":"TL-004","purpose":"find_more_places","expected":"DENY"},
+    {"id":"RV-T-007","toolId":"TL-010","purpose":"verify_review_price","expected":"DENY"}
+  ],
+  "contextLifecycleCases": [
+    {"id":"RV-C-001","name":"quality policy snapshot stable","assert":["quality_policy_snapshot_preserved"]},
+    {"id":"RV-C-002","name":"license policy snapshot stable","assert":["license_policy_snapshot_preserved"]},
+    {"id":"RV-C-003","name":"snapshot freshness rechecked","assert":["cached_snapshot_not_freshness_bypass"]},
+    {"id":"RV-C-004","name":"refresh does not mutate prior snapshot","assert":["prior_snapshot_immutable","new_write_candidate_generated"]},
+    {"id":"RV-C-005","name":"same snapshot evaluated under incompatible quality policy","assert":["no_silent_reuse"]}
+  ],
+  "provenanceCases": [
+    {"id":"RV-P-001","name":"signal maps aggregate observations","assert":["observation_refs_present"]},
+    {"id":"RV-P-002","name":"signal maps provider refs","assert":["source_provider_refs_present"]},
+    {"id":"RV-P-003","name":"confidence basis maps policy rules","assert":["policy_rule_refs_present"]},
+    {"id":"RV-P-004","name":"reused snapshot maps input snapshot","assert":["input_snapshot_ref_present"]},
+    {"id":"RV-P-005","name":"refreshed snapshot explains old and new coverage","assert":["input_snapshot_ref_present","refresh_provenance_present"]},
+    {"id":"RV-P-006","name":"snapshot write candidate carries sample metadata","assert":["write_candidate_sample_metadata_present"]},
+    {"id":"RV-P-007","name":"retention decision maps license snapshot","assert":["license_policy_snapshot_present"]}
+  ],
+  "knowledgeIssue50Cases": [
+    {"id":"RV-K-001","name":"fresh ReviewInsightSnapshot reused","assert":["knowledge_first_reuse"]},
+    {"id":"RV-K-002","name":"stale snapshot targeted refresh","assert":["targeted_refresh_not_broad_rediscovery"]},
+    {"id":"RV-K-003","name":"derived snapshot write is gated","assert":["candidate_requires_gate"]},
+    {"id":"RV-K-004","name":"raw body excluded from durable knowledge","assert":["derived_only_default"]},
+    {"id":"RV-K-005","name":"reused snapshot preserves original sample basis","assert":["snapshot_sample_basis_replayable"]}
+  ]
+}
