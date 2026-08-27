@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tatil-modu.local/schemas/weather-signal-set.v1.json",
+  "title": "WeatherSignalSet.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "requestId", "signals", "warnings", "overallConfidence"],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "requestId": { "type": "string", "minLength": 1 },
+    "signals": { "type": "array", "items": { "$ref": "#/$defs/weatherSignal" } },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "overallConfidence": { "type": "number", "minimum": 0, "maximum": 1 }
+  },
+  "$defs": {
+    "weatherSignal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["weatherSignalId", "locationRef", "journeySegmentRef", "activityRef", "dataType", "validWindow", "issuedAt", "retrievedAt", "freshnessStatus", "forecastHorizonHours", "conditions", "hazards", "riskLevel", "planBias", "evidence", "confidence"],
+      "properties": {
+        "weatherSignalId": { "type": "string", "minLength": 1 },
+        "locationRef": { "type": "string", "minLength": 1 },
+        "journeySegmentRef": { "type": ["string", "null"] },
+        "activityRef": { "type": ["string", "null"] },
+        "dataType": { "enum": ["FORECAST", "CLIMATE_NORMAL"] },
+        "validWindow": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["start", "end"],
+          "properties": {
+            "start": { "type": "string", "format": "date-time" },
+            "end": { "type": "string", "format": "date-time" }
+          }
+        },
+        "issuedAt": { "type": ["string", "null"], "format": "date-time" },
+        "retrievedAt": { "type": "string", "format": "date-time" },
+        "freshnessStatus": { "enum": ["CURRENT", "STALE", "UNKNOWN"] },
+        "forecastHorizonHours": { "type": ["number", "null"], "minimum": 0 },
+        "conditions": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["temperatureC", "precipitationProbability", "precipitationMm", "windSpeedKph", "conditionCode"],
+          "properties": {
+            "temperatureC": { "type": ["number", "null"] },
+            "precipitationProbability": { "type": ["number", "null"], "minimum": 0, "maximum": 1 },
+            "precipitationMm": { "type": ["number", "null"], "minimum": 0 },
+            "windSpeedKph": { "type": ["number", "null"], "minimum": 0 },
+            "conditionCode": { "type": ["string", "null"] }
+          }
+        },
+        "hazards": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["type", "severity", "evidenceRefs"],
+            "properties": {
+              "type": { "enum": ["RAIN", "HEAVY_RAIN", "THUNDERSTORM", "SNOW_ICE", "HIGH_WIND", "HEAT", "COLD", "LOW_VISIBILITY", "UNKNOWN"] },
+              "severity": { "enum": ["LOW", "MEDIUM", "HIGH", "SEVERE", "UNKNOWN"] },
+              "evidenceRefs": { "type": "array", "items": { "type": "string" } }
+            }
+          }
+        },
+        "riskLevel": { "enum": ["LOW", "MEDIUM", "HIGH", "SEVERE", "UNKNOWN"] },
+        "planBias": { "enum": ["PREFER_INDOOR", "PREFER_OUTDOOR", "CAUTION", "NO_SIGNAL"] },
+        "evidence": { "type": "array", "items": { "$ref": "#/$defs/evidence" } },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["evidenceId", "sourceRef", "sourceType", "retrievedAt", "freshnessStatus"],
+      "properties": {
+        "evidenceId": { "type": "string", "minLength": 1 },
+        "sourceRef": { "type": "string", "minLength": 1 },
+        "sourceType": { "enum": ["WEATHER_PROVIDER", "CLIMATE_PROVIDER", "KNOWLEDGE_SNAPSHOT"] },
+        "retrievedAt": { "type": "string", "format": "date-time" },
+        "freshnessStatus": { "enum": ["CURRENT", "STALE", "UNKNOWN"] }
+      }
+    }
+  }
+}
