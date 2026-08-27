@@ -1,7 +1,38 @@
-import Ajv2020, { type ErrorObject, type ValidateFunction } from 'ajv/dist/2020.js';
-import addFormats from 'ajv-formats';
+import { createRequire } from 'node:module';
+import type { ErrorObject, ValidateFunction } from 'ajv';
 import type { AgentRegistry } from './agent-registry.js';
 import { loadResolvedContractBundle } from './contract-loader.js';
+
+interface ContractSchemaCompiler {
+  addSchema(schema: Record<string, unknown>): unknown;
+  getSchema(id: string): ValidateFunction | undefined;
+  compile(schema: Record<string, unknown>): ValidateFunction;
+}
+
+type Ajv2020Constructor = new (options: {
+  allErrors: boolean;
+  strict: boolean;
+  allowUnionTypes: boolean;
+  validateFormats: boolean;
+}) => ContractSchemaCompiler;
+
+type AddFormats = (ajv: ContractSchemaCompiler) => unknown;
+
+const require = createRequire(import.meta.url);
+const ajv2020Module = require('ajv/dist/2020.js') as { default?: Ajv2020Constructor } | Ajv2020Constructor;
+const ajvFormatsModule = require('ajv-formats') as { default?: AddFormats } | AddFormats;
+
+function resolveAjv2020Constructor(): Ajv2020Constructor {
+  if (typeof ajv2020Module === 'function') return ajv2020Module;
+  if (typeof ajv2020Module.default === 'function') return ajv2020Module.default;
+  throw new Error('AJV2020_CONSTRUCTOR_NOT_FOUND');
+}
+
+function resolveAddFormats(): AddFormats {
+  if (typeof ajvFormatsModule === 'function') return ajvFormatsModule;
+  if (typeof ajvFormatsModule.default === 'function') return ajvFormatsModule.default;
+  throw new Error('AJV_FORMATS_FUNCTION_NOT_FOUND');
+}
 
 export interface CompiledComponentSchemas {
   componentId: string;
@@ -16,7 +47,9 @@ export interface SchemaCompilationResult {
   errors: string[];
 }
 
-export function createContractSchemaCompiler(): Ajv2020 {
+export function createContractSchemaCompiler(): ContractSchemaCompiler {
+  const Ajv2020 = resolveAjv2020Constructor();
+  const addFormats = resolveAddFormats();
   const ajv = new Ajv2020({
     allErrors: true,
     strict: true,
