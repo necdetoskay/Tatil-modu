@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tatil-modu.local/schemas/preference-policy-agent-input.v1.json",
+  "title": "PreferencePolicyAgentInput.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "requestId", "tripRequest", "travelerProfile", "policyVersion"],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "requestId": { "type": "string", "minLength": 1 },
+    "tripRequest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["userMessage"],
+      "properties": {
+        "userMessage": { "type": "string", "minLength": 1 },
+        "preferenceStatements": {
+          "type": "array",
+          "default": [],
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["statementId", "text", "sourceType", "sourceRef"],
+            "properties": {
+              "statementId": { "type": "string", "minLength": 1 },
+              "text": { "type": "string", "minLength": 1 },
+              "sourceType": { "enum": ["USER_EXPLICIT", "CONVERSATION_FACT"] },
+              "sourceRef": { "type": "string", "minLength": 1 }
+            }
+          }
+        }
+      }
+    },
+    "travelerProfile": {
+      "$ref": "https://tatil-modu.local/schemas/traveler-profile.v1.json"
+    },
+    "policyVersion": { "type": "string", "minLength": 1 },
+    "contextManifestId": { "type": ["string", "null"] }
+  }
+}
