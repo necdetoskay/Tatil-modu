@@ -1,7 +1,7 @@
 # 11 — Agent Specifications
 
 **Doküman türü:** canonical agent specification alanı  
-**Durum:** canonical catalog v1.0 + seven golden agent packages  
+**Durum:** canonical catalog v1.0 + eight golden agent packages  
 **Kodlama durumu:** kapalı  
 **Prototype durumu:** kapalı
 
@@ -40,7 +40,7 @@ canonical_catalog_date: 2026-08-27
 | TM-AG-005 | Accommodation Agent | **golden package v1 ready** |
 | TM-AG-006 | Food & Local Taste Agent | **golden package v1 ready** |
 | TM-AG-007 | Weather Agent | **golden package v1 ready** |
-| TM-AG-008 | Transportation Agent | pending |
+| TM-AG-008 | Transportation Agent | **golden package v1 ready** |
 | TM-AG-009 | Route Planner Agent | pending |
 | TM-AG-010 | Budget Agent | pending |
 | TM-AG-011 | Public Authority Intelligence Agent | pending |
@@ -54,7 +54,6 @@ canonical_catalog_date: 2026-08-27
 ## Golden package standardı
 
 Her hazır paket şunları içerir:
-
 - `specification.md`
 - `input.schema.json`
 - `output.schema.json`
@@ -67,7 +66,6 @@ Her hazır paket şunları içerir:
 - `tests/fixture-pack.v1.json`
 
 ### TM-AG-001 Profile
-
 ```yaml
 normal_and_edge_cases: 10
 authority_cases: 5
@@ -76,7 +74,6 @@ provenance_cases: 2
 ```
 
 ### TM-AG-002 Preference & Policy
-
 ```yaml
 behavior_cases: 14
 authority_cases: 6
@@ -85,11 +82,9 @@ provenance_cases: 3
 conditional_hard_supported: true
 exception_policy_supported: true
 ```
-
 Contract gap: `ExceptionPolicySet` fixture tasarımında ortaya çıkarılmış ve schema'ya eklenmiştir.
 
 ### TM-AG-003 Destination Research
-
 ```yaml
 behavior_cases: 14
 authority_cases: 7
@@ -100,11 +95,9 @@ region_level_only: true
 route_validation_delegated_to: TM-AG-008
 place_discovery_delegated_to: TM-AG-004
 ```
-
-Contract gap: exceptional region adayının hangi exception policy'ye dayandığını göstermek için `exceptionPolicyRefs` alanı output schema'ya eklenmiştir.
+Contract gap: exceptional region adayının exception policy provenance'ı için `exceptionPolicyRefs` eklenmiştir.
 
 ### TM-AG-004 Place Intelligence
-
 ```yaml
 behavior_cases: 16
 authority_cases: 8
@@ -117,13 +110,11 @@ review_analysis_delegated_to: TM-AG-012
 route_calculation_delegated_to: TM-AG-008
 weather_delegated_to: TM-AG-007
 ```
-
 Contract gaps:
 - `businessStatus` artık `value + evidenceRefs` taşır.
 - `eligibility.dispositionReasons[]` kararın nedenini evidence'a bağlar.
 
 ### TM-AG-005 Accommodation
-
 ```yaml
 behavior_cases: 16
 authority_cases: 7
@@ -135,11 +126,9 @@ live_price_and_availability_freshness_required: true
 booking_and_payment_forbidden: true
 journey_issue_49_compatible: true
 ```
-
-Contract gap: Issue #49 stopover konaklama adayının journey segment provenance'ını korumak için `journeySegmentRef`, `stayQuerySignature` içine eklenmiştir.
+Contract gap: stopover konaklamasının journey provenance'ı için `journeySegmentRef` query signature'a eklenmiştir.
 
 ### TM-AG-006 Food & Local Taste
-
 ```yaml
 behavior_cases: 16
 authority_cases: 8
@@ -152,16 +141,13 @@ review_analysis_delegated_to: TM-AG-012
 journey_issue_49_compatible: true
 knowledge_issue_50_compatible: true
 ```
-
 Invariant:
-
 ```text
 regional local-taste knowledge != venue current menu fact
 knowledge hit != dynamic freshness bypass
 ```
 
 ### TM-AG-007 Weather
-
 ```yaml
 behavior_cases: 14
 authority_cases: 6
@@ -174,13 +160,33 @@ provider_selected: false
 journey_issue_49_compatible: true
 knowledge_issue_50_compatible: true
 ```
-
 Invariant:
-
 ```text
 FORECAST != CLIMATE_NORMAL
 weather signal != itinerary mutation
 ```
+
+### TM-AG-008 Transportation
+```yaml
+behavior_cases: 18
+authority_cases: 8
+tool_policy_cases: 6
+context_lifecycle_cases: 4
+provenance_cases: 5
+route_corridor_discovery: true
+straight_line_never_route_distance: true
+stop_selection_delegated_to: TM-AG-009
+corridor_value_research_delegated_to: TM-AG-003
+journey_issue_49_required: true
+knowledge_issue_50_compatible: true
+```
+Invariant:
+```text
+Transportation computes logistics.
+Destination Research evaluates destination value.
+Route Planner decides schedule/order.
+```
+Contract gap: fixture provenance testinde corridor relation threshold'unu açıklamak için `ruleSnapshotId` output schema'ya eklenmiştir.
 
 ## Eski first-phase specs
 
@@ -189,7 +195,6 @@ Eski spec dosyaları silinmez; tarihsel tasarım/reconciliation kaydıdır. İsi
 ## Agent specification standardı
 
 Her paket en az şunları kapsar:
-
 1. Purpose / Non-goals
 2. Inputs / Outputs
 3. Required / Forbidden context
@@ -214,9 +219,10 @@ TM_AG_004_place_intelligence_package: completed
 TM_AG_005_accommodation_package: completed
 TM_AG_006_food_local_taste_package: completed
 TM_AG_007_weather_package: completed
+TM_AG_008_transportation_package: completed
 runtime_tests: pending
-next_agent_package: TM-AG-008
+next_agent_package: TM-AG-009
 implementation_allowed: false
 ```
 
-Bir sonraki paket `TM-AG-008 Transportation Agent` olacaktır. Issue #49 `Route Corridor Discovery` bu paketin zorunlu tasarım girdisidir.
+Bir sonraki paket `TM-AG-009 Route Planner Agent` olacaktır. Issue #49'daki `JourneyPlan / JourneySegment / stop-role` planlama modeli bu paketin ana tasarım girdisidir.
