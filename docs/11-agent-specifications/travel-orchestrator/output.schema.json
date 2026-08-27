@@ -1,0 +1,198 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tatil-modu.local/schemas/orchestration-result.v1.json",
+  "title": "OrchestrationResult.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "orchestrationRunId", "workflowId", "tripRequestRef", "registrySnapshotId", "orchestrationPolicySnapshotId", "initialGraphHash", "finalGraphHash", "graphRevisions", "nodeSelections", "nodeRuns", "handoffs", "retryEvents", "repairLoops", "contextManifestRefs", "failureAttributions", "budgetUsage", "authorityViolations", "stateTransitions", "stateCommitAttempts", "finalVerificationRef", "finalPlanRef", "finalStatus"],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "orchestrationRunId": { "type": "string", "minLength": 1 },
+    "workflowId": { "type": "string", "minLength": 1 },
+    "tripRequestRef": { "type": "string", "minLength": 1 },
+    "registrySnapshotId": { "type": "string", "minLength": 1 },
+    "orchestrationPolicySnapshotId": { "type": "string", "minLength": 1 },
+    "initialGraphHash": { "type": "string", "minLength": 1 },
+    "finalGraphHash": { "type": "string", "minLength": 1 },
+    "graphRevisions": { "type": "array", "items": { "$ref": "#/$defs/graphRevision" } },
+    "nodeSelections": { "type": "array", "items": { "$ref": "#/$defs/nodeSelection" } },
+    "nodeRuns": { "type": "array", "items": { "$ref": "#/$defs/nodeRun" } },
+    "handoffs": { "type": "array", "items": { "$ref": "#/$defs/handoff" } },
+    "retryEvents": { "type": "array", "items": { "$ref": "#/$defs/retryEvent" } },
+    "repairLoops": { "type": "array", "items": { "$ref": "#/$defs/repairLoop" } },
+    "contextManifestRefs": { "type": "array", "items": { "type": "string" } },
+    "failureAttributions": { "type": "array", "items": { "$ref": "#/$defs/failureAttribution" } },
+    "budgetUsage": { "$ref": "#/$defs/budgetUsage" },
+    "authorityViolations": { "type": "array", "items": { "$ref": "#/$defs/authorityViolation" } },
+    "stateTransitions": { "type": "array", "items": { "$ref": "#/$defs/stateTransition" } },
+    "stateCommitAttempts": { "type": "array", "items": { "$ref": "#/$defs/stateCommit" } },
+    "finalVerificationRef": { "type": ["string", "null"] },
+    "finalPlanRef": { "type": ["string", "null"] },
+    "finalStatus": { "enum": ["COMPLETED", "BLOCKED", "FAILED"] }
+  },
+  "$defs": {
+    "graphRevision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["revision", "priorGraphHash", "newGraphHash", "reasonCode", "triggerRefs", "addedNodeRefs", "removedNodeRefs", "changedEdgeRefs"],
+      "properties": {
+        "revision": { "type": "integer", "minimum": 1 },
+        "priorGraphHash": { "type": "string", "minLength": 1 },
+        "newGraphHash": { "type": "string", "minLength": 1 },
+        "reasonCode": { "type": "string", "minLength": 1 },
+        "triggerRefs": { "type": "array", "items": { "type": "string" } },
+        "addedNodeRefs": { "type": "array", "items": { "type": "string" } },
+        "removedNodeRefs": { "type": "array", "items": { "type": "string" } },
+        "changedEdgeRefs": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "nodeSelection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["nodeId", "agentId", "disposition", "reasonCodes", "policyRefs", "featureRefs"],
+      "properties": {
+        "nodeId": { "type": "string", "minLength": 1 },
+        "agentId": { "type": "string", "minLength": 1 },
+        "disposition": { "enum": ["SELECTED", "SKIPPED", "DEFERRED"] },
+        "reasonCodes": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+        "policyRefs": { "type": "array", "items": { "type": "string" } },
+        "featureRefs": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "nodeRun": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["nodeRunId", "nodeId", "agentId", "attempt", "contractVersion", "contractHash", "contextManifestRef", "executionRef", "evaluationRef", "inputRefs", "outputRef", "status", "startedAt", "completedAt"],
+      "properties": {
+        "nodeRunId": { "type": "string", "minLength": 1 },
+        "nodeId": { "type": "string", "minLength": 1 },
+        "agentId": { "type": "string", "minLength": 1 },
+        "attempt": { "type": "integer", "minimum": 1 },
+        "contractVersion": { "type": "string", "minLength": 1 },
+        "contractHash": { "type": "string", "minLength": 1 },
+        "contextManifestRef": { "type": "string", "minLength": 1 },
+        "executionRef": { "type": ["string", "null"] },
+        "evaluationRef": { "type": ["string", "null"] },
+        "inputRefs": { "type": "array", "items": { "type": "string" } },
+        "outputRef": { "type": ["string", "null"] },
+        "status": { "enum": ["SUCCEEDED", "FAILED", "BLOCKED", "TIMED_OUT", "CANCELLED"] },
+        "startedAt": { "type": "string", "format": "date-time" },
+        "completedAt": { "type": ["string", "null"], "format": "date-time" }
+      }
+    },
+    "handoff": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["handoffId", "producerNodeRunRef", "consumerNodeRef", "objectRef", "schemaRef", "schemaValidationStatus", "snapshotCompatibilityStatus", "authorityValidationStatus", "accepted"],
+      "properties": {
+        "handoffId": { "type": "string", "minLength": 1 },
+        "producerNodeRunRef": { "type": "string", "minLength": 1 },
+        "consumerNodeRef": { "type": "string", "minLength": 1 },
+        "objectRef": { "type": "string", "minLength": 1 },
+        "schemaRef": { "type": "string", "minLength": 1 },
+        "schemaValidationStatus": { "enum": ["PASS", "FAIL"] },
+        "snapshotCompatibilityStatus": { "enum": ["PASS", "FAIL", "NOT_APPLICABLE"] },
+        "authorityValidationStatus": { "enum": ["PASS", "FAIL"] },
+        "accepted": { "type": "boolean" }
+      }
+    },
+    "retryEvent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["retryEventId", "nodeId", "priorNodeRunRef", "nextAttempt", "failureAttributionRef", "disposition", "reasonCode", "newContextManifestRef"],
+      "properties": {
+        "retryEventId": { "type": "string", "minLength": 1 },
+        "nodeId": { "type": "string", "minLength": 1 },
+        "priorNodeRunRef": { "type": "string", "minLength": 1 },
+        "nextAttempt": { "type": ["integer", "null"], "minimum": 2 },
+        "failureAttributionRef": { "type": "string", "minLength": 1 },
+        "disposition": { "enum": ["RETRY", "NO_RETRY", "ROUTE_TO_REPAIR", "BLOCK_WORKFLOW", "FAIL_WORKFLOW"] },
+        "reasonCode": { "type": "string", "minLength": 1 },
+        "newContextManifestRef": { "type": ["string", "null"] }
+      }
+    },
+    "repairLoop": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["repairLoopId", "iteration", "verificationRef", "repairTargetRefs", "ownerRecheckNodeRefs", "adaptiveNodeRunRef", "postRepairRecheckNodeRefs", "nextVerificationRef", "status"],
+      "properties": {
+        "repairLoopId": { "type": "string", "minLength": 1 },
+        "iteration": { "type": "integer", "minimum": 1 },
+        "verificationRef": { "type": "string", "minLength": 1 },
+        "repairTargetRefs": { "type": "array", "items": { "type": "string" } },
+        "ownerRecheckNodeRefs": { "type": "array", "items": { "type": "string" } },
+        "adaptiveNodeRunRef": { "type": ["string", "null"] },
+        "postRepairRecheckNodeRefs": { "type": "array", "items": { "type": "string" } },
+        "nextVerificationRef": { "type": ["string", "null"] },
+        "status": { "enum": ["REPAIRED", "BLOCKED", "FAILED", "LIMIT_REACHED"] }
+      }
+    },
+    "failureAttribution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["failureAttributionId", "nodeRunRef", "primaryClass", "secondaryClasses", "component", "smallestFailingScope", "reproducible"],
+      "properties": {
+        "failureAttributionId": { "type": "string", "minLength": 1 },
+        "nodeRunRef": { "type": ["string", "null"] },
+        "primaryClass": { "enum": ["CONTRACT", "SCHEMA", "DETERMINISTIC_RULE", "CONTEXT_ASSEMBLY", "CONTEXT_SCOPE", "PROMPT", "MODEL", "TOOL_SELECTION", "TOOL_POLICY", "TOOL_PROVIDER", "TOOL_ADAPTER", "NORMALIZATION", "AUTHORITY", "HANDOFF", "ORCHESTRATION", "VERIFICATION", "EVALUATOR", "STATE_COMMIT", "UNKNOWN"] },
+        "secondaryClasses": { "type": "array", "items": { "type": "string" } },
+        "component": { "type": "string", "minLength": 1 },
+        "smallestFailingScope": { "type": ["string", "null"] },
+        "reproducible": { "type": "boolean" }
+      }
+    },
+    "budgetUsage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["wallClockMs", "nodeAttempts", "repairLoops", "toolCalls", "modelTokens", "estimatedCost", "budgetExceededDimensions"],
+      "properties": {
+        "wallClockMs": { "type": "integer", "minimum": 0 },
+        "nodeAttempts": { "type": "integer", "minimum": 0 },
+        "repairLoops": { "type": "integer", "minimum": 0 },
+        "toolCalls": { "type": "integer", "minimum": 0 },
+        "modelTokens": { "type": ["integer", "null"], "minimum": 0 },
+        "estimatedCost": { "type": ["number", "null"], "minimum": 0 },
+        "budgetExceededDimensions": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "authorityViolation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["violationId", "code", "actorRef", "targetRef", "blockedBeforeExecution", "traceRef"],
+      "properties": {
+        "violationId": { "type": "string", "minLength": 1 },
+        "code": { "type": "string", "minLength": 1 },
+        "actorRef": { "type": "string", "minLength": 1 },
+        "targetRef": { "type": "string", "minLength": 1 },
+        "blockedBeforeExecution": { "type": "boolean" },
+        "traceRef": { "type": "string", "minLength": 1 }
+      }
+    },
+    "stateTransition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["transitionId", "fromPhase", "toPhase", "reasonCode", "triggerRefs"],
+      "properties": {
+        "transitionId": { "type": "string", "minLength": 1 },
+        "fromPhase": { "enum": ["CREATED", "INTAKE", "RESEARCH", "PLANNING", "BUDGET", "VERIFICATION", "REPAIR", "EXPLANATION", "COMPOSITION", "COMPLETED", "BLOCKED", "FAILED"] },
+        "toPhase": { "enum": ["INTAKE", "RESEARCH", "PLANNING", "BUDGET", "VERIFICATION", "REPAIR", "EXPLANATION", "COMPOSITION", "COMPLETED", "BLOCKED", "FAILED"] },
+        "reasonCode": { "type": "string", "minLength": 1 },
+        "triggerRefs": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "stateCommit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["stateCommitAttemptId", "candidateStateRef", "candidateSnapshotHash", "verificationRef", "verificationStatus", "decision", "reasonCodes"],
+      "properties": {
+        "stateCommitAttemptId": { "type": "string", "minLength": 1 },
+        "candidateStateRef": { "type": "string", "minLength": 1 },
+        "candidateSnapshotHash": { "type": "string", "minLength": 1 },
+        "verificationRef": { "type": ["string", "null"] },
+        "verificationStatus": { "enum": ["PASS", "REPAIR", "FAIL", "MISSING"] },
+        "decision": { "enum": ["COMMITTED", "BLOCKED", "REJECTED"] },
+        "reasonCodes": { "type": "array", "minItems": 1, "items": { "type": "string" } }
+      }
+    }
+  }
+}
