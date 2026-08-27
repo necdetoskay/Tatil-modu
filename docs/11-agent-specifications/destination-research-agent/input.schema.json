@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tatil-modu.local/schemas/destination-research-input.v1.json",
+  "title": "DestinationResearchInput.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "requestId", "travelerProfile", "policyPackage", "destinationScope"],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "requestId": { "type": "string", "minLength": 1 },
+    "travelerProfile": { "$ref": "https://tatil-modu.local/schemas/traveler-profile.v1.json" },
+    "policyPackage": { "$ref": "https://tatil-modu.local/schemas/preference-policy-output.v1.json" },
+    "destinationScope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "originName", "targetName"],
+      "properties": {
+        "mode": { "enum": ["FIXED_TARGET", "OPEN_DESTINATION"] },
+        "originName": { "type": ["string", "null"] },
+        "targetName": { "type": ["string", "null"] },
+        "country": { "type": ["string", "null"] },
+        "dateRange": {
+          "anyOf": [
+            { "type": "null" },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["startDate", "endDate"],
+              "properties": {
+                "startDate": { "type": "string", "format": "date" },
+                "endDate": { "type": "string", "format": "date" }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "contextManifestId": { "type": ["string", "null"] }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "destinationScope": { "properties": { "mode": { "const": "FIXED_TARGET" } } } } },
+      "then": { "properties": { "destinationScope": { "required": ["targetName"] } } }
+    }
+  ]
+}
