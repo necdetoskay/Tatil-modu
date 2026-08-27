@@ -16,12 +16,13 @@
     "destinationBrief": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["destinationId", "name", "administrativeType", "relationToTarget", "geoIdentity", "experienceThemes", "seasonality", "constraintRelevance", "routeValidationRequired", "researchStatus", "unresolvedClaims", "evidence", "confidence"],
+      "required": ["destinationId", "name", "administrativeType", "relationToTarget", "exceptionPolicyRefs", "geoIdentity", "experienceThemes", "seasonality", "constraintRelevance", "routeValidationRequired", "researchStatus", "unresolvedClaims", "evidence", "confidence"],
       "properties": {
         "destinationId": { "type": "string", "minLength": 1 },
         "name": { "type": "string", "minLength": 1 },
         "administrativeType": { "enum": ["city", "district", "region", "resort_area", "nature_region", "thermal_region", "mixed"] },
         "relationToTarget": { "enum": ["primary", "nearby", "exceptional"] },
+        "exceptionPolicyRefs": { "type": "array", "items": { "type": "string" } },
         "geoIdentity": {
           "type": "object",
           "additionalProperties": false,
@@ -61,7 +62,13 @@
         "unresolvedClaims": { "type": "array", "items": { "type": "string" } },
         "evidence": { "type": "array", "items": { "$ref": "#/$defs/evidence" } },
         "confidence": { "type": "number", "minimum": 0, "maximum": 1 }
-      }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "relationToTarget": { "const": "exceptional" } } },
+          "then": { "properties": { "exceptionPolicyRefs": { "minItems": 1 } } }
+        }
+      ]
     },
     "evidence": {
       "type": "object",
