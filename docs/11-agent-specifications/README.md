@@ -1,7 +1,7 @@
 # 11 — Agent Specifications
 
 **Doküman türü:** canonical agent specification alanı  
-**Durum:** canonical catalog v1.0 + thirteen golden agent packages  
+**Durum:** canonical catalog v1.0 + fourteen golden agent packages  
 **Kodlama durumu:** kapalı  
 **Prototype durumu:** kapalı
 
@@ -46,7 +46,7 @@ canonical_catalog_date: 2026-08-27
 | TM-AG-011 | Public Authority Intelligence Agent | **golden package v1 ready** |
 | TM-AG-012 | Review Intelligence Agent | **golden package v1 ready** |
 | TM-AG-013 | Adaptive Itinerary Agent | **golden package v1 ready** |
-| TM-AG-014 | Verification Agent | pending |
+| TM-AG-014 | Verification Agent | **golden package v1 ready** |
 | TM-AG-015 | Explanation Agent | pending |
 | TM-AG-016 | Final Composer Agent | pending |
 | TM-ORCH-001 | Travel Orchestrator | pending |
@@ -254,16 +254,34 @@ preservation_proof_required: true
 trigger_resolution_trace_required: true
 verification_recheck_required_after_mutation: true
 ```
+Fixture-driven contract gap:
+- multiple/conflicting triggers needed per-trigger disposition → `triggerResolutions[]` added.
+
+### TM-AG-014 Verification
+```yaml
+behavior_cases: 24
+authority_cases: 7
+tool_policy_cases: 6
+context_lifecycle_cases: 5
+provenance_cases: 7
+journey_issue_49_cases: 4
+knowledge_issue_50_cases: 4
+event_season_issue_51_cases: 5
+adaptive_cases: 5
+deterministic_before_semantic: true
+zero_blocking_findings_required_for_pass: true
+verified_snapshot_hash_required: true
+```
 Invariants:
 ```text
-small change → smallest justified repair scope
-protected unchanged scope → equal before/after hash
-user-fixed decision cannot disappear silently
-recurring event knowledge != exact occurrence fact
-climate normal != exact-day weather trigger
+G0..G9 blocking failure cannot be overridden by G10 semantic quality
+PASS requires zero blocking findings
+precomputed knowledge != current critical evidence
+review experience != OfficialFact
+adaptive REPAIRED != verified state advancement
 ```
 Fixture-driven contract gap:
-- multiple/conflicting triggers needed per-trigger disposition → `triggerResolutions[]` added with `APPLIED | NO_EFFECT | DEFERRED | CONFLICTING`.
+- verification policy/evaluator lineage missing from result → `policySnapshotRefs[] + evaluatorRefs[]` added.
 
 ## Eski first-phase specs
 
@@ -302,9 +320,10 @@ TM_AG_010_budget_package: completed
 TM_AG_011_public_authority_package: completed
 TM_AG_012_review_intelligence_package: completed
 TM_AG_013_adaptive_itinerary_package: completed
+TM_AG_014_verification_package: completed
 runtime_tests: pending
-next_agent_package: TM-AG-014
+next_agent_package: TM-AG-015
 implementation_allowed: false
 ```
 
-Bir sonraki paket `TM-AG-014 Verification Agent` olacaktır. Bu paket tüm upstream çıktılarda deterministic schema/constraint/time/route/budget/evidence/provenance gate'lerini ve `PASS | FAIL | REPAIR` kararını kanonikleştirecektir.
+Bir sonraki paket `TM-AG-015 Explanation Agent` olacaktır. Bu agent yalnız verified snapshot/trace/evidence üzerinden kullanıcıya gerekçe üretir; yeni fact, yeni karar veya yeni candidate eklemesi authority violation olacaktır.
