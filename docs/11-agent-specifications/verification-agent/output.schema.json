@@ -1,0 +1,121 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tatil-modu.local/schemas/verification-result.v1.json",
+  "title": "VerificationResult.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "verificationRunId", "requestId", "verifiedSnapshotRef", "verifiedSnapshotHash", "status", "gates", "blockingFindings", "nonBlockingFindings", "repairTargets", "evidenceCoverage", "authoritySummary", "provenanceSummary", "requiredRechecks", "confidence"],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "verificationRunId": { "type": "string", "minLength": 1 },
+    "requestId": { "type": "string", "minLength": 1 },
+    "verifiedSnapshotRef": { "type": "string", "minLength": 1 },
+    "verifiedSnapshotHash": { "type": "string", "minLength": 1 },
+    "status": { "enum": ["PASS", "REPAIR", "FAIL"] },
+    "gates": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/gate" } },
+    "blockingFindings": { "type": "array", "items": { "$ref": "#/$defs/finding" } },
+    "nonBlockingFindings": { "type": "array", "items": { "$ref": "#/$defs/finding" } },
+    "repairTargets": { "type": "array", "items": { "$ref": "#/$defs/repairTarget" } },
+    "evidenceCoverage": { "$ref": "#/$defs/evidenceCoverage" },
+    "authoritySummary": { "$ref": "#/$defs/authoritySummary" },
+    "provenanceSummary": { "$ref": "#/$defs/provenanceSummary" },
+    "requiredRechecks": { "type": "array", "items": { "$ref": "#/$defs/recheck" } },
+    "confidence": { "type": "number", "minimum": 0, "maximum": 1 }
+  },
+  "$defs": {
+    "gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["gateId", "gateFamily", "method", "status", "severity", "subjectRefs", "ruleRefs", "evidenceRefs", "findingCodes"],
+      "properties": {
+        "gateId": { "type": "string", "minLength": 1 },
+        "gateFamily": { "enum": ["G0_SCHEMA", "G1_PROVENANCE", "G2_AUTHORITY", "G3_CONSTRAINTS", "G4_TIME_GRAPH", "G5_ROUTE", "G6_OPERATIONAL_FRESHNESS", "G7_WEATHER_EVENT_SEASONAL", "G8_BUDGET", "G9_EVIDENCE_COVERAGE", "G10_SEMANTIC"] },
+        "method": { "enum": ["DETERMINISTIC", "SEMANTIC", "READONLY_RECHECK"] },
+        "status": { "enum": ["PASS", "FAIL", "REPAIR", "SKIP"] },
+        "severity": { "enum": ["BLOCKING", "NON_BLOCKING"] },
+        "subjectRefs": { "type": "array", "items": { "type": "string" } },
+        "ruleRefs": { "type": "array", "items": { "type": "string" } },
+        "evidenceRefs": { "type": "array", "items": { "type": "string" } },
+        "findingCodes": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "finding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["findingId", "code", "severity", "subjectRefs", "ruleRefs", "evidenceRefs", "messageKey"],
+      "properties": {
+        "findingId": { "type": "string", "minLength": 1 },
+        "code": { "type": "string", "minLength": 1 },
+        "severity": { "enum": ["BLOCKING", "NON_BLOCKING"] },
+        "subjectRefs": { "type": "array", "items": { "type": "string" } },
+        "ruleRefs": { "type": "array", "items": { "type": "string" } },
+        "evidenceRefs": { "type": "array", "items": { "type": "string" } },
+        "messageKey": { "type": "string", "minLength": 1 }
+      }
+    },
+    "repairTarget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["repairTargetId", "reasonCode", "targetRefs", "dependencyRefs", "requiredOwner", "requiredEvidenceTypes", "severity"],
+      "properties": {
+        "repairTargetId": { "type": "string", "minLength": 1 },
+        "reasonCode": { "type": "string", "minLength": 1 },
+        "targetRefs": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+        "dependencyRefs": { "type": "array", "items": { "type": "string" } },
+        "requiredOwner": { "type": "string", "minLength": 1 },
+        "requiredEvidenceTypes": { "type": "array", "items": { "type": "string" } },
+        "severity": { "enum": ["BLOCKING", "NON_BLOCKING"] }
+      }
+    },
+    "evidenceCoverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["criticalClaimsTotal", "criticalClaimsVerified", "criticalClaimsUnknown", "criticalClaimsConflicting", "officialCoverage", "routeCoverage", "weatherCoverage", "priceCoverage", "provenanceCoverage"],
+      "properties": {
+        "criticalClaimsTotal": { "type": "integer", "minimum": 0 },
+        "criticalClaimsVerified": { "type": "integer", "minimum": 0 },
+        "criticalClaimsUnknown": { "type": "integer", "minimum": 0 },
+        "criticalClaimsConflicting": { "type": "integer", "minimum": 0 },
+        "officialCoverage": { "type": "number", "minimum": 0, "maximum": 1 },
+        "routeCoverage": { "type": "number", "minimum": 0, "maximum": 1 },
+        "weatherCoverage": { "type": "number", "minimum": 0, "maximum": 1 },
+        "priceCoverage": { "type": "number", "minimum": 0, "maximum": 1 },
+        "provenanceCoverage": { "type": "number", "minimum": 0, "maximum": 1 }
+      }
+    },
+    "authoritySummary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["agentViolations", "toolViolations", "orchestratorDirectDomainToolViolations"],
+      "properties": {
+        "agentViolations": { "type": "array", "items": { "type": "string" } },
+        "toolViolations": { "type": "array", "items": { "type": "string" } },
+        "orchestratorDirectDomainToolViolations": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "provenanceSummary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["missingRefs", "brokenLineageRefs", "snapshotMismatchRefs", "adaptivePreservationFailures"],
+      "properties": {
+        "missingRefs": { "type": "array", "items": { "type": "string" } },
+        "brokenLineageRefs": { "type": "array", "items": { "type": "string" } },
+        "snapshotMismatchRefs": { "type": "array", "items": { "type": "string" } },
+        "adaptivePreservationFailures": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "recheck": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["recheckId", "type", "ownerId", "scopeRefs", "requiredEvidenceTypes", "blocking"],
+      "properties": {
+        "recheckId": { "type": "string", "minLength": 1 },
+        "type": { "enum": ["OFFICIAL_FACT", "ROUTE", "WEATHER", "PRICE", "AVAILABILITY", "REVIEW", "EVENT_OCCURRENCE", "OTHER"] },
+        "ownerId": { "type": "string", "minLength": 1 },
+        "scopeRefs": { "type": "array", "items": { "type": "string" } },
+        "requiredEvidenceTypes": { "type": "array", "items": { "type": "string" } },
+        "blocking": { "type": "boolean" }
+      }
+    }
+  }
+}
