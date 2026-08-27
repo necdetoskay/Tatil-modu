@@ -1,0 +1,123 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tatil-modu.local/schemas/review-intelligence-input.v1.json",
+  "title": "ReviewIntelligenceInput.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "requestId", "entityRef", "entityType", "analysisWindow", "reviewQualityPolicySnapshotId", "licensePolicySnapshotId", "records", "priorSnapshot", "currentDateTime"],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "requestId": { "type": "string", "minLength": 1 },
+    "entityRef": { "type": "string", "minLength": 1 },
+    "entityType": { "enum": ["PLACE", "ACCOMMODATION", "FOOD", "OTHER"] },
+    "analysisWindow": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["start", "end"],
+      "properties": {
+        "start": { "type": "string", "format": "date-time" },
+        "end": { "type": "string", "format": "date-time" }
+      }
+    },
+    "reviewQualityPolicySnapshotId": { "type": "string", "minLength": 1 },
+    "licensePolicySnapshotId": { "type": "string", "minLength": 1 },
+    "records": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/reviewRecord" }
+    },
+    "providerLookupScope": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "properties": {
+        "providerRefs": { "type": "array", "items": { "type": "string" } },
+        "targetWindow": { "$ref": "#/$defs/timeWindow" },
+        "maxRecords": { "type": ["integer", "null"], "minimum": 1 }
+      }
+    },
+    "priorSnapshot": {
+      "anyOf": [
+        { "type": "null" },
+        { "$ref": "#/$defs/priorSnapshot" }
+      ]
+    },
+    "currentDateTime": { "type": "string", "format": "date-time" },
+    "contextManifestId": { "type": ["string", "null"] }
+  },
+  "$defs": {
+    "timeWindow": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["start", "end"],
+      "properties": {
+        "start": { "type": "string", "format": "date-time" },
+        "end": { "type": "string", "format": "date-time" }
+      }
+    },
+    "reviewRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["recordId", "entityRef", "sourceProviderRef", "reviewedAt", "retrievedAt", "rating", "body", "language", "providerQualitySignals", "duplicateGroupRef", "retentionClass", "evidenceRef"],
+      "properties": {
+        "recordId": { "type": "string", "minLength": 1 },
+        "entityRef": { "type": "string", "minLength": 1 },
+        "sourceProviderRef": { "type": "string", "minLength": 1 },
+        "reviewedAt": { "type": ["string", "null"], "format": "date-time" },
+        "retrievedAt": { "type": "string", "format": "date-time" },
+        "rating": { "type": ["number", "null"], "minimum": 0, "maximum": 5 },
+        "body": { "type": ["string", "null"] },
+        "language": { "type": ["string", "null"] },
+        "providerQualitySignals": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["spamSuspected", "verifiedExperience", "sourceRecordQuality"],
+          "properties": {
+            "spamSuspected": { "type": ["boolean", "null"] },
+            "verifiedExperience": { "type": ["boolean", "null"] },
+            "sourceRecordQuality": { "enum": ["HIGH", "MEDIUM", "LOW", "UNKNOWN"] }
+          }
+        },
+        "duplicateGroupRef": { "type": ["string", "null"] },
+        "segmentMetadata": {
+          "type": ["object", "null"],
+          "additionalProperties": false,
+          "properties": {
+            "familyTravelExplicit": { "type": ["boolean", "null"] },
+            "childrenMentioned": { "type": ["boolean", "null"] }
+          }
+        },
+        "retentionClass": { "enum": ["EPHEMERAL_BODY_ALLOWED", "DERIVED_ONLY", "NO_PERSISTENCE"] },
+        "evidenceRef": { "type": "string", "minLength": 1 }
+      }
+    },
+    "priorSnapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["snapshotRef", "entityRef", "window", "lastUpdatedAt", "freshnessStatus", "sourceProviderRefs", "signals", "qualityPolicySnapshotId", "licensePolicySnapshotId"],
+      "properties": {
+        "snapshotRef": { "type": "string", "minLength": 1 },
+        "entityRef": { "type": "string", "minLength": 1 },
+        "window": { "$ref": "#/$defs/timeWindow" },
+        "lastUpdatedAt": { "type": "string", "format": "date-time" },
+        "freshnessStatus": { "enum": ["CURRENT", "STALE", "UNKNOWN"] },
+        "sourceProviderRefs": { "type": "array", "items": { "type": "string" } },
+        "signals": { "type": "array", "items": { "$ref": "#/$defs/snapshotSignal" } },
+        "qualityPolicySnapshotId": { "type": "string", "minLength": 1 },
+        "licensePolicySnapshotId": { "type": "string", "minLength": 1 }
+      }
+    },
+    "snapshotSignal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["signalRef", "theme", "direction", "mentionCount", "validSampleSize", "prevalence", "confidence"],
+      "properties": {
+        "signalRef": { "type": "string", "minLength": 1 },
+        "theme": { "type": "string", "minLength": 1 },
+        "direction": { "enum": ["POSITIVE", "NEGATIVE", "MIXED", "NEUTRAL"] },
+        "mentionCount": { "type": "integer", "minimum": 0 },
+        "validSampleSize": { "type": "integer", "minimum": 0 },
+        "prevalence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 }
+      }
+    }
+  }
+}
