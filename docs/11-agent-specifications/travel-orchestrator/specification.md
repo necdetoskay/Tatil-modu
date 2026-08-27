@@ -4,7 +4,7 @@
 |---|---|
 | Orchestrator ID | TM-ORCH-001 |
 | Sürüm | 1.0 |
-| Durum | CANONICAL SPEC |
+| Durum | GOLDEN PACKAGE V1 |
 | Tarih | 2026-08-27 |
 
 ## 1. Purpose
@@ -51,10 +51,13 @@ Direct domain-tool call = authority violation.
 - current workflow/trip working-state refs
 - AgentRegistry snapshot
 - orchestration policy snapshot
+- **harness policy/baseline snapshot** (`harnessPolicySnapshotId`)
 - run budget/timeout/quota policy
 - product feature flags/preferences
 - optional prior workflow/checkpoint ref
 - `contextManifestId` for orchestrator-level non-domain context
+
+Harness policy snapshot is required so graph/handoff/context/state-gate behavior can be replayed against the exact orchestration/harness rules used by that run.
 
 ## 4. Output
 
@@ -66,6 +69,7 @@ workflowId: string
 tripRequestRef: string
 registrySnapshotId: string
 orchestrationPolicySnapshotId: string
+harnessPolicySnapshotId: string
 initialGraphHash: string
 finalGraphHash: string
 graphRevisions: []
@@ -106,7 +110,6 @@ Graph must be acyclic unless an explicit bounded repair-loop edge type is used o
 ## 6. Node selection trace
 
 Every potential/conditional node gets a disposition:
-
 - `SELECTED`
 - `SKIPPED`
 - `DEFERRED`
@@ -176,6 +179,20 @@ Before downstream node becomes READY:
 - producer/consumer snapshot compatibility valid,
 - handoff authority/policy valid.
 
+Every handoff carries at least:
+
+```yaml
+producerNodeRunRef: string
+producerAgentId: string
+consumerNodeRef: string
+consumerAgentId: string
+objectRef: string
+objectType: string
+objectVersion: string
+objectHash: string
+schemaRef: string
+```
+
 Invalid handoff cannot reach downstream.
 
 ## 11. Parallel execution
@@ -217,6 +234,8 @@ Examples:
 - schema-invalid deterministic output → targeted upstream repair/fix path, not blind same retry,
 - authority violation → no retry that repeats forbidden action,
 - hard policy conflict → block/clarify/repair route.
+
+Retry lineage binds the prior node run, next attempt, failure attribution and any new context manifest.
 
 ## 13. Workflow budgets
 
@@ -299,7 +318,6 @@ Orchestrator chooses capability path; it does not decide tourism value or stop r
 ## 18. Issue #50 — knowledge-first routing
 
 Orchestrator may route based on **knowledge availability/freshness metadata**, not domain truth:
-
 - `KNOWLEDGE_HIT`
 - `TARGETED_REFRESH`
 - `FULL_DISCOVERY`
@@ -385,14 +403,35 @@ Orchestration output keeps failure attribution refs so RIVE descent can start wi
 - R7 controlled live E2E
 - R8 workflow regressions
 
-## 25. Current status
+## 25. Golden fixture coverage
 
 ```yaml
-orchestrator_spec_status: canonical_v1
+behavior_cases: 20
+authority_cases: 9
+tool_policy_cases: 9
+context_lifecycle_cases: 6
+provenance_cases: 9
+journey_issue_49_cases: 4
+knowledge_issue_50_cases: 5
+event_season_issue_51_cases: 5
+state_gate_cases: 5
+```
+
+Fixture-driven contract gaps closed:
+- orchestration runtime policy/baseline provenance → `harnessPolicySnapshotId`
+- handoff lineage → `producerAgentId + consumerAgentId + objectType + objectVersion + objectHash`
+
+## 26. Current status
+
+```yaml
+orchestrator_spec_status: golden_v1
 implementation_allowed: false
 prototype_allowed: false
-schemas: pending
-policies: pending
-fixtures: pending
+schemas: completed
+policies: completed
+fixtures: completed
 all_16_specialist_packages_required: true
+all_16_specialist_packages_ready: true
+cross_contract_reconciliation_audit: pending
+runtime_tests: pending
 ```
