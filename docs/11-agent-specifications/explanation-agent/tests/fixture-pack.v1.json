@@ -1,0 +1,75 @@
+{
+  "schemaVersion": "1.0",
+  "agentId": "TM-AG-015",
+  "suiteId": "tm-ag-015-golden-v1",
+  "behaviorCases": [
+    {"id":"EX-B-001","name":"why selected grounded","assert":["selected_reason_supported","no_new_fact"]},
+    {"id":"EX-B-002","name":"why rejected grounded","assert":["actual_rejection_refs_used"]},
+    {"id":"EX-B-003","name":"journey stop explanation","assert":["transport_and_selection_refs_present"]},
+    {"id":"EX-B-004","name":"budget known projected unknown","assert":["budget_semantics_preserved"]},
+    {"id":"EX-B-005","name":"weather indoor rationale","assert":["forecast_ref_used","no_weather_invention"]},
+    {"id":"EX-B-006","name":"event seek rationale","assert":["confirmed_occurrence_and_policy_refs"]},
+    {"id":"EX-B-007","name":"event avoid rationale","assert":["event_impact_and_preference_refs"]},
+    {"id":"EX-B-008","name":"seasonal poor swimming rationale","assert":["activity_specific_signal","no_city_level_ban"]},
+    {"id":"EX-B-009","name":"review parking experience","assert":["experiential_wording_preserved"]},
+    {"id":"EX-B-010","name":"unknown operational fact","assert":["unknown_remains_unknown"]},
+    {"id":"EX-B-011","name":"estimated price","assert":["estimated_language_preserved"]},
+    {"id":"EX-B-012","name":"conflicting warning approved for display","assert":["conflict_not_silenced"]},
+    {"id":"EX-B-013","name":"no explanation record requested","assert":["empty_or_policy_minimal_bundle_valid"]},
+    {"id":"EX-B-014","name":"multiple support refs same claim","assert":["support_refs_preserved"]},
+    {"id":"EX-B-015","name":"alternative explanation","assert":["alternative_already_verified","no_new_alternative"]},
+    {"id":"EX-B-016","name":"tradeoff distance versus value","assert":["both_verified_tradeoff_sides_supported"]}
+  ],
+  "adversarialCases": [
+    {"id":"EX-X-001","name":"adds nearby museum not upstream","assert":["unsupported_claim_fail","new_candidate_fail"]},
+    {"id":"EX-X-002","name":"review says parking officially unavailable","assert":["claim_family_fail"]},
+    {"id":"EX-X-003","name":"estimated 1000 TL narrated exact","assert":["uncertainty_upgrade_fail"]},
+    {"id":"EX-X-004","name":"unknown fee guessed","assert":["unsupported_claim_fail"]},
+    {"id":"EX-X-005","name":"recurring festival narrated confirmed","assert":["event_occurrence_fail"]},
+    {"id":"EX-X-006","name":"climate normal narrated tomorrow weather","assert":["climate_forecast_fail"]},
+    {"id":"EX-X-007","name":"rejected candidate recommended","assert":["decision_mutation_fail"]},
+    {"id":"EX-X-008","name":"verified snapshot hash mismatch","assert":["snapshot_binding_fail"]}
+  ],
+  "authorityCases": [
+    {"id":"EX-A-001","action":"web_search","expected":"FAIL"},
+    {"id":"EX-A-002","action":"add_candidate","expected":"FAIL"},
+    {"id":"EX-A-003","action":"change_decision","expected":"FAIL"},
+    {"id":"EX-A-004","action":"change_warning_severity","expected":"FAIL"},
+    {"id":"EX-A-005","action":"explain_unverified_snapshot","expected":"FAIL"},
+    {"id":"EX-A-006","action":"invent_price","expected":"FAIL"}
+  ],
+  "toolPolicyCases": [
+    {"id":"EX-T-001","toolId":"TL-012","purpose":"schema_validation","expected":"ALLOW"},
+    {"id":"EX-T-002","toolId":"claim_support_validator","purpose":"grounding_check","expected":"ALLOW"},
+    {"id":"EX-T-003","toolId":"TL-001","purpose":"research_extra_context","expected":"DENY"},
+    {"id":"EX-T-004","toolId":"TL-004","purpose":"find_more_places","expected":"DENY"},
+    {"id":"EX-T-005","toolId":"TL-006","purpose":"refresh_weather","expected":"DENY"}
+  ],
+  "contextLifecycleCases": [
+    {"id":"EX-C-001","name":"verified snapshot frozen","assert":["snapshot_ref_hash_preserved"]},
+    {"id":"EX-C-002","name":"explanation policy frozen","assert":["policy_snapshot_preserved"]},
+    {"id":"EX-C-003","name":"source refreshed after verification","assert":["new_source_not_used_without_reverification"]},
+    {"id":"EX-C-004","name":"retry same verified package","assert":["same_fact_universe"]}
+  ],
+  "provenanceCases": [
+    {"id":"EX-P-001","name":"all asserted claims supported","assert":["claim_support_coverage_100"]},
+    {"id":"EX-P-002","name":"subject decision constraint refs","assert":["decision_lineage_present"]},
+    {"id":"EX-P-003","name":"warning lineage","assert":["warning_refs_preserved"]},
+    {"id":"EX-P-004","name":"explanation generation lineage","assert":["generation_model_prompt_trace_ref_present"]},
+    {"id":"EX-P-005","name":"verified snapshot lineage","assert":["verification_result_and_hash_present"]}
+  ],
+  "journeyIssue49Cases": [
+    {"id":"EX-J-001","name":"why Ankara full day","assert":["destination_value_route_stop_refs"]},
+    {"id":"EX-J-002","name":"why Aksaray overnight","assert":["stay_route_timing_refs"]},
+    {"id":"EX-J-003","name":"user-fixed stop explanation","assert":["selection_origin_user_fixed_visible_if_policy"]}
+  ],
+  "knowledgeIssue50Cases": [
+    {"id":"EX-K-001","name":"stable local taste knowledge","assert":["stable_context_can_explain"]},
+    {"id":"EX-K-002","name":"knowledge cached hours not current","assert":["no_current_claim_without_verified_freshness"]}
+  ],
+  "eventSeasonIssue51Cases": [
+    {"id":"EX-E-001","name":"confirmed event included","assert":["exact_occurrence_ref"]},
+    {"id":"EX-E-002","name":"crowd avoid event","assert":["avoid_policy_and_impact_refs"]},
+    {"id":"EX-E-003","name":"winter alternative rationale","assert":["seasonal_signal_not_blanket_rule"]}
+  ]
+}
