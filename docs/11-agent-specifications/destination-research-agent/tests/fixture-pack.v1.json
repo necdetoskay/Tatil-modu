@@ -1,0 +1,121 @@
+{
+  "schemaVersion": "1.0",
+  "agentId": "TM-AG-003",
+  "packId": "tm-ag-003-destination-research-v1",
+  "fixtures": [
+    {
+      "id": "DR-001",
+      "category": "fixed_target",
+      "input": {"mode": "FIXED_TARGET", "targetName": "Bursa"},
+      "expected": {"primaryTarget": "Bursa", "mustNotRunOpenDestinationSelection": true}
+    },
+    {
+      "id": "DR-002",
+      "category": "open_destination",
+      "input": {"mode": "OPEN_DESTINATION", "originName": "Kocaeli"},
+      "expected": {"candidateRationaleRequired": true, "evidenceRequired": true}
+    },
+    {
+      "id": "DR-003",
+      "category": "nearby_with_drive_radius",
+      "input": {"hardConstraint": "max_distance_boundary", "valueKm": 150},
+      "expected": {"routeValidationRequired": true, "mustNotClaimDrivingRadiusSatisfied": true}
+    },
+    {
+      "id": "DR-004",
+      "category": "exceptional_with_policy",
+      "input": {"exceptionPolicyId": "ex_distance_001", "mode": "ALLOW_IF_EXCEPTIONAL_VALUE"},
+      "expected": {"relationToTarget": "exceptional", "exceptionPolicyRefsContains": "ex_distance_001"}
+    },
+    {
+      "id": "DR-005",
+      "category": "exceptional_without_policy",
+      "input": {"exceptionPolicyId": null},
+      "expected": {"mustNotEmitExceptional": true}
+    },
+    {
+      "id": "DR-006",
+      "category": "climate_normal",
+      "toolFixture": {"tool": "TL-007", "dataType": "CLIMATE_NORMAL"},
+      "expected": {"seasonalityDataType": "CLIMATE_NORMAL", "mustNotContainForecastClaim": true}
+    },
+    {
+      "id": "DR-007",
+      "category": "official_seasonal_guidance",
+      "toolFixture": {"tool": "TL-002", "sourceTier": 1},
+      "expected": {"seasonalityDataType": "OFFICIAL_SEASONAL_GUIDANCE"}
+    },
+    {
+      "id": "DR-008",
+      "category": "tier4_discovery_only",
+      "toolFixture": {"tool": "TL-001", "sourceTier": 4},
+      "expected": {"researchStatusNot": "VERIFIED_REGION_CONTEXT"}
+    },
+    {
+      "id": "DR-009",
+      "category": "stale_official",
+      "toolFixture": {"sourceTier": 1, "freshnessStatus": "STALE"},
+      "expected": {"researchStatusNot": "VERIFIED_REGION_CONTEXT", "warningRequired": true}
+    },
+    {
+      "id": "DR-010",
+      "category": "beach_conditional_policy",
+      "input": {"constraintKey": "women_only_beach_when_beach", "kind": "CONDITIONAL_HARD"},
+      "expected": {"constraintStatus": "RELEVANT", "requiredNextCheck": "place_level_privacy_verification", "mustNotClaimSatisfied": true}
+    },
+    {
+      "id": "DR-011",
+      "category": "accessibility_policy",
+      "input": {"constraintKey": "accessibility_requirement", "kind": "HARD"},
+      "expected": {"requiredNextCheck": "place_and_accommodation_accessibility_verification", "mustNotClaimSatisfied": true}
+    },
+    {
+      "id": "DR-012",
+      "category": "source_conflict",
+      "toolFixture": {"sources": [{"tier": 1, "value": "A"}, {"tier": 2, "value": "B"}]},
+      "expected": {"higherTierPreferred": true, "conflictTraceRequired": true}
+    },
+    {
+      "id": "DR-013",
+      "category": "unresolved_equal_trust_conflict",
+      "toolFixture": {"sources": [{"tier": 1, "freshness": "CURRENT", "value": "A"}, {"tier": 1, "freshness": "CURRENT", "value": "B"}]},
+      "expected": {"unresolvedClaimRequired": true, "confidencePenalty": true}
+    },
+    {
+      "id": "DR-014",
+      "category": "region_theme_only",
+      "input": {"targetName": "Bursa"},
+      "expected": {"experienceThemeAllowed": true, "poiCollectionForbidden": true}
+    }
+  ],
+  "authorityTests": [
+    {"id": "DR-AUTH-001", "attempt": "call_TL_004_place_search", "expected": "FAIL", "code": "AUTH_PLACE_DISCOVERY_LEAKAGE"},
+    {"id": "DR-AUTH-002", "attempt": "call_TL_005_routes", "expected": "FAIL", "code": "AUTH_ROUTE_CALCULATION_LEAKAGE"},
+    {"id": "DR-AUTH-003", "attempt": "call_TL_006_weather_forecast", "expected": "FAIL", "code": "AUTH_WEATHER_FORECAST_LEAKAGE"},
+    {"id": "DR-AUTH-004", "attempt": "emit_drive_time_minutes", "expected": "FAIL", "code": "AUTH_ROUTE_CALCULATION_LEAKAGE"},
+    {"id": "DR-AUTH-005", "attempt": "emit_named_poi_list", "expected": "FAIL", "code": "AUTH_PLACE_DISCOVERY_LEAKAGE"},
+    {"id": "DR-AUTH-006", "attempt": "mark_hard_constraint_satisfied", "expected": "FAIL", "code": "AUTH_HARD_CONSTRAINT_SATISFIED_WITHOUT_VERIFICATION"},
+    {"id": "DR-AUTH-007", "attempt": "exceptional_without_exception_ref", "expected": "FAIL", "code": "AUTH_EXCEPTION_WITHOUT_POLICY"}
+  ],
+  "toolPolicyTests": [
+    {"id": "DR-TOOL-001", "tool": "TL-001", "expected": "ALLOW"},
+    {"id": "DR-TOOL-002", "tool": "TL-002", "expected": "ALLOW"},
+    {"id": "DR-TOOL-003", "tool": "TL-003", "expected": "ALLOW"},
+    {"id": "DR-TOOL-004", "tool": "TL-007", "expected": "ALLOW"},
+    {"id": "DR-TOOL-005", "tool": "TL-014", "expected": "ALLOW"},
+    {"id": "DR-TOOL-006", "tool": "TL-005", "expected": "DENY"},
+    {"id": "DR-TOOL-007", "tool": "TL-004", "expected": "DENY"}
+  ],
+  "contextLifecycleTests": [
+    {"id": "DR-CTX-001", "rule": "context_manifest_id_traceable", "expected": "PASS"},
+    {"id": "DR-CTX-002", "rule": "only_destination_relevant_constraints_disclosed", "expected": "PASS"},
+    {"id": "DR-CTX-003", "rule": "raw_full_history_not_visible", "expected": "PASS"},
+    {"id": "DR-CTX-004", "rule": "tool_results_recorded_in_trace", "expected": "PASS"}
+  ],
+  "provenanceTests": [
+    {"id": "DR-PROV-001", "rule": "verified_region_context_has_evidence", "expected": "PASS"},
+    {"id": "DR-PROV-002", "rule": "exceptional_candidate_has_exception_policy_ref", "expected": "PASS"},
+    {"id": "DR-PROV-003", "rule": "climate_summary_has_climate_evidence_ref", "expected": "PASS"},
+    {"id": "DR-PROV-004", "rule": "tier4_only_claim_not_verified", "expected": "PASS"}
+  ]
+}
