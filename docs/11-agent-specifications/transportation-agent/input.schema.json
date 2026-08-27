@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tatil-modu.local/schemas/transportation-input.v1.json",
+  "title": "TransportationInput.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "requestId", "requestType", "mode", "locations"],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "requestId": { "type": "string", "minLength": 1 },
+    "requestType": { "enum": ["POINT_TO_POINT", "MATRIX", "CORRIDOR_DISCOVERY", "STOP_SEQUENCE_RECALC"] },
+    "mode": { "enum": ["car", "transit", "walking", "cycling", "other"] },
+    "locations": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["locationRef", "name", "latitude", "longitude"],
+        "properties": {
+          "locationRef": { "type": "string", "minLength": 1 },
+          "name": { "type": "string", "minLength": 1 },
+          "latitude": { "type": "number", "minimum": -90, "maximum": 90 },
+          "longitude": { "type": "number", "minimum": -180, "maximum": 180 },
+          "administrativeType": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "departureTime": { "type": ["string", "null"], "format": "date-time" },
+    "arrivalTime": { "type": ["string", "null"], "format": "date-time" },
+    "journeySegmentRefs": { "type": "array", "items": { "type": "string" } },
+    "selectedStopSequenceRefs": { "type": "array", "items": { "type": "string" } },
+    "ruleSnapshotId": { "type": ["string", "null"] },
+    "knowledgeRefs": { "type": "array", "items": { "type": "string" } },
+    "contextManifestId": { "type": ["string", "null"] }
+  }
+}
