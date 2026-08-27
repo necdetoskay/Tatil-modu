@@ -12,7 +12,7 @@
     {"id":"PA-B-007","name":"two official sources unresolved conflict","assert":["status_unknown","conflict_unresolved_visible"]},
     {"id":"PA-B-008","name":"operator newer source resolves ministry old page","assert":["resolution_reason_traceable","winning_evidence_ref_present"]},
     {"id":"PA-B-009","name":"healthy entity source registry hit","assert":["lookup_registry_hit","no_broad_search"]},
-    {"id":"PA-B-010","name":"registry source dead then discovery","assert":["dead_source_feedback","lookup_generic_or_refresh","replacement_discovery_possible"]},
+    {"id":"PA-B-010","name":"registry source dead then discovery","assert":["dead_source_feedback","lookup_generic_or_refresh","replacement_discovery_possible","ordered_lookup_trace_present"]},
     {"id":"PA-B-011","name":"registry entry alone","assert":["status_not_verified_without_fetch"]},
     {"id":"PA-B-012","name":"wrong entity same-name official page","assert":["scope_mismatch","status_not_verified"]},
     {"id":"PA-B-013","name":"partial source answer","assert":["status_unknown_or_partial_evidence","full_claim_not_verified"]},
@@ -48,11 +48,12 @@
     {"id":"PA-P-003","name":"effective date traceable","assert":["effective_window_present"]},
     {"id":"PA-P-004","name":"registry hit traceable","assert":["source_registry_ref_present"]},
     {"id":"PA-P-005","name":"resolved conflict traceable","assert":["winning_evidence_ref_present"]},
-    {"id":"PA-P-006","name":"unknown conflict retains both sources","assert":["all_conflicting_evidence_refs_preserved"]}
+    {"id":"PA-P-006","name":"unknown conflict retains both sources","assert":["all_conflicting_evidence_refs_preserved"]},
+    {"id":"PA-P-007","name":"fallback source lookup sequence traceable","assert":["source_lookup_trace_ordered","registry_attempt_and_discovery_visible"]}
   ],
   "knowledgeIssue50Cases": [
     {"id":"PA-K-001","name":"known province source avoids broad rediscovery","assert":["registry_first"]},
-    {"id":"PA-K-002","name":"dead source yields health feedback","assert":["dead_feedback"]},
+    {"id":"PA-K-002","name":"dead source yields health feedback and fallback trace","assert":["dead_feedback","ordered_lookup_trace_present"]},
     {"id":"PA-K-003","name":"new authoritative source discovered","assert":["new_source_feedback_candidate"]},
     {"id":"PA-K-004","name":"registry knowledge never bypasses claim fetch","assert":["registry_not_fact"]}
   ]
