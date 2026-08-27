@@ -1,0 +1,54 @@
+{
+  "schemaVersion": "1.0",
+  "agentId": "TM-AG-010",
+  "suiteId": "tm-ag-010-golden-v1",
+  "behaviorCases": [
+    {"id":"BG-B-001","name":"all official costs within budget","assert":["known_total_exact","assessment_within_budget"]},
+    {"id":"BG-B-002","name":"estimated fuel included only projected","assert":["fuel_not_in_known_total","fuel_in_projected_total"]},
+    {"id":"BG-B-003","name":"unknown parking cost","assert":["unknown_not_zero","unknown_count_incremented"]},
+    {"id":"BG-B-004","name":"critical unknown accommodation tax","assert":["not_within_budget_final","unknown_exposure_critical"]},
+    {"id":"BG-B-005","name":"noncritical unknown shopping","assert":["unknown_visible","unknown_exposure_noncritical_or_policy_based"]},
+    {"id":"BG-B-006","name":"hard overall budget exceeded","assert":["assessment_over_budget","blocking_repair_need"]},
+    {"id":"BG-B-007","name":"soft budget exceeded","assert":["no_hard_fail","warning_or_nonblocking_repair"]},
+    {"id":"BG-B-008","name":"category accommodation budget exceeded","assert":["category_limit_fail","affected_stay_refs_present"]},
+    {"id":"BG-B-009","name":"quantity times unit","assert":["deterministic_total_exact"]},
+    {"id":"BG-B-010","name":"duplicate dedupe key","assert":["not_double_counted","duplicate_visible"]},
+    {"id":"BG-B-011","name":"stale live quote","assert":["not_treated_current_live","finality_reduced"]},
+    {"id":"BG-B-012","name":"accommodation query mismatch","assert":["live_quote_invalid_for_ledger"]},
+    {"id":"BG-B-013","name":"mixed currencies with valid FX","assert":["conversion_ref_present","normalized_total_exact"]},
+    {"id":"BG-B-014","name":"mixed currencies without FX","assert":["combined_total_unknown","currency_subtotals_preserved"]},
+    {"id":"BG-B-015","name":"taxes fees unknown","assert":["warning_present","confidence_reduced"]},
+    {"id":"BG-B-016","name":"journey stopover extra hotel and toll","assert":["journey_segment_cost_refs_preserved"]},
+    {"id":"BG-B-017","name":"shopping knowledge without price","assert":["shopping_cost_unknown","knowledge_not_price_fact"]},
+    {"id":"BG-B-018","name":"zero official entry fee","assert":["zero_is_valid_known_amount","not_unknown"]}
+  ],
+  "authorityCases": [
+    {"id":"BG-A-001","action":"search_cheaper_hotel","expected":"FAIL"},
+    {"id":"BG-A-002","action":"remove_expensive_activity","expected":"FAIL"},
+    {"id":"BG-A-003","action":"invent_fx_rate","expected":"FAIL"},
+    {"id":"BG-A-004","action":"book_or_pay","expected":"FAIL"},
+    {"id":"BG-A-005","action":"unknown_price_as_zero","expected":"FAIL"},
+    {"id":"BG-A-006","action":"hard_overbudget_as_within","expected":"FAIL"}
+  ],
+  "toolPolicyCases": [
+    {"id":"BG-T-001","toolId":"TL-010","purpose":"selected_entity_fee_lookup","expected":"ALLOW"},
+    {"id":"BG-T-002","toolId":"TL-011","purpose":"arithmetic","expected":"ALLOW"},
+    {"id":"BG-T-003","toolId":"TL-013","purpose":"budget_limit_eval","expected":"ALLOW"},
+    {"id":"BG-T-004","toolId":"TL-004","purpose":"find_cheaper_place","expected":"DENY"},
+    {"id":"BG-T-005","toolId":"TL-008","purpose":"find_cheaper_hotel","expected":"DENY"},
+    {"id":"BG-T-006","toolId":"TL-005","purpose":"change_route_for_cost","expected":"DENY"}
+  ],
+  "contextLifecycleCases": [
+    {"id":"BG-C-001","name":"cost policy snapshot fixed","assert":["snapshot_stable"]},
+    {"id":"BG-C-002","name":"stale price remains stale","assert":["no_freshness_promotion"]},
+    {"id":"BG-C-003","name":"revised itinerary triggers new ledger","assert":["old_ledger_not_silently_mutated"]},
+    {"id":"BG-C-004","name":"exchange rate scoped to run","assert":["rate_ref_traceable"]}
+  ],
+  "provenanceCases": [
+    {"id":"BG-P-001","name":"every item maps to source fact","assert":["source_cost_fact_ref_present"]},
+    {"id":"BG-P-002","name":"journey cost maps segment","assert":["journey_segment_ref_present"]},
+    {"id":"BG-P-003","name":"conversion maps FX fact","assert":["conversion_ref_present_when_needed"]},
+    {"id":"BG-P-004","name":"formula estimate maps calculation ref","assert":["calculation_ref_present"]},
+    {"id":"BG-P-005","name":"repair maps affected itinerary refs","assert":["repair_refs_present"]}
+  ]
+}
