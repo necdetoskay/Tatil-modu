@@ -4,7 +4,7 @@
 |---|---|
 | Agent ID | TM-AG-010 |
 | Sürüm | 1.0 |
-| Durum | CANONICAL SPEC |
+| Durum | CANONICAL / GOLDEN PACKAGE |
 | Tarih | 2026-08-27 |
 
 ## 1. Purpose
@@ -23,16 +23,16 @@ itinerary + normalized cost facts + budget constraints
 ## 2. Boundary
 
 Yapar:
-- accommodation/activity/food/transport/toll/parking/fee maliyetlerini ledger'a bağlama,
+- accommodation/activity/food/transport/toll/parking/fee/shopping maliyetlerini ledger'a bağlama,
 - quantity × unit arithmetic,
-- LIVE/OFFICIAL/ESTIMATED/UNKNOWN statülerini koruma,
-- known total ve projected total hesaplama,
-- unknown exposure görünürlüğü,
+- `LIVE | OFFICIAL | ESTIMATED | UNKNOWN` statülerini koruma,
+- known/projected total hesaplama,
+- critical/non-critical unknown exposure görünürlüğü,
 - hard overall/category budget limit değerlendirmesi,
 - over-budget ise repair ihtiyacı üretme.
 
 Yapmaz:
-- itinerary sırasını değiştirmez,
+- itinerary değiştirmez,
 - daha ucuz POI/otel/restoran keşfetmez,
 - UNKNOWN fiyatı 0 kabul etmez,
 - kur/fiyat uydurmaz,
@@ -42,12 +42,10 @@ Yapmaz:
 ## 3. Inputs
 
 - `DraftItinerary` (TM-AG-009)
-- selected accommodation price facts
-- selected place/activity fee facts
-- selected food price facts varsa
-- route/toll/parking/fuel cost facts veya açık estimate model refs
+- selected accommodation/place/food cost facts
+- route/toll/parking/fuel cost facts veya explicit estimate refs
 - `PreferencePolicyOutput` budget constraints
-- optional exchange-rate facts supplied by upstream capability
+- optional evidence-backed exchange-rate facts
 - cost policy snapshot
 - `contextManifestId`
 
@@ -60,12 +58,14 @@ ledgerId: string
 itineraryRef: string
 targetCurrency: string
 items: BudgetItem[]
-knownTotal: number
+currencySubtotals: []
+knownTotal: number|null
 projectedTotal: number|null
 unknownItemCount: integer
 budgetLimits: []
 assessment:
   status: WITHIN_BUDGET | PROVISIONALLY_WITHIN | OVER_BUDGET | UNKNOWN
+  unknownExposure: NONE | NON_CRITICAL | CRITICAL | UNKNOWN
   headroomAmount: number|null
   overageAmount: number|null
 repairNeeds: []
@@ -76,145 +76,182 @@ warnings: []
 
 ```yaml
 itemId: string
+sourceCostFactRef: string
+dedupeKey: string
 category: ACCOMMODATION | ACTIVITY | FOOD | TRANSPORT | FUEL | TOLL | PARKING | TRANSIT | FEE | SHOPPING | OTHER
+budgetCriticality: CRITICAL | NON_CRITICAL
 itineraryRefs: []
 entityRef: string|null
+journeySegmentRef: string|null
 quantity: number|null
 unitAmount: number|null
-totalAmount: number|null
-currency: string
+sourceAmount: number|null
+sourceCurrency: string
+normalizedAmount: number|null
+targetCurrency: string
+conversionRef: string|null
 priceStatus: LIVE | OFFICIAL | ESTIMATED | UNKNOWN
 calculationMethod: DIRECT | QUANTITY_X_UNIT | FORMULA | UNKNOWN
-sourceRefs: []
+calculationRef: string|null
 freshnessStatus: CURRENT | STALE | UNKNOWN
+contextValidity: MATCHED | MISMATCHED | NOT_APPLICABLE | UNKNOWN
+taxesFeesKnown: boolean|null
+sourceRefs: []
 ```
 
-`UNKNOWN` item'ın `totalAmount` alanı null kalmalıdır.
+## 6. Criticality semantics
 
-## 6. Total semantics
+`budgetCriticality` maliyet bilinmediğinde plan güvenine etkisini belirler.
+
+- `CRITICAL`: planın zorunlu parçası; ör. seçilmiş konaklama, zorunlu ulaşım/toll, hard-required activity fee.
+- `NON_CRITICAL`: opsiyonel harcama; ör. isteğe bağlı hediyelik/alışveriş.
+
+UNKNOWN critical item → `WITHIN_BUDGET` kesin sonucu verilemez.
+
+## 7. Total semantics
 
 ### knownTotal
-Yalnız `LIVE` + `OFFICIAL` ve amount mevcut kalemler.
+Yalnız amount mevcut `LIVE + OFFICIAL` kalemler.
 
 ### projectedTotal
 `knownTotal + ESTIMATED` amount'lar.
 
-UNKNOWN item projected total'a 0 olarak eklenmez.
+UNKNOWN item hiçbir toplamda 0 gibi kullanılmaz.
 
-## 7. Assessment semantics
+## 8. Assessment precedence
 
-- `WITHIN_BUDGET`: hard budget limiti var, ilgili tüm kritik kalemler known/estimated policy açısından yeterli ve projected total limit içinde.
-- `PROVISIONALLY_WITHIN`: mevcut projected total limit içinde fakat unknown/non-final exposure var.
-- `OVER_BUDGET`: deterministic karşılaştırmada applicable hard limit aşılmış.
-- `UNKNOWN`: yeterli maliyet verisi veya karşılaştırılabilir currency yok.
+```text
+hard budget FAIL → OVER_BUDGET
+else critical currency/amount incomparable → UNKNOWN
+else critical unknown exposure → PROVISIONALLY_WITHIN
+else applicable hard limits pass → WITHIN_BUDGET
+```
 
-## 8. Budget constraints
+Soft budget limit hard rejection üretmez.
 
-Desteklenen limit örnekleri:
-- overall trip max,
-- accommodation max,
-- daily max,
-- activity max,
-- per-meal max,
-- journey/transport max.
+## 9. Budget constraints
 
-Hard budget constraint ihlali soft plan kalitesiyle telafi edilemez.
+Desteklenen scope örnekleri:
+- overall trip,
+- accommodation,
+- daily,
+- activity,
+- food/meal,
+- transport,
+- shopping.
 
-## 9. Currency policy
+Hard budget constraint soft kalite ile telafi edilemez.
 
-Budget Agent kur uyduramaz.
+## 10. Currency policy
 
-- aynı currency → normal toplama.
-- farklı currency + evidence-backed conversion fact → normalize edilebilir.
-- farklı currency + conversion fact yok → ilgili birleşik toplam `UNKNOWN` veya ayrı currency subtotal olarak tutulur.
+Budget Agent exchange rate uyduramaz.
 
-## 10. Estimate policy
+- same currency → direct normalize.
+- mixed currency + evidence-backed conversion fact → normalize.
+- mixed currency + conversion yok/stale → combined target total kesinleştirilemez; source-currency subtotals korunur.
 
-Estimate kullanılabilir ancak:
+## 11. Estimate policy
+
+Estimate:
 - formula/model ref taşır,
-- `ESTIMATED` olarak kalır,
+- `ESTIMATED` kalır,
 - LIVE/OFFICIAL'a yükseltilmez,
-- uncertainty/warning görünür olur.
+- uncertainty görünür olur.
 
-Örneğin fuel estimate:
+Fuel örneği:
 
 ```text
 route_km × consumption_per_km × fuel_unit_price
 ```
 
-Her input provenance taşımalıdır.
+Her input provenance taşır.
 
-## 11. Allowed tools
+## 12. Allowed tools
 
-- `TL-010` Price & Fee Lookup — eksik resmi/güncel fee lookup gerektiğinde.
-- `TL-011` Calculator — arithmetic.
-- `TL-012` Schema Validator.
-- `TL-013` Rule Engine — budget limits/status.
-- `TL-014` Cache.
+- `TL-010` Price & Fee Lookup — yalnız selected entity/fee scope
+- `TL-011` Calculator
+- `TL-012` Schema Validator
+- `TL-013` Rule Engine
+- `TL-014` Cache
 
-## 12. Forbidden tools
+## 13. Forbidden tools / authority
 
 - place/accommodation/food discovery,
 - route optimization,
 - weather/review research,
-- booking/payment.
+- booking/payment,
+- itinerary mutation.
 
 Budget Agent daha ucuz alternatif aramaz; repair target üretir.
 
-## 13. Source policy
+## 14. Source policy
 
 Fiyat güven sırası:
-1. matching LIVE quote,
-2. current OFFICIAL tariff/menu/fee,
-3. explicit ESTIMATED method,
-4. UNKNOWN.
+1. matching `LIVE`,
+2. current `OFFICIAL`,
+3. explicit `ESTIMATED`,
+4. `UNKNOWN`.
 
-Tier 4 veya review fiyatı current authoritative price olarak kullanılamaz.
+Tier 4/review fiyatı current authoritative amount olamaz.
 
-## 14. Freshness
+## 15. Freshness and context validity
 
-Live/dynamic prices query/date/occupancy context'ine bağlıdır.
+Live/dynamic fiyat query/date/occupancy context'ine bağlıdır.
 
-Stale price current LIVE olarak kullanılamaz. Accommodation query-signature mismatch → LIVE price invalid.
+- stale price current LIVE sayılamaz.
+- accommodation query-signature mismatch → live quote invalid.
+- taxes/fees bilinmiyorsa finality/confidence düşer.
 
-## 15. Itinerary provenance
+## 16. Deduplication
 
-Her ledger item hangi plan parçasına ait olduğunu taşır:
+Her source fact `dedupeKey` taşır. Aynı ekonomik maliyet iki farklı kaynak/kalem üzerinden tekrar sayılmaz.
+
+Örnek hard fail:
+- otel toplamına dahil verginin ayrıca ikinci kez ledger'a eklenmesi,
+- aynı toll kaydının iki kez sayılması.
+
+## 17. Itinerary provenance — Issue #49
+
+Her maliyet plan parçasına bağlanır:
 - day/block ref,
-- journeySegmentRef varsa,
+- `journeySegmentRef` varsa,
 - accommodation/food/place/route entity ref.
 
-Issue #49 stopover nedeniyle oluşan ek geceleme/toll/fuel maliyetleri ilgili JourneySegment'e bağlanmalıdır.
+Stopover ek geceleme/toll/fuel/parking maliyetleri ilgili JourneySegment'e bağlanır.
 
-## 16. Shopping compatibility — Issue #50 extension
+## 18. Shopping compatibility — Issue #50
 
-Yerel ürün/alışveriş planı ileride itinerary'ye eklenirse `SHOPPING` category desteklenir.
+`SHOPPING` category desteklenir.
 
-Ancak LocalProductKnowledge içindeki kültürel ürün bilgisi fiyat değildir. Belirli ürün/mağaza fiyatı runtime evidence ister; yoksa `UNKNOWN/ESTIMATED` kalır.
+`LocalProductKnowledge` kültürel ürün bilgisidir; current mağaza/ürün fiyatı değildir. Runtime price evidence yoksa cost `UNKNOWN/ESTIMATED` kalır.
 
-## 17. Repair boundary
-
-`OVER_BUDGET` veya hard budget blocker halinde Budget Agent itinerary'yi değiştirmez.
+## 19. Repair boundary
 
 ```text
-Budget Agent → repairNeed
-→ TM-AG-013 Adaptive Itinerary
+BudgetLedger hard FAIL
+→ repairNeed
+→ TM-AG-013 targeted repair
 → revised itinerary
-→ Budget Agent re-run
+→ TM-AG-010 re-run
+→ TM-AG-014 Verification
 ```
 
-## 18. Deterministic invariants
+Budget Agent itinerary'yi kendisi değiştirmez.
 
-1. UNKNOWN = 0 değildir.
+## 20. Deterministic invariants
+
+1. UNKNOWN != 0.
 2. knownTotal yalnız LIVE/OFFICIAL.
 3. projectedTotal estimate'leri içerir, unknown'ları içermez.
-4. currency conversion evidence'sız birleştirme yok.
-5. hard over-budget accepted PASS olamaz.
-6. item total arithmetic reproducible olmalıdır.
-7. duplicate cost item double-count edilemez.
-8. tax/fee dahil durumu bilinmiyorsa finality düşer.
+4. FX evidence'sız currency merge yok.
+5. hard over-budget → OVER_BUDGET.
+6. arithmetic reproducible.
+7. duplicate cost double-count yok.
+8. critical unknown → final WITHIN_BUDGET yok.
+9. stale/mismatched price current olarak promote edilmez.
+10. every item has source + itinerary provenance.
 
-## 19. Failure modes
+## 21. Failure modes
 
 - `UNKNOWN_AS_ZERO`
 - `STALE_PRICE_AS_LIVE`
@@ -223,37 +260,52 @@ Budget Agent → repairNeed
 - `DOUBLE_COUNTED_COST`
 - `ARITHMETIC_ERROR`
 - `HARD_BUDGET_FALSE_PASS`
+- `CRITICAL_UNKNOWN_FALSE_PASS`
 - `MISSING_ITEM_PROVENANCE`
 - `PRICE_STATUS_PROMOTION`
 - `ITINERARY_MUTATION_LEAKAGE`
 
-## 20. Handoff
+## 22. Handoff
 
-- TM-AG-014 Verification: BudgetLedger + provenance.
-- TM-AG-013 Adaptive: repairNeeds when over budget/blocker.
-- TM-AG-015 Explanation: verified budget rationale only after Verification.
+- TM-AG-014 Verification → full ledger/provenance.
+- TM-AG-013 Adaptive → targeted repair needs.
+- TM-AG-015 Explanation → verified ledger only after Verification.
 
-## 21. Harness binding
+## 23. Harness binding
 
 - R0 ledger schema
-- R1 deterministic arithmetic/status/currency rules
+- R1 deterministic BG-001..BG-018
 - R2 recorded cost fixtures
 - R3 TL-010/Calculator integration
-- R4 uncertainty/explanation semantic quality
-- R5 stale/missing/mixed-currency/double-count cases
+- R4 uncertainty/repair semantic quality
+- R5 stale/missing/mixed-currency/dedupe cases
 - R6 discovery/itinerary mutation/payment leakage
 - R7 controlled current fee lookup
 - R8 regressions
 
-## 22. Current status
+## 24. Golden coverage
 
 ```yaml
-agent_spec_status: canonical_v1
+behavior_cases: 18
+authority_cases: 6
+tool_policy_cases: 6
+context_lifecycle_cases: 4
+provenance_cases: 5
+```
+
+Fixture-driven contract gap:
+- unknown cost severity could not be derived reliably → `budgetCriticality: CRITICAL | NON_CRITICAL` added to input and ledger item.
+
+## 25. Current status
+
+```yaml
+agent_spec_status: golden_v1
 implementation_allowed: false
 prototype_allowed: false
-schemas: pending
-policies: pending
-fixtures: pending
+schemas: completed
+policies: completed
+fixtures: completed
 journey_issue_49_compatible: true
 knowledge_issue_50_shopping_compatible: true
+next_agent_package: TM-AG-011
 ```
