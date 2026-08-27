@@ -4,7 +4,7 @@
 |---|---|
 | Agent ID | TM-AG-013 |
 | Sürüm | 1.0 |
-| Durum | CANONICAL SPEC |
+| Durum | GOLDEN PACKAGE V1 READY |
 | Tarih | 2026-08-27 |
 
 ## 1. Purpose
@@ -13,6 +13,7 @@ Adaptive Itinerary Agent, mevcut itinerary üzerinde yeni bir olay/değişiklik 
 
 ```text
 existing itinerary + verified change signal
+→ resolve trigger set
 → impact analysis
 → smallest repair scope
 → candidate/route/time re-evaluation
@@ -23,23 +24,11 @@ existing itinerary + verified change signal
 
 ## 2. Core principle — targeted repair
 
-Bu agent'ın temel invariant'ı:
-
 > Değişiklik ne kadar küçükse repair scope da mümkün olan en küçük kapsamda kalmalıdır.
 
-Örnek:
+Örnek `Day 3 / 15:00 outdoor event cancelled` ise normal durumda Day 1, Day 2, Day 4 ve Day 5 değişmez; yalnız affected block ve zorunlu dependency closure onarılır.
 
-```text
-Day 3 / 15:00 outdoor event cancelled
-```
-
-normal durumda:
-- Day 1 değişmez,
-- Day 2 değişmez,
-- Day 3 yalnız affected block ve zorunlu komşu transition'lar değişir,
-- Day 4/5 değişmez.
-
-Tüm itinerary'nin yeniden üretilmesi ancak değişiklik gerçekten global feasibility'yi bozuyorsa mümkündür ve açık `scopeEscalationReason` ister.
+Tüm itinerary'nin yeniden üretilmesi ancak değişiklik global feasibility'yi gerçekten bozuyorsa mümkündür ve açık scope escalation provenance ister.
 
 ## 3. Supported triggers
 
@@ -61,16 +50,16 @@ Trigger fact'i agent uyduramaz; evidence-aware change signal veya verification r
 
 ## 4. Inputs
 
-- current `DraftItinerary` / verified itinerary snapshot
+- current itinerary snapshot
 - `changeSignals[]`
-- applicable hard/soft constraints
-- current planning policy snapshot
-- user-fixed stop/block decisions
-- current candidate pool and replacement candidates where available
-- current route facts/matrix where available
+- hard/soft constraints
+- planning policy snapshot
+- user-fixed stop/block refs
+- current/replacement candidate pool
+- current route facts/matrix
 - WeatherSignal / OfficialFact / ReviewSignal / EventOccurrence / EventImpactSignal where applicable
-- BudgetLedger repair needs where applicable
-- VerificationResult repair targets where applicable
+- BudgetLedger repair needs
+- VerificationResult repair targets
 - `contextManifestId`
 
 ## 5. Output
@@ -81,6 +70,13 @@ Ana çıktı: `AdaptiveRepairResult.v1`.
 repairId: string
 originalItineraryRef: string
 triggerRefs: []
+triggerResolutions:
+  - triggerRef: string
+    disposition: APPLIED | NO_EFFECT | DEFERRED | CONFLICTING
+    reasonCode: string
+    affectedRefs: []
+    conflictWithTriggerRefs: []
+    evidenceRefs: []
 impactScope: object
 scopeEscalation: object
 patches: []
@@ -93,9 +89,18 @@ repairStatus: REPAIRED | PARTIAL | BLOCKED | NO_CHANGE_REQUIRED
 warnings: []
 ```
 
-## 6. Impact scope
+## 6. Multi-trigger resolution
 
-Impact analysis önce yapılır.
+Bir repair birden fazla trigger taşıyabilir. Her trigger ayrı disposition alır:
+
+- `APPLIED`: repair kararına doğrudan etkili.
+- `NO_EFFECT`: current plan invariant/objective'i materially etkilemiyor.
+- `DEFERRED`: gerekli evidence/recheck tamamlanmadan uygulanamaz.
+- `CONFLICTING`: başka trigger ile çözülemeyen çelişki var.
+
+Çelişkili trigger'lar sessizce sıralanamaz veya biri yok sayılamaz. `triggerResolutions[]` tüm input trigger'larını kapsamalıdır.
+
+## 7. Impact scope
 
 ```yaml
 impactScope:
@@ -107,11 +112,9 @@ impactScope:
   protectedUnchangedDayRefs: []
 ```
 
-Bir blok değişti diye aynı günün tamamı otomatik affected sayılmaz. Dependency graph üzerinden gerekçe gerekir.
+Bir blok değişti diye aynı günün tamamı otomatik affected sayılmaz; dependency graph gerekçesi gerekir.
 
-## 7. Scope escalation
-
-Başlangıç repair scope'u en küçüktür.
+## 8. Scope escalation
 
 Escalation seviyeleri:
 - `BLOCK`
@@ -121,18 +124,13 @@ Escalation seviyeleri:
 - `MULTI_DAY`
 - `FULL_ITINERARY`
 
-`FULL_ITINERARY` yalnız açık global nedenlerle kullanılabilir:
-- final destination artık erişilemez,
-- ana konaklama zinciri tamamen çöktü,
-- kullanıcı tüm tarihleri/hedefi değiştirdi,
-- global hard constraint değişti,
-- tüm downstream zaman grafiğini etkileyen büyük rota disruption'ı.
+`FULL_ITINERARY` yalnız global nedenlerle kullanılabilir: destination erişilemez, ana konaklama zinciri çöktü, kullanıcı tüm tarih/hedefi değiştirdi, global hard constraint değişti veya tüm zaman grafiğini etkileyen büyük route disruption oluştu.
 
 Her escalation `reasonCode + evidenceRefs + dependencyRefs` taşır.
 
-## 8. Patch model
+## 9. Patch model
 
-Supported patch operations:
+Supported operations:
 - `REPLACE_BLOCK`
 - `REMOVE_BLOCK`
 - `INSERT_BLOCK`
@@ -142,23 +140,11 @@ Supported patch operations:
 - `REPLACE_ACCOMMODATION`
 - `UPDATE_JOURNEY_SEGMENT`
 
-Her patch:
+Her patch trigger/reason/constraint/evidence provenance taşır.
 
-```yaml
-patchId: string
-operation: string
-targetRef: string
-beforeRef: string|null
-afterRef: string|null
-reasonCodes: []
-triggerRefs: []
-constraintRefs: []
-evidenceRefs: []
-```
+## 10. Preservation proof
 
-## 9. Preservation proof
-
-Targeted repair yalnız patch listesiyle kanıtlanmaz; değişmeyen kapsam için preservation proof taşınır.
+Değişmeyen protected scope için before/after hash eşitliği gerekir:
 
 ```yaml
 preservationProof:
@@ -168,11 +154,11 @@ preservationProof:
   unchanged: true
 ```
 
-Protected scope hash değişmişse repair minimal değildir veya gerekçesiz mutation vardır.
+Protected scope hash değişmişse over-repair veya untracked mutation vardır.
 
-## 10. Shared feasibility invariants
+## 11. Shared feasibility invariants
 
-TM-AG-013, TM-AG-009 ile aynı temel feasibility kurallarını kullanır:
+TM-AG-013, TM-AG-009 ile aynı temel kuralları kullanır:
 - hard constraint önce,
 - block overlap yok,
 - route transition fiziksel olarak mümkün,
@@ -183,23 +169,19 @@ TM-AG-013, TM-AG-009 ile aynı temel feasibility kurallarını kullanır:
 - user-fixed stop preservation,
 - rejected candidate kullanılmaması.
 
-Repair eski hatayı başka bir hard violation ile değiştiremez.
+Repair eski hatayı başka hard violation ile değiştiremez.
 
-## 11. Replacement candidate policy
+## 12. Replacement candidate policy
 
 Öncelik:
-1. mevcut accepted alternative/candidate pool,
-2. aynı lokasyon/gün için önceden araştırılmış knowledge/candidates,
-3. yalnız gerekli repair scope için targeted `TL-004` discovery,
-4. yeterli güvenli replacement yoksa `BLOCKED/PARTIAL`.
+1. mevcut accepted alternatives/candidate pool,
+2. Issue #50 knowledge/candidate store,
+3. yalnız affected scope için targeted `TL-004` discovery,
+4. güvenli replacement yoksa `BLOCKED/PARTIAL`.
 
-Broad destination rediscovery yasaktır.
+Knowledge hit dynamic freshness gate'i bypass etmez.
 
-Issue #50 knowledge hit mevcutsa gereksiz broad search yapılmaz; stale dynamic facts yeniden doğrulanmalıdır.
-
-## 12. Issue #49 — multi-city journey repair
-
-Journey repair segment-aware olmalıdır.
+## 13. Issue #49 — multi-city journey repair
 
 Örnek:
 
@@ -207,109 +189,75 @@ Journey repair segment-aware olmalıdır.
 Kocaeli → Ankara FULL_DAY → Aksaray OVERNIGHT → Nevşehir
 ```
 
-Aksaray oteli unavailable olursa:
-- mümkünse yalnız Aksaray stay + bağlı arrival/departure blokları onarılır,
-- Ankara tam gün planı sebepsiz değiştirilmez,
-- Nevşehir final planı ancak yeni travel timing etkiliyorsa değişir.
+Aksaray oteli unavailable olursa mümkünse yalnız Aksaray stay + bağlı arrival/departure/route blokları onarılır; Ankara tam gün planı korunur. Nevşehir bölümü yalnız yeni timing dependency'si varsa etkilenir.
 
-User-fixed stop silinemez; infeasible ise conflict olarak kullanıcı/Orchestrator'a yükseltilir.
+User-fixed stop silinemez; infeasible ise `BLOCKED/PARTIAL` conflict olarak yükseltilir.
 
-## 13. Issue #51 — event/festival repair
+## 14. Issue #51 — event/festival/seasonal repair
 
-### Event cancelled
-Confirmed cancellation:
-- event block invalidated,
-- yalnız event block ve bağlı route/meal/rest transition'ları repair edilir.
+- confirmed event cancellation → event block + dependent transitions local repair.
+- postponement → feasible ise move/local repair; değilse gerekçeli scope escalation.
+- crowd-avoid preference → affected venue/peak window değiştirilir, unrelated areas korunur.
+- seasonal closure → official current evidence gerekir.
 
-### Event postponed
-Yeni saat/gün mevcut itinerary ile uyumluysa local move/replace yapılabilir. Uyumlu değilse scope gerekçeli yükseltilir.
+RecurringEventKnowledge exact occurrence fact'i değildir.
 
-### Crowd avoid
-EventImpactSignal değiştiğinde kullanıcı `AVOID` ise affected venue/peak window için local alternative oluşturulur.
+## 15. Weather repair
 
-Recurring event knowledge tek başına cancellation/postponement fact'i değildir; exact occurrence evidence gerekir.
+Exact-day repair yalnız fresh FORECAST/current weather evidence ile yapılır. Climate normal exact weather trigger değildir.
 
-## 14. Weather repair
+## 16. Budget repair
 
-High/severe fresh WeatherSignal affected outdoor block için repair trigger olabilir.
+TM-AG-010 repairNeeds cost-driving refs'i hedefler. Hard budget gevşetilmez. Revised itinerary sonrası `BUDGET_RECHECK` + `VERIFICATION_RECHECK` zorunludur.
 
-Weather Agent itinerary değiştirmez; Adaptive Agent değişikliği yapar.
+## 17. Verification repair
 
-Climate normal exact-day weather trigger olarak kullanılamaz.
+TM-AG-014 repair target/dependency closure dışına gereksiz mutation yapılamaz. Repair sonrası Verification yeniden zorunludur.
 
-## 15. Budget repair
+## 18. Allowed tools
 
-TM-AG-010 `repairNeeds` üretir.
+- `TL-004` targeted replacement discovery
+- `TL-005` affected route calculation
+- `TL-006` current weather refresh
+- `TL-010` replacement price/fee lookup
+- `TL-011` Calculator
+- `TL-012` Schema Validator
+- `TL-013` Rule Engine
+- `TL-014` Cache
 
-Adaptive Agent:
-- over-budget item'ların bağlı olduğu block/stay/segmentleri hedefler,
-- kullanıcı hard budget'ını gevşetmez,
-- daha ucuz replacement gerekiyorsa scope-limited candidate lookup yapabilir,
-- revised itinerary sonrası Budget Agent tekrar çalışmalıdır.
+## 19. Forbidden behavior
 
-Budget Agent'ın kendisi itinerary değiştirmez.
-
-## 16. Verification repair
-
-TM-AG-014 `REPAIR` sonucu:
-- repair target refs,
-- violated invariant/claim refs,
-- severity
-ile gelmelidir.
-
-Adaptive Agent yalnız target/dependency closure içinde mutation yapar.
-
-Repair sonrası Verification yeniden zorunludur.
-
-## 17. Allowed tools
-
-Kanonik katalogla uyumlu:
-- `TL-004` Place Search — yalnız targeted replacement discovery.
-- `TL-005` Directions & Distance Matrix — affected transition/route.
-- `TL-006` Weather Forecast — yalnız trigger/current weather refresh gerektiğinde.
-- `TL-010` Price & Fee Lookup — replacement cost/fee gerektiğinde.
-- `TL-011` Calculator — time/cost arithmetic.
-- `TL-012` Schema Validator — harness/output validation.
-- `TL-013` Rule Engine — feasibility/hard constraints.
-- `TL-014` Cache.
-
-## 18. Forbidden behavior
-
-- full itinerary regeneration by default,
+- default full regeneration,
 - hard constraint relaxation,
 - user-fixed decision deletion,
-- unrelated POI discovery,
-- official event/closure fact invention,
-- review signalini official closure sayma,
-- climate normal'i weather trigger yapma,
-- replacement route duration invention,
+- unrelated discovery,
+- official event/closure invention,
+- review-as-official fact,
+- climate-as-weather trigger,
+- invented route duration,
 - untracked mutation,
-- final user response writing.
+- final user response.
 
-## 19. Source policy
+## 20. Source policy
 
-Change signal kaynağı trigger türüne uygun olmalıdır:
-- official closure/event status → TM-AG-011 OfficialFact / primary evidence,
-- weather → TM-AG-007 fresh FORECAST,
-- crowd/queue experience → TM-AG-012 signal (policy-dependent planning impact only),
-- route → TM-AG-008 route fact,
-- budget → TM-AG-010 BudgetLedger,
-- user change → explicit user source.
+- official closure/event status → TM-AG-011 / primary evidence
+- weather → TM-AG-007 fresh FORECAST
+- crowd/queue experience → TM-AG-012 planning signal only
+- route → TM-AG-008
+- budget → TM-AG-010
+- user change → explicit user source
 
-Repair sırasında yeni dynamic claim elde edilirse provenance/freshness korunur.
+## 21. Downstream rechecks
 
-## 20. Downstream recheck contract
-
-Repair sonrası gerekli recheck'ler açıkça istenir:
 - `ROUTE_RECHECK`
 - `BUDGET_RECHECK`
 - `OFFICIAL_FACT_RECHECK`
 - `WEATHER_RECHECK`
 - `VERIFICATION_RECHECK`
 
-`VERIFICATION_RECHECK` başarılı repair sonrası zorunludur.
+Mutation sonrası `VERIFICATION_RECHECK` zorunludur.
 
-## 21. Failure modes
+## 22. Failure modes
 
 - `OVER_REPAIR`
 - `UNJUSTIFIED_SCOPE_ESCALATION`
@@ -323,29 +271,32 @@ Repair sonrası gerekli recheck'ler açıkça istenir:
 - `BUDGET_REPAIR_WITHOUT_RECHECK`
 - `MISSING_BEFORE_AFTER_DIFF`
 - `MISSING_PRESERVATION_PROOF`
+- `MISSING_TRIGGER_RESOLUTION_TRACE`
 
-## 22. Harness binding
+## 23. Harness binding
 
 - R0 repair/patch schema
-- R1 impact closure, minimal-scope, time/hard-constraint invariants
+- R1 impact closure, trigger resolution, minimal-scope, hard/time invariants
 - R2 recorded change fixtures
-- R3 targeted tool adapter integration
-- R4 replacement quality/continuity semantic evaluation
-- R5 cascade, stale evidence, conflicting triggers, no-replacement cases
-- R6 over-repair/research/constraint authority leakage
-- R7 controlled live change repair
-- R8 production regression repairs
+- R3 targeted tool integration
+- R4 replacement quality/continuity
+- R5 cascade/stale/conflicting/no-replacement cases
+- R6 over-repair/research/constraint leakage
+- R7 controlled live repair
+- R8 regressions
 
-## 23. Current status
+## 24. Current status
 
 ```yaml
-agent_spec_status: canonical_v1
+agent_spec_status: golden_v1_ready
 implementation_allowed: false
 prototype_allowed: false
-schemas: pending
-policies: pending
-fixtures: pending
+schemas: completed
+policies: completed
+fixtures: completed
 journey_issue_49_required: true
 knowledge_issue_50_required: true
 event_season_issue_51_required: true
+trigger_resolution_trace_required: true
+preservation_proof_required: true
 ```
