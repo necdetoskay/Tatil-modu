@@ -11,10 +11,7 @@
     "draftItineraryRef": { "type": "string", "minLength": 1 },
     "targetCurrency": { "type": "string", "minLength": 3, "maxLength": 3 },
     "costPolicySnapshotId": { "type": "string", "minLength": 1 },
-    "costFacts": {
-      "type": "array",
-      "items": { "$ref": "#/$defs/costFact" }
-    },
+    "costFacts": { "type": "array", "items": { "$ref": "#/$defs/costFact" } },
     "budgetConstraints": {
       "type": "array",
       "items": {
@@ -54,11 +51,12 @@
     "costFact": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["costFactId", "dedupeKey", "category", "itineraryRefs", "entityRef", "journeySegmentRef", "quantity", "unitAmount", "totalAmount", "currency", "priceStatus", "calculationMethod", "freshnessStatus", "contextValidity", "taxesFeesKnown", "sourceRefs"],
+      "required": ["costFactId", "dedupeKey", "category", "budgetCriticality", "itineraryRefs", "entityRef", "journeySegmentRef", "quantity", "unitAmount", "totalAmount", "currency", "priceStatus", "calculationMethod", "freshnessStatus", "contextValidity", "taxesFeesKnown", "sourceRefs"],
       "properties": {
         "costFactId": { "type": "string", "minLength": 1 },
         "dedupeKey": { "type": "string", "minLength": 1 },
         "category": { "enum": ["ACCOMMODATION", "ACTIVITY", "FOOD", "TRANSPORT", "FUEL", "TOLL", "PARKING", "TRANSIT", "FEE", "SHOPPING", "OTHER"] },
+        "budgetCriticality": { "enum": ["CRITICAL", "NON_CRITICAL"] },
         "itineraryRefs": { "type": "array", "items": { "type": "string" } },
         "entityRef": { "type": ["string", "null"] },
         "journeySegmentRef": { "type": ["string", "null"] },
