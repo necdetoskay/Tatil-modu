@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tatil-modu.local/schemas/transportation-result.v1.json",
+  "title": "TransportationResult.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "requestId", "requestType", "routeLegs", "matrixEntries", "corridorCandidates", "warnings", "overallConfidence"],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "requestId": { "type": "string", "minLength": 1 },
+    "requestType": { "enum": ["POINT_TO_POINT", "MATRIX", "CORRIDOR_DISCOVERY", "STOP_SEQUENCE_RECALC"] },
+    "routeLegs": { "type": "array", "items": { "$ref": "#/$defs/routeLeg" } },
+    "matrixEntries": { "type": "array", "items": { "$ref": "#/$defs/matrixEntry" } },
+    "corridorCandidates": { "type": "array", "items": { "$ref": "#/$defs/corridorCandidate" } },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "overallConfidence": { "type": "number", "minimum": 0, "maximum": 1 }
+  },
+  "$defs": {
+    "routeLeg": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["routeLegId", "fromRef", "toRef", "journeySegmentRef", "mode", "distanceMeters", "durationSeconds", "trafficAwareDurationSeconds", "departureTime", "arrivalTimeEstimate", "routeGeometryRef", "freshnessStatus", "routeMetadata", "evidence"],
+      "properties": {
+        "routeLegId": { "type": "string", "minLength": 1 },
+        "fromRef": { "type": "string", "minLength": 1 },
+        "toRef": { "type": "string", "minLength": 1 },
+        "journeySegmentRef": { "type": ["string", "null"] },
+        "mode": { "enum": ["car", "transit", "walking", "cycling", "other"] },
+        "distanceMeters": { "type": ["integer", "null"], "minimum": 0 },
+        "durationSeconds": { "type": ["integer", "null"], "minimum": 0 },
+        "trafficAwareDurationSeconds": { "type": ["integer", "null"], "minimum": 0 },
+        "departureTime": { "type": ["string", "null"], "format": "date-time" },
+        "arrivalTimeEstimate": { "type": ["string", "null"], "format": "date-time" },
+        "routeGeometryRef": { "type": ["string", "null"] },
+        "freshnessStatus": { "enum": ["CURRENT", "STALE", "UNKNOWN"] },
+        "routeMetadata": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["hasTolls", "hasFerry", "hasHighway", "trafficDataType"],
+          "properties": {
+            "hasTolls": { "type": ["boolean", "null"] },
+            "hasFerry": { "type": ["boolean", "null"] },
+            "hasHighway": { "type": ["boolean", "null"] },
+            "trafficDataType": { "enum": ["LIVE_OR_CURRENT", "HISTORICAL_OR_TYPICAL", "NONE", "UNKNOWN"] }
+          }
+        },
+        "evidence": { "type": "array", "items": { "$ref": "#/$defs/evidence" } }
+      }
+    },
+    "matrixEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["fromRef", "toRef", "distanceMeters", "durationSeconds", "trafficAwareDurationSeconds", "freshnessStatus", "evidenceRefs"],
+      "properties": {
+        "fromRef": { "type": "string", "minLength": 1 },
+        "toRef": { "type": "string", "minLength": 1 },
+        "distanceMeters": { "type": ["integer", "null"], "minimum": 0 },
+        "durationSeconds": { "type": ["integer", "null"], "minimum": 0 },
+        "trafficAwareDurationSeconds": { "type": ["integer", "null"], "minimum": 0 },
+        "freshnessStatus": { "enum": ["CURRENT", "STALE", "UNKNOWN"] },
+        "evidenceRefs": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "corridorCandidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["corridorCityId", "locationRef", "name", "administrativeType", "corridorRelation", "routeProgressRatio", "baselineRouteRef", "detourDistanceMeters", "detourDurationSeconds", "mainRouteEvidenceRefs", "detourEvidenceRefs", "requiresDestinationResearch"],
+      "properties": {
+        "corridorCityId": { "type": "string", "minLength": 1 },
+        "locationRef": { "type": "string", "minLength": 1 },
+        "name": { "type": "string", "minLength": 1 },
+        "administrativeType": { "enum": ["city", "province", "district"] },
+        "corridorRelation": { "enum": ["ON_ROUTE", "NEAR_ROUTE", "DETOUR"] },
+        "routeProgressRatio": { "type": "number", "minimum": 0, "maximum": 1 },
+        "baselineRouteRef": { "type": "string", "minLength": 1 },
+        "detourDistanceMeters": { "type": ["integer", "null"], "minimum": 0 },
+        "detourDurationSeconds": { "type": ["integer", "null"], "minimum": 0 },
+        "mainRouteEvidenceRefs": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+        "detourEvidenceRefs": { "type": "array", "items": { "type": "string" } },
+        "requiresDestinationResearch": { "const": true }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["evidenceId", "sourceRef", "claimType", "retrievedAt", "freshnessStatus"],
+      "properties": {
+        "evidenceId": { "type": "string", "minLength": 1 },
+        "sourceRef": { "type": "string", "minLength": 1 },
+        "claimType": { "enum": ["ROUTE_DISTANCE", "ROUTE_DURATION", "TRAFFIC_DURATION", "ROUTE_GEOMETRY", "DETOUR_DISTANCE", "DETOUR_DURATION", "ROUTE_METADATA", "LOCATION_IDENTITY"] },
+        "retrievedAt": { "type": "string", "format": "date-time" },
+        "freshnessStatus": { "enum": ["CURRENT", "STALE", "UNKNOWN"] }
+      }
+    }
+  }
+}
