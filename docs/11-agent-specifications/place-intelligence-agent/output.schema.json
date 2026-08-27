@@ -46,7 +46,15 @@
           }
         },
         "categories": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string" } },
-        "businessStatus": { "enum": ["OPERATIONAL", "CLOSED_TEMPORARILY", "CLOSED_PERMANENTLY", "FUTURE_OPENING", "UNKNOWN"] },
+        "businessStatus": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["value", "evidenceRefs"],
+          "properties": {
+            "value": { "enum": ["OPERATIONAL", "CLOSED_TEMPORARILY", "CLOSED_PERMANENTLY", "FUTURE_OPENING", "UNKNOWN"] },
+            "evidenceRefs": { "type": "array", "items": { "type": "string" } }
+          }
+        },
         "operationalFacts": {
           "type": "object",
           "additionalProperties": false,
@@ -61,9 +69,22 @@
         "eligibility": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["disposition", "hardConstraintChecks"],
+          "required": ["disposition", "dispositionReasons", "hardConstraintChecks"],
           "properties": {
             "disposition": { "enum": ["ACCEPTED", "REJECTED", "NEEDS_VERIFICATION"] },
+            "dispositionReasons": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["code", "evidenceRefs"],
+                "properties": {
+                  "code": { "type": "string", "minLength": 1 },
+                  "evidenceRefs": { "type": "array", "items": { "type": "string" } },
+                  "constraintId": { "type": ["string", "null"] }
+                }
+              }
+            },
             "hardConstraintChecks": {
               "type": "array",
               "items": {
