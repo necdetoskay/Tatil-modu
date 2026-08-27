@@ -1,7 +1,7 @@
 # 11 — Agent Specifications
 
 **Doküman türü:** canonical agent specification alanı  
-**Durum:** canonical catalog v1.0 + twelve golden agent packages  
+**Durum:** canonical catalog v1.0 + thirteen golden agent packages  
 **Kodlama durumu:** kapalı  
 **Prototype durumu:** kapalı
 
@@ -45,7 +45,7 @@ canonical_catalog_date: 2026-08-27
 | TM-AG-010 | Budget Agent | **golden package v1 ready** |
 | TM-AG-011 | Public Authority Intelligence Agent | **golden package v1 ready** |
 | TM-AG-012 | Review Intelligence Agent | **golden package v1 ready** |
-| TM-AG-013 | Adaptive Itinerary Agent | pending |
+| TM-AG-013 | Adaptive Itinerary Agent | **golden package v1 ready** |
 | TM-AG-014 | Verification Agent | pending |
 | TM-AG-015 | Explanation Agent | pending |
 | TM-AG-016 | Final Composer Agent | pending |
@@ -235,16 +235,35 @@ prevalence_deterministic: true
 raw_review_retention_policy_required: true
 snapshot_lineage_required: true
 ```
-Invariants:
-```text
-review experience != OfficialFact
-REUSED snapshot preserves original sample basis
-REFRESHED snapshot preserves base + new contribution lineage
-knowledge snapshot != freshness bypass
-```
 Fixture-driven contract gaps:
 - base snapshot sample lineage → `snapshotLineage.baseSample`
 - refresh contribution provenance → `snapshotLineage.refreshContributions[]`
+
+### TM-AG-013 Adaptive Itinerary
+```yaml
+behavior_cases: 24
+authority_cases: 8
+tool_policy_cases: 7
+context_lifecycle_cases: 5
+provenance_cases: 7
+journey_issue_49_cases: 4
+knowledge_issue_50_cases: 3
+event_season_issue_51_cases: 5
+targeted_repair_required: true
+preservation_proof_required: true
+trigger_resolution_trace_required: true
+verification_recheck_required_after_mutation: true
+```
+Invariants:
+```text
+small change → smallest justified repair scope
+protected unchanged scope → equal before/after hash
+user-fixed decision cannot disappear silently
+recurring event knowledge != exact occurrence fact
+climate normal != exact-day weather trigger
+```
+Fixture-driven contract gap:
+- multiple/conflicting triggers needed per-trigger disposition → `triggerResolutions[]` added with `APPLIED | NO_EFFECT | DEFERRED | CONFLICTING`.
 
 ## Eski first-phase specs
 
@@ -282,9 +301,10 @@ TM_AG_009_route_planner_package: completed
 TM_AG_010_budget_package: completed
 TM_AG_011_public_authority_package: completed
 TM_AG_012_review_intelligence_package: completed
+TM_AG_013_adaptive_itinerary_package: completed
 runtime_tests: pending
-next_agent_package: TM-AG-013
+next_agent_package: TM-AG-014
 implementation_allowed: false
 ```
 
-Bir sonraki paket `TM-AG-013 Adaptive Itinerary Agent` olacaktır. Bu paket targeted repair modelini ve Issue #49 multi-city journey, Issue #50 knowledge freshness, Issue #51 event/seasonal change trigger'larını birlikte ele alacaktır.
+Bir sonraki paket `TM-AG-014 Verification Agent` olacaktır. Bu paket tüm upstream çıktılarda deterministic schema/constraint/time/route/budget/evidence/provenance gate'lerini ve `PASS | FAIL | REPAIR` kararını kanonikleştirecektir.
