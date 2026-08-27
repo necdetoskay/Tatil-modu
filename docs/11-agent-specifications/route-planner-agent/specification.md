@@ -4,19 +4,19 @@
 |---|---|
 | Agent ID | TM-AG-009 |
 | Sürüm | 1.0 |
-| Durum | CANONICAL SPEC |
+| Durum | CANONICAL / GOLDEN PACKAGE |
 | Tarih | 2026-08-27 |
 
 ## 1. Purpose
 
-Route Planner Agent, doğrulanmış/uygun adayları, route facts, konaklama, yemek pencereleri, weather sinyalleri ve hard/soft policy'leri **zaman açısından uygulanabilir bir JourneyPlan + DailyPlan** haline getirir.
+Route Planner Agent, uygun adayları, route facts, konaklama/yemek pencereleri, weather sinyalleri ve policy'leri **zaman açısından uygulanabilir JourneyPlan + DailyPlan** haline getirir.
 
 ```text
 eligible candidates + route matrix + constraints + stay windows
 → build feasible time graph
 → place travel/activity/meal/rest/stay blocks
 → reject impossible combinations
-→ generate daily alternatives
+→ generate feasible alternatives
 → emit DraftItinerary
 ```
 
@@ -26,21 +26,21 @@ Yapar:
 - ziyaret sırası ve zamanlama,
 - şehirlerarası JourneySegment planlama,
 - şehir içi günlük blok planlama,
-- çalışma saati ile ziyaret slotu uyumu,
-- route duration + buffer ile bloklar arası feasibility,
-- check-in/check-out / overnight bağlantıları,
+- çalışma saati + transition + buffer feasibility,
+- check-in/check-out ve overnight bağlantıları,
 - yemek/rest pencereleri,
-- çocuk/aile tempo ve dinlenme kurallarının uygulanması,
-- weather signal'e göre alternatif plan bias'ı,
+- hard aile/tempo kurallarını uygulama,
+- weather signal'i planning bias olarak kullanma,
 - Issue #49 stopover rollerini günlere bağlama,
-- hard constraint ihlalinde kombinasyonu reject etme,
-- 2–3 alternatif istenmişse gerçek alternatif plan dalları oluşturma.
+- hard violation'da kombinasyonu reject etme,
+- talep/policy varsa 2–3 gerçek alternatif üretme.
 
 Yapmaz:
 - yeni POI/otel/restoran keşfetmez,
 - opening hours/fiyat/weather fact'i uydurmaz,
+- toplam bütçe hesabı yapmaz,
 - hard constraint'i scoring penalty'ye dönüştürmez,
-- kullanıcı adına rezervasyon/ödeme yapmaz,
+- rezervasyon/ödeme yapmaz,
 - final kullanıcı metni yazmaz.
 
 ## 3. Inputs
@@ -48,13 +48,13 @@ Yapmaz:
 - `TravelerProfile`
 - `PreferencePolicyOutput`
 - `DestinationBriefSet`
-- `PlaceCandidateSet` — yalnız accepted/eligible pool
+- `PlaceCandidateSet`
 - `AccommodationCandidateSet`
-- `FoodAndLocalTasteResult` — yalnız eligible food candidate refs
+- `FoodAndLocalTasteResult`
 - `WeatherSignalSet`
 - `TransportationResult` / route matrix
 - trip date range/duration
-- optional selected journey stopovers and stop roles (Issue #49)
+- optional selected journey stopovers + stop roles
 - optional final-arrival deadline
 - product planning policy snapshot
 - `contextManifestId`
@@ -65,9 +65,8 @@ Ana çıktı: `DraftItinerary.v1`.
 
 ```yaml
 itineraryId: string
-requestId: string
 planningPolicySnapshotId: string
-journeyPlan: object
+journeyPlan: JourneyPlan
 days: DailyPlan[]
 alternatives: AlternativePlan[]
 rejectedCombinations: []
@@ -88,7 +87,7 @@ journeyPlan:
   segments: JourneySegment[]
 ```
 
-Her `JourneySegment`:
+Her segment:
 
 ```yaml
 segmentId: string
@@ -97,13 +96,15 @@ toRef: string
 travelDate: date
 routeLegRef: string
 stopRole: PASS_THROUGH | SHORT_STOP | HALF_DAY | FULL_DAY | OVERNIGHT_ONLY | OVERNIGHT_AND_DAY | MULTI_DAY | FINAL_DESTINATION
+selectionOrigin: USER_FIXED | USER_OPTIONAL | PLANNER_SELECTED | FINAL_DESTINATION
+selectionSourceRef: string
 arrivalWindow: object|null
 departureWindow: object|null
 dailyPlanRefs: []
 accommodationRef: string|null
 ```
 
-Route Planner corridor şehirlerini keşfetmez. TM-AG-008/TM-AG-003 tarafından sağlanan ve kullanıcı/policy tarafından seçilebilir hale getirilen stopover context'ini zamanlar.
+`selectionOrigin` kullanıcı seçimi ile planner seçimini ayırır. `USER_FIXED` bir durak sessizce kaldırılamaz; infeasible ise conflict/rejected combination görünür olmalıdır.
 
 ## 6. DailyPlan
 
@@ -114,8 +115,7 @@ dayId: string
 date: date
 baseLocationRef: string|null
 blocks:
-  - blockId: string
-    blockType: TRAVEL | ACTIVITY | MEAL | REST | CHECK_IN | CHECK_OUT | FREE_TIME
+  - blockType: TRAVEL | ACTIVITY | MEAL | REST | CHECK_IN | CHECK_OUT | FREE_TIME
     start: datetime
     end: datetime
     entityRef: string|null
@@ -128,24 +128,22 @@ blocks:
 
 Bloklar çakışamaz.
 
-## 7. Feasibility invariant
+## 7. Feasibility invariants
 
-Aşağıdaki kombinasyonlar planlanamaz:
-
-- bir önceki bloktan fiziksel olarak yetişilemeyen sonraki blok,
-- ziyaret saatinin dışında aktivite,
-- check-in/out ile çakışan travel/activity,
+Planlanamaz:
+- fiziksel olarak yetişilemeyen transition,
+- çalışma saatinin dışında aktivite/meal,
+- check-in/out conflict,
 - hard rest window ihlali,
 - final-arrival deadline ihlali,
-- hard daily-drive veya distance limit ihlali,
-- REJECTED/NEEDS_VERIFICATION hard blocker candidate'ın accepted gibi kullanılması,
-- hard conditional constraint ihlali.
+- hard daily-drive/distance ihlali,
+- REJECTED candidate kullanımı,
+- unresolved hard blocker'ın accepted gibi kullanımı,
+- conditional hard constraint ihlali.
 
-Hard violation → candidate combination `rejectedCombinations[]`.
+Hard violation → `rejectedCombinations[]`.
 
-## 8. Time arithmetic
-
-Plan zamanlaması deterministic olmalıdır:
+## 8. Deterministic time arithmetic
 
 ```text
 block_end
@@ -154,75 +152,53 @@ block_end
 <= next_block_start
 ```
 
-Route matrix/leg eksikse Route Planner `TL-005` ile yalnız gerekli pair/leg hesabını isteyebilir; yeni yer keşfedemez.
+Route fact eksikse yalnız mevcut entity pair için `TL-005` istenebilir; süre uydurulamaz.
 
-## 9. Opening-hours invariant
+## 9. Opening-hours rule
 
-Bir activity/food block:
-- gerekli opening/menu window evidence ile uyuşmalı,
-- conflict/stale/unverified critical hours varsa `NEEDS_VERIFICATION` olarak işaretlenmeli veya hard policy'ye göre block edilmelidir.
-
-Route Planner çalışma saati uyduramaz.
+Activity/food block ilgili operational window ile uyumlu olmalıdır. Stale/conflicting/unverified critical hours policy'ye göre blocker veya `NEEDS_VERIFICATION` üretir.
 
 ## 10. Family pace / rest
 
-Aile temposu policy/constraint girdisidir; agent kendi çocuk güvenlik eşiğini icat etmez.
+Tempo eşikleri prompt tarafından icat edilmez; policy/constraint snapshot'tan gelir.
 
-Örnek planning signals:
-- midday rest window,
-- max continuous activity duration,
-- max daily drive,
-- low-fatigue preference,
-- early evening return,
-- walking/load signal.
-
-Hard rest constraint varsa ihlal edilemez. Soft fatigue preference objective/ranking sinyalidir.
+Hard rest/daily-drive sınırı ihlal edilemez. Low-fatigue gibi soft tercihler yalnız feasible kombinasyonlar arasında optimize edilir.
 
 ## 11. Alternatives
-
-Alternatifler aynı planın küçük isim değişikliği değildir.
 
 Supported classes:
 - `WEATHER_ALTERNATIVE`
 - `LOW_FATIGUE_ALTERNATIVE`
-- `BUDGET_ALTERNATIVE`
 - `ROUTE_ALTERNATIVE`
 - `ACTIVITY_ALTERNATIVE`
 
-Product/user policy 2–3 alternatif/gün istiyorsa, feasible candidate pool yettiği ölçüde 2–3 anlamlı alternatif üretilir. Yeterli güvenli aday yoksa sayı uydurulmaz; coverage gap görünür tutulur.
+Alternatif gerçek block/entity/route farkı içermelidir. Yeterli feasible aday yoksa 2–3 sayısını doldurmak için sahte/duplicate plan üretilmez.
+
+### Budget boundary
+
+`BUDGET_ALTERNATIVE` TM-AG-009 ownership'inde değildir. Toplam maliyet `TM-AG-010 Budget Agent` tarafından hesaplanır. Budget hard fail/overflow gerekiyorsa `TM-AG-013 Adaptive Itinerary` için targeted repair tetiklenir.
 
 ## 12. Weather interaction
 
-TM-AG-007 `planBias` ve hazard signal verir.
-
-Route Planner:
-- PREFER_INDOOR sinyalini objective olarak kullanabilir,
-- severe/high weather risk'te outdoor combination'ı policy'ye göre reject/alternative'e taşıyabilir,
-- weather fact üretmez.
+TM-AG-007 weather signal verir; Route Planner bunu plan bias/risk girdisi olarak kullanır. Weather fact üretmez. `CLIMATE_NORMAL` belirli gün weather event'i gibi kullanılamaz.
 
 ## 13. Accommodation interaction
 
-- `LIVE_UNAVAILABLE` veya hard occupancy violation stay seçilemez.
-- `NEEDS_VERIFICATION` accommodation hard policy'ye göre plan draft'ında blocker olabilir.
-- check-in/out window'ları zaman çizelgesinde block olarak tutulur.
-- Issue #49 overnight segmentleri doğru `journeySegmentRef` ile bağlanır.
+- live-unavailable/occupancy violated stay seçilemez,
+- check-in/out zaman çizelgesinde block'tur,
+- overnight journey segment provenance korunur.
 
 ## 14. Food interaction
 
-Meal windows:
-- travel/activity ile çakışmamalı,
-- hard dietary constraint ihlali içeren candidate kullanılamaz,
-- venue current menu/hours unverified ise status görünür kalır.
-
-LocalTasteBrief tek başına restaurant block üretmez.
+Meal blocks travel/activity ile çakışamaz. Hard dietary violation içeren candidate kullanılamaz. `LocalTasteBrief` tek başına venue/menu fact'i değildir.
 
 ## 15. Allowed tools
 
-- `TL-005` Directions & Distance Matrix — eksik transition/leg hesabı.
-- `TL-011` Calculator — süre/toplam arithmetic.
-- `TL-012` Schema Validator.
-- `TL-013` Rule Engine — hard constraints/feasibility.
-- `TL-014` Cache.
+- `TL-005` Directions & Distance Matrix — eksik mevcut-entity transition/leg
+- `TL-011` Calculator
+- `TL-012` Schema Validator
+- `TL-013` Rule Engine
+- `TL-014` Cache
 
 ## 16. Forbidden tools
 
@@ -234,50 +210,49 @@ LocalTasteBrief tek başına restaurant block üretmez.
 - `TL-009` Review Data Provider
 - `TL-010` Price Lookup
 
-Missing domain fact → ilgili upstream verification/repair ihtiyacı; Route Planner araştırma yapmaz.
+Missing domain fact → upstream verification/repair ihtiyacı.
 
-## 17. Source policy
+## 17. Source/provenance policy
 
-Agent source keşfetmez. Yalnız upstream evidence-aware facts kullanır.
+Agent source keşfetmez. Her selected block mümkün olduğunda entity, route, constraint ve source/evidence refs taşır.
 
-Plan block provenance minimum:
-- selected entity/candidate ref,
-- route leg/matrix ref where movement exists,
-- applicable constraint refs,
-- source/evidence refs or verification status.
+Journey stop provenance:
+
+```text
+selectionSourceRef
+→ selectionOrigin
+→ JourneySegment
+→ DailyPlan blocks
+→ Verification
+```
 
 ## 18. Constraint ordering
 
-Karar sırası:
-
 ```text
 1 hard eligibility
-2 time feasibility
-3 route/travel feasibility
-4 fixed stay/deadline constraints
-5 rest/family hard rules
-6 weather safety policy
-7 soft preferences / quality objective
-8 alternatives/diversity
+2 fixed user choices
+3 temporal feasibility
+4 route/travel feasibility
+5 stay/deadline feasibility
+6 hard rest/family rules
+7 weather safety policy
+8 soft preference optimization
+9 alternative diversity
 ```
 
-Soft score hiçbir üst seviyedeki fail'i telafi edemez.
+Soft score üst seviyedeki fail'i telafi edemez.
 
-## 19. Final-arrival deadline — Issue #49
+## 19. Final-arrival deadline
 
-`finalArrivalDeadline` HARD ise:
+Hard deadline varsa:
 
 ```text
 arrival(final destination) <= deadline
 ```
 
-olmalıdır.
-
-Ara şehir çok değerli olsa bile deadline ihlal eden journey plan reject edilir.
+olmalıdır. Çok değerli stopover bile bu kuralı geçersiz kılamaz.
 
 ## 20. Rejected combination provenance
-
-Her reject:
 
 ```yaml
 combinationId: string
@@ -288,32 +263,15 @@ routeRefs: []
 evidenceRefs: []
 ```
 
-taşır.
-
-Bu bilgi Adaptive Itinerary ve Explanation için önemlidir.
+User-fixed stop infeasible ise bu kayıtta açıkça görünür olmalıdır.
 
 ## 21. Verification needs
 
-Route Planner yeni evidence toplamaz. Eksik kritik fact için:
-
-```yaml
-verificationNeed:
-  needId: string
-  claimType: string
-  entityRef: string
-  affectsBlockRefs: []
-  severity: BLOCKING | NON_BLOCKING
-```
-
-üretir.
+Agent yeni evidence toplamaz. Eksik kritik fact için `BLOCKING | NON_BLOCKING` verification need üretir ve etkilenen block refs'i bağlar.
 
 ## 22. Adaptive boundary
 
-TM-AG-009 initial/draft plan oluşturur.
-
-Sonradan weather/closure/crowding/change nedeniyle targeted repair → TM-AG-013.
-
-TM-AG-009 ve TM-AG-013 aynı feasibility invariants'ını paylaşmalıdır.
+TM-AG-009 initial/draft plan sahibidir. Sonradan closure/weather/budget/change repair → TM-AG-013. İki agent aynı feasibility invariants'ını paylaşır.
 
 ## 23. Failure modes
 
@@ -329,29 +287,47 @@ TM-AG-009 ve TM-AG-013 aynı feasibility invariants'ını paylaşmalıdır.
 - `NEW_PLACE_DISCOVERY_LEAKAGE`
 - `ROUTE_FACT_INVENTION`
 - `JOURNEY_SEGMENT_PROVENANCE_DROPPED`
+- `USER_FIXED_STOP_PROVENANCE_DROPPED`
 - `FAKE_ALTERNATIVE_DIVERSITY`
+- `BUDGET_AUTHORITY_LEAKAGE`
 
 ## 24. Harness binding
 
 - R0 itinerary/journey schema
-- R1 deterministic time/constraint/overlap/deadline rules
+- R1 deterministic rules RP-001..RP-020
 - R2 recorded multi-agent fixtures
-- R3 route-calculation integration for missing legs
-- R4 itinerary quality/pacing/alternative diversity
-- R5 stale hours/weather conflict/check-in/deadline/impossible route
-- R6 research/tool/authority leakage
-- R7 controlled live route-feasibility test
+- R3 missing-leg route integration
+- R4 pacing/quality/alternative diversity
+- R5 stale hours/weather/check-in/deadline/impossible route
+- R6 research/budget/tool authority leakage
+- R7 controlled live route-feasibility
 - R8 regressions
 
-## 25. Current status
+## 25. Golden coverage
 
 ```yaml
-agent_spec_status: canonical_v1
+behavior_cases: 22
+authority_cases: 9
+tool_policy_cases: 7
+context_lifecycle_cases: 5
+provenance_cases: 6
+journey_issue_49_cases: 4
+```
+
+Fixture-driven contract gaps resolved:
+- user-fixed stop selection provenance → `selectionOrigin + selectionSourceRef`
+- budget alternative ownership → removed from Route Planner; Budget → Adaptive repair loop
+
+## 26. Current status
+
+```yaml
+agent_spec_status: golden_v1
 implementation_allowed: false
 prototype_allowed: false
-schemas: pending
-policies: pending
-fixtures: pending
+schemas: completed
+policies: completed
+fixtures: completed
 journey_issue_49_required: true
 knowledge_issue_50_indirect: true
+next_agent_package: TM-AG-010
 ```
