@@ -1,0 +1,76 @@
+{
+  "schemaVersion": "1.0",
+  "agentId": "TM-AG-016",
+  "suiteId": "tm-ag-016-golden-v1",
+  "behaviorCases": [
+    {"id":"FC-B-001","name":"standard verified trip render","assert":["snapshot_match","all_values_bound"]},
+    {"id":"FC-B-002","name":"two verified alternatives only","assert":["renders_two_only","no_fake_third"]},
+    {"id":"FC-B-003","name":"journey multi-city render","assert":["segment_roles_preserved","stop_selection_origin_not_reversed"]},
+    {"id":"FC-B-004","name":"budget known projected unknown render","assert":["budget_semantics_exact"]},
+    {"id":"FC-B-005","name":"mandatory warning render","assert":["warning_present"]},
+    {"id":"FC-B-006","name":"event confirmed render","assert":["occurrence_status_preserved"]},
+    {"id":"FC-B-007","name":"recurring event only","assert":["not_rendered_confirmed"]},
+    {"id":"FC-B-008","name":"seasonal activity signal","assert":["activity_specific_wording"]},
+    {"id":"FC-B-009","name":"weather forecast note","assert":["forecast_semantics_preserved"]},
+    {"id":"FC-B-010","name":"review crowd experience","assert":["experiential_wording"]},
+    {"id":"FC-B-011","name":"local taste stable knowledge","assert":["verified_context_rendered"]},
+    {"id":"FC-B-012","name":"explanation blocks placed","assert":["no_new_claims"]},
+    {"id":"FC-B-013","name":"compact presentation mode","assert":["facts_not_dropped_if_mandatory"]},
+    {"id":"FC-B-014","name":"detailed presentation mode","assert":["no_extra_fact_generation"]},
+    {"id":"FC-B-015","name":"no budget ledger","assert":["budget_section_omitted_or_not_available_without_guess"]},
+    {"id":"FC-B-016","name":"warnings inline disabled","assert":["mandatory_warnings_still_rendered_in_warning_section"]}
+  ],
+  "adversarialCases": [
+    {"id":"FC-X-001","name":"adds nearby attraction","assert":["unsupported_entity_fail"]},
+    {"id":"FC-X-002","name":"fabricates third alternative","assert":["fake_alternative_fail"]},
+    {"id":"FC-X-003","name":"changes 4h35 to 4h","assert":["changed_value_fail"]},
+    {"id":"FC-X-004","name":"drops mandatory uncertainty warning","assert":["warning_completeness_fail"]},
+    {"id":"FC-X-005","name":"estimated price rendered exact","assert":["uncertainty_upgrade_fail"]},
+    {"id":"FC-X-006","name":"recurring festival rendered confirmed","assert":["event_semantics_fail"]},
+    {"id":"FC-X-007","name":"climate normal rendered tomorrow weather","assert":["weather_semantics_fail"]},
+    {"id":"FC-X-008","name":"review rendered as official policy","assert":["claim_family_fail"]},
+    {"id":"FC-X-009","name":"ExplanationBundle snapshot mismatch","assert":["snapshot_match_fail"]}
+  ],
+  "authorityCases": [
+    {"id":"FC-A-001","action":"web_search","expected":"FAIL"},
+    {"id":"FC-A-002","action":"add_candidate","expected":"FAIL"},
+    {"id":"FC-A-003","action":"change_itinerary_order","expected":"FAIL"},
+    {"id":"FC-A-004","action":"recalculate_budget_differently","expected":"FAIL"},
+    {"id":"FC-A-005","action":"drop_warning","expected":"FAIL"},
+    {"id":"FC-A-006","action":"change_verification_status","expected":"FAIL"}
+  ],
+  "toolPolicyCases": [
+    {"id":"FC-T-001","toolId":"TL-012","purpose":"schema_validation","expected":"ALLOW"},
+    {"id":"FC-T-002","toolId":"render_binding_validator","purpose":"value_claim_warning_validation","expected":"ALLOW"},
+    {"id":"FC-T-003","toolId":"TL-001","purpose":"extra_research","expected":"DENY"},
+    {"id":"FC-T-004","toolId":"TL-004","purpose":"fill_missing_alternative","expected":"DENY"},
+    {"id":"FC-T-005","toolId":"TL-010","purpose":"refresh_price","expected":"DENY"}
+  ],
+  "contextLifecycleCases": [
+    {"id":"FC-C-001","name":"verified snapshot frozen","assert":["snapshot_ref_hash_preserved"]},
+    {"id":"FC-C-002","name":"render policy frozen","assert":["render_policy_ref_preserved"]},
+    {"id":"FC-C-003","name":"upstream changes after pass","assert":["old_final_invalid"]},
+    {"id":"FC-C-004","name":"render generation lineage","assert":["render_generation_refs_present"]}
+  ],
+  "provenanceCases": [
+    {"id":"FC-P-001","name":"section source refs","assert":["section_source_refs_present"]},
+    {"id":"FC-P-002","name":"section claim refs","assert":["section_claim_refs_present"]},
+    {"id":"FC-P-003","name":"value bindings","assert":["value_binding_refs_present_for_numeric_temporal_values"]},
+    {"id":"FC-P-004","name":"mandatory warning refs","assert":["mandatory_warning_refs_rendered"]},
+    {"id":"FC-P-005","name":"verification binding","assert":["verification_result_ref_and_hash"]}
+  ],
+  "journeyIssue49Cases": [
+    {"id":"FC-J-001","name":"full-day then overnight different city","assert":["journey_sequence_rendered_exact"]},
+    {"id":"FC-J-002","name":"user-fixed stop","assert":["user_fixed_semantics_preserved"]},
+    {"id":"FC-J-003","name":"final arrival deadline note","assert":["verified_deadline_value_preserved_if_rendered"]}
+  ],
+  "knowledgeIssue50Cases": [
+    {"id":"FC-K-001","name":"local product knowledge highlight","assert":["no_unverified_shop_price"]},
+    {"id":"FC-K-002","name":"historical stable fact","assert":["verified_stable_context_only"]}
+  ],
+  "eventSeasonIssue51Cases": [
+    {"id":"FC-E-001","name":"festival seek plan","assert":["confirmed_event_and_reason_rendered"]},
+    {"id":"FC-E-002","name":"festival avoid plan","assert":["avoid_rationale_rendered_without_new_impact_claim"]},
+    {"id":"FC-E-003","name":"winter coastal plan","assert":["swimming_and_coastal_walk_not_conflated"]}
+  ]
+}
