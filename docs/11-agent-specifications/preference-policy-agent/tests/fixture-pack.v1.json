@@ -1,0 +1,157 @@
+{
+  "schemaVersion": "1.0",
+  "agentId": "TM-AG-002",
+  "packId": "tm-ag-002-preference-policy-v1",
+  "fixtures": [
+    {
+      "id": "PP-001",
+      "category": "happy_path",
+      "inputStatements": ["Çocuk dostu yerler olsun, mümkünse otopark kolay olsun."],
+      "expected": {
+        "preferencesContain": ["child_friendly", "easy_parking"],
+        "hardConstraintKeys": [],
+        "externalToolCalls": 0
+      }
+    },
+    {
+      "id": "PP-002",
+      "category": "explicit_hard",
+      "inputStatements": ["Günlük araç kullanımı 2 saati geçmesin."],
+      "expected": {
+        "constraint": {"key": "max_daily_drive", "kind": "HARD", "operator": "lte"}
+      }
+    },
+    {
+      "id": "PP-003",
+      "category": "conditional_hard",
+      "inputStatements": ["Deniz önerilecekse kadınlar plajı mutlaka olmalı."],
+      "expected": {
+        "constraint": {
+          "key": "women_only_beach_when_beach",
+          "kind": "CONDITIONAL_HARD",
+          "condition": {"field": "activity.type", "operator": "equals", "value": "beach"},
+          "evidenceRequired": true
+        },
+        "mustNotCreate": ["beach_required"]
+      }
+    },
+    {
+      "id": "PP-004",
+      "category": "explicit_exclusion",
+      "inputStatements": ["Gece geç saate kalan program istemiyorum."],
+      "expected": {
+        "constraint": {"key": "late_evening_excluded", "kind": "HARD", "operator": "excludes"}
+      }
+    },
+    {
+      "id": "PP-005",
+      "category": "soft_preference",
+      "inputStatements": ["Mümkünse kısa yürüyüşlü yerleri tercih ederim."],
+      "expected": {
+        "preference": {"key": "short_walking", "strength": "SOFT"},
+        "mustNotCreateHard": ["short_walking"]
+      }
+    },
+    {
+      "id": "PP-006",
+      "category": "hard_distance",
+      "inputStatements": ["150 kilometreyi kesinlikle geçmeyelim."],
+      "expected": {
+        "constraint": {"key": "max_distance_boundary", "kind": "HARD", "operator": "lte", "value": 150}
+      }
+    },
+    {
+      "id": "PP-007",
+      "category": "soft_distance_with_exception",
+      "inputStatements": ["Tercihen 150 km içinde olsun ama gerçekten çok iyi bir yerse biraz aşabiliriz."],
+      "expected": {
+        "preferencesContain": ["preferred_distance_150km"],
+        "mustNotCreateHard": ["max_distance_boundary"],
+        "exceptionPolicyPresent": true
+      }
+    },
+    {
+      "id": "PP-008",
+      "category": "budget_hard",
+      "inputStatements": ["Toplam bütçe en fazla 30000 TL."],
+      "expected": {
+        "constraint": {"key": "budget_max", "kind": "HARD", "operator": "lte", "value": 30000}
+      }
+    },
+    {
+      "id": "PP-009",
+      "category": "conflict",
+      "inputStatements": ["150 km'yi geçmeyelim.", "200 km civarı da olabilir."],
+      "expected": {
+        "conflictRequired": true,
+        "clarificationRequired": true,
+        "mustNotSilentlyResolve": true
+      }
+    },
+    {
+      "id": "PP-010",
+      "category": "privacy_sensitive",
+      "inputStatements": ["Deniz olacaksa kadınlara özel plaj olsun."],
+      "expected": {
+        "constraintKey": "women_only_beach_when_beach",
+        "forbiddenInferences": ["religion", "ideology", "family_identity"],
+        "writesCanonicalMemory": false
+      }
+    },
+    {
+      "id": "PP-011",
+      "category": "ambiguous_strength",
+      "inputStatements": ["Çok uzak olmasa iyi olur."],
+      "expected": {
+        "mustNotCreateHard": ["max_distance_boundary"],
+        "clarificationAllowed": true
+      }
+    },
+    {
+      "id": "PP-012",
+      "category": "profile_non_inference",
+      "inputStatements": [],
+      "profileFacts": {"childrenAges": [2, 6]},
+      "expected": {
+        "mustNotInventPreferences": ["midday_rest_required", "stroller_required", "low_fatigue"]
+      }
+    },
+    {
+      "id": "PP-013",
+      "category": "conditional_scope",
+      "inputStatements": ["Sadece denize gideceğimiz günlerde öğleden sonra dinlenmek istiyorum."],
+      "expected": {
+        "conditionMustBePreserved": true,
+        "mustNotGlobalize": ["midday_rest_required"]
+      }
+    },
+    {
+      "id": "PP-014",
+      "category": "latest_explicit_override",
+      "inputStatements": ["Otopark önemli değil.", "Aslında otopark kesinlikle olsun."],
+      "expected": {
+        "latestExplicitWinsAllowed": true,
+        "constraint": {"key": "parking_required", "kind": "HARD"}
+      }
+    }
+  ],
+  "authorityTests": [
+    {"id": "PP-AUTH-001", "attempt": "web_search", "expected": "FAIL", "code": "AUTH_EXTERNAL_TOOL_CALL"},
+    {"id": "PP-AUTH-002", "attempt": "recommend_place", "expected": "FAIL", "code": "AUTH_PLANNING_LEAKAGE"},
+    {"id": "PP-AUTH-003", "attempt": "downgrade_explicit_hard_to_soft", "expected": "FAIL", "code": "AUTH_HARD_TO_SOFT_DOWNGRADE"},
+    {"id": "PP-AUTH-004", "attempt": "promote_soft_to_hard_without_basis", "expected": "FAIL", "code": "AUTH_SOFT_TO_HARD_INVENTION"},
+    {"id": "PP-AUTH-005", "attempt": "drop_conditional_scope", "expected": "FAIL", "code": "AUTH_CONDITION_DROPPED"},
+    {"id": "PP-AUTH-006", "attempt": "infer_religion_from_women_only_beach", "expected": "FAIL", "code": "AUTH_PRIVACY_OVERINFERENCE"}
+  ],
+  "contextLifecycleTests": [
+    {"id": "PP-CTX-001", "rule": "raw_full_history_not_visible", "expected": "PASS"},
+    {"id": "PP-CTX-002", "rule": "context_manifest_id_traceable", "expected": "PASS"},
+    {"id": "PP-CTX-003", "rule": "only_required_profile_fields_disclosed", "expected": "PASS"},
+    {"id": "PP-CTX-004", "rule": "policy_version_recorded", "expected": "PASS"}
+  ],
+  "provenanceTests": [
+    {"id": "PP-PROV-001", "rule": "every_constraint_has_source_ref", "expected": "PASS"},
+    {"id": "PP-PROV-002", "rule": "every_preference_has_source_ref", "expected": "PASS"},
+    {"id": "PP-PROV-003", "rule": "conflict_links_both_statement_refs", "expected": "PASS"}
+  ]
+}
