@@ -1,3 +1,4 @@
+export * from './agent-registry.js';
 export * from './context-builder.js';
 
 export const HARNESS_PACKAGE = '@tatil-modu/harness' as const;
@@ -117,6 +118,13 @@ export interface HarnessRunContext {
   workflowVersion: string;
 }
 
+/**
+ * PRE-FREEZE LEGACY WORKFLOW.
+ *
+ * Kept for compatibility with the existing first-phase tests while the canonical
+ * TM-AG-001..016 + TM-ORCH-001 registry-driven workflow is introduced. New M1
+ * contract tests must use the AgentRegistry rather than extending this object.
+ */
 export const FAMILY_TRIP_PLANNING_V1: WorkflowDefinition = {
   workflowId: 'family_trip_planning',
   version: 'v1',
