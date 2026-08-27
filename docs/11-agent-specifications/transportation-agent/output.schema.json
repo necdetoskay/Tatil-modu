@@ -4,11 +4,12 @@
   "title": "TransportationResult.v1",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schemaVersion", "requestId", "requestType", "routeLegs", "matrixEntries", "corridorCandidates", "warnings", "overallConfidence"],
+  "required": ["schemaVersion", "requestId", "requestType", "ruleSnapshotId", "routeLegs", "matrixEntries", "corridorCandidates", "warnings", "overallConfidence"],
   "properties": {
     "schemaVersion": { "const": "1.0" },
     "requestId": { "type": "string", "minLength": 1 },
     "requestType": { "enum": ["POINT_TO_POINT", "MATRIX", "CORRIDOR_DISCOVERY", "STOP_SEQUENCE_RECALC"] },
+    "ruleSnapshotId": { "type": ["string", "null"] },
     "routeLegs": { "type": "array", "items": { "$ref": "#/$defs/routeLeg" } },
     "matrixEntries": { "type": "array", "items": { "$ref": "#/$defs/matrixEntry" } },
     "corridorCandidates": { "type": "array", "items": { "$ref": "#/$defs/corridorCandidate" } },
