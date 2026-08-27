@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tatil-modu.local/schemas/explanation-agent-input.v1.json",
+  "title": "ExplanationAgentInput.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "requestId", "verificationResultRef", "verificationStatus", "verifiedSnapshotRef", "verifiedSnapshotHash", "explanationPolicySnapshotId", "explainableRecords", "warningRefs"],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "requestId": { "type": "string", "minLength": 1 },
+    "verificationResultRef": { "type": "string", "minLength": 1 },
+    "verificationStatus": { "const": "PASS" },
+    "verifiedSnapshotRef": { "type": "string", "minLength": 1 },
+    "verifiedSnapshotHash": { "type": "string", "minLength": 1 },
+    "explanationPolicySnapshotId": { "type": "string", "minLength": 1 },
+    "explainableRecords": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["subjectRef", "recordType", "decisionRefs", "constraintRefs", "supportRefs", "allowedClaimRefs", "uncertaintyRefs"],
+        "properties": {
+          "subjectRef": { "type": "string", "minLength": 1 },
+          "recordType": { "enum": ["SELECTED", "REJECTED", "TRADEOFF", "JOURNEY_STOP", "BUDGET", "WEATHER", "EVENT", "SEASONAL", "UNCERTAINTY", "ALTERNATIVE"] },
+          "decisionRefs": { "type": "array", "items": { "type": "string" } },
+          "constraintRefs": { "type": "array", "items": { "type": "string" } },
+          "supportRefs": { "type": "array", "items": { "type": "string" } },
+          "allowedClaimRefs": { "type": "array", "items": { "type": "string" } },
+          "uncertaintyRefs": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+    "warningRefs": { "type": "array", "items": { "type": "string" } },
+    "contextManifestId": { "type": ["string", "null"] }
+  }
+}
