@@ -4,7 +4,7 @@
 |---|---|
 | Agent ID | TM-AG-014 |
 | Sürüm | 1.0 |
-| Durum | CANONICAL SPEC |
+| Durum | GOLDEN PACKAGE V1 READY |
 | Tarih | 2026-08-27 |
 
 ## 1. Purpose
@@ -32,29 +32,27 @@ Verification Agent plan üretmez; planın kabul edilip edilemeyeceğine karar ve
 - authority/provenance ihlali yok.
 
 ### REPAIR
-- plan genel olarak onarılabilir,
-- failure hedefli ref/dependency closure ile düzeltilebilir,
-- `repairTargets[]` üretilebilir.
+- plan hedefli olarak onarılabilir,
+- failure target/dependency refs ile lokalize edilebilir,
+- actionable `repairTargets[]` üretilebilir.
 
 ### FAIL
-- structural/unsafe/irrecoverable veya authority-integrity problemi,
-- planın mevcut snapshot'ı güvenle repair target'a indirgenemiyor,
-- schema/provenance bütünlüğü ciddi biçimde kayıp,
-- sistem planı kabul etmemelidir.
+- structural/authority/schema/provenance integrity problemi güvenli targeted repair'e indirgenemiyor,
+- current snapshot ilerlememelidir.
 
 ## 3. Inputs
 
-- itinerary snapshot / DraftItinerary or repaired candidate
-- selected Place/Accommodation/Food candidate refs and eligibility records
-- TransportationResult / route facts
+- itinerary snapshot
+- selected candidate eligibility refs
+- routes
 - WeatherSignalSet
 - BudgetLedger
 - OfficialFact set
-- ReviewSignalSet where plan decisions use experiential signals
-- current constraints/policy snapshots
+- ReviewSignalSet where used
+- constraints/policy snapshots
 - optional AdaptiveRepairResult
 - AgentTrace + ToolCall traces
-- evidence registry/package refs
+- evidence refs
 - Issue #51 EventOccurrence / EventImpact / SeasonalSuitability refs where used
 - `contextManifestId`
 
@@ -66,6 +64,8 @@ Ana çıktı: `VerificationResult.v1`.
 verificationRunId: string
 verifiedSnapshotRef: string
 verifiedSnapshotHash: string
+policySnapshotRefs: []
+evaluatorRefs: []
 status: PASS | REPAIR | FAIL
 gates: VerificationGateResult[]
 blockingFindings: []
@@ -78,9 +78,9 @@ requiredRechecks: []
 confidence: 0..1
 ```
 
-## 5. Gate order
+`policySnapshotRefs` exact verification/rule/policy context'ini, `evaluatorRefs` ise G10 semantic evaluation kullanıldıysa evaluator/model/prompt lineage'ını taşır.
 
-Verification deterministic-before-LLM sırasını kullanır:
+## 5. Gate order
 
 ```text
 G0 schema/contracts
@@ -93,10 +93,10 @@ G6 operational facts + freshness
 G7 weather/event/seasonal consistency
 G8 budget ledger / hard budget
 G9 evidence coverage/conflicts
-G10 semantic quality checks (only non-deterministic remainder)
+G10 semantic quality checks
 ```
 
-Üst gate failure alt semantic score ile telafi edilemez.
+G10 hiçbir G0–G9 blocking failure'ını override edemez.
 
 ## 6. Gate result
 
@@ -112,162 +112,149 @@ evidenceRefs: []
 findingCodes: []
 ```
 
-## 7. Schema and handoff integrity
+## 7. Schema/handoff integrity
 
 - all required schemas valid,
 - schema versions/snapshot refs traceable,
-- no downstream object references missing upstream refs,
-- repaired snapshot must reference AdaptiveRepairResult if repair path used.
+- no broken critical cross-object refs,
+- repaired snapshot AdaptiveRepairResult lineage taşımalı.
 
-Schema-invalid critical handoff cannot PASS.
+Critical schema-invalid handoff cannot PASS.
 
 ## 8. Authority integrity
 
-Agent/tool authority traces are verified.
-
 Examples:
-- Profile web searched → authority FAIL.
-- Orchestrator directly called Places/Routes/Weather → authority FAIL.
+- Profile web searched → blocking authority finding.
+- Orchestrator directly called Places/Routes/Weather → blocking authority finding.
 - Final Composer added new place → FAIL.
-- Adaptive changed unrelated day without scope proof → FAIL/REPAIR depending integrity.
+- Adaptive changed unrelated day without proof → blocking finding.
 
-Authority violation is not a semantic quality issue.
+Authority violation semantic quality değildir.
 
 ## 9. Hard constraints
 
-All applicable HARD / CONDITIONAL_HARD constraints must resolve to satisfied or safely blocked-before-final.
+Applicable HARD / CONDITIONAL_HARD constraint violation → PASS impossible.
 
-Hard violation in accepted itinerary → cannot PASS.
-
-Unknown hard-critical claim generally produces REPAIR/recheck, not optimistic PASS.
+Hard-critical claim unresolved ise optimistic PASS yasaktır; REPAIR/recheck veya FAIL gerekir.
 
 ## 10. Time/route feasibility
 
-Deterministic checks:
+Deterministic:
 - block overlap,
-- route transition + buffer,
-- opening/operation window fit,
+- transition + buffer,
+- opening window,
 - check-in/out,
 - final arrival deadline,
-- journey segment ordering,
+- journey order,
 - user-fixed stop preservation,
-- route distance/duration provenance.
+- route provenance.
 
-Straight-line distance cannot satisfy route-duration gate.
+Straight-line distance route-duration evidence değildir.
 
 ## 11. Evidence/freshness
 
-Critical current facts require matching evidence family and freshness.
-
-Examples:
+Current critical facts matching evidence/freshness ister:
 - opening hours,
 - event occurrence/status,
-- current weather,
-- live accommodation availability/price where asserted,
-- official seasonal closure,
-- route/traffic facts,
-- women-only beach status where hard conditional rule applies.
+- weather,
+- accommodation availability/price when asserted,
+- seasonal closure,
+- route/traffic,
+- women-only beach status when conditional hard rule applies.
 
-Precomputed Issue #50 knowledge does not automatically satisfy current critical fact gates.
+Issue #50 precomputed knowledge current-critical gate'i otomatik geçirmez.
 
-## 12. Official vs experiential claims
-
-Verification keeps claim families separate:
+## 12. Official vs experiential
 
 ```text
 OfficialFact → operational/policy fact
 ReviewSignal → experiential pattern
 ```
 
-ReviewSignal cannot satisfy a required OfficialFact gate.
+ReviewSignal required OfficialFact gate'ini karşılayamaz.
 
 ## 13. Issue #49 multi-city checks
 
-For JourneyPlan:
-- each JourneySegment route ref exists,
-- overnight segment has valid stay where required,
+- every JourneySegment route ref exists,
+- overnight stay valid where required,
 - stop role/time/day relation coherent,
-- user-fixed stop provenance preserved,
-- final destination deadline satisfied,
-- route sequence physically feasible.
+- user-fixed provenance preserved,
+- final-arrival deadline satisfied,
+- route chain feasible.
 
 ## 14. Issue #51 seasonal/event checks
 
 - recurring event knowledge != exact-year occurrence,
-- exact event block requires adequate EventOccurrence/official evidence,
-- cancelled event cannot remain active block,
-- seasonal closure cannot be ignored,
-- climate normal cannot be exact-day forecast,
-- event AVOID/SEEK policy must be applied consistently where event data is material.
+- exact event block adequate current occurrence evidence ister,
+- cancelled event active kalamaz,
+- seasonal closure ignore edilemez,
+- climate normal exact forecast değildir,
+- SEEK/AVOID event policy data material ise tutarlı uygulanmalı.
 
 ## 15. Budget checks
 
-- BudgetLedger arithmetic reproducible,
+- arithmetic reproducible,
 - UNKNOWN != 0,
-- duplicate dedupeKey not double-counted,
+- duplicate dedupeKey double-count yok,
 - hard over-budget cannot PASS,
-- critical unknown exposure can block/provisionally prevent PASS according to policy,
-- mixed currency requires conversion evidence.
+- critical unknown exposure policy'ye göre PASS'i engeller,
+- mixed currency conversion evidence ister.
 
-## 16. Adaptive repair verification
+## 16. Adaptive repair checks
 
-If `AdaptiveRepairResult` exists:
-- each patch inside justified impact scope,
-- triggerResolutions complete,
-- protected preservation proofs hash-equal,
+AdaptiveRepairResult varsa:
+- patch justified scope içinde,
+- `triggerResolutions[]` complete,
+- preservation hashes equal,
 - scope escalation justified,
-- mandatory downstream rechecks completed,
-- repaired fragment passes same TM-AG-009 feasibility invariants.
+- mandatory rechecks complete,
+- repaired fragment shared route-planner feasibility kurallarını geçer.
 
-Repair candidate cannot advance merely because Adaptive Agent says `REPAIRED`.
+Adaptive `REPAIRED` tek başına state advancement değildir.
 
 ## 17. Evidence coverage
 
-Verification reports claim-family coverage, not just a single percent.
+Coverage claim-family bazında deterministic hesaplanır:
 
 ```yaml
-evidenceCoverage:
-  criticalClaimsTotal: integer
-  criticalClaimsVerified: integer
-  criticalClaimsUnknown: integer
-  criticalClaimsConflicting: integer
-  officialCoverage: 0..1
-  routeCoverage: 0..1
-  weatherCoverage: 0..1
-  priceCoverage: 0..1
-  provenanceCoverage: 0..1
+criticalClaimsTotal: integer
+criticalClaimsVerified: integer
+criticalClaimsUnknown: integer
+criticalClaimsConflicting: integer
+officialCoverage: 0..1
+routeCoverage: 0..1
+weatherCoverage: 0..1
+priceCoverage: 0..1
+provenanceCoverage: 0..1
 ```
 
 ## 18. Repair target
-
-A `REPAIR` finding must be actionable:
 
 ```yaml
 repairTargetId: string
 reasonCode: string
 targetRefs: []
 dependencyRefs: []
-requiredOwner: TM-AG-013 | other-owner-via-orchestrator
+requiredOwner: string
 requiredEvidenceTypes: []
 severity: BLOCKING | NON_BLOCKING
 ```
 
-Verification does not perform the repair.
+Verification repair yapmaz; target üretir.
 
 ## 19. Reverification policy
 
-Base verification pass external-world search yapmaz.
-
-Missing/conflicting critical facts için tercih edilen yol:
+Base pass external-world domain search yapmaz.
 
 ```text
-Verification → requiredRecheck
-→ Orchestrator routes to owning specialist
-→ new evidence
-→ Verification rerun
+Verification requiredRecheck
+→ Orchestrator
+→ owning specialist
+→ refreshed evidence
+→ new Verification run
 ```
 
-Explicit controlled mode'da narrow read-only recheck capability kullanılabilir; discovery/ranking/new candidate creation yasaktır.
+Controlled direct read-only recheck yalnız explicit policy/mode ile tek existing claim scope'unda kullanılabilir; discovery/ranking yasaktır.
 
 ## 20. Allowed tools
 
@@ -276,27 +263,23 @@ Primary:
 - `TL-013` Rule Engine
 - `TL-011` Calculator
 
-Optional controlled read-only recheck:
-- claim owner'a uygun mevcut read-only adapter; yalnız explicit missing/conflicting fact scope'unda.
+Optional controlled read-only existing-claim recheck only.
 
 ## 21. Forbidden behavior
 
-- new place/hotel/restaurant candidate generation,
+- candidate generation,
 - itinerary mutation,
 - hard constraint relaxation,
-- final prose response,
-- semantic judge ile deterministic failure override,
-- missing evidence'i confidence tahminiyle kapatma,
+- final prose,
+- semantic override of deterministic fail,
+- confidence replacing evidence,
 - unsupported PASS.
 
-## 22. Semantic judgement boundary
+## 22. Semantic evaluator provenance
 
-LLM/semantic evaluation yalnız deterministik olmayan remainder için kullanılabilir:
-- alternative meaningful diversity,
-- pacing quality,
-- explanation-level coherence gibi.
+G10 kullanılırsa `evaluatorRefs[]` empty olamaz. Model/prompt/rubric version lineage harness trace ile yeniden üretilebilir olmalıdır.
 
-Semantic judgement hard gate'leri override edemez.
+G10 SKIP ise evaluatorRefs boş olabilir.
 
 ## 23. Failure modes
 
@@ -313,29 +296,32 @@ Semantic judgement hard gate'leri override edemez.
 - `SEMANTIC_OVERRIDE_OF_DETERMINISTIC_FAIL`
 - `REPAIR_TARGET_NOT_ACTIONABLE`
 - `MISSING_VERIFICATION_PROVENANCE`
+- `MISSING_EVALUATOR_LINEAGE`
 
 ## 24. Harness binding
 
 - R0 VerificationResult schema
 - R1 all deterministic gates
 - R2 recorded full-pipeline fixtures
-- R3 schema/rule/calculator/recheck adapter integration
+- R3 schema/rule/calculator/recheck integration
 - R4 limited semantic gate quality
 - R5 conflicting/stale/missing/authority/provenance adversarial cases
 - R6 reviewer authority leakage/new-candidate generation
 - R7 controlled live final verification
-- R8 production false-pass/false-repair regressions
+- R8 false-pass/false-repair regressions
 
 ## 25. Current status
 
 ```yaml
-agent_spec_status: canonical_v1
+agent_spec_status: golden_v1_ready
 implementation_allowed: false
 prototype_allowed: false
-schemas: pending
-policies: pending
-fixtures: pending
+schemas: completed
+policies: completed
+fixtures: completed
 journey_issue_49_required: true
 knowledge_issue_50_freshness_required: true
 event_season_issue_51_required: true
+verification_policy_lineage_required: true
+semantic_evaluator_lineage_required_when_used: true
 ```
