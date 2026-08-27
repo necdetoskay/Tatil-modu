@@ -1,0 +1,107 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tatil-modu.local/schemas/budget-ledger.v1.json",
+  "title": "BudgetLedger.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "ledgerId", "requestId", "itineraryRef", "costPolicySnapshotId", "targetCurrency", "items", "currencySubtotals", "knownTotal", "projectedTotal", "unknownItemCount", "budgetLimits", "assessment", "repairNeeds", "warnings"],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "ledgerId": { "type": "string", "minLength": 1 },
+    "requestId": { "type": "string", "minLength": 1 },
+    "itineraryRef": { "type": "string", "minLength": 1 },
+    "costPolicySnapshotId": { "type": "string", "minLength": 1 },
+    "targetCurrency": { "type": "string", "minLength": 3, "maxLength": 3 },
+    "items": { "type": "array", "items": { "$ref": "#/$defs/item" } },
+    "currencySubtotals": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["currency", "knownAmount", "estimatedAmount", "unknownItemCount"],
+        "properties": {
+          "currency": { "type": "string", "minLength": 3, "maxLength": 3 },
+          "knownAmount": { "type": "number", "minimum": 0 },
+          "estimatedAmount": { "type": "number", "minimum": 0 },
+          "unknownItemCount": { "type": "integer", "minimum": 0 }
+        }
+      }
+    },
+    "knownTotal": { "type": ["number", "null"], "minimum": 0 },
+    "projectedTotal": { "type": ["number", "null"], "minimum": 0 },
+    "unknownItemCount": { "type": "integer", "minimum": 0 },
+    "budgetLimits": { "type": "array", "items": { "$ref": "#/$defs/limitResult" } },
+    "assessment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "headroomAmount", "overageAmount", "unknownExposure", "confidence"],
+      "properties": {
+        "status": { "enum": ["WITHIN_BUDGET", "PROVISIONALLY_WITHIN", "OVER_BUDGET", "UNKNOWN"] },
+        "headroomAmount": { "type": ["number", "null"], "minimum": 0 },
+        "overageAmount": { "type": ["number", "null"], "minimum": 0 },
+        "unknownExposure": { "enum": ["NONE", "NON_CRITICAL", "CRITICAL", "UNKNOWN"] },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 }
+      }
+    },
+    "repairNeeds": { "type": "array", "items": { "$ref": "#/$defs/repairNeed" } },
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  },
+  "$defs": {
+    "item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["itemId", "sourceCostFactRef", "dedupeKey", "category", "itineraryRefs", "entityRef", "journeySegmentRef", "quantity", "unitAmount", "sourceAmount", "sourceCurrency", "normalizedAmount", "targetCurrency", "conversionRef", "priceStatus", "calculationMethod", "calculationRef", "freshnessStatus", "contextValidity", "taxesFeesKnown", "sourceRefs"],
+      "properties": {
+        "itemId": { "type": "string", "minLength": 1 },
+        "sourceCostFactRef": { "type": "string", "minLength": 1 },
+        "dedupeKey": { "type": "string", "minLength": 1 },
+        "category": { "enum": ["ACCOMMODATION", "ACTIVITY", "FOOD", "TRANSPORT", "FUEL", "TOLL", "PARKING", "TRANSIT", "FEE", "SHOPPING", "OTHER"] },
+        "itineraryRefs": { "type": "array", "items": { "type": "string" } },
+        "entityRef": { "type": ["string", "null"] },
+        "journeySegmentRef": { "type": ["string", "null"] },
+        "quantity": { "type": ["number", "null"], "minimum": 0 },
+        "unitAmount": { "type": ["number", "null"], "minimum": 0 },
+        "sourceAmount": { "type": ["number", "null"], "minimum": 0 },
+        "sourceCurrency": { "type": "string", "minLength": 3, "maxLength": 3 },
+        "normalizedAmount": { "type": ["number", "null"], "minimum": 0 },
+        "targetCurrency": { "type": "string", "minLength": 3, "maxLength": 3 },
+        "conversionRef": { "type": ["string", "null"] },
+        "priceStatus": { "enum": ["LIVE", "OFFICIAL", "ESTIMATED", "UNKNOWN"] },
+        "calculationMethod": { "enum": ["DIRECT", "QUANTITY_X_UNIT", "FORMULA", "UNKNOWN"] },
+        "calculationRef": { "type": ["string", "null"] },
+        "freshnessStatus": { "enum": ["CURRENT", "STALE", "UNKNOWN"] },
+        "contextValidity": { "enum": ["MATCHED", "MISMATCHED", "NOT_APPLICABLE", "UNKNOWN"] },
+        "taxesFeesKnown": { "type": ["boolean", "null"] },
+        "sourceRefs": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "limitResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["constraintId", "scope", "kind", "limitAmount", "currency", "evaluatedAmount", "status", "itemRefs"],
+      "properties": {
+        "constraintId": { "type": "string", "minLength": 1 },
+        "scope": { "enum": ["OVERALL", "ACCOMMODATION", "ACTIVITY", "FOOD", "TRANSPORT", "DAILY", "MEAL", "SHOPPING", "OTHER"] },
+        "kind": { "enum": ["HARD", "SOFT"] },
+        "limitAmount": { "type": "number", "minimum": 0 },
+        "currency": { "type": "string", "minLength": 3, "maxLength": 3 },
+        "evaluatedAmount": { "type": ["number", "null"], "minimum": 0 },
+        "status": { "enum": ["PASS", "FAIL", "UNKNOWN"] },
+        "itemRefs": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "repairNeed": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["repairNeedId", "reasonCode", "constraintRefs", "itemRefs", "affectedItineraryRefs", "severity"],
+      "properties": {
+        "repairNeedId": { "type": "string", "minLength": 1 },
+        "reasonCode": { "type": "string", "minLength": 1 },
+        "constraintRefs": { "type": "array", "items": { "type": "string" } },
+        "itemRefs": { "type": "array", "items": { "type": "string" } },
+        "affectedItineraryRefs": { "type": "array", "items": { "type": "string" } },
+        "severity": { "enum": ["BLOCKING", "NON_BLOCKING"] }
+      }
+    }
+  }
+}
