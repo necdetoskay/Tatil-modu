@@ -1,7 +1,7 @@
 # 11 — Agent Specifications
 
 **Doküman türü:** canonical agent specification alanı  
-**Durum:** canonical catalog v1.0 + eight golden agent packages  
+**Durum:** canonical catalog v1.0 + nine golden agent packages  
 **Kodlama durumu:** kapalı  
 **Prototype durumu:** kapalı
 
@@ -41,7 +41,7 @@ canonical_catalog_date: 2026-08-27
 | TM-AG-006 | Food & Local Taste Agent | **golden package v1 ready** |
 | TM-AG-007 | Weather Agent | **golden package v1 ready** |
 | TM-AG-008 | Transportation Agent | **golden package v1 ready** |
-| TM-AG-009 | Route Planner Agent | pending |
+| TM-AG-009 | Route Planner Agent | **golden package v1 ready** |
 | TM-AG-010 | Budget Agent | pending |
 | TM-AG-011 | Public Authority Intelligence Agent | pending |
 | TM-AG-012 | Review Intelligence Agent | pending |
@@ -186,7 +186,32 @@ Transportation computes logistics.
 Destination Research evaluates destination value.
 Route Planner decides schedule/order.
 ```
-Contract gap: fixture provenance testinde corridor relation threshold'unu açıklamak için `ruleSnapshotId` output schema'ya eklenmiştir.
+Contract gap: corridor relation threshold provenance'ı için `ruleSnapshotId` output schema'ya eklenmiştir.
+
+### TM-AG-009 Route Planner
+```yaml
+behavior_cases: 22
+authority_cases: 9
+tool_policy_cases: 7
+context_lifecycle_cases: 5
+provenance_cases: 6
+journey_issue_49_cases: 4
+journey_plan_and_daily_plan_unified: true
+user_fixed_stop_provenance_required: true
+hard_constraint_before_soft_optimization: true
+budget_calculation_delegated_to: TM-AG-010
+budget_repair_delegated_to: TM-AG-013
+```
+Invariants:
+```text
+hard feasibility before semantic optimization
+JourneySegment + DailyPlan share one time graph
+user-fixed stop cannot disappear silently
+route fact missing != invented duration
+```
+Fixture-driven contract gaps:
+- user stop ownership provenance → `selectionOrigin + selectionSourceRef`
+- `BUDGET_ALTERNATIVE` removed from TM-AG-009 because total budget ownership is TM-AG-010; overflow repair is TM-AG-013.
 
 ## Eski first-phase specs
 
@@ -220,9 +245,10 @@ TM_AG_005_accommodation_package: completed
 TM_AG_006_food_local_taste_package: completed
 TM_AG_007_weather_package: completed
 TM_AG_008_transportation_package: completed
+TM_AG_009_route_planner_package: completed
 runtime_tests: pending
-next_agent_package: TM-AG-009
+next_agent_package: TM-AG-010
 implementation_allowed: false
 ```
 
-Bir sonraki paket `TM-AG-009 Route Planner Agent` olacaktır. Issue #49'daki `JourneyPlan / JourneySegment / stop-role` planlama modeli bu paketin ana tasarım girdisidir.
+Bir sonraki paket `TM-AG-010 Budget Agent` olacaktır. Route Planner'ın seçtiği itinerary içindeki konaklama, aktivite, yemek, route/toll ve diğer maliyetler burada deterministic ledger'a dönüştürülecektir.
