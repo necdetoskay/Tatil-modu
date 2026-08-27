@@ -66,7 +66,9 @@ providerPlaceIds: []
 name: string
 location: object
 categories: []
-businessStatus: OPERATIONAL | CLOSED_TEMPORARILY | CLOSED_PERMANENTLY | FUTURE_OPENING | UNKNOWN
+businessStatus:
+  value: OPERATIONAL | CLOSED_TEMPORARILY | CLOSED_PERMANENTLY | FUTURE_OPENING | UNKNOWN
+  evidenceRefs: []
 operationalFacts:
   openingHours: object
   price: object
@@ -74,6 +76,7 @@ operationalFacts:
   accessibility: object
 eligibility:
   disposition: ACCEPTED | REJECTED | NEEDS_VERIFICATION
+  dispositionReasons: []
   hardConstraintChecks: []
 familyFit:
   band: EXCELLENT | GOOD | CONDITIONAL | WEAK | UNKNOWN
@@ -81,12 +84,18 @@ familyFit:
   fatigueRisk: LOW | MEDIUM | HIGH | UNKNOWN
   indoorOutdoor: INDOOR | OUTDOOR | MIXED | UNKNOWN
   estimatedVisitDurationMinutes: number|null
-reviewSummaryRef: string|null
+aggregateSignals:
+  rating: number|null
+  userRatingCount: number|null
+  reviewDataAvailable: boolean
+  reviewAnalysisRef: string|null
 constraintRefs: []
 evidence: []
 unresolvedClaims: []
 confidence: 0..1
 ```
+
+`dispositionReasons[]`, kabul/red/verification kararını source evidence'a bağlayan zorunlu provenance zinciridir.
 
 ## 5. Stable identity rule
 
@@ -131,17 +140,17 @@ Kritik claim önceliği:
 3. Tier 3 review/platform yalnız deneyim sinyali.
 4. Tier 4 web discovery; kritik fact'i tek başına kesinleştiremez.
 
-Kaynaklar çelişirse `conflicting` durum görünür tutulur; eski/düşük güvenli kaynak sessizce seçilmez.
+Kaynaklar çelişirse `CONFLICTING` durum görünür tutulur; eski/düşük güvenli kaynak sessizce seçilmez.
 
 ## 9. Operational facts
 
 ### Business status
 
-Kapalı kalıcı bir yer accepted candidate olamaz.
+Business status yalnız enum değildir; karar provenance'ı için `value + evidenceRefs` taşır.
 
-`CLOSED_PERMANENTLY` → `REJECTED`.
-
-`CLOSED_TEMPORARILY` → ziyaret tarihiyle ilişkili güncel kanıt yoksa `NEEDS_VERIFICATION` veya `REJECTED`.
+- `CLOSED_PERMANENTLY` → `REJECTED`.
+- `CLOSED_TEMPORARILY` → ziyaret tarihiyle ilişkili güncel reopening evidence yoksa `NEEDS_VERIFICATION` veya `REJECTED`.
+- closure kaynaklı disposition nedeni `dispositionReasons[]` içine evidence refs ile yazılır.
 
 ### Opening hours
 
@@ -161,7 +170,7 @@ Status:
 
 ### Parking
 
-`parkingOptions`/resmî otopark bilgisi facility signal olabilir; **yer garantisi** değildir.
+`parkingOptions`/resmî otopark bilgisi facility signal olabilir; **yer garantisi değildir**. Contract `guaranteedAvailability=false` invariant'ını enforce eder.
 
 ### Accessibility
 
@@ -201,8 +210,6 @@ Soft/heuristic quality signal'dır.
 
 TM-AG-002'den gelen condition korunur.
 
-Örnek:
-
 ```text
 IF activity.type == beach
 THEN place.womenOnlyStatus == true
@@ -226,6 +233,17 @@ Aday disposition:
 - herhangi bir `VIOLATED` → `REJECTED`
 - violation yok ama applicable `UNVERIFIED` hard constraint varsa → `NEEDS_VERIFICATION`
 - applicable hard constraints satisfied/not-applicable ise → `ACCEPTED`
+
+Her disposition ayrıca:
+
+```yaml
+dispositionReasons:
+  - code: string
+    constraintId: string|null
+    evidenceRefs: []
+```
+
+ile trace edilir.
 
 ## 13. Review boundary
 
@@ -283,6 +301,7 @@ Confidence; identity resolution + source trust + freshness + completeness + conf
 - `OFFICIAL_SOURCE_OVERRIDDEN_BY_LOW_TRUST`
 - `MISSING_PROVENANCE`
 - `PARKING_SIGNAL_AS_GUARANTEE`
+- `DISPOSITION_REASON_MISSING`
 
 ## 17. Clarification policy
 
@@ -315,11 +334,12 @@ TM-AG-009 yalnız `ACCEPTED` ve gerekli repair/verification sonrası kabul edilm
 - hava tahmini üretmek,
 - review pattern analizi yapmak,
 - resmî kaynakla çelişen düşük-tier bilgiyi sessizce seçmek,
-- evidence'sız kesin opening hour/price/eligibility claim'i.
+- evidence'sız kesin opening hour/price/eligibility claim'i,
+- disposition kararını evidence'a bağlamamak.
 
 ## 20. Current provider note
 
-Provider adapter sözleşmesi provider-independent'tır. V1 için structured place adapter'ında Google Places tercih edilir; provider alanları kanonik PlaceCandidate'a normalize edilir. Provider'ın alanı desteklemesi, alanın her place için dolu olacağını garanti etmez.
+Provider adapter sözleşmesi provider-independent'tır. V1 için structured place adapter'ında Google Places tercih edilir; provider alanları kanonik `PlaceCandidate`'a normalize edilir. Provider'ın alanı desteklemesi, alanın her place için dolu olacağını garanti etmez.
 
 ## 21. Contract sketch
 
@@ -360,10 +380,13 @@ Zorunlu RIVE/Harness coverage:
 ## 23. Current status
 
 ```yaml
-agent_spec_status: canonical_v1
+agent_spec_status: golden_package_v1_ready
 implementation_allowed: false
 prototype_allowed: false
-schemas: pending
-policies: pending
-fixtures: pending
+schemas: completed
+policies: completed
+fixtures: completed
+contract_gap_resolved:
+  - business_status_evidence_refs
+  - disposition_reasons_with_evidence
 ```
