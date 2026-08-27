@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tatil-modu.local/schemas/final-travel-plan.v1.json",
+  "title": "FinalTravelPlan.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "finalPlanId", "requestId", "verificationResultRef", "verifiedSnapshotRef", "verifiedSnapshotHash", "finalRenderPolicySnapshotId", "renderGenerationRefs", "sections", "mandatoryWarningRefsRendered", "renderValidation"],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "finalPlanId": { "type": "string", "minLength": 1 },
+    "requestId": { "type": "string", "minLength": 1 },
+    "verificationResultRef": { "type": "string", "minLength": 1 },
+    "verifiedSnapshotRef": { "type": "string", "minLength": 1 },
+    "verifiedSnapshotHash": { "type": "string", "minLength": 1 },
+    "finalRenderPolicySnapshotId": { "type": "string", "minLength": 1 },
+    "renderGenerationRefs": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+    "sections": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/section" } },
+    "mandatoryWarningRefsRendered": { "type": "array", "items": { "type": "string" } },
+    "renderValidation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["unsupportedEntityRefCount", "unsupportedClaimRefCount", "changedVerifiedValueCount", "missingMandatoryWarningCount", "snapshotMatch"],
+      "properties": {
+        "unsupportedEntityRefCount": { "const": 0 },
+        "unsupportedClaimRefCount": { "const": 0 },
+        "changedVerifiedValueCount": { "const": 0 },
+        "missingMandatoryWarningCount": { "const": 0 },
+        "snapshotMatch": { "const": true }
+      }
+    }
+  },
+  "$defs": {
+    "section": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sectionId", "type", "title", "text", "subjectRefs", "sourceRefs", "claimRefs", "valueBindingRefs", "warningRefs"],
+      "properties": {
+        "sectionId": { "type": "string", "minLength": 1 },
+        "type": { "enum": ["TRIP_SUMMARY", "JOURNEY", "DAY_PLAN", "ALTERNATIVES", "ACCOMMODATION", "FOOD_LOCAL_TASTE", "BUDGET", "EVENT_SEASONAL_WEATHER", "WARNINGS", "EXPLANATIONS", "OTHER"] },
+        "title": { "type": "string", "minLength": 1 },
+        "text": { "type": "string", "minLength": 1 },
+        "subjectRefs": { "type": "array", "items": { "type": "string" } },
+        "sourceRefs": { "type": "array", "items": { "type": "string" } },
+        "claimRefs": { "type": "array", "items": { "type": "string" } },
+        "valueBindingRefs": { "type": "array", "items": { "type": "string" } },
+        "warningRefs": { "type": "array", "items": { "type": "string" } }
+      }
+    }
+  }
+}
