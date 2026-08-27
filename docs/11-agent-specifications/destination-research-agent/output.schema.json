@@ -65,8 +65,21 @@
       },
       "allOf": [
         {
-          "if": { "properties": { "relationToTarget": { "const": "exceptional" } } },
-          "then": { "properties": { "exceptionPolicyRefs": { "minItems": 1 } } }
+          "if": {
+            "properties": {
+              "relationToTarget": { "const": "exceptional" }
+            },
+            "required": ["relationToTarget"]
+          },
+          "then": {
+            "properties": {
+              "exceptionPolicyRefs": {
+                "type": "array",
+                "minItems": 1,
+                "items": { "type": "string", "minLength": 1 }
+              }
+            }
+          }
         }
       ]
     },
