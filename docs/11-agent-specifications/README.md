@@ -1,7 +1,7 @@
 # 11 — Agent Specifications
 
 **Doküman türü:** canonical agent specification alanı  
-**Durum:** canonical catalog v1.0 + six golden agent packages  
+**Durum:** canonical catalog v1.0 + seven golden agent packages  
 **Kodlama durumu:** kapalı  
 **Prototype durumu:** kapalı
 
@@ -39,7 +39,7 @@ canonical_catalog_date: 2026-08-27
 | TM-AG-004 | Place Intelligence Agent | **golden package v1 ready** |
 | TM-AG-005 | Accommodation Agent | **golden package v1 ready** |
 | TM-AG-006 | Food & Local Taste Agent | **golden package v1 ready** |
-| TM-AG-007 | Weather Agent | pending |
+| TM-AG-007 | Weather Agent | **golden package v1 ready** |
 | TM-AG-008 | Transportation Agent | pending |
 | TM-AG-009 | Route Planner Agent | pending |
 | TM-AG-010 | Budget Agent | pending |
@@ -153,11 +153,33 @@ journey_issue_49_compatible: true
 knowledge_issue_50_compatible: true
 ```
 
-Özel invariant:
+Invariant:
 
 ```text
 regional local-taste knowledge != venue current menu fact
 knowledge hit != dynamic freshness bypass
+```
+
+### TM-AG-007 Weather
+
+```yaml
+behavior_cases: 14
+authority_cases: 6
+tool_policy_cases: 5
+context_lifecycle_cases: 4
+provenance_cases: 4
+forecast_vs_climate_normal_separated: true
+forecast_horizon_from_adapter_metadata: true
+provider_selected: false
+journey_issue_49_compatible: true
+knowledge_issue_50_compatible: true
+```
+
+Invariant:
+
+```text
+FORECAST != CLIMATE_NORMAL
+weather signal != itinerary mutation
 ```
 
 ## Eski first-phase specs
@@ -191,9 +213,10 @@ TM_AG_003_destination_research_package: completed
 TM_AG_004_place_intelligence_package: completed
 TM_AG_005_accommodation_package: completed
 TM_AG_006_food_local_taste_package: completed
+TM_AG_007_weather_package: completed
 runtime_tests: pending
-next_agent_package: TM-AG-007
+next_agent_package: TM-AG-008
 implementation_allowed: false
 ```
 
-Bir sonraki paket `TM-AG-007 Weather Agent` olacaktır.
+Bir sonraki paket `TM-AG-008 Transportation Agent` olacaktır. Issue #49 `Route Corridor Discovery` bu paketin zorunlu tasarım girdisidir.
