@@ -546,6 +546,7 @@ golden_packages_ready: 17/17
 journey_issue_49_integrated: true
 knowledge_issue_50_integrated_as_backlog_subsystem_contract_input: true
 event_season_issue_51_integrated_as_backlog_capability_input: true
-cross_contract_reconciliation: in_progress
+cross_contract_reconciliation: PASS
+m1_harness_entry_allowed: true
 runtime_implementation_allowed: false
 ```
