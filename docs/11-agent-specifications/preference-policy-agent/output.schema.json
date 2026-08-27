@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tatil-modu.local/schemas/preference-policy-output.v1.json",
+  "title": "PreferencePolicyOutput.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "requestId", "preferences", "constraints", "conflicts", "clarificationRequired", "overallConfidence"],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "requestId": { "type": "string", "minLength": 1 },
+    "preferences": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/preference" }
+    },
+    "constraints": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/constraint" }
+    },
+    "conflicts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["conflictId", "code", "statementRefs", "resolution"],
+        "properties": {
+          "conflictId": { "type": "string", "minLength": 1 },
+          "code": { "type": "string", "minLength": 1 },
+          "statementRefs": { "type": "array", "minItems": 2, "items": { "type": "string" } },
+          "resolution": { "enum": ["CLARIFICATION_REQUIRED", "LATEST_EXPLICIT_WINS", "POLICY_RULE_APPLIED"] },
+          "notes": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "clarificationRequired": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["clarificationId", "reasonCode", "statementRefs"],
+        "properties": {
+          "clarificationId": { "type": "string", "minLength": 1 },
+          "reasonCode": { "type": "string", "minLength": 1 },
+          "statementRefs": { "type": "array", "items": { "type": "string" } },
+          "questionHint": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "overallConfidence": { "type": "number", "minimum": 0, "maximum": 1 }
+  },
+  "$defs": {
+    "preference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["preferenceId", "key", "value", "strength", "sourceRefs", "confidence"],
+      "properties": {
+        "preferenceId": { "type": "string", "minLength": 1 },
+        "key": { "type": "string", "minLength": 1 },
+        "value": {},
+        "strength": { "enum": ["SOFT", "INFORMATIONAL"] },
+        "sourceRefs": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 }
+      }
+    },
+    "constraint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["constraintId", "key", "kind", "subject", "operator", "value", "condition", "sourceRefs", "confidence", "evidenceRequired"],
+      "properties": {
+        "constraintId": { "type": "string", "minLength": 1 },
+        "key": { "type": "string", "minLength": 1 },
+        "kind": { "enum": ["HARD", "CONDITIONAL_HARD"] },
+        "subject": { "type": "string", "minLength": 1 },
+        "operator": { "enum": ["equals", "not_equals", "lte", "gte", "contains", "excludes"] },
+        "value": {},
+        "condition": {
+          "anyOf": [
+            { "type": "null" },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["field", "operator", "value"],
+              "properties": {
+                "field": { "type": "string", "minLength": 1 },
+                "operator": { "enum": ["equals", "not_equals", "in"] },
+                "value": {}
+              }
+            }
+          ]
+        },
+        "sourceRefs": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "evidenceRequired": { "type": "boolean" }
+      }
+    }
+  }
+}
