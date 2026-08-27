@@ -1,0 +1,159 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tatil-modu.local/schemas/route-planner-input.v1.json",
+  "title": "RoutePlannerInput.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "requestId", "tripWindow", "planningPolicySnapshotId", "travelerProfile", "preferencePolicy", "candidatePool", "transportation", "weatherSignals"],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "requestId": { "type": "string", "minLength": 1 },
+    "tripWindow": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["startDate", "endDate"],
+      "properties": {
+        "startDate": { "type": "string", "format": "date" },
+        "endDate": { "type": "string", "format": "date" },
+        "timezone": { "type": ["string", "null"] }
+      }
+    },
+    "planningPolicySnapshotId": { "type": "string", "minLength": 1 },
+    "travelerProfile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["profileRef", "adults", "childrenAges"],
+      "properties": {
+        "profileRef": { "type": "string", "minLength": 1 },
+        "adults": { "type": ["integer", "null"], "minimum": 0 },
+        "childrenAges": { "type": "array", "items": { "type": ["integer", "null"], "minimum": 0, "maximum": 17 } }
+      }
+    },
+    "preferencePolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["preferenceRefs", "hardConstraints", "exceptionPolicyRefs"],
+      "properties": {
+        "preferenceRefs": { "type": "array", "items": { "type": "string" } },
+        "hardConstraints": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["constraintId", "kind", "key", "condition", "operator", "value"],
+            "properties": {
+              "constraintId": { "type": "string", "minLength": 1 },
+              "kind": { "enum": ["HARD", "CONDITIONAL_HARD"] },
+              "key": { "type": "string", "minLength": 1 },
+              "condition": { "type": ["object", "null"] },
+              "operator": { "type": "string", "minLength": 1 },
+              "value": {}
+            }
+          }
+        },
+        "exceptionPolicyRefs": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "candidatePool": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["places", "accommodations", "food"],
+      "properties": {
+        "places": { "type": "array", "items": { "$ref": "#/$defs/candidateRef" } },
+        "accommodations": { "type": "array", "items": { "$ref": "#/$defs/candidateRef" } },
+        "food": { "type": "array", "items": { "$ref": "#/$defs/candidateRef" } }
+      }
+    },
+    "transportation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["routeLegs", "matrixEntries"],
+      "properties": {
+        "routeLegs": { "type": "array", "items": { "$ref": "#/$defs/routeFact" } },
+        "matrixEntries": { "type": "array", "items": { "$ref": "#/$defs/matrixFact" } }
+      }
+    },
+    "weatherSignals": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["weatherSignalId", "locationRef", "activityRef", "journeySegmentRef", "dataType", "riskLevel", "planBias", "freshnessStatus"],
+        "properties": {
+          "weatherSignalId": { "type": "string", "minLength": 1 },
+          "locationRef": { "type": "string", "minLength": 1 },
+          "activityRef": { "type": ["string", "null"] },
+          "journeySegmentRef": { "type": ["string", "null"] },
+          "dataType": { "enum": ["FORECAST", "CLIMATE_NORMAL"] },
+          "riskLevel": { "enum": ["LOW", "MEDIUM", "HIGH", "SEVERE", "UNKNOWN"] },
+          "planBias": { "enum": ["PREFER_INDOOR", "PREFER_OUTDOOR", "CAUTION", "NO_SIGNAL"] },
+          "freshnessStatus": { "enum": ["CURRENT", "STALE", "UNKNOWN"] }
+        }
+      }
+    },
+    "selectedJourneyStops": {
+      "type": "array",
+      "default": [],
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["locationRef", "stopRole", "fixedByUser"],
+        "properties": {
+          "locationRef": { "type": "string", "minLength": 1 },
+          "stopRole": { "enum": ["PASS_THROUGH", "SHORT_STOP", "HALF_DAY", "FULL_DAY", "OVERNIGHT_ONLY", "OVERNIGHT_AND_DAY", "MULTI_DAY", "FINAL_DESTINATION"] },
+          "fixedByUser": { "type": "boolean" },
+          "requestedDays": { "type": ["integer", "null"], "minimum": 1 }
+        }
+      }
+    },
+    "finalArrivalDeadline": { "type": ["string", "null"], "format": "date-time" },
+    "contextManifestId": { "type": ["string", "null"] }
+  },
+  "$defs": {
+    "candidateRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["entityRef", "disposition", "availabilityOrOperationalStatus", "openingWindowRefs", "constraintCheckRefs", "evidenceRefs"],
+      "properties": {
+        "entityRef": { "type": "string", "minLength": 1 },
+        "candidateType": { "enum": ["PLACE", "ACCOMMODATION", "FOOD"] },
+        "locationRef": { "type": ["string", "null"] },
+        "disposition": { "enum": ["ACCEPTED", "REJECTED", "NEEDS_VERIFICATION"] },
+        "availabilityOrOperationalStatus": { "type": ["string", "null"] },
+        "openingWindowRefs": { "type": "array", "items": { "type": "string" } },
+        "constraintCheckRefs": { "type": "array", "items": { "type": "string" } },
+        "evidenceRefs": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "routeFact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["routeLegId", "fromRef", "toRef", "journeySegmentRef", "distanceMeters", "durationSeconds", "trafficAwareDurationSeconds", "freshnessStatus", "evidenceRefs"],
+      "properties": {
+        "routeLegId": { "type": "string", "minLength": 1 },
+        "fromRef": { "type": "string", "minLength": 1 },
+        "toRef": { "type": "string", "minLength": 1 },
+        "journeySegmentRef": { "type": ["string", "null"] },
+        "distanceMeters": { "type": ["integer", "null"], "minimum": 0 },
+        "durationSeconds": { "type": ["integer", "null"], "minimum": 0 },
+        "trafficAwareDurationSeconds": { "type": ["integer", "null"], "minimum": 0 },
+        "freshnessStatus": { "enum": ["CURRENT", "STALE", "UNKNOWN"] },
+        "evidenceRefs": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "matrixFact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["fromRef", "toRef", "distanceMeters", "durationSeconds", "trafficAwareDurationSeconds", "freshnessStatus", "evidenceRefs"],
+      "properties": {
+        "fromRef": { "type": "string", "minLength": 1 },
+        "toRef": { "type": "string", "minLength": 1 },
+        "distanceMeters": { "type": ["integer", "null"], "minimum": 0 },
+        "durationSeconds": { "type": ["integer", "null"], "minimum": 0 },
+        "trafficAwareDurationSeconds": { "type": ["integer", "null"], "minimum": 0 },
+        "freshnessStatus": { "enum": ["CURRENT", "STALE", "UNKNOWN"] },
+        "evidenceRefs": { "type": "array", "items": { "type": "string" } }
+      }
+    }
+  }
+}
