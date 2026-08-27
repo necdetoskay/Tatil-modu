@@ -1,7 +1,7 @@
 # 11 — Agent Specifications
 
 **Doküman türü:** canonical agent specification alanı  
-**Durum:** canonical catalog v1.0 + four golden agent packages  
+**Durum:** canonical catalog v1.0 + five golden agent packages  
 **Kodlama durumu:** kapalı  
 **Prototype durumu:** kapalı
 
@@ -37,7 +37,7 @@ canonical_catalog_date: 2026-08-27
 | TM-AG-002 | Preference & Policy Agent | **golden package v1 ready** |
 | TM-AG-003 | Destination Research Agent | **golden package v1 ready** |
 | TM-AG-004 | Place Intelligence Agent | **golden package v1 ready** |
-| TM-AG-005 | Accommodation Agent | pending |
+| TM-AG-005 | Accommodation Agent | **golden package v1 ready** |
 | TM-AG-006 | Food & Local Taste Agent | pending |
 | TM-AG-007 | Weather Agent | pending |
 | TM-AG-008 | Transportation Agent | pending |
@@ -123,6 +123,22 @@ Fixture/provenance incelemesinde iki contract gap kapatılmıştır:
 - `businessStatus` artık `value + evidenceRefs` taşır.
 - `eligibility.dispositionReasons[]` kararın nedenini doğrudan evidence'a bağlar.
 
+### TM-AG-005 Accommodation
+
+```yaml
+behavior_cases: 16
+authority_cases: 7
+tool_policy_cases: 6
+context_lifecycle_cases: 4
+provenance_cases: 4
+query_signature_required: true
+live_price_and_availability_freshness_required: true
+booking_and_payment_forbidden: true
+journey_issue_49_compatible: true
+```
+
+Contract gap: Issue #49 stopover konaklama adayının journey segment provenance'ını korumak için `journeySegmentRef`, `stayQuerySignature` içine eklenmiştir.
+
 ## Eski first-phase specs
 
 Eski spec dosyaları silinmez; tarihsel tasarım/reconciliation kaydıdır. İsim veya ownership çakışmasında `canonical-agent-contract-catalog.md` önceliklidir.
@@ -152,9 +168,10 @@ TM_AG_001_profile_package: completed
 TM_AG_002_preference_policy_package: completed
 TM_AG_003_destination_research_package: completed
 TM_AG_004_place_intelligence_package: completed
+TM_AG_005_accommodation_package: completed
 runtime_tests: pending
-next_agent_package: TM-AG-005
+next_agent_package: TM-AG-006
 implementation_allowed: false
 ```
 
-Bir sonraki paket `TM-AG-005 Accommodation Agent` olacaktır.
+Bir sonraki paket `TM-AG-006 Food & Local Taste Agent` olacaktır.
