@@ -26,7 +26,16 @@ export interface ToolAuthorityPolicyProjection {
   componentId: string;
   allowedToolIds: readonly CanonicalToolId[];
   explicitForbiddenToolIds: readonly CanonicalToolId[];
+  conditionalBehaviorToolIds: readonly CanonicalToolId[];
   sourceRef: string;
+}
+
+export interface ToolGatewayAuthorityContext {
+  repairId?: string;
+  triggerRef?: string;
+  affectedScopeRef?: string;
+  targetScopeRef?: string;
+  scopeEscalationApproved?: boolean;
 }
 
 export interface ToolGatewayRequest {
@@ -35,9 +44,15 @@ export interface ToolGatewayRequest {
   toolId: CanonicalToolId;
   purpose: string;
   input: unknown;
+  authorityContext?: ToolGatewayAuthorityContext;
 }
 
-export type ToolGatewayDecisionReason = 'ALLOW_EXPLICIT' | 'DENY_EXPLICIT' | 'DENY_UNLISTED';
+export type ToolGatewayDecisionReason =
+  | 'ALLOW_EXPLICIT'
+  | 'ALLOW_SCOPED'
+  | 'DENY_EXPLICIT'
+  | 'DENY_UNLISTED'
+  | 'DENY_SCOPE_CONTEXT';
 
 export interface ToolGatewayDecision {
   requestId: string;
@@ -66,16 +81,19 @@ function uniqueSortedTools(values: Iterable<string>): CanonicalToolId[] {
 function extractToolsBySection(markdown: string): {
   allowed: CanonicalToolId[];
   forbidden: CanonicalToolId[];
+  conditionalBehavior: CanonicalToolId[];
 } {
   const allowed: string[] = [];
   const forbidden: string[] = [];
-  let section: 'allowed' | 'forbidden' | null = null;
+  const conditionalBehavior: string[] = [];
+  let section: 'allowed' | 'forbidden' | 'forbidden_behavior' | null = null;
 
   for (const line of markdown.split(/\r?\n/)) {
     const heading = line.match(/^##\s+(.+?)\s*$/);
     if (heading) {
       const title = heading[1]!.toLowerCase();
       if (title.startsWith('allowed')) section = 'allowed';
+      else if (title.startsWith('forbidden') && title.includes('behavior')) section = 'forbidden_behavior';
       else if (title.startsWith('forbidden')) section = 'forbidden';
       else section = null;
       continue;
@@ -84,11 +102,13 @@ function extractToolsBySection(markdown: string): {
     const matches = line.match(/TL-\d{3}/g) ?? [];
     if (section === 'allowed') allowed.push(...matches);
     if (section === 'forbidden') forbidden.push(...matches);
+    if (section === 'forbidden_behavior') conditionalBehavior.push(...matches);
   }
 
   return {
     allowed: uniqueSortedTools(allowed),
-    forbidden: uniqueSortedTools(forbidden)
+    forbidden: uniqueSortedTools(forbidden),
+    conditionalBehavior: uniqueSortedTools(conditionalBehavior)
   };
 }
 
@@ -103,10 +123,16 @@ export function projectToolAuthorityPolicy(args: {
     throw new Error(`TOOL_POLICY_ALLOW_DENY_OVERLAP:${args.componentId}:${overlap.join(',')}`);
   }
 
+  const conditionalNotAllowed = extracted.conditionalBehavior.filter(toolId => !extracted.allowed.includes(toolId));
+  if (conditionalNotAllowed.length > 0) {
+    throw new Error(`TOOL_POLICY_CONDITIONAL_NOT_ALLOWED:${args.componentId}:${conditionalNotAllowed.join(',')}`);
+  }
+
   return {
     componentId: args.componentId,
     allowedToolIds: extracted.allowed,
     explicitForbiddenToolIds: extracted.forbidden,
+    conditionalBehaviorToolIds: extracted.conditionalBehavior,
     sourceRef: args.sourceRef
   };
 }
@@ -127,6 +153,18 @@ export async function loadToolAuthorityPolicies(
     .sort((a, b) => a.componentId.localeCompare(b.componentId));
 }
 
+function hasValidScopedAuthorityContext(context: ToolGatewayAuthorityContext | undefined): boolean {
+  if (!context) return false;
+  if (
+    typeof context.repairId !== 'string' || context.repairId.length === 0 ||
+    typeof context.triggerRef !== 'string' || context.triggerRef.length === 0 ||
+    typeof context.affectedScopeRef !== 'string' || context.affectedScopeRef.length === 0 ||
+    typeof context.targetScopeRef !== 'string' || context.targetScopeRef.length === 0
+  ) return false;
+
+  return context.targetScopeRef === context.affectedScopeRef || context.scopeEscalationApproved === true;
+}
+
 export function authorizeToolRequest(
   policy: ToolAuthorityPolicyProjection,
   request: ToolGatewayRequest
@@ -137,12 +175,18 @@ export function authorizeToolRequest(
 
   const explicitlyForbidden = policy.explicitForbiddenToolIds.includes(request.toolId);
   const allowed = policy.allowedToolIds.includes(request.toolId);
-  const decision: 'ALLOW' | 'DENY' = allowed && !explicitlyForbidden ? 'ALLOW' : 'DENY';
+  const scoped = policy.conditionalBehaviorToolIds.includes(request.toolId);
+  const scopedContextValid = !scoped || hasValidScopedAuthorityContext(request.authorityContext);
+  const decision: 'ALLOW' | 'DENY' = allowed && !explicitlyForbidden && scopedContextValid ? 'ALLOW' : 'DENY';
   const reason: ToolGatewayDecisionReason = decision === 'ALLOW'
-    ? 'ALLOW_EXPLICIT'
+    ? scoped
+      ? 'ALLOW_SCOPED'
+      : 'ALLOW_EXPLICIT'
     : explicitlyForbidden
       ? 'DENY_EXPLICIT'
-      : 'DENY_UNLISTED';
+      : !allowed
+        ? 'DENY_UNLISTED'
+        : 'DENY_SCOPE_CONTEXT';
 
   return {
     requestId: request.requestId,
