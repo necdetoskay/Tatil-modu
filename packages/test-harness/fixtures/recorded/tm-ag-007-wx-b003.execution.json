@@ -1,0 +1,69 @@
+{
+  "schemaVersion": "1.0",
+  "componentId": "TM-AG-007",
+  "fixtureId": "WX-B003",
+  "recordingKind": "CANONICAL_RECORDED_EXECUTION",
+  "canonicalInput": {
+    "schemaVersion": "1.0",
+    "requestId": "req-wx-b003",
+    "location": {
+      "locationRef": "destination:bursa:primary",
+      "name": "Bursa",
+      "latitude": 40.195,
+      "longitude": 29.06
+    },
+    "timeWindow": {
+      "start": "2027-08-10T10:00:00+03:00",
+      "end": "2027-08-10T18:00:00+03:00"
+    },
+    "exposureType": "OUTDOOR",
+    "activityRef": "activity:future-outdoor",
+    "journeySegmentRef": null,
+    "currentDateTime": "2026-08-28T07:40:00+03:00",
+    "knowledgeRefs": [],
+    "contextManifestId": null
+  },
+  "canonicalOutput": {
+    "schemaVersion": "1.0",
+    "requestId": "req-wx-b003",
+    "signals": [
+      {
+        "weatherSignalId": "weather:climate:bursa:2027-08-10",
+        "locationRef": "destination:bursa:primary",
+        "journeySegmentRef": null,
+        "activityRef": "activity:future-outdoor",
+        "dataType": "CLIMATE_NORMAL",
+        "validWindow": {
+          "start": "2027-08-10T10:00:00+03:00",
+          "end": "2027-08-10T18:00:00+03:00"
+        },
+        "issuedAt": null,
+        "retrievedAt": "2026-08-28T04:40:00Z",
+        "freshnessStatus": "CURRENT",
+        "forecastHorizonHours": null,
+        "conditions": {
+          "temperatureC": null,
+          "precipitationProbability": null,
+          "precipitationMm": null,
+          "windSpeedKph": null,
+          "conditionCode": null
+        },
+        "hazards": [],
+        "riskLevel": "UNKNOWN",
+        "planBias": "NO_SIGNAL",
+        "evidence": [
+          {
+            "evidenceId": "ev-climate-bursa-august",
+            "sourceRef": "climate-provider:bursa-august-normal",
+            "sourceType": "CLIMATE_PROVIDER",
+            "retrievedAt": "2026-08-28T04:40:00Z",
+            "freshnessStatus": "CURRENT"
+          }
+        ],
+        "confidence": 0.65
+      }
+    ],
+    "warnings": ["TARGET_WINDOW_OUTSIDE_FORECAST_HORIZON_CLIMATE_CONTEXT_ONLY"],
+    "overallConfidence": 0.65
+  }
+}
