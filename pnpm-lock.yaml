@@ -33,6 +33,12 @@ importers:
         specifier: workspace:*
         version: link:../../packages/orchestrator
 
+  apps/web:
+    dependencies:
+      '@tatil-modu/orchestrator':
+        specifier: workspace:*
+        version: link:../../packages/orchestrator
+
   packages/agents: {}
 
   packages/capabilities: {}

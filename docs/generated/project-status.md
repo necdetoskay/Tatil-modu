@@ -16,7 +16,7 @@
 | R2 case-depth gate | PASS |
 | Deterministic runtime vertical slice | PASS |
 | Verification blocks final composition | YES |
-| Local deterministic suite | PASS (79 files / 344 tests) |
+| Local deterministic suite | PASS (81 files / 350 tests) |
 | Runtime implementation | ALLOWED |
 | Live provider integration | LOCKED |
 | Headless core acceptance | PASS |

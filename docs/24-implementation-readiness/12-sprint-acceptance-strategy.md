@@ -64,4 +64,4 @@ L8 benchmark; UI unlock'tan bağımsız olarak provider/model seçimini destekle
 Bir sprintte feature code mevcut ama fixture/test eksikse sprint tamamlanmamıştır.
 
 ## No UI rule
-H0–H11 tamamlanmadan `/apps/web` oluşturulmaz. Dokümantasyon amaçlı UX tasarımı kalabilir fakat implementation yoktur.
+H11 ve UI Readiness Review tamamlanmadan `/apps/web` oluşturulmaz. UI gate açıldıktan sonra web implementation ayrı browser E2E kanıtıyla ilerler.

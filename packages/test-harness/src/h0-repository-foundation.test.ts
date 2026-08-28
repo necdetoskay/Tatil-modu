@@ -1,6 +1,7 @@
 import { access } from 'node:fs/promises';
 import { constants } from 'node:fs';
 import { describe, expect, it } from 'vitest';
+import projectStatus from '../../../project-status.json' with { type: 'json' };
 
 const requiredPaths = [
   'package.json',
@@ -38,7 +39,7 @@ describe('H0 repository foundation', () => {
     expect(results.filter(([, present]) => !present)).toEqual([]);
   });
 
-  it('keeps UI implementation locked', async () => {
-    expect(await exists('apps/web')).toBe(false);
+  it('prevents UI implementation before the readiness gate opens', async () => {
+    expect(await exists('apps/web')).toBe(projectStatus.gates.uiDevelopmentAllowed);
   });
 });

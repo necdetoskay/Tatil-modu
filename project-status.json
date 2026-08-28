@@ -41,8 +41,15 @@
   },
   "quality": {
     "localDeterministicSuite": "PASS",
-    "testFilesPassed": 79,
-    "testsPassed": 344
+    "testFilesPassed": 81,
+    "testsPassed": 350
+  },
+  "frontend": {
+    "verticalSlice": "PASS",
+    "routes": ["/", "/plan", "/blocked", "/health"],
+    "typedUiAdapter": "PASS",
+    "browserE2E": "PASS",
+    "browserE2EExecution": "2026-08-28"
   },
   "acceptance": {
     "h11": "PASS",

@@ -93,5 +93,5 @@ UI implementation unlock
 6. Memory canonical write ownership'i Memory Platform'dadır.
 7. Deterministic suite live network kullanmaz.
 8. Gerçek model/provider testleri evaluation mode'dadır.
-9. `apps/web` H11 + UI readiness review PASS öncesi oluşturulamaz.
+9. `apps/web` H11 + UI readiness review PASS öncesi oluşturulamaz; bu gate PASS olmuştur.
 10. Bir bug düzeltildiğinde regression fixture/test eklenir.
