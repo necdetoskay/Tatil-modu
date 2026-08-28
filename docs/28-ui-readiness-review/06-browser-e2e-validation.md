@@ -20,8 +20,10 @@ Primary UI vertical slice browser test: **PASS**.
 - Local URL: `http://127.0.0.1:4173`
 - Completed route: `/plan`
 - Blocked route: `/blocked`
-- Completed view showed two day cards and verified disclosure.
-- Blocked view showed an accessible alert and did not show `Gün 1` final plan content.
+- Completed view showed two day cards and verified disclosure after API job polling.
+- Browser observed the loading state before the API job completed.
+- Blocked view showed an accessible alert and did not show any day card content.
+- API contract tests also cover invalid intake, completed warning, and blocked verification responses.
 - Reproducible step list: `apps/web/e2e/primary-flow.browser-e2e.md`
 
-This is a deterministic fixture-mode browser validation; it does not claim live provider or production deployment readiness.
+This is a deterministic local API/fixture-provider browser validation; it does not claim live provider or production deployment readiness.

@@ -9,6 +9,7 @@ export interface UiPlanViewModel {
   privacyConstraintActive: boolean;
   days: { dayNumber: number; theme: string; blocks: { label: string; title: string; notes: string[] }[]; alternatives: string[]; warnings: string[] }[];
   disclosures: { status: string; message: string; evidenceAttached: boolean }[];
+  verificationWarnings: string[];
   blockers: string[];
   confidence: string;
   confidenceReasons: string[];
@@ -20,7 +21,7 @@ type FinalResponse = {
     response_title: string;
     executive_summary: string;
     plan_overview: { duration_days: number; travel_style: string; privacy_constraint_active: boolean };
-    daily_plan_cards: { day_number: number; day_theme: string; primary_plan: Record<string, { title: string; notes: string[] }>; alternatives: { title: string }[]; warnings: string[] }[];
+    daily_plan_cards: { day_number: number; day_theme: string; primary_plan: Record<string, { title: string; notes: string[] }>; alternatives: { title: string }[]; verification_needed?: string[]; warnings: string[] }[];
     verification_disclosures: { status: string; message: string; source_evidence_item_ids: string[] }[];
     hard_blockers: string[];
     confidence_summary: { overall_confidence: string; confidence_reasons: string[] };
@@ -38,6 +39,6 @@ export function toUiPlanViewModel(response: FinalResponse): UiPlanViewModel {
       blocks: Object.entries(day.primary_plan).map(([key, block]) => ({ label: labels[key] ?? key, title: block.title, notes: block.notes })),
       alternatives: day.alternatives.map((alternative) => alternative.title), warnings: day.warnings })),
     disclosures: result.verification_disclosures.map((disclosure) => ({ status: disclosure.status, message: disclosure.message, evidenceAttached: disclosure.source_evidence_item_ids.length > 0 })),
-    blockers: result.hard_blockers, confidence: result.confidence_summary.overall_confidence, confidenceReasons: result.confidence_summary.confidence_reasons
+    blockers: result.hard_blockers, verificationWarnings: [...new Set(result.daily_plan_cards.flatMap((day) => day.verification_needed ?? []))], confidence: result.confidence_summary.overall_confidence, confidenceReasons: result.confidence_summary.confidence_reasons
   };
 }
