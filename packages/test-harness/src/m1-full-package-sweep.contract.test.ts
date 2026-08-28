@@ -13,7 +13,9 @@ const EXECUTABLE_R2_COMPONENTS = new Set([
   'TM-AG-002',
   'TM-AG-003',
   'TM-AG-004',
-  'TM-AG-005'
+  'TM-AG-005',
+  'TM-AG-006',
+  'TM-AG-007'
 ]);
 
 describe('M1.9 full 17-package readiness sweep', () => {
@@ -71,9 +73,11 @@ describe('M1.9 full 17-package readiness sweep', () => {
       'TM-AG-002',
       'TM-AG-003',
       'TM-AG-004',
-      'TM-AG-005'
+      'TM-AG-005',
+      'TM-AG-006',
+      'TM-AG-007'
     ]));
-    expect(pending).toHaveLength(12);
+    expect(pending).toHaveLength(10);
     for (const executable of EXECUTABLE_R2_COMPONENTS) expect(pending).not.toContain(executable);
     expect(pending).toContain('TM-ORCH-001');
   });
