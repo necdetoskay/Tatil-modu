@@ -1,0 +1,105 @@
+{
+  "componentId": "TM-AG-012",
+  "fixtureId": "RV-B-001",
+  "canonicalInput": {
+    "schemaVersion": "1.0",
+    "requestId": "req-rv-b-001",
+    "entityRef": "place:museum-001",
+    "entityType": "PLACE",
+    "analysisWindow": {
+      "start": "2026-08-01T00:00:00+03:00",
+      "end": "2026-08-31T23:59:59+03:00"
+    },
+    "reviewQualityPolicySnapshotId": "review-quality:v1",
+    "licensePolicySnapshotId": "review-license:v1",
+    "records": [
+      {"recordId":"rv-001","entityRef":"place:museum-001","sourceProviderRef":"reviews:p1","reviewedAt":"2026-08-02T10:00:00+03:00","retrievedAt":"2026-08-28T10:00:00+03:00","rating":3,"body":"Otopark bulmak zordu ama müze güzeldi.","language":"tr","providerQualitySignals":{"spamSuspected":false,"verifiedExperience":true,"sourceRecordQuality":"HIGH"},"duplicateGroupRef":null,"retentionClass":"DERIVED_ONLY","evidenceRef":"ev-rv-001"},
+      {"recordId":"rv-002","entityRef":"place:museum-001","sourceProviderRef":"reviews:p1","reviewedAt":"2026-08-04T11:00:00+03:00","retrievedAt":"2026-08-28T10:00:00+03:00","rating":3,"body":"Hafta sonu otopark çok zor oldu.","language":"tr","providerQualitySignals":{"spamSuspected":false,"verifiedExperience":true,"sourceRecordQuality":"HIGH"},"duplicateGroupRef":null,"retentionClass":"DERIVED_ONLY","evidenceRef":"ev-rv-002"},
+      {"recordId":"rv-003","entityRef":"place:museum-001","sourceProviderRef":"reviews:p1","reviewedAt":"2026-08-07T12:00:00+03:00","retrievedAt":"2026-08-28T10:00:00+03:00","rating":2,"body":"Otopark alanı yetersiz geldi.","language":"tr","providerQualitySignals":{"spamSuspected":false,"verifiedExperience":true,"sourceRecordQuality":"MEDIUM"},"duplicateGroupRef":null,"retentionClass":"DERIVED_ONLY","evidenceRef":"ev-rv-003"},
+      {"recordId":"rv-004","entityRef":"place:museum-001","sourceProviderRef":"reviews:p1","reviewedAt":"2026-08-09T13:00:00+03:00","retrievedAt":"2026-08-28T10:00:00+03:00","rating":3,"body":"Otopark için biraz bekledik.","language":"tr","providerQualitySignals":{"spamSuspected":false,"verifiedExperience":true,"sourceRecordQuality":"HIGH"},"duplicateGroupRef":null,"retentionClass":"DERIVED_ONLY","evidenceRef":"ev-rv-004"},
+      {"recordId":"rv-005","entityRef":"place:museum-001","sourceProviderRef":"reviews:p1","reviewedAt":"2026-08-12T14:00:00+03:00","retrievedAt":"2026-08-28T10:00:00+03:00","rating":2,"body":"Otopark girişinde yoğunluk vardı.","language":"tr","providerQualitySignals":{"spamSuspected":false,"verifiedExperience":true,"sourceRecordQuality":"MEDIUM"},"duplicateGroupRef":null,"retentionClass":"DERIVED_ONLY","evidenceRef":"ev-rv-005"},
+      {"recordId":"rv-006","entityRef":"place:museum-001","sourceProviderRef":"reviews:p1","reviewedAt":"2026-08-15T15:00:00+03:00","retrievedAt":"2026-08-28T10:00:00+03:00","rating":3,"body":"Otopark yeri bulmak zaman aldı.","language":"tr","providerQualitySignals":{"spamSuspected":false,"verifiedExperience":true,"sourceRecordQuality":"HIGH"},"duplicateGroupRef":null,"retentionClass":"DERIVED_ONLY","evidenceRef":"ev-rv-006"},
+      {"recordId":"rv-007","entityRef":"place:museum-001","sourceProviderRef":"reviews:p1","reviewedAt":"2026-08-18T16:00:00+03:00","retrievedAt":"2026-08-28T10:00:00+03:00","rating":5,"body":"Çocuklarla keyifli bir ziyaret oldu.","language":"tr","providerQualitySignals":{"spamSuspected":false,"verifiedExperience":true,"sourceRecordQuality":"HIGH"},"duplicateGroupRef":null,"retentionClass":"DERIVED_ONLY","evidenceRef":"ev-rv-007"},
+      {"recordId":"rv-008","entityRef":"place:museum-001","sourceProviderRef":"reviews:p1","reviewedAt":"2026-08-20T17:00:00+03:00","retrievedAt":"2026-08-28T10:00:00+03:00","rating":4,"body":"Sergiler düzenli ve personel yardımcıydı.","language":"tr","providerQualitySignals":{"spamSuspected":false,"verifiedExperience":true,"sourceRecordQuality":"HIGH"},"duplicateGroupRef":null,"retentionClass":"DERIVED_ONLY","evidenceRef":"ev-rv-008"},
+      {"recordId":"rv-009","entityRef":"place:museum-001","sourceProviderRef":"reviews:p1","reviewedAt":"2026-08-22T18:00:00+03:00","retrievedAt":"2026-08-28T10:00:00+03:00","rating":4,"body":"Ziyaret süresi aile için uygundu.","language":"tr","providerQualitySignals":{"spamSuspected":false,"verifiedExperience":true,"sourceRecordQuality":"MEDIUM"},"duplicateGroupRef":null,"retentionClass":"DERIVED_ONLY","evidenceRef":"ev-rv-009"},
+      {"recordId":"rv-010","entityRef":"place:museum-001","sourceProviderRef":"reviews:p1","reviewedAt":"2026-08-25T19:00:00+03:00","retrievedAt":"2026-08-28T10:00:00+03:00","rating":5,"body":"Genel deneyim çok iyiydi.","language":"tr","providerQualitySignals":{"spamSuspected":false,"verifiedExperience":true,"sourceRecordQuality":"HIGH"},"duplicateGroupRef":null,"retentionClass":"DERIVED_ONLY","evidenceRef":"ev-rv-010"}
+    ],
+    "providerLookupScope": null,
+    "priorSnapshot": null,
+    "currentDateTime": "2026-08-28T10:00:00+03:00",
+    "contextManifestId": "ctx-rv-b-001"
+  },
+  "canonicalOutput": {
+    "schemaVersion": "1.0",
+    "reviewAnalysisId": "review-analysis:rv-b-001",
+    "requestId": "req-rv-b-001",
+    "entityRef": "place:museum-001",
+    "analysisWindow": {"start":"2026-08-01T00:00:00+03:00","end":"2026-08-31T23:59:59+03:00"},
+    "reviewQualityPolicySnapshotId": "review-quality:v1",
+    "licensePolicySnapshotId": "review-license:v1",
+    "snapshotMode": "COMPUTED",
+    "inputSnapshotRef": null,
+    "snapshotLineage": {
+      "baseSnapshotRef": null,
+      "baseSnapshotWindow": null,
+      "baseSample": null,
+      "refreshContributions": []
+    },
+    "sample": {
+      "rawCount": 10,
+      "windowEligibleCount": 10,
+      "entityMatchedCount": 10,
+      "validCount": 10,
+      "duplicateRemoved": 0,
+      "suspectedSpamRemoved": 0,
+      "unusableRemoved": 0,
+      "sourceCount": 1,
+      "sourceProviderRefs": ["reviews:p1"]
+    },
+    "dataCoverageStatus": "SUFFICIENT",
+    "signals": [
+      {
+        "reviewSignalId": "review-signal:parking-001",
+        "theme": "parking_experience",
+        "direction": "NEGATIVE",
+        "mentionCount": 6,
+        "validSampleSize": 10,
+        "prevalence": 0.6,
+        "strength": 0.6,
+        "confidence": 0.76,
+        "confidenceBasis": {
+          "sampleSizeBand": "MEDIUM",
+          "sourceCoverageBand": "SINGLE_SOURCE",
+          "freshnessBand": "CURRENT",
+          "duplicateSpamBurden": "LOW",
+          "disagreementBand": "LOW",
+          "segmentRelevanceBand": "NONE",
+          "policyRuleRefs": ["RV-006", "RV-007", "RV-009"]
+        },
+        "observationRefs": ["ev-rv-001","ev-rv-002","ev-rv-003","ev-rv-004","ev-rv-005","ev-rv-006"],
+        "sourceProviderRefs": ["reviews:p1"],
+        "window": {"start":"2026-08-01T00:00:00+03:00","end":"2026-08-31T23:59:59+03:00"},
+        "freshnessStatus": "CURRENT",
+        "limitations": ["single_provider_sample"]
+      }
+    ],
+    "limitations": ["single_provider_sample"],
+    "retentionDecision": {
+      "rawBodyPersistenceAllowed": false,
+      "durableOutputClass": "DERIVED_SIGNALS_ONLY",
+      "reasonCodes": ["DERIVED_ONLY_INPUT_POLICY"]
+    },
+    "snapshotWriteCandidate": {
+      "candidateId": "snapshot-candidate:rv-b-001",
+      "entityRef": "place:museum-001",
+      "window": {"start":"2026-08-01T00:00:00+03:00","end":"2026-08-31T23:59:59+03:00"},
+      "signalRefs": ["review-signal:parking-001"],
+      "sourceProviderRefs": ["reviews:p1"],
+      "qualityPolicySnapshotId": "review-quality:v1",
+      "licensePolicySnapshotId": "review-license:v1",
+      "writeStatus": "CANDIDATE_REQUIRES_GATE"
+    },
+    "freshnessStatus": "CURRENT",
+    "overallConfidence": 0.76
+  }
+}
