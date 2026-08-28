@@ -1,0 +1,90 @@
+{
+  "schemaVersion": "1.0",
+  "componentId": "TM-AG-008",
+  "fixtureId": "TR-B001",
+  "recordingKind": "CANONICAL_RECORDED_EXECUTION",
+  "canonicalInput": {
+    "schemaVersion": "1.0",
+    "requestId": "req-tr-b001",
+    "requestType": "POINT_TO_POINT",
+    "mode": "car",
+    "locations": [
+      {
+        "locationRef": "origin:kocaeli",
+        "name": "Kocaeli",
+        "latitude": 40.7654,
+        "longitude": 29.9408,
+        "administrativeType": "province"
+      },
+      {
+        "locationRef": "destination:bursa",
+        "name": "Bursa",
+        "latitude": 40.195,
+        "longitude": 29.06,
+        "administrativeType": "province"
+      }
+    ],
+    "departureTime": null,
+    "arrivalTime": null,
+    "journeySegmentRefs": [],
+    "selectedStopSequenceRefs": [],
+    "ruleSnapshotId": null,
+    "knowledgeRefs": [],
+    "contextManifestId": null
+  },
+  "canonicalOutput": {
+    "schemaVersion": "1.0",
+    "requestId": "req-tr-b001",
+    "requestType": "POINT_TO_POINT",
+    "ruleSnapshotId": null,
+    "routeLegs": [
+      {
+        "routeLegId": "route-leg:fixture:kocaeli-bursa",
+        "fromRef": "origin:kocaeli",
+        "toRef": "destination:bursa",
+        "journeySegmentRef": null,
+        "mode": "car",
+        "distanceMeters": 132000,
+        "durationSeconds": 7200,
+        "trafficAwareDurationSeconds": null,
+        "departureTime": null,
+        "arrivalTimeEstimate": null,
+        "routeGeometryRef": "route-geometry:fixture:kocaeli-bursa",
+        "freshnessStatus": "CURRENT",
+        "routeMetadata": {
+          "hasTolls": null,
+          "hasFerry": null,
+          "hasHighway": null,
+          "trafficDataType": "NONE"
+        },
+        "evidence": [
+          {
+            "evidenceId": "ev-route-distance",
+            "sourceRef": "fixture-routes:kocaeli-bursa",
+            "claimType": "ROUTE_DISTANCE",
+            "retrievedAt": "2026-08-28T04:45:00Z",
+            "freshnessStatus": "CURRENT"
+          },
+          {
+            "evidenceId": "ev-route-duration",
+            "sourceRef": "fixture-routes:kocaeli-bursa",
+            "claimType": "ROUTE_DURATION",
+            "retrievedAt": "2026-08-28T04:45:00Z",
+            "freshnessStatus": "CURRENT"
+          },
+          {
+            "evidenceId": "ev-route-geometry",
+            "sourceRef": "fixture-routes:kocaeli-bursa",
+            "claimType": "ROUTE_GEOMETRY",
+            "retrievedAt": "2026-08-28T04:45:00Z",
+            "freshnessStatus": "CURRENT"
+          }
+        ]
+      }
+    ],
+    "matrixEntries": [],
+    "corridorCandidates": [],
+    "warnings": [],
+    "overallConfidence": 0.95
+  }
+}
