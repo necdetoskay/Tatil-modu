@@ -21,6 +21,7 @@
     "test:h0": "pnpm status:check && pnpm typecheck && pnpm test:boundaries && pnpm test",
     "h11:acceptance": "node scripts/run-h11-acceptance.mjs",
     "web:dev": "pnpm --filter @tatil-modu/web dev",
+    "provider:smoke": "tsx scripts/provider-live-smoke.ts",
     "headless": "tsx apps/cli/src/index.ts",
     "headless:run": "tsx apps/cli/src/index.ts run"
   },

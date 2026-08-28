@@ -1,35 +1,47 @@
 import { randomUUID } from 'node:crypto';
+import { CapabilityRegistry, executeWithRegistry, type CapabilityResult } from '../../../packages/capabilities/src/index.js';
+import { FixtureDestinationProvider, FixtureRouteProvider } from '../../../packages/providers-mock/src/index.js';
 import { runHeadlessTripPlan, type HeadlessTripPlanInput, type HeadlessTripPlanResult } from '../../../packages/orchestrator/src/index.js';
 import { toUiPlanViewModel, type UiPlanViewModel } from './ui-adapter.js';
 
 export type IntakeRequest = { origin: string; targetRegion: string; durationDays: number; budgetAmount: number; mode?: 'verified' | 'warning' | 'blocked' };
 export type PlanJob = { id: string; status: 'planning' | 'completed' | 'blocked'; viewModel?: UiPlanViewModel; error?: string };
 
-const baseInput = (request: IntakeRequest): HeadlessTripPlanInput => ({
-  traceId: 'web-' + randomUUID(), origin: request.origin, targetRegion: request.targetRegion, durationDays: request.durationDays,
-  childrenAges: [2, 6], budgetAmount: request.budgetAmount, maxRadiusKm: 150, lowFatigueRequired: true, middayRestRequired: true,
-  womenOnlyBeachRequiredWhenSeaRecommended: true,
-  candidatePool: [{ candidateId: 'candidate-yalova', name: 'Yalova', type: 'mixed', relationToTarget: 'primary', estimatedDistanceBucket: '50_100_km', likelyTripRole: 'base_stay', familyRelevanceHypothesis: 'Short transfer and family rest options.', seaRelevant: true, fatigueRisk: 'low' }],
-  routes: [{ destinationId: 'candidate-yalova', destinationName: 'Yalova', exactDistanceKm: 92, exactDriveTimeMinutes: 85, parkingAvailable: true, trafficRisk: 'low', evidenceIds: { exactDistance: 'route-distance-001', exactDriveTime: 'route-duration-001', parkingAvailability: 'parking-001', liveTraffic: 'traffic-001' } }],
-  evidence: { womenOnlyBeach: { evidenceId: 'official-facility-001', sourceType: 'official_facility' } }
-});
+type DestinationProviderData = { candidates: HeadlessTripPlanInput['candidatePool'] };
+type RouteProviderData = { routes: HeadlessTripPlanInput['routes'] };
 
-function run(request: IntakeRequest): UiPlanViewModel {
-  const input = baseInput(request);
-  if (request.mode === 'blocked') delete input.evidence;
-  if (request.mode === 'warning') {
-    const route = input.routes[0];
-    if (route) delete route.evidenceIds.exactDistance;
-  }
+function registryForProviders() {
+  const registry = new CapabilityRegistry();
+  registry.registerProvider(new FixtureDestinationProvider(), 'ACTIVE');
+  registry.registerProvider(new FixtureRouteProvider(), 'ACTIVE');
+  registry.registerCapability({ capability: 'place_discovery', primaryProviderId: 'mock:destination-fixture', timeoutMs: 250, retryPolicy: { maxAttempts: 2, retryableCodes: ['PROVIDER_TIMEOUT', 'PROVIDER_RATE_LIMIT', 'PROVIDER_UNAVAILABLE'] } });
+  registry.registerCapability({ capability: 'route_lookup', primaryProviderId: 'mock:route-fixture', timeoutMs: 250, retryPolicy: { maxAttempts: 2, retryableCodes: ['PROVIDER_TIMEOUT', 'PROVIDER_RATE_LIMIT', 'PROVIDER_UNAVAILABLE'] } });
+  return registry;
+}
+
+function blockedView(input: Pick<HeadlessTripPlanInput, 'durationDays'>, blockers: string[]): UiPlanViewModel {
+  return { status: 'blocked', title: 'Plan oluşturulamadı', summary: 'Provider veya doğrulama tamamlanmadan final plan gösterilmez.', durationDays: input.durationDays, travelStyle: 'family_low_fatigue', privacyConstraintActive: true, days: [], disclosures: [], blockers, verificationWarnings: [], confidence: 'low', confidenceReasons: ['provider_or_verification_blocker'] };
+}
+
+async function run(request: IntakeRequest): Promise<UiPlanViewModel> {
+  const traceId = 'web-' + randomUUID();
+  const registry = registryForProviders();
+  const base = { traceId, origin: request.origin, targetRegion: request.targetRegion, durationDays: request.durationDays, childrenAges: [2, 6], budgetAmount: request.budgetAmount, maxRadiusKm: 150, lowFatigueRequired: true, middayRestRequired: true, womenOnlyBeachRequiredWhenSeaRecommended: true };
+  const destinations = await executeWithRegistry<DestinationProviderData>(registry, { capability: 'place_discovery', traceId, payload: { origin: request.origin, targetRegion: request.targetRegion } });
+  const routes = await executeWithRegistry<RouteProviderData>(registry, { capability: 'route_lookup', traceId, payload: { origin: request.origin, targetRegion: request.targetRegion } });
+  if (!destinations.ok) return blockedView(base, ['destination_provider:' + destinations.code]);
+  if (!routes.ok) return blockedView(base, ['route_provider:' + routes.code]);
+  const routeData = request.mode === 'warning' ? routes.data.routes.map((route) => { const { exactDistance: _exactDistance, ...evidenceIds } = route.evidenceIds; return { ...route, evidenceIds }; }) : routes.data.routes;
+  const input: HeadlessTripPlanInput = { ...base, candidatePool: destinations.data.candidates, routes: routeData, ...(request.mode === 'blocked' ? {} : { evidence: { womenOnlyBeach: { evidenceId: 'official-facility-001', sourceType: 'official_facility' } } }) };
   const result: HeadlessTripPlanResult = runHeadlessTripPlan(input);
   if (result.finalResponse) return toUiPlanViewModel(result.finalResponse);
-  return { status: 'blocked', title: 'Plan oluşturulamadı', summary: 'Gerekli doğrulama tamamlanmadan final plan gösterilmez.', durationDays: input.durationDays, travelStyle: 'family_low_fatigue', privacyConstraintActive: true, days: [], disclosures: [], blockers: result.verification.hard_blockers, verificationWarnings: [], confidence: result.verification.confidence.value, confidenceReasons: result.verification.confidence.reasons };
+  return blockedView(input, result.verification.hard_blockers);
 }
 
 export function createPlanService(delayMs = 80) {
   const jobs = new Map<string, PlanJob>();
   return {
-    start(request: IntakeRequest): PlanJob { const id = randomUUID(); const job: PlanJob = { id, status: 'planning' }; jobs.set(id, job); setTimeout(() => { const current = jobs.get(id); if (!current) return; const viewModel = run(request); current.status = viewModel.status === 'blocked' ? 'blocked' : 'completed'; current.viewModel = viewModel; }, delayMs); return job; },
+    start(request: IntakeRequest): PlanJob { const id = randomUUID(); const job: PlanJob = { id, status: 'planning' }; jobs.set(id, job); setTimeout(() => { void run(request).then((viewModel) => { const current = jobs.get(id); if (!current) return; current.status = viewModel.status === 'blocked' ? 'blocked' : 'completed'; current.viewModel = viewModel; }); }, delayMs); return job; },
     get(id: string): PlanJob | undefined { return jobs.get(id); }
   };
 }
