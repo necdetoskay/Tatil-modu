@@ -1,3 +1,5 @@
+import { readdir, readFile } from 'node:fs/promises';
+import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import {
   ALL_R1_ORACLES,
@@ -8,17 +10,36 @@ import {
   validateResolvedContractBundle
 } from '../../harness/src/index.js';
 
-const EXECUTABLE_R2_COMPONENTS = new Set([
-  'TM-AG-001',
-  'TM-AG-002',
-  'TM-AG-003',
-  'TM-AG-004',
-  'TM-AG-005',
-  'TM-AG-006',
-  'TM-AG-007',
-  'TM-AG-008',
-  'TM-AG-009'
-]);
+interface RecordedExecutionHeader {
+  componentId: string;
+  fixtureId: string;
+}
+
+async function loadRecordedR2Coverage(repoRoot = process.cwd()): Promise<Map<string, Set<string>>> {
+  const directory = resolve(repoRoot, 'packages/test-harness/fixtures/recorded');
+  const filenames = (await readdir(directory))
+    .filter(name => name.endsWith('.execution.json'))
+    .sort();
+  const coverage = new Map<string, Set<string>>();
+
+  for (const filename of filenames) {
+    const parsed = JSON.parse(await readFile(resolve(directory, filename), 'utf8')) as RecordedExecutionHeader;
+    if (typeof parsed.componentId !== 'string' || parsed.componentId.length === 0) {
+      throw new Error(`RECORDED_R2_COMPONENT_ID_MISSING:${filename}`);
+    }
+    if (typeof parsed.fixtureId !== 'string' || parsed.fixtureId.length === 0) {
+      throw new Error(`RECORDED_R2_FIXTURE_ID_MISSING:${filename}`);
+    }
+    const fixtureIds = coverage.get(parsed.componentId) ?? new Set<string>();
+    if (fixtureIds.has(parsed.fixtureId)) {
+      throw new Error(`RECORDED_R2_DUPLICATE_FIXTURE:${parsed.componentId}:${parsed.fixtureId}`);
+    }
+    fixtureIds.add(parsed.fixtureId);
+    coverage.set(parsed.componentId, fixtureIds);
+  }
+
+  return coverage;
+}
 
 describe('M1.9 full 17-package readiness sweep', () => {
   it('enforces canonical M1 structural minimums across every registered component', async () => {
@@ -60,19 +81,23 @@ describe('M1.9 full 17-package readiness sweep', () => {
     expect(failures).toEqual([]);
   });
 
-  it('reports R2 execution readiness honestly instead of fabricating outputs for non-executable agents', async () => {
+  it('requires at least one real recorded canonical R2 execution for every registered component', async () => {
     const registry = await loadAgentRegistry();
-    const pending = registry.entries
+    const coverage = await loadRecordedR2Coverage();
+    const registeredIds = new Set(registry.entries.map(entry => entry.componentId));
+    const unknownRecordedComponents = [...coverage.keys()]
+      .filter(componentId => !registeredIds.has(componentId))
+      .sort();
+    const missingRecordedComponents = registry.entries
       .map(entry => entry.componentId)
-      .filter(componentId => !EXECUTABLE_R2_COMPONENTS.has(componentId))
+      .filter(componentId => (coverage.get(componentId)?.size ?? 0) === 0)
       .sort();
 
-    expect(EXECUTABLE_R2_COMPONENTS).toEqual(new Set([
-      'TM-AG-001', 'TM-AG-002', 'TM-AG-003', 'TM-AG-004', 'TM-AG-005',
-      'TM-AG-006', 'TM-AG-007', 'TM-AG-008', 'TM-AG-009'
-    ]));
-    expect(pending).toHaveLength(8);
-    for (const executable of EXECUTABLE_R2_COMPONENTS) expect(pending).not.toContain(executable);
-    expect(pending).toContain('TM-ORCH-001');
+    expect(unknownRecordedComponents).toEqual([]);
+    expect(missingRecordedComponents).toEqual([]);
+    expect(coverage.size).toBe(17);
+    for (const entry of registry.entries) {
+      expect(coverage.get(entry.componentId)?.size ?? 0).toBeGreaterThanOrEqual(1);
+    }
   });
 });
