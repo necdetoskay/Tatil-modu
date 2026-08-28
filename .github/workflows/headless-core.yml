@@ -31,5 +31,11 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Typecheck, boundaries and tests
-        run: pnpm test:h0
+      - name: H11 headless acceptance
+        run: pnpm h11:acceptance
+
+      - name: Upload H11 validation record
+        uses: actions/upload-artifact@v4
+        with:
+          name: h11-validation-record
+          path: docs/26-headless-implementation/H11-validation-record.md

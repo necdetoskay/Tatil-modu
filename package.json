@@ -18,6 +18,7 @@
     "test:integration": "vitest run packages/capabilities packages/providers-mock packages/providers-mapbox packages/harness",
     "test:golden": "vitest run golden-scenario-001 headless-runtime.e2e",
     "test:h0": "pnpm status:check && pnpm typecheck && pnpm test:boundaries && pnpm test",
+    "h11:acceptance": "node scripts/run-h11-acceptance.mjs",
     "headless": "tsx apps/cli/src/index.ts",
     "headless:run": "tsx apps/cli/src/index.ts run"
   },
