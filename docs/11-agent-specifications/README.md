@@ -32,6 +32,9 @@ cross_contract_reconciliation: PASS
 m1_agent_registry: PASS
 m1_contract_loader_R0: PASS
 m1_deterministic_runner_R1: PASS_17_OF_17
+m1_fixture_runner_R2: PASS_INFRA_PROFILE_EXECUTABLE_16_ADAPTERS_PENDING
+m1_tool_gateway_authority_R6: PASS
+m1_context_manifest_trace: PASS
 ```
 
 > Package readiness için bu README kanoniktir. Bazı erken oluşturulmuş `specification.md` dosyalarındaki lokal `Current status` blokları stale olabilir ve readiness kararını override etmez.
@@ -106,6 +109,10 @@ facts(explanation) ⊆ verified facts
 facts(final) ⊆ verified snapshot + verified explanation
 Orchestrator → Specialist → ToolGateway → Tool
 Verification PASS + matching hash → durable commit
+FROZEN ContextManifest attempt içinde mutate edilemez
+retry → yeni contextManifestId
+AttemptTrace → exact contractHash + harnessPolicySnapshotId + contextManifestHash
+modelVisibleRefs(trace) = modelVisibleRefs(manifest)
 ```
 
 ## Backlog integration status
@@ -149,12 +156,23 @@ Eski tekil `.md` dosyaları tarihsel tasarım/reconciliation kaydıdır. İsim v
 M1_1_agent_registry: PASS
 M1_2_contract_loader_R0: PASS
 M1_3_deterministic_runner_R1: PASS_17_OF_17
-M1_4_fixture_runner_R2: IN_PROGRESS
-M1_5_tool_gateway_authority_R6: pending
-M1_6_context_trace: pending
-M1_7_failure_attribution_RIVE: pending
+M1_4_fixture_runner_R2: PASS_INFRA_PROFILE_EXECUTABLE_16_ADAPTERS_PENDING
+M1_5_tool_gateway_authority_R6: PASS
+M1_6_context_trace: PASS
+M1_7_failure_attribution_RIVE: IN_PROGRESS
 M1_8_verified_state_gate: pending
 M1_9_full_17_package_sweep: pending
 ```
+
+### M1.6 executable guarantees
+
+- context selection scope/memory/freshness/token policy ile deterministic yapılır,
+- `ContextManifest` run + attempt + component + contract hash + harness policy snapshot'a bağlanır,
+- manifest `FROZEN` ve deep-immutable'dır,
+- retry sequential yeni manifest identity gerektirir,
+- model-visible ref evreni manifest içinde açıkça tutulur,
+- `AttemptTrace` exact context/contract/policy snapshot'a bağlıdır,
+- tool-call evidence refs attempt trace'e taşınır,
+- manifest/trace tamper kontrolleri deterministic FAIL üretir.
 
 M1 tamamlanana kadar gerçek domain runtime implementation ve live provider-first test akışı açılmaz. M1 için gerçek web/Places/Routes/Weather/Booking çağrısı gerekmez.
