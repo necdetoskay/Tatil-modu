@@ -32,13 +32,13 @@ cross_contract_reconciliation: PASS
 m1_agent_registry: PASS
 m1_contract_loader_R0: PASS
 m1_deterministic_runner_R1: PASS_17_OF_17
-m1_fixture_runner_R2: PASS_INFRA_PROFILE_EXECUTABLE_16_ADAPTERS_PENDING
+m1_fixture_runner_R2: PASS_INFRA_7_OF_17_EXECUTABLE_10_PENDING
 m1_tool_gateway_authority_R6: PASS
 m1_context_manifest_trace: PASS
 m1_failure_attribution_RIVE: PASS
 m1_verified_state_gate: PASS
 m1_full_17_package_structural_sweep: PASS
-m1_overall_readiness: BLOCKED_BY_16_R2_EXECUTION_ADAPTERS
+m1_overall_readiness: BLOCKED_BY_10_R2_EXECUTION_GAPS
 ```
 
 > Package readiness için bu README kanoniktir. Bazı erken oluşturulmuş `specification.md` dosyalarındaki lokal `Current status` blokları stale olabilir ve readiness kararını override etmez.
@@ -149,7 +149,7 @@ knowledge_issue_50: PASS_AS_INTERFACE
 event_season_issue_51: PASS_AS_INTERFACE
 verified_state_gate: PASS_EXECUTABLE
 m1_harness_entry: ALLOWED
-runtime_implementation: BLOCKED_UNTIL_R2_EXECUTION_ADAPTER_GAPS_CLOSED
+runtime_implementation: BLOCKED_UNTIL_R2_EXECUTION_GAPS_CLOSED
 ```
 
 ## Eski first-phase specs
@@ -162,13 +162,13 @@ Eski tekil `.md` dosyaları tarihsel tasarım/reconciliation kaydıdır. İsim v
 M1_1_agent_registry: PASS
 M1_2_contract_loader_R0: PASS
 M1_3_deterministic_runner_R1: PASS_17_OF_17
-M1_4_fixture_runner_R2: PASS_INFRA_PROFILE_EXECUTABLE_16_ADAPTERS_PENDING
+M1_4_fixture_runner_R2: PASS_INFRA_7_OF_17_EXECUTABLE_10_PENDING
 M1_5_tool_gateway_authority_R6: PASS
 M1_6_context_trace: PASS
 M1_7_failure_attribution_RIVE: PASS
 M1_8_verified_state_gate: PASS
 M1_9_full_17_package_sweep: PASS_STRUCTURAL_READINESS
-M1_completion: BLOCKED_16_R2_EXECUTION_ADAPTERS
+M1_completion: BLOCKED_10_R2_EXECUTION_GAPS
 ```
 
 ### M1.6 executable guarantees
@@ -212,6 +212,17 @@ M1_completion: BLOCKED_16_R2_EXECUTION_ADAPTERS
 - en az 2 provenance fixture,
 - executable ToolGateway policy projection.
 
-Ancak fixture pack'ler genel olarak tam canonical output snapshot'ları değil davranış beklentileri taşır. Bu nedenle expected veriden sahte output üretip R2 PASS vermek yasaktır. Şu anda gerçek executable R2 pipeline yalnız TM-AG-001 Profile için kanıtlanmıştır; kalan 16 component gerçek fixture execution adapter gerektirir.
+Fixture pack'ler genel olarak tam canonical output snapshot'ları değil davranış beklentileri taşır. Bu nedenle `expected` veriden sahte output üretip R2 PASS vermek yasaktır. Recorded canonical executions bağımsız olarak hazırlanır; R0 + R1 + fixture-specific expectation zincirinden geçirilir ve schema-valid negatif mutasyonlarla false-green kontrol edilir.
+
+Şu anda executable R2 kanıtı bulunan component'ler:
+- TM-AG-001 Profile,
+- TM-AG-002 Preference & Policy,
+- TM-AG-003 Destination Research,
+- TM-AG-004 Place Intelligence,
+- TM-AG-005 Accommodation,
+- TM-AG-006 Food & Local Taste,
+- TM-AG-007 Weather.
+
+Kalan 10 component için recorded/canonical fixture execution evidence henüz tamamlanmamıştır.
 
 M1 tamamlanana kadar gerçek domain runtime implementation ve live provider-first test akışı açılmaz. M1 için gerçek web/Places/Routes/Weather/Booking çağrısı gerekmez.
