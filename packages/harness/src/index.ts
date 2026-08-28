@@ -173,7 +173,7 @@ export const FAMILY_TRIP_PLANNING_V1: WorkflowDefinition = {
       stepId: 'family_suitability',
       harnessProfile: 'family-suitability',
       dependsOn: ['destination_discovery'],
-      inputContract: 'destination_candidate_contract.v1',
+      inputContract: 'travel_request_contract.v1',
       outputContract: 'family_suitability_contract.v1',
       allowedCapabilities: [],
       retryPolicy: { maxAttempts: 1, retryableFailureClasses: [] },
