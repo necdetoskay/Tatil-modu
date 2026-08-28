@@ -3,6 +3,7 @@ export * from './contract-loader.js';
 export * from './schema-compiler.js';
 export * from './deterministic-runner.js';
 export * from './deterministic-oracles.js';
+export * from './deterministic-oracles-extended.js';
 export * from './context-builder.js';
 
 export const HARNESS_PACKAGE = '@tatil-modu/harness' as const;
