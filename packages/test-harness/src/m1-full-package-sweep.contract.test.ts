@@ -15,7 +15,9 @@ const EXECUTABLE_R2_COMPONENTS = new Set([
   'TM-AG-004',
   'TM-AG-005',
   'TM-AG-006',
-  'TM-AG-007'
+  'TM-AG-007',
+  'TM-AG-008',
+  'TM-AG-009'
 ]);
 
 describe('M1.9 full 17-package readiness sweep', () => {
@@ -34,9 +36,7 @@ describe('M1.9 full 17-package readiness sweep', () => {
     for (const entry of registry.entries) {
       const bundle = await loadResolvedContractBundle(entry);
       const contractErrors = validateResolvedContractBundle(bundle);
-      if (contractErrors.length > 0) {
-        failures.push(`${entry.componentId}:R0:${contractErrors.join(',')}`);
-      }
+      if (contractErrors.length > 0) failures.push(`${entry.componentId}:R0:${contractErrors.join(',')}`);
 
       const blockingR1 = ALL_R1_ORACLES.filter(
         oracle => oracle.componentId === entry.componentId && oracle.severity === 'BLOCKING'
@@ -44,9 +44,8 @@ describe('M1.9 full 17-package readiness sweep', () => {
       if (blockingR1.length === 0) failures.push(`${entry.componentId}:R1:NO_BLOCKING_ORACLE`);
 
       const row = rowById.get(entry.componentId);
-      if (!row) {
-        failures.push(`${entry.componentId}:R2:FIXTURE_ROW_MISSING`);
-      } else {
+      if (!row) failures.push(`${entry.componentId}:R2:FIXTURE_ROW_MISSING`);
+      else {
         if (row.behaviorCount < 10) failures.push(`${entry.componentId}:R2:BEHAVIOR_LT_10:${row.behaviorCount}`);
         if (row.authorityCount < 5) failures.push(`${entry.componentId}:R6:AUTHORITY_LT_5:${row.authorityCount}`);
         if (row.contextCount < 4) failures.push(`${entry.componentId}:CTX:CONTEXT_LT_4:${row.contextCount}`);
@@ -69,15 +68,10 @@ describe('M1.9 full 17-package readiness sweep', () => {
       .sort();
 
     expect(EXECUTABLE_R2_COMPONENTS).toEqual(new Set([
-      'TM-AG-001',
-      'TM-AG-002',
-      'TM-AG-003',
-      'TM-AG-004',
-      'TM-AG-005',
-      'TM-AG-006',
-      'TM-AG-007'
+      'TM-AG-001', 'TM-AG-002', 'TM-AG-003', 'TM-AG-004', 'TM-AG-005',
+      'TM-AG-006', 'TM-AG-007', 'TM-AG-008', 'TM-AG-009'
     ]));
-    expect(pending).toHaveLength(10);
+    expect(pending).toHaveLength(8);
     for (const executable of EXECUTABLE_R2_COMPONENTS) expect(pending).not.toContain(executable);
     expect(pending).toContain('TM-ORCH-001');
   });
