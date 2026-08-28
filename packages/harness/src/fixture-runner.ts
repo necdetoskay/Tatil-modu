@@ -86,6 +86,14 @@ function asRecord(value: unknown): Record<string, unknown> | null {
     : null;
 }
 
+function isFixtureCaseCollection(value: unknown): value is Record<string, unknown>[] {
+  if (!Array.isArray(value) || value.length === 0) return false;
+  return value.every(item => {
+    const payload = asRecord(item);
+    return payload !== null && typeof payload.id === 'string' && payload.id.length > 0;
+  });
+}
+
 function ownerId(pack: Record<string, unknown>): string | null {
   const owner = pack.agentId ?? pack.orchestratorId ?? pack.componentId;
   return typeof owner === 'string' ? owner : null;
@@ -115,15 +123,10 @@ export function normalizeFixturePack(
 
   const cases: NormalizedFixtureCase[] = [];
   for (const [groupName, value] of Object.entries(pack)) {
-    if (!Array.isArray(value)) continue;
+    if (!isFixtureCaseCollection(value)) continue;
     const groupKind = classifyFixtureGroup(groupName);
-    for (const raw of value) {
-      const payload = asRecord(raw);
-      if (!payload) throw new Error(`FIXTURE_CASE_NOT_OBJECT:${componentId}:${groupName}`);
-      const id = payload.id;
-      if (typeof id !== 'string' || id.length === 0) {
-        throw new Error(`FIXTURE_ID_MISSING:${componentId}:${groupName}`);
-      }
+    for (const payload of value) {
+      const id = payload.id as string;
       cases.push({
         componentId,
         fixtureId: id,
