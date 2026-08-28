@@ -9,6 +9,7 @@ export * from './tool-gateway.js';
 export * from './context-builder.js';
 export * from './context-manifest.js';
 export * from './trace-recorder.js';
+export * from './failure-attributor.js';
 
 export const HARNESS_PACKAGE = '@tatil-modu/harness' as const;
 
@@ -172,7 +173,7 @@ export const FAMILY_TRIP_PLANNING_V1: WorkflowDefinition = {
       stepId: 'family_suitability',
       harnessProfile: 'family-suitability',
       dependsOn: ['destination_discovery'],
-      inputContract: 'family_suitability.request.v1',
+      inputContract: 'destination_candidate_contract.v1',
       outputContract: 'family_suitability_contract.v1',
       allowedCapabilities: [],
       retryPolicy: { maxAttempts: 1, retryableFailureClasses: [] },
