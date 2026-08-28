@@ -1,0 +1,134 @@
+{
+  "schemaVersion": "1.0",
+  "componentId": "TM-AG-006",
+  "fixtureId": "FOOD-B004",
+  "recordingKind": "CANONICAL_RECORDED_EXECUTION",
+  "canonicalInput": {
+    "schemaVersion": "1.0",
+    "requestId": "req-food-b004",
+    "locationContext": {
+      "name": "Bursa",
+      "scopeType": "DESTINATION",
+      "destinationRef": "destination:bursa:primary",
+      "journeySegmentRef": null
+    },
+    "travelerProfile": {
+      "travelerProfileRef": "profile:req-food-b004",
+      "partyAges": [2, 6]
+    },
+    "policyContext": {
+      "hardConstraints": [
+        {
+          "constraintId": "constraint:peanut-allergy",
+          "key": "peanut_exclusion",
+          "kind": "HARD"
+        }
+      ]
+    },
+    "mealWindow": "lunch",
+    "dateTimeContext": "2026-09-10T12:30:00+03:00",
+    "selectedPlaceRefs": [],
+    "selectedAccommodationRef": null,
+    "knowledgeRefs": [],
+    "sourceRegistryRefs": [],
+    "contextManifestId": null
+  },
+  "canonicalOutput": {
+    "schemaVersion": "1.0",
+    "requestId": "req-food-b004",
+    "locationContextRef": "destination:bursa:primary",
+    "journeySegmentRef": null,
+    "localTasteBriefs": [],
+    "foodCandidates": [],
+    "rejectedCandidates": [
+      {
+        "foodId": "food:fixture:allergy-violation",
+        "providerIds": [
+          { "provider": "fixture-provider", "id": "food-allergy-001" }
+        ],
+        "name": "Fixture Restaurant With Peanut Menu Item",
+        "location": {
+          "latitude": null,
+          "longitude": null,
+          "formattedAddress": null,
+          "evidenceRefs": []
+        },
+        "categories": ["restaurant"],
+        "localTasteRefs": [],
+        "businessStatus": {
+          "value": "OPERATIONAL",
+          "evidenceRefs": ["ev-business"]
+        },
+        "openingHours": {
+          "status": "UNKNOWN",
+          "dataType": "NONE",
+          "value": null,
+          "evidenceRefs": []
+        },
+        "menuEvidence": {
+          "status": "SUPPORTED_CURRENT",
+          "items": ["Peanut sauce plate"],
+          "dietarySignals": ["CONTAINS_PEANUT"],
+          "evidenceRefs": ["ev-menu"]
+        },
+        "priceFact": {
+          "status": "UNKNOWN",
+          "amount": null,
+          "currency": "TRY",
+          "priceLevel": null,
+          "evidenceRefs": []
+        },
+        "eligibility": {
+          "disposition": "REJECTED",
+          "dispositionReasons": [
+            {
+              "code": "HARD_DIETARY_CONSTRAINT_VIOLATED",
+              "constraintId": "constraint:peanut-allergy",
+              "evidenceRefs": ["ev-menu"]
+            }
+          ],
+          "hardConstraintChecks": [
+            {
+              "constraintId": "constraint:peanut-allergy",
+              "status": "VIOLATED",
+              "evidenceRefs": ["ev-menu"]
+            }
+          ]
+        },
+        "familyFit": {
+          "band": "WEAK",
+          "mealWindowFit": "UNKNOWN",
+          "expectedMealBurden": "HIGH",
+          "reasonCodes": ["HARD_DIETARY_VIOLATION"]
+        },
+        "aggregateSignals": {
+          "rating": 4.9,
+          "userRatingCount": 1200
+        },
+        "reviewAnalysisRef": null,
+        "evidence": [
+          {
+            "evidenceId": "ev-business",
+            "claimType": "BUSINESS_STATUS",
+            "sourceTier": 2,
+            "sourceRef": "provider:food-allergy-001",
+            "retrievedAt": "2026-08-28T04:40:00Z",
+            "freshnessStatus": "CURRENT"
+          },
+          {
+            "evidenceId": "ev-menu",
+            "claimType": "CURRENT_OFFICIAL_MENU_DIETARY_SIGNAL",
+            "sourceTier": 1,
+            "sourceRef": "official-menu:food-allergy-001",
+            "retrievedAt": "2026-08-28T04:40:00Z",
+            "freshnessStatus": "CURRENT"
+          }
+        ],
+        "unresolvedClaims": [],
+        "confidence": 0.99
+      }
+    ],
+    "warnings": [],
+    "overallConfidence": 0.99
+  }
+}
