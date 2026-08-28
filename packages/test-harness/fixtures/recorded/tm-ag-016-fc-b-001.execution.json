@@ -1,0 +1,81 @@
+{
+  "componentId": "TM-AG-016",
+  "fixtureId": "FC-B-001",
+  "canonicalInput": {
+    "schemaVersion": "1.0",
+    "requestId": "req-fc-b-001",
+    "verificationResultRef": "verification-run:vf-b-001",
+    "verificationStatus": "PASS",
+    "verifiedSnapshotRef": "snapshot:trip:v1",
+    "verifiedSnapshotHash": "hash-trip-v1",
+    "itineraryRef": "itinerary:trip:v1",
+    "alternativeRefs": ["alternative:day1:a", "alternative:day1:b"],
+    "budgetLedgerRef": "budget:001",
+    "explanationBundleRef": "explanation:ex-b-001",
+    "explanationSnapshotHash": "hash-trip-v1",
+    "warningRefs": ["warning:parking-current-availability"],
+    "mandatoryWarningRefs": ["warning:parking-current-availability"],
+    "finalRenderPolicySnapshotId": "render-policy:v1",
+    "locale": "tr-TR",
+    "presentationPreferences": {
+      "verbosity": "STANDARD",
+      "showDecisionReasons": true,
+      "showBudgetBreakdown": true,
+      "showWarningsInline": false
+    },
+    "contextManifestId": "ctx-fc-b-001"
+  },
+  "canonicalOutput": {
+    "schemaVersion": "1.0",
+    "finalPlanId": "final-plan:fc-b-001",
+    "requestId": "req-fc-b-001",
+    "verificationResultRef": "verification-run:vf-b-001",
+    "verifiedSnapshotRef": "snapshot:trip:v1",
+    "verifiedSnapshotHash": "hash-trip-v1",
+    "finalRenderPolicySnapshotId": "render-policy:v1",
+    "renderGenerationRefs": ["render-generation:fc-b-001"],
+    "sections": [
+      {
+        "sectionId": "section:summary",
+        "type": "TRIP_SUMMARY",
+        "title": "Tatil planı",
+        "text": "Doğrulanmış seyahat planı aşağıdaki bölümlerde sunulmaktadır.",
+        "subjectRefs": ["itinerary:trip:v1"],
+        "sourceRefs": ["itinerary:trip:v1", "verification-run:vf-b-001"],
+        "claimRefs": [],
+        "valueBindingRefs": [],
+        "warningRefs": []
+      },
+      {
+        "sectionId": "section:day-plan",
+        "type": "DAY_PLAN",
+        "title": "Günlük plan",
+        "text": "Günlük akış, doğrulanmış itinerary sırasına göre gösterilmektedir.",
+        "subjectRefs": ["itinerary:trip:v1"],
+        "sourceRefs": ["itinerary:trip:v1"],
+        "claimRefs": [],
+        "valueBindingRefs": [],
+        "warningRefs": []
+      },
+      {
+        "sectionId": "section:warnings",
+        "type": "WARNINGS",
+        "title": "Dikkat edilmesi gerekenler",
+        "text": "Otoparkın varlığı doğrulanmış olsa da seyahat anındaki boş yer durumu garanti değildir.",
+        "subjectRefs": ["itinerary:trip:v1"],
+        "sourceRefs": ["verification-run:vf-b-001"],
+        "claimRefs": [],
+        "valueBindingRefs": [],
+        "warningRefs": ["warning:parking-current-availability"]
+      }
+    ],
+    "mandatoryWarningRefsRendered": ["warning:parking-current-availability"],
+    "renderValidation": {
+      "unsupportedEntityRefCount": 0,
+      "unsupportedClaimRefCount": 0,
+      "changedVerifiedValueCount": 0,
+      "missingMandatoryWarningCount": 0,
+      "snapshotMatch": true
+    }
+  }
+}
