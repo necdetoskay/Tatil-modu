@@ -41,12 +41,14 @@
   },
   "quality": {
     "localDeterministicSuite": "PASS",
-    "testFilesPassed": 81,
-    "testsPassed": 350
+    "testFilesPassed": 82,
+    "testsPassed": 354
   },
   "frontend": {
     "verticalSlice": "PASS",
     "routes": ["/", "/plan", "/blocked", "/health"],
+    "apiEndpoints": ["POST /api/plans", "GET /api/plans/:id"],
+    "planningTransport": "polling",
     "typedUiAdapter": "PASS",
     "browserE2E": "PASS",
     "browserE2EExecution": "2026-08-28"

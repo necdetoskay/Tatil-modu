@@ -23,7 +23,7 @@ describe('typed UI adapter', () => {
         hard_blockers: [], confidence_summary: { overall_confidence: 'high', confidence_reasons: ['Verified inputs'] }
       }
     });
-    expect(model).toMatchObject({ status: 'completed', durationDays: 1, privacyConstraintActive: true, confidence: 'high' });
+    expect(model).toMatchObject({ status: 'completed', durationDays: 1, privacyConstraintActive: true, confidence: 'high', verificationWarnings: [] });
     expect(model.days[0]).toMatchObject({ dayNumber: 1, alternatives: ['Indoor alternative', 'Rest alternative'] });
     expect(model.days[0]?.blocks[1]).toMatchObject({ label: 'Öğle ve dinlenme', title: 'Rest' });
     expect(model.disclosures[0]).toMatchObject({ status: 'verified', evidenceAttached: true });
