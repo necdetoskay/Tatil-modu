@@ -5,8 +5,8 @@
 | Alan | Değer |
 |---|---|
 | Güncelleme | 2026-08-28 |
-| Güncel aşama | headless_quality_gate_alignment |
-| Güncel odak | completion_audit |
+| Güncel aşama | ui_readiness_review |
+| Güncel odak | headless_acceptance_complete |
 | Golden contract paketleri | 17/17 |
 | Cross-contract reconciliation | PASS |
 | H0 Repository Foundation | PASS |
@@ -19,7 +19,7 @@
 | Local deterministic suite | PASS (79 files / 344 tests) |
 | Runtime implementation | ALLOWED |
 | Live provider integration | LOCKED |
-| Headless core acceptance | PENDING |
-| UI readiness review | LOCKED |
+| Headless core acceptance | PASS |
+| UI readiness review | ALLOWED |
 | UI development | LOCKED |
 | Production release | LOCKED |
