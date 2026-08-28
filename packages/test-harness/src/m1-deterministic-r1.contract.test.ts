@@ -286,10 +286,19 @@ describe('M1.3 deterministic R1 runner', () => {
     );
     expect(good.status).toBe('PASS');
 
-    const badOutput = verificationOutput('PASS');
-    badOutput.blockingFindings.push({ findingId: 'f1' });
-    badOutput.authoritySummary.toolViolations.push('tool-leak');
-    badOutput.evidenceCoverage.criticalClaimsUnknown = 1;
+    const base = verificationOutput('PASS');
+    const badOutput = {
+      ...base,
+      blockingFindings: [{ findingId: 'f1' }],
+      authoritySummary: {
+        ...base.authoritySummary,
+        toolViolations: ['tool-leak']
+      },
+      evidenceCoverage: {
+        ...base.evidenceCoverage,
+        criticalClaimsUnknown: 1
+      }
+    };
 
     const bad = runDeterministicOracles(
       CORE_R1_ORACLES,
