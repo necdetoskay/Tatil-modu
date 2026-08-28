@@ -1,0 +1,57 @@
+{
+  "componentId": "TM-AG-015",
+  "fixtureId": "EX-B-001",
+  "canonicalInput": {
+    "schemaVersion": "1.0",
+    "requestId": "req-ex-b-001",
+    "verificationResultRef": "verification-run:vf-b-001",
+    "verificationStatus": "PASS",
+    "verifiedSnapshotRef": "snapshot:trip:v1",
+    "verifiedSnapshotHash": "hash-trip-v1",
+    "explanationPolicySnapshotId": "explanation-policy:v1",
+    "explainableRecords": [
+      {
+        "subjectRef": "place:001",
+        "recordType": "SELECTED",
+        "decisionRefs": ["decision:place-001:selected"],
+        "constraintRefs": ["constraint:family-fit"],
+        "supportRefs": ["support:place-001:family", "support:place-001:hours"],
+        "allowedClaimRefs": ["claim:place-001:family-fit", "claim:place-001:open-window"],
+        "uncertaintyRefs": []
+      }
+    ],
+    "warningRefs": [],
+    "contextManifestId": "ctx-ex-b-001"
+  },
+  "canonicalOutput": {
+    "schemaVersion": "1.0",
+    "explanationBundleId": "explanation:ex-b-001",
+    "requestId": "req-ex-b-001",
+    "verificationResultRef": "verification-run:vf-b-001",
+    "verifiedSnapshotRef": "snapshot:trip:v1",
+    "verifiedSnapshotHash": "hash-trip-v1",
+    "explanationPolicySnapshotId": "explanation-policy:v1",
+    "generationRefs": ["generation:model-fixture:ex-b-001"],
+    "blocks": [
+      {
+        "blockId": "ex-block:place-001",
+        "type": "WHY_SELECTED",
+        "subjectRefs": ["place:001"],
+        "decisionRefs": ["decision:place-001:selected"],
+        "constraintRefs": ["constraint:family-fit"],
+        "supportRefs": ["support:place-001:family", "support:place-001:hours"],
+        "assertedClaimRefs": ["claim:place-001:family-fit", "claim:place-001:open-window"],
+        "uncertaintyRefs": [],
+        "text": "Bu yer, doğrulanmış aile uygunluğu ve ziyaret saatleri planla uyumlu olduğu için seçildi."
+      }
+    ],
+    "unresolvedWarnings": [],
+    "coverage": {
+      "explainableRecordCount": 1,
+      "explainedRecordCount": 1,
+      "assertedClaimCount": 2,
+      "supportedAssertedClaimCount": 2,
+      "unsupportedAssertedClaimCount": 0
+    }
+  }
+}
