@@ -10,6 +10,7 @@ export * from './context-builder.js';
 export * from './context-manifest.js';
 export * from './trace-recorder.js';
 export * from './failure-attributor.js';
+export * from './verified-state-gate.js';
 
 export const HARNESS_PACKAGE = '@tatil-modu/harness' as const;
 
