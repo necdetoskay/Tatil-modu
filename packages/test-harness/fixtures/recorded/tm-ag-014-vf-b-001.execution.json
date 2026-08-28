@@ -1,0 +1,76 @@
+{
+  "componentId": "TM-AG-014",
+  "fixtureId": "VF-B-001",
+  "canonicalInput": {
+    "schemaVersion": "1.0",
+    "requestId": "req-vf-b-001",
+    "snapshotRef": "snapshot:trip:v1",
+    "snapshotHash": "hash-trip-v1",
+    "policySnapshotRefs": ["verification-policy:v1"],
+    "itineraryRef": "itinerary:trip:v1",
+    "constraintRefs": ["constraint:hard:001"],
+    "selectedCandidateRefs": ["place:001", "stay:001"],
+    "routeRefs": ["route:001"],
+    "weatherSignalRefs": ["weather:001"],
+    "budgetLedgerRef": "budget:001",
+    "officialFactRefs": ["official-fact:001"],
+    "reviewSignalRefs": ["review-signal:001"],
+    "eventRefs": [],
+    "adaptiveRepairRef": null,
+    "agentTraceRefs": ["trace:planner:001", "trace:budget:001"],
+    "toolCallTraceRefs": ["tool:route:001", "tool:official:001"],
+    "evidenceRefs": ["evidence:route:001", "evidence:official:001", "evidence:weather:001"],
+    "reverificationMode": "NONE",
+    "contextManifestId": "ctx-vf-b-001"
+  },
+  "canonicalOutput": {
+    "schemaVersion": "1.0",
+    "verificationRunId": "verification-run:vf-b-001",
+    "requestId": "req-vf-b-001",
+    "verifiedSnapshotRef": "snapshot:trip:v1",
+    "verifiedSnapshotHash": "hash-trip-v1",
+    "policySnapshotRefs": ["verification-policy:v1"],
+    "evaluatorRefs": [],
+    "status": "PASS",
+    "gates": [
+      {"gateId":"g0","gateFamily":"G0_SCHEMA","method":"DETERMINISTIC","status":"PASS","severity":"BLOCKING","subjectRefs":["snapshot:trip:v1"],"ruleRefs":["VR-001"],"evidenceRefs":[],"findingCodes":[]},
+      {"gateId":"g1","gateFamily":"G1_PROVENANCE","method":"DETERMINISTIC","status":"PASS","severity":"BLOCKING","subjectRefs":["snapshot:trip:v1"],"ruleRefs":["VR-002"],"evidenceRefs":["evidence:route:001","evidence:official:001"],"findingCodes":[]},
+      {"gateId":"g2","gateFamily":"G2_AUTHORITY","method":"DETERMINISTIC","status":"PASS","severity":"BLOCKING","subjectRefs":["snapshot:trip:v1"],"ruleRefs":["VR-003"],"evidenceRefs":[],"findingCodes":[]},
+      {"gateId":"g3","gateFamily":"G3_CONSTRAINTS","method":"DETERMINISTIC","status":"PASS","severity":"BLOCKING","subjectRefs":["constraint:hard:001"],"ruleRefs":["VR-004"],"evidenceRefs":[],"findingCodes":[]},
+      {"gateId":"g4","gateFamily":"G4_TIME_GRAPH","method":"DETERMINISTIC","status":"PASS","severity":"BLOCKING","subjectRefs":["itinerary:trip:v1"],"ruleRefs":["VR-005"],"evidenceRefs":[],"findingCodes":[]},
+      {"gateId":"g5","gateFamily":"G5_ROUTE","method":"DETERMINISTIC","status":"PASS","severity":"BLOCKING","subjectRefs":["route:001"],"ruleRefs":["VR-006"],"evidenceRefs":["evidence:route:001"],"findingCodes":[]},
+      {"gateId":"g6","gateFamily":"G6_OPERATIONAL_FRESHNESS","method":"DETERMINISTIC","status":"PASS","severity":"BLOCKING","subjectRefs":["official-fact:001"],"ruleRefs":["VR-007"],"evidenceRefs":["evidence:official:001"],"findingCodes":[]},
+      {"gateId":"g7","gateFamily":"G7_WEATHER_EVENT_SEASONAL","method":"DETERMINISTIC","status":"PASS","severity":"BLOCKING","subjectRefs":["weather:001"],"ruleRefs":["VR-008"],"evidenceRefs":["evidence:weather:001"],"findingCodes":[]},
+      {"gateId":"g8","gateFamily":"G8_BUDGET","method":"DETERMINISTIC","status":"PASS","severity":"BLOCKING","subjectRefs":["budget:001"],"ruleRefs":["VR-009"],"evidenceRefs":[],"findingCodes":[]},
+      {"gateId":"g9","gateFamily":"G9_EVIDENCE_COVERAGE","method":"DETERMINISTIC","status":"PASS","severity":"BLOCKING","subjectRefs":["snapshot:trip:v1"],"ruleRefs":["VR-010"],"evidenceRefs":["evidence:route:001","evidence:official:001","evidence:weather:001"],"findingCodes":[]},
+      {"gateId":"g10","gateFamily":"G10_SEMANTIC","method":"SEMANTIC","status":"SKIP","severity":"NON_BLOCKING","subjectRefs":["itinerary:trip:v1"],"ruleRefs":["VR-SEMANTIC-OPTIONAL"],"evidenceRefs":[],"findingCodes":[]}
+    ],
+    "blockingFindings": [],
+    "nonBlockingFindings": [],
+    "repairTargets": [],
+    "evidenceCoverage": {
+      "criticalClaimsTotal": 3,
+      "criticalClaimsVerified": 3,
+      "criticalClaimsUnknown": 0,
+      "criticalClaimsConflicting": 0,
+      "officialCoverage": 1,
+      "routeCoverage": 1,
+      "weatherCoverage": 1,
+      "priceCoverage": 1,
+      "provenanceCoverage": 1
+    },
+    "authoritySummary": {
+      "agentViolations": [],
+      "toolViolations": [],
+      "orchestratorDirectDomainToolViolations": []
+    },
+    "provenanceSummary": {
+      "missingRefs": [],
+      "brokenLineageRefs": [],
+      "snapshotMismatchRefs": [],
+      "adaptivePreservationFailures": []
+    },
+    "requiredRechecks": [],
+    "confidence": 1
+  }
+}
