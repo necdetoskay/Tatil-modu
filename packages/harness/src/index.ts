@@ -7,6 +7,8 @@ export * from './deterministic-oracles-extended.js';
 export * from './fixture-runner.js';
 export * from './tool-gateway.js';
 export * from './context-builder.js';
+export * from './context-manifest.js';
+export * from './trace-recorder.js';
 
 export const HARNESS_PACKAGE = '@tatil-modu/harness' as const;
 
