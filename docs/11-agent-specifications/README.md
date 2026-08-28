@@ -32,13 +32,13 @@ cross_contract_reconciliation: PASS
 m1_agent_registry: PASS
 m1_contract_loader_R0: PASS
 m1_deterministic_runner_R1: PASS_17_OF_17
-m1_fixture_runner_R2: PASS_INFRA_7_OF_17_EXECUTABLE_10_PENDING
+m1_fixture_runner_R2: PASS_COMPONENT_COVERAGE_17_OF_17_CASE_DEPTH_PENDING
 m1_tool_gateway_authority_R6: PASS
 m1_context_manifest_trace: PASS
 m1_failure_attribution_RIVE: PASS
 m1_verified_state_gate: PASS
-m1_full_17_package_structural_sweep: PASS
-m1_overall_readiness: BLOCKED_BY_10_R2_EXECUTION_GAPS
+m1_full_17_package_structural_sweep: PASS_WITH_RECORDED_COMPONENT_COVERAGE
+m1_overall_readiness: BLOCKED_BY_R2_CASE_DEPTH_MINIMUM
 ```
 
 > Package readiness için bu README kanoniktir. Bazı erken oluşturulmuş `specification.md` dosyalarındaki lokal `Current status` blokları stale olabilir ve readiness kararını override etmez.
@@ -149,7 +149,7 @@ knowledge_issue_50: PASS_AS_INTERFACE
 event_season_issue_51: PASS_AS_INTERFACE
 verified_state_gate: PASS_EXECUTABLE
 m1_harness_entry: ALLOWED
-runtime_implementation: BLOCKED_UNTIL_R2_EXECUTION_GAPS_CLOSED
+runtime_implementation: BLOCKED_UNTIL_R2_CASE_DEPTH_MINIMUM
 ```
 
 ## Eski first-phase specs
@@ -162,13 +162,13 @@ Eski tekil `.md` dosyaları tarihsel tasarım/reconciliation kaydıdır. İsim v
 M1_1_agent_registry: PASS
 M1_2_contract_loader_R0: PASS
 M1_3_deterministic_runner_R1: PASS_17_OF_17
-M1_4_fixture_runner_R2: PASS_INFRA_7_OF_17_EXECUTABLE_10_PENDING
+M1_4_fixture_runner_R2: PASS_COMPONENT_COVERAGE_17_OF_17_CASE_DEPTH_PENDING
 M1_5_tool_gateway_authority_R6: PASS
 M1_6_context_trace: PASS
 M1_7_failure_attribution_RIVE: PASS
 M1_8_verified_state_gate: PASS
-M1_9_full_17_package_sweep: PASS_STRUCTURAL_READINESS
-M1_completion: BLOCKED_10_R2_EXECUTION_GAPS
+M1_9_full_17_package_sweep: PASS_STRUCTURAL_AND_RECORDED_COMPONENT_COVERAGE
+M1_completion: BLOCKED_R2_CASE_DEPTH_LT_BASELINE
 ```
 
 ### M1.6 executable guarantees
@@ -206,23 +206,42 @@ M1_completion: BLOCKED_10_R2_EXECUTION_GAPS
 17/17 package structural M1 minimumlarını geçti:
 - canonical R0 contract validation,
 - en az bir blocking R1 oracle,
-- en az 10 behavior fixture,
+- fixture catalogunda en az 10 behavior fixture,
 - en az 5 authority fixture,
 - en az 4 context lifecycle fixture,
 - en az 2 provenance fixture,
 - executable ToolGateway policy projection.
 
-Fixture pack'ler genel olarak tam canonical output snapshot'ları değil davranış beklentileri taşır. Bu nedenle `expected` veriden sahte output üretip R2 PASS vermek yasaktır. Recorded canonical executions bağımsız olarak hazırlanır; R0 + R1 + fixture-specific expectation zincirinden geçirilir ve schema-valid negatif mutasyonlarla false-green kontrol edilir.
+Ayrıca 17/17 registry component için en az bir **recorded canonical R2 execution** artık mevcuttur. Full-sweep bu coverage'ı hardcoded component listesinden değil `packages/test-harness/fixtures/recorded/*.execution.json` kayıtlarından otomatik türetir. Kayıp component, bilinmeyen component veya duplicate recorded fixture CI failure üretir.
 
-Şu anda executable R2 kanıtı bulunan component'ler:
-- TM-AG-001 Profile,
-- TM-AG-002 Preference & Policy,
-- TM-AG-003 Destination Research,
-- TM-AG-004 Place Intelligence,
-- TM-AG-005 Accommodation,
-- TM-AG-006 Food & Local Taste,
-- TM-AG-007 Weather.
+Her recorded R2 kanıtı şu zincire bağlanır:
 
-Kalan 10 component için recorded/canonical fixture execution evidence henüz tamamlanmamıştır.
+```text
+golden fixture id
+→ independent canonical input/output recording
+→ R0 input/output schema
+→ R1 deterministic oracle
+→ fixture-specific independent expectation
+→ schema-valid negative mutation / false-green test
+```
+
+Fixture pack'ler genel olarak tam canonical output snapshot'ları değil davranış beklentileri taşır. Bu nedenle `expected/assert` veriden sahte output üretip R2 PASS vermek yasaktır.
+
+### M1.4 için kalan gerçek gap — case depth
+
+Component-level execution yolu artık tamamdır, fakat kanonik harness baseline her agent için minimum **10 executable R2 fixture case** ister. Şu anda bu minimum tüm 17 component için case-level olarak tamamlanmış değildir.
+
+Dolayısıyla:
+
+```yaml
+recorded_r2_component_coverage: 17/17
+minimum_r2_cases_per_component_required: 10
+case_depth_gate: PENDING
+runtime_unlock: BLOCKED
+```
+
+Bu ayrım önemlidir: `17/17 component coverage PASS`, `M1 complete` anlamına gelmez.
+
+Son doğrulanan 17/17 component-level coverage CI run: `33143523774`.
 
 M1 tamamlanana kadar gerçek domain runtime implementation ve live provider-first test akışı açılmaz. M1 için gerçek web/Places/Routes/Weather/Booking çağrısı gerekmez.
