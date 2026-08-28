@@ -92,9 +92,9 @@ function extractToolsBySection(markdown: string): {
     const heading = line.match(/^##\s+(.+?)\s*$/);
     if (heading) {
       const title = heading[1]!.toLowerCase();
-      if (title.startsWith('allowed')) section = 'allowed';
-      else if (title.startsWith('forbidden') && title.includes('behavior')) section = 'forbidden_behavior';
+      if (title.startsWith('forbidden') && title.includes('behavior')) section = 'forbidden_behavior';
       else if (title.startsWith('forbidden')) section = 'forbidden';
+      else if (title.includes('allowed')) section = 'allowed';
       else section = null;
       continue;
     }
