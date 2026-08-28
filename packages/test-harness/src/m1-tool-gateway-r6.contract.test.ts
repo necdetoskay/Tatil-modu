@@ -20,8 +20,21 @@ function request(componentId: string, toolId: CanonicalToolId) {
   } as const;
 }
 
+function scopedRequest(componentId: string, toolId: CanonicalToolId, targetScopeRef = 'day-2', escalation = false) {
+  return {
+    ...request(componentId, toolId),
+    authorityContext: {
+      repairId: 'repair-1',
+      triggerRef: 'trigger-1',
+      affectedScopeRef: 'day-2',
+      targetScopeRef,
+      scopeEscalationApproved: escalation
+    }
+  } as const;
+}
+
 describe('M1.5 ToolGateway R6 authority enforcement', () => {
-  it('projects all 17 golden tool policies without allow/deny overlap', async () => {
+  it('projects all 17 golden tool policies without full allow/deny overlap', async () => {
     const registry = await loadAgentRegistry();
     const policies = await loadToolAuthorityPolicies(registry);
 
@@ -33,6 +46,7 @@ describe('M1.5 ToolGateway R6 authority enforcement', () => {
     for (const policy of policies) {
       expect(policy.allowedToolIds.length).toBeGreaterThan(0);
       expect(policy.allowedToolIds.filter(toolId => policy.explicitForbiddenToolIds.includes(toolId))).toEqual([]);
+      expect(policy.conditionalBehaviorToolIds.every(toolId => policy.allowedToolIds.includes(toolId))).toBe(true);
       expect(policy.allowedToolIds.every(toolId => CANONICAL_TOOL_IDS.includes(toolId))).toBe(true);
       expect(policy.explicitForbiddenToolIds.every(toolId => CANONICAL_TOOL_IDS.includes(toolId))).toBe(true);
     }
@@ -76,11 +90,25 @@ describe('M1.5 ToolGateway R6 authority enforcement', () => {
     expect(authorizeToolRequest(place, request('TM-AG-004', 'TL-005')).decision).toBe('DENY');
   });
 
+  it('enforces Adaptive conditional tool scope instead of flattening it to allow/deny', async () => {
+    const registry = await loadAgentRegistry();
+    const policies = await loadToolAuthorityPolicies(registry);
+    const adaptive = policies.find(policy => policy.componentId === 'TM-AG-013');
+    if (!adaptive) throw new Error('Adaptive policy missing');
+
+    expect(adaptive.conditionalBehaviorToolIds).toEqual(['TL-004', 'TL-005', 'TL-006', 'TL-010']);
+    expect(authorizeToolRequest(adaptive, request('TM-AG-013', 'TL-004')).reason).toBe('DENY_SCOPE_CONTEXT');
+    expect(authorizeToolRequest(adaptive, scopedRequest('TM-AG-013', 'TL-004')).reason).toBe('ALLOW_SCOPED');
+    expect(authorizeToolRequest(adaptive, scopedRequest('TM-AG-013', 'TL-004', 'day-5')).reason).toBe('DENY_SCOPE_CONTEXT');
+    expect(authorizeToolRequest(adaptive, scopedRequest('TM-AG-013', 'TL-004', 'day-5', true)).reason).toBe('ALLOW_SCOPED');
+  });
+
   it('uses secure default DENY for tools not explicitly listed as allowed', () => {
     const policy: ToolAuthorityPolicyProjection = {
       componentId: 'TM-TEST-001',
       allowedToolIds: ['TL-012'],
       explicitForbiddenToolIds: [],
+      conditionalBehaviorToolIds: [],
       sourceRef: 'synthetic-policy.md'
     };
 
@@ -114,10 +142,11 @@ describe('M1.5 ToolGateway R6 authority enforcement', () => {
       executableAssertions += 1;
       const policy = policyById.get(fixture.componentId);
       if (!policy) throw new Error(`policy missing: ${fixture.componentId}`);
-      const actual = authorizeToolRequest(
-        policy,
-        request(fixture.componentId, tool as CanonicalToolId)
-      ).decision;
+      const canonicalTool = tool as CanonicalToolId;
+      const toolRequest = expected === 'ALLOW' && policy.conditionalBehaviorToolIds.includes(canonicalTool)
+        ? scopedRequest(fixture.componentId, canonicalTool)
+        : request(fixture.componentId, canonicalTool);
+      const actual = authorizeToolRequest(policy, toolRequest).decision;
       if (actual !== expected) mismatches.push(`${fixture.componentId}:${fixture.fixtureId}:${tool}:${expected}->${actual}`);
     }
 
