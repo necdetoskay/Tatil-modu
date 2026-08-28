@@ -29,6 +29,9 @@ source_of_truth: docs/11-agent-specifications/canonical-agent-contract-catalog.m
 canonical_catalog_version: 1.1
 canonical_catalog_date: 2026-08-27
 cross_contract_reconciliation: PASS
+m1_agent_registry: PASS
+m1_contract_loader_R0: PASS
+m1_deterministic_runner_R1: PASS_17_OF_17
 ```
 
 > Package readiness için bu README kanoniktir. Bazı erken oluşturulmuş `specification.md` dosyalarındaki lokal `Current status` blokları stale olabilir ve readiness kararını override etmez.
@@ -143,10 +146,10 @@ Eski tekil `.md` dosyaları tarihsel tasarım/reconciliation kaydıdır. İsim v
 ## Sonraki aşama — M1 Executable Agent Contract Harness
 
 ```yaml
-M1_1_agent_registry: next
-M1_2_contract_loader_R0: pending
-M1_3_deterministic_runner_R1: pending
-M1_4_fixture_runner_R2: pending
+M1_1_agent_registry: PASS
+M1_2_contract_loader_R0: PASS
+M1_3_deterministic_runner_R1: PASS_17_OF_17
+M1_4_fixture_runner_R2: IN_PROGRESS
 M1_5_tool_gateway_authority_R6: pending
 M1_6_context_trace: pending
 M1_7_failure_attribution_RIVE: pending
