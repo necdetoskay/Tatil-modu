@@ -1,0 +1,79 @@
+{
+  "schemaVersion": "1.0",
+  "componentId": "TM-AG-002",
+  "fixtureId": "PP-003",
+  "recordingKind": "CANONICAL_RECORDED_EXECUTION",
+  "canonicalInput": {
+    "schemaVersion": "1.0",
+    "requestId": "req-pp-003",
+    "tripRequest": {
+      "userMessage": "Deniz önerilecekse kadınlar plajı mutlaka olmalı.",
+      "preferenceStatements": [
+        {
+          "statementId": "stmt-pp-003",
+          "text": "Deniz önerilecekse kadınlar plajı mutlaka olmalı.",
+          "sourceType": "USER_EXPLICIT",
+          "sourceRef": "request:req-pp-003"
+        }
+      ]
+    },
+    "travelerProfile": {
+      "schemaVersion": "1.0",
+      "requestId": "req-pp-003",
+      "party": {
+        "adults": 2,
+        "children": [
+          { "ageYears": 2, "evidenceRefs": ["ev-child-1"] },
+          { "ageYears": 6, "evidenceRefs": ["ev-child-2"] }
+        ],
+        "totalTravelers": 4
+      },
+      "tripContext": {
+        "origin": { "value": "Kocaeli", "evidenceRefs": ["ev-origin"] },
+        "destination": { "value": "Bursa", "evidenceRefs": ["ev-destination"] }
+      },
+      "transport": { "mode": "own_car", "evidenceRefs": ["ev-transport"] },
+      "unknownFields": [],
+      "conflicts": [],
+      "evidence": [
+        { "evidenceId": "ev-adults", "type": "USER_EXPLICIT", "fieldPath": "party.adults", "sourceRef": "request:req-pp-003" },
+        { "evidenceId": "ev-child-1", "type": "USER_EXPLICIT", "fieldPath": "party.children[0].ageYears", "sourceRef": "request:req-pp-003" },
+        { "evidenceId": "ev-child-2", "type": "USER_EXPLICIT", "fieldPath": "party.children[1].ageYears", "sourceRef": "request:req-pp-003" },
+        { "evidenceId": "ev-origin", "type": "USER_EXPLICIT", "fieldPath": "tripContext.origin", "sourceRef": "request:req-pp-003" },
+        { "evidenceId": "ev-destination", "type": "USER_EXPLICIT", "fieldPath": "tripContext.destination", "sourceRef": "request:req-pp-003" },
+        { "evidenceId": "ev-transport", "type": "USER_EXPLICIT", "fieldPath": "transport.mode", "sourceRef": "request:req-pp-003" },
+        { "evidenceId": "ev-total", "type": "NORMALIZATION", "fieldPath": "party.totalTravelers", "sourceRef": "normalization:req-pp-003" }
+      ],
+      "overallConfidence": 1
+    },
+    "policyVersion": "tm-preference-policy-v1",
+    "contextManifestId": null
+  },
+  "canonicalOutput": {
+    "schemaVersion": "1.0",
+    "requestId": "req-pp-003",
+    "preferences": [],
+    "constraints": [
+      {
+        "constraintId": "constraint:pp-003:women-only-beach",
+        "key": "women_only_beach_when_beach",
+        "kind": "CONDITIONAL_HARD",
+        "subject": "activity.beach.access",
+        "operator": "equals",
+        "value": "women_only",
+        "condition": {
+          "field": "activity.type",
+          "operator": "equals",
+          "value": "beach"
+        },
+        "sourceRefs": ["stmt-pp-003"],
+        "confidence": 1,
+        "evidenceRequired": true
+      }
+    ],
+    "exceptions": [],
+    "conflicts": [],
+    "clarificationRequired": [],
+    "overallConfidence": 1
+  }
+}
