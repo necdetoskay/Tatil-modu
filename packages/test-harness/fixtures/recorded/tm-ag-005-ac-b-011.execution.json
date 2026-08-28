@@ -1,0 +1,106 @@
+{
+  "schemaVersion": "1.0",
+  "componentId": "TM-AG-005",
+  "fixtureId": "AC-B-011",
+  "recordingKind": "CANONICAL_RECORDED_EXECUTION",
+  "canonicalInput": {
+    "schemaVersion": "1.0",
+    "requestId": "req-ac-b-011",
+    "travelerProfileRef": "profile:req-ac-b-011",
+    "preferencePolicyRef": "policy:req-ac-b-011",
+    "destinationBriefRef": "destination:bursa:primary",
+    "journeySegmentRef": null,
+    "stayRequest": {
+      "locationName": "Bursa",
+      "checkIn": "2026-09-10",
+      "checkOut": "2026-09-12",
+      "adults": 2,
+      "childrenAges": [2, 6],
+      "rooms": 1,
+      "stayRole": "FINAL_DESTINATION",
+      "currency": "TRY"
+    },
+    "activeConstraints": [],
+    "contextManifestId": null
+  },
+  "canonicalOutput": {
+    "schemaVersion": "1.0",
+    "requestId": "req-ac-b-011",
+    "stayQuerySignature": {
+      "locationName": "Bursa",
+      "checkIn": "2026-09-10",
+      "checkOut": "2026-09-12",
+      "adults": 2,
+      "childrenAges": [2, 6],
+      "rooms": 1,
+      "currency": "TRY",
+      "stayRole": "FINAL_DESTINATION",
+      "journeySegmentRef": null
+    },
+    "candidates": [
+      {
+        "accommodationId": "accommodation:fixture:bursa-static-001",
+        "providerIds": [
+          { "provider": "static-fixture-catalog", "id": "bursa-static-001" }
+        ],
+        "name": "Fixture Bursa Family Stay",
+        "location": {
+          "latitude": null,
+          "longitude": null,
+          "formattedAddress": null,
+          "evidenceRefs": []
+        },
+        "availability": {
+          "status": "UNKNOWN",
+          "retrievedAt": null,
+          "freshnessStatus": "UNKNOWN",
+          "querySignatureMatch": false,
+          "evidenceRefs": []
+        },
+        "priceQuote": {
+          "status": "UNKNOWN",
+          "totalAmount": null,
+          "currency": "TRY",
+          "taxesFeesKnown": null,
+          "retrievedAt": null,
+          "freshnessStatus": "UNKNOWN",
+          "querySignatureMatch": false,
+          "evidenceRefs": []
+        },
+        "occupancyFit": {
+          "status": "UNVERIFIED",
+          "roomsRequired": 1,
+          "childrenPolicyStatus": "UNVERIFIED",
+          "evidenceRefs": []
+        },
+        "facilities": [],
+        "policies": {
+          "cancellation": { "status": "UNKNOWN", "value": null, "evidenceRefs": [] },
+          "mealPlan": { "status": "UNKNOWN", "value": null, "evidenceRefs": [] },
+          "checkInOut": { "status": "UNKNOWN", "value": null, "evidenceRefs": [] },
+          "extraCharges": { "status": "UNKNOWN", "value": null, "evidenceRefs": [] }
+        },
+        "eligibility": {
+          "disposition": "NEEDS_VERIFICATION",
+          "dispositionReasons": [
+            { "code": "LIVE_PROVIDER_ACCESS_UNAVAILABLE", "constraintId": null, "evidenceRefs": [] }
+          ],
+          "hardConstraintChecks": []
+        },
+        "familyFit": {
+          "band": "UNKNOWN",
+          "restFit": "UNKNOWN",
+          "locationFit": "UNKNOWN",
+          "reasonCodes": ["LIVE_STAY_FACTS_UNAVAILABLE"]
+        },
+        "reviewAnalysisRef": null,
+        "evidence": [],
+        "unresolvedClaims": ["availability", "price", "occupancy_policy"],
+        "confidence": 0.35
+      }
+    ],
+    "rejectedCandidates": [],
+    "warnings": ["LIVE_ACCOMMODATION_PROVIDER_UNAVAILABLE"],
+    "overallConfidence": 0.35
+  }
+}
