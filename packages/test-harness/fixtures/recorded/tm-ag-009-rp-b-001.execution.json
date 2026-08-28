@@ -1,0 +1,146 @@
+{
+  "schemaVersion": "1.0",
+  "componentId": "TM-AG-009",
+  "fixtureId": "RP-B-001",
+  "recordingKind": "CANONICAL_RECORDED_EXECUTION",
+  "canonicalInput": {
+    "schemaVersion": "1.0",
+    "requestId": "req-rp-b-001",
+    "tripWindow": {
+      "startDate": "2026-09-10",
+      "endDate": "2026-09-10",
+      "timezone": "Europe/Istanbul"
+    },
+    "planningPolicySnapshotId": "planning-policy:fixture:v1",
+    "travelerProfile": {
+      "profileRef": "profile:req-rp-b-001",
+      "adults": 2,
+      "childrenAges": [2, 6]
+    },
+    "preferencePolicy": {
+      "preferenceRefs": [],
+      "hardConstraints": [],
+      "exceptionPolicyRefs": []
+    },
+    "candidatePool": {
+      "places": [
+        {
+          "entityRef": "place:bursa:activity-1",
+          "candidateType": "PLACE",
+          "locationRef": "destination:bursa",
+          "disposition": "ACCEPTED",
+          "availabilityOrOperationalStatus": "OPERATIONAL",
+          "openingWindowRefs": ["opening:activity-1"],
+          "constraintCheckRefs": [],
+          "evidenceRefs": ["ev-place-1"]
+        },
+        {
+          "entityRef": "place:bursa:activity-2",
+          "candidateType": "PLACE",
+          "locationRef": "destination:bursa",
+          "disposition": "ACCEPTED",
+          "availabilityOrOperationalStatus": "OPERATIONAL",
+          "openingWindowRefs": ["opening:activity-2"],
+          "constraintCheckRefs": [],
+          "evidenceRefs": ["ev-place-2"]
+        }
+      ],
+      "accommodations": [],
+      "food": []
+    },
+    "transportation": {
+      "routeLegs": [
+        {
+          "routeLegId": "route-leg:activity-1-to-2",
+          "fromRef": "place:bursa:activity-1",
+          "toRef": "place:bursa:activity-2",
+          "journeySegmentRef": null,
+          "distanceMeters": 12000,
+          "durationSeconds": 1800,
+          "trafficAwareDurationSeconds": null,
+          "freshnessStatus": "CURRENT",
+          "evidenceRefs": ["ev-route-1"]
+        }
+      ],
+      "matrixEntries": []
+    },
+    "weatherSignals": [],
+    "selectedJourneyStops": [],
+    "finalArrivalDeadline": null,
+    "contextManifestId": null
+  },
+  "canonicalOutput": {
+    "schemaVersion": "1.0",
+    "itineraryId": "itinerary:fixture:rp-b-001",
+    "requestId": "req-rp-b-001",
+    "planningPolicySnapshotId": "planning-policy:fixture:v1",
+    "journeyPlan": {
+      "mode": "DIRECT",
+      "originRef": "destination:bursa",
+      "finalDestinationRef": "destination:bursa",
+      "finalArrivalDeadline": null,
+      "segments": []
+    },
+    "days": [
+      {
+        "dayId": "day:2026-09-10",
+        "date": "2026-09-10",
+        "baseLocationRef": "destination:bursa",
+        "blocks": [
+          {
+            "blockId": "block:activity-1",
+            "blockType": "ACTIVITY",
+            "start": "2026-09-10T09:00:00+03:00",
+            "end": "2026-09-10T11:00:00+03:00",
+            "entityRef": "place:bursa:activity-1",
+            "routeLegRef": null,
+            "journeySegmentRef": null,
+            "sourceRefs": ["ev-place-1"],
+            "constraintRefs": [],
+            "verificationStatus": "VERIFIED_INPUT"
+          },
+          {
+            "blockId": "block:travel-1-to-2",
+            "blockType": "TRAVEL",
+            "start": "2026-09-10T11:00:00+03:00",
+            "end": "2026-09-10T11:30:00+03:00",
+            "entityRef": null,
+            "routeLegRef": "route-leg:activity-1-to-2",
+            "journeySegmentRef": null,
+            "sourceRefs": ["ev-route-1"],
+            "constraintRefs": [],
+            "verificationStatus": "VERIFIED_INPUT"
+          },
+          {
+            "blockId": "block:activity-2",
+            "blockType": "ACTIVITY",
+            "start": "2026-09-10T11:30:00+03:00",
+            "end": "2026-09-10T13:00:00+03:00",
+            "entityRef": "place:bursa:activity-2",
+            "routeLegRef": null,
+            "journeySegmentRef": null,
+            "sourceRefs": ["ev-place-2"],
+            "constraintRefs": [],
+            "verificationStatus": "VERIFIED_INPUT"
+          }
+        ],
+        "alternativeRefs": [],
+        "totalTravelSeconds": 1800,
+        "totalActivitySeconds": 12600,
+        "constraintRefs": [],
+        "warnings": []
+      }
+    ],
+    "alternatives": [],
+    "rejectedCombinations": [],
+    "verificationNeeds": [],
+    "constraintSummary": {
+      "hardConstraintRefs": [],
+      "satisfiedRefs": [],
+      "unresolvedRefs": [],
+      "violatedRefs": []
+    },
+    "warnings": [],
+    "overallConfidence": 0.95
+  }
+}
