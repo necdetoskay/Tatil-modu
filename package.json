@@ -17,6 +17,7 @@
     "test:core": "vitest run packages/contracts packages/policy packages/memory packages/agents",
     "test:integration": "vitest run packages/capabilities packages/providers-mock packages/providers-mapbox packages/harness",
     "test:golden": "vitest run golden-scenario-001 headless-runtime.e2e",
+    "test:ui-readiness": "vitest run packages/test-harness/src/ui-readiness-review.contract.test.ts",
     "test:h0": "pnpm status:check && pnpm typecheck && pnpm test:boundaries && pnpm test",
     "h11:acceptance": "node scripts/run-h11-acceptance.mjs",
     "headless": "tsx apps/cli/src/index.ts",

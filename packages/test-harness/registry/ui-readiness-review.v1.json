@@ -1,0 +1,42 @@
+{
+  "schemaVersion": "1.0",
+  "requiredStates": [
+    "idle",
+    "collecting_input",
+    "clarification_required",
+    "planning",
+    "partial_result",
+    "completed",
+    "blocked",
+    "failed",
+    "revising"
+  ],
+  "requiredSurfaces": [
+    "constraint_summary",
+    "plan_overview",
+    "daily_cards",
+    "alternatives",
+    "disclosures",
+    "blockers",
+    "confidence",
+    "user_actions",
+    "errors"
+  ],
+  "forbiddenUiOwnership": [
+    "candidate_generation",
+    "constraint_classification",
+    "ranking",
+    "verification",
+    "confidence_generation",
+    "quality_score",
+    "orchestration_routing",
+    "memory_write"
+  ],
+  "invariants": {
+    "blockedHidesFinalPlan": true,
+    "hardBlockersAreVisible": true,
+    "unverifiedClaimsDiscloseUncertainty": true,
+    "memoryRequiresConsent": true,
+    "revisionPreservesScope": true
+  }
+}

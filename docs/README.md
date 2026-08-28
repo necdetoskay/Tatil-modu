@@ -34,6 +34,7 @@ Tek kanonik makine-okunur durum kaydı [`../project-status.json`](../project-sta
 | `25-headless-test-architecture/` | Headless test suite, severity/gate, coverage, model eval ve UI Unlock mimarisi |
 | `26-headless-implementation/` | H0–H12 gerçek implementation ve execution evidence kayıt alanı |
 | `27-agent-model-routing-and-evaluation/` | Agent bazlı model tier, capability/memory matrisi, routing, benchmark ve promotion/rollback tasarımı |
+| `28-ui-readiness-review/` | H11 sonrası UI ekran, state, contract traceability ve readiness gate kanıtları |
 
 ## Kanonik belge matrisi
 | Konu | Tek kaynak |
@@ -57,6 +58,7 @@ Tek kanonik makine-okunur durum kaydı [`../project-status.json`](../project-sta
 | UI unlock gate | `25-headless-test-architecture/15-headless-core-acceptance-gate.md` |
 | Implementation execution | `26-headless-implementation/README.md` |
 | Agent/model routing & evaluation | `27-agent-model-routing-and-evaluation/README.md` |
+| UI readiness review | `28-ui-readiness-review/README.md` |
 
 ## Aşama durumu
 
