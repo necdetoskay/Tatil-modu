@@ -1,0 +1,115 @@
+{
+  "schemaVersion": "1.0",
+  "componentId": "TM-AG-004",
+  "fixtureId": "PI-B-002",
+  "recordingKind": "CANONICAL_RECORDED_EXECUTION",
+  "canonicalInput": {
+    "schemaVersion": "1.0",
+    "requestId": "req-pi-b-002",
+    "travelerProfileRef": "profile:req-pi-b-002",
+    "preferencePolicyRef": "policy:req-pi-b-002",
+    "destinationBriefs": [
+      {
+        "destinationId": "destination:bursa:primary",
+        "name": "Bursa",
+        "relationToTarget": "primary"
+      }
+    ],
+    "visitWindow": null,
+    "categoryScope": ["family_attraction"],
+    "activeConstraints": [],
+    "contextManifestId": null
+  },
+  "canonicalOutput": {
+    "schemaVersion": "1.0",
+    "requestId": "req-pi-b-002",
+    "candidates": [],
+    "rejectedCandidates": [
+      {
+        "placeId": "place:fixture:closed-permanently",
+        "providerPlaceIds": [
+          { "provider": "fixture-provider", "id": "fixture-closed-001" }
+        ],
+        "name": "Fixture Closed Family Attraction",
+        "officialUrl": null,
+        "location": {
+          "latitude": null,
+          "longitude": null,
+          "formattedAddress": null,
+          "evidenceRefs": []
+        },
+        "categories": ["family_attraction"],
+        "businessStatus": {
+          "value": "CLOSED_PERMANENTLY",
+          "evidenceRefs": ["ev-closure"]
+        },
+        "operationalFacts": {
+          "openingHours": {
+            "status": "UNKNOWN",
+            "dataType": "NONE",
+            "value": null,
+            "evidenceRefs": []
+          },
+          "price": {
+            "status": "UNKNOWN",
+            "amount": null,
+            "currency": null,
+            "evidenceRefs": []
+          },
+          "parking": {
+            "status": "UNKNOWN",
+            "options": [],
+            "guaranteedAvailability": false,
+            "evidenceRefs": []
+          },
+          "accessibility": {
+            "status": "UNKNOWN",
+            "features": [],
+            "evidenceRefs": []
+          }
+        },
+        "eligibility": {
+          "disposition": "REJECTED",
+          "dispositionReasons": [
+            {
+              "code": "PLACE_CLOSED_PERMANENTLY",
+              "evidenceRefs": ["ev-closure"],
+              "constraintId": null
+            }
+          ],
+          "hardConstraintChecks": []
+        },
+        "familyFit": {
+          "band": "UNKNOWN",
+          "childAgeSignals": [],
+          "fatigueRisk": "UNKNOWN",
+          "indoorOutdoor": "UNKNOWN",
+          "estimatedVisitDurationMinutes": null,
+          "reasonCodes": ["NOT_EVALUATED_AFTER_PERMANENT_CLOSURE"]
+        },
+        "aggregateSignals": {
+          "rating": null,
+          "userRatingCount": null,
+          "reviewDataAvailable": false,
+          "reviewAnalysisRef": null
+        },
+        "constraintRefs": [],
+        "evidence": [
+          {
+            "evidenceId": "ev-closure",
+            "claimType": "BUSINESS_STATUS",
+            "sourceTier": 1,
+            "sourceRef": "official:fixture-closed-001",
+            "retrievedAt": "2026-08-28T04:30:00Z",
+            "freshnessStatus": "CURRENT",
+            "valueRef": "CLOSED_PERMANENTLY"
+          }
+        ],
+        "unresolvedClaims": [],
+        "confidence": 0.98
+      }
+    ],
+    "researchWarnings": [],
+    "overallConfidence": 0.98
+  }
+}
