@@ -52,6 +52,21 @@
     "overallConfidence": { "type": "number", "minimum": 0, "maximum": 1 }
   },
   "$defs": {
+    "condition": {
+      "anyOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["field", "operator", "value"],
+          "properties": {
+            "field": { "type": "string", "minLength": 1 },
+            "operator": { "enum": ["equals", "not_equals", "in"] },
+            "value": {}
+          }
+        }
+      ]
+    },
     "preference": {
       "type": "object",
       "additionalProperties": false,
@@ -61,6 +76,7 @@
         "key": { "type": "string", "minLength": 1 },
         "value": {},
         "strength": { "enum": ["SOFT", "INFORMATIONAL"] },
+        "condition": { "$ref": "#/$defs/condition" },
         "sourceRefs": { "type": "array", "minItems": 1, "items": { "type": "string" } },
         "confidence": { "type": "number", "minimum": 0, "maximum": 1 }
       }
@@ -76,21 +92,7 @@
         "subject": { "type": "string", "minLength": 1 },
         "operator": { "enum": ["equals", "not_equals", "lte", "gte", "contains", "excludes"] },
         "value": {},
-        "condition": {
-          "anyOf": [
-            { "type": "null" },
-            {
-              "type": "object",
-              "additionalProperties": false,
-              "required": ["field", "operator", "value"],
-              "properties": {
-                "field": { "type": "string", "minLength": 1 },
-                "operator": { "enum": ["equals", "not_equals", "in"] },
-                "value": {}
-              }
-            }
-          ]
-        },
+        "condition": { "$ref": "#/$defs/condition" },
         "sourceRefs": { "type": "array", "minItems": 1, "items": { "type": "string" } },
         "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
         "evidenceRequired": { "type": "boolean" }
