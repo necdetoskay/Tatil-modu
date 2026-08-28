@@ -1,6 +1,7 @@
 # UI Readiness Review Validation Record
 
-**Result:** PASS pending CI confirmation
+**Result:** PASS
+**CI:** [GitHub Actions run 33166373239](https://github.com/necdetoskay/Tatil-modu/actions/runs/33166373239)
 **Mode:** contract/design review; no frontend implementation
 
 ## Review evidence
@@ -23,9 +24,9 @@
 
 ## Gate decision
 
-This review opens UI implementation only after the CI run for the commit containing these artifacts passes. H11 remains the prerequisite and is already PASS.
+This review opens UI implementation. H11 is the prerequisite and is already PASS.
 
 ```yaml
 ui_readiness_review: pass
-ui_development_allowed: pending_ci
+ui_development_allowed: true
 ```

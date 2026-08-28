@@ -5,8 +5,8 @@
 | Alan | Değer |
 |---|---|
 | Güncelleme | 2026-08-28 |
-| Güncel aşama | ui_readiness_review |
-| Güncel odak | headless_acceptance_complete |
+| Güncel aşama | ui_implementation_unlocked |
+| Güncel odak | frontend_implementation |
 | Golden contract paketleri | 17/17 |
 | Cross-contract reconciliation | PASS |
 | H0 Repository Foundation | PASS |
@@ -21,5 +21,5 @@
 | Live provider integration | LOCKED |
 | Headless core acceptance | PASS |
 | UI readiness review | ALLOWED |
-| UI development | LOCKED |
+| UI development | ALLOWED |
 | Production release | LOCKED |
