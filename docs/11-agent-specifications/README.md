@@ -35,6 +35,10 @@ m1_deterministic_runner_R1: PASS_17_OF_17
 m1_fixture_runner_R2: PASS_INFRA_PROFILE_EXECUTABLE_16_ADAPTERS_PENDING
 m1_tool_gateway_authority_R6: PASS
 m1_context_manifest_trace: PASS
+m1_failure_attribution_RIVE: PASS
+m1_verified_state_gate: PASS
+m1_full_17_package_structural_sweep: PASS
+m1_overall_readiness: BLOCKED_BY_16_R2_EXECUTION_ADAPTERS
 ```
 
 > Package readiness için bu README kanoniktir. Bazı erken oluşturulmuş `specification.md` dosyalarındaki lokal `Current status` blokları stale olabilir ve readiness kararını override etmez.
@@ -113,6 +117,8 @@ FROZEN ContextManifest attempt içinde mutate edilemez
 retry → yeni contextManifestId
 AttemptTrace → exact contractHash + harnessPolicySnapshotId + contextManifestHash
 modelVisibleRefs(trace) = modelVisibleRefs(manifest)
+failed run → deterministic FailureAttribution → RIVE smallest-scope descent
+verification PASS alone is insufficient if snapshot/authority/provenance lineage conflicts
 ```
 
 ## Backlog integration status
@@ -141,16 +147,16 @@ context_provenance: PASS
 journey_issue_49: PASS
 knowledge_issue_50: PASS_AS_INTERFACE
 event_season_issue_51: PASS_AS_INTERFACE
-verified_state_gate: PASS_AT_CONTRACT_LEVEL
+verified_state_gate: PASS_EXECUTABLE
 m1_harness_entry: ALLOWED
-runtime_implementation: BLOCKED_UNTIL_EXECUTABLE_M1_GATES
+runtime_implementation: BLOCKED_UNTIL_R2_EXECUTION_ADAPTER_GAPS_CLOSED
 ```
 
 ## Eski first-phase specs
 
 Eski tekil `.md` dosyaları tarihsel tasarım/reconciliation kaydıdır. İsim veya ownership çakışmasında `canonical-agent-contract-catalog.md` v1.1 ve golden package sözleşmeleri önceliklidir.
 
-## Sonraki aşama — M1 Executable Agent Contract Harness
+## M1 Executable Agent Contract Harness status
 
 ```yaml
 M1_1_agent_registry: PASS
@@ -159,9 +165,10 @@ M1_3_deterministic_runner_R1: PASS_17_OF_17
 M1_4_fixture_runner_R2: PASS_INFRA_PROFILE_EXECUTABLE_16_ADAPTERS_PENDING
 M1_5_tool_gateway_authority_R6: PASS
 M1_6_context_trace: PASS
-M1_7_failure_attribution_RIVE: IN_PROGRESS
-M1_8_verified_state_gate: pending
-M1_9_full_17_package_sweep: pending
+M1_7_failure_attribution_RIVE: PASS
+M1_8_verified_state_gate: PASS
+M1_9_full_17_package_sweep: PASS_STRUCTURAL_READINESS
+M1_completion: BLOCKED_16_R2_EXECUTION_ADAPTERS
 ```
 
 ### M1.6 executable guarantees
@@ -174,5 +181,37 @@ M1_9_full_17_package_sweep: pending
 - `AttemptTrace` exact context/contract/policy snapshot'a bağlıdır,
 - tool-call evidence refs attempt trace'e taşınır,
 - manifest/trace tamper kontrolleri deterministic FAIL üretir.
+
+### M1.7 executable guarantees
+
+- blocking ve non-blocking signals ayrılır,
+- canonical failure-class precedence deterministiktir,
+- structural/authority failures semantic/model failures tarafından maskelenemez,
+- primary + secondary classes ayrı tutulur,
+- deepest primary scope `smallestFailingScope` olur,
+- RIVE descent planı run → component → harness/tool/rule scope şeklinde üretilebilir,
+- reproducer/tool/evidence refs attribution'a bağlanır.
+
+### M1.8 executable guarantees
+
+- verification missing → commit blocked,
+- `REPAIR` / `FAIL` → commit blocked,
+- verified snapshot ref/hash mismatch → commit blocked,
+- contradictory PASS + blocking/authority/provenance issue → commit blocked,
+- verification run source lineage'da değilse commit blocked,
+- yalnız exact verified snapshot lineage → commit allowed.
+
+### M1.9 finding
+
+17/17 package structural M1 minimumlarını geçti:
+- canonical R0 contract validation,
+- en az bir blocking R1 oracle,
+- en az 10 behavior fixture,
+- en az 5 authority fixture,
+- en az 4 context lifecycle fixture,
+- en az 2 provenance fixture,
+- executable ToolGateway policy projection.
+
+Ancak fixture pack'ler genel olarak tam canonical output snapshot'ları değil davranış beklentileri taşır. Bu nedenle expected veriden sahte output üretip R2 PASS vermek yasaktır. Şu anda gerçek executable R2 pipeline yalnız TM-AG-001 Profile için kanıtlanmıştır; kalan 16 component gerçek fixture execution adapter gerektirir.
 
 M1 tamamlanana kadar gerçek domain runtime implementation ve live provider-first test akışı açılmaz. M1 için gerçek web/Places/Routes/Weather/Booking çağrısı gerekmez.
