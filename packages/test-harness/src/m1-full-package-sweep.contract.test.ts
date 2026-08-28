@@ -8,7 +8,13 @@ import {
   validateResolvedContractBundle
 } from '../../harness/src/index.js';
 
-const EXECUTABLE_R2_COMPONENTS = new Set(['TM-AG-001', 'TM-AG-002', 'TM-AG-003']);
+const EXECUTABLE_R2_COMPONENTS = new Set([
+  'TM-AG-001',
+  'TM-AG-002',
+  'TM-AG-003',
+  'TM-AG-004',
+  'TM-AG-005'
+]);
 
 describe('M1.9 full 17-package readiness sweep', () => {
   it('enforces canonical M1 structural minimums across every registered component', async () => {
@@ -60,10 +66,15 @@ describe('M1.9 full 17-package readiness sweep', () => {
       .filter(componentId => !EXECUTABLE_R2_COMPONENTS.has(componentId))
       .sort();
 
-    expect(EXECUTABLE_R2_COMPONENTS).toEqual(new Set(['TM-AG-001', 'TM-AG-002', 'TM-AG-003']));
-    expect(pending).toHaveLength(14);
-    expect(pending).not.toContain('TM-AG-002');
-    expect(pending).not.toContain('TM-AG-003');
+    expect(EXECUTABLE_R2_COMPONENTS).toEqual(new Set([
+      'TM-AG-001',
+      'TM-AG-002',
+      'TM-AG-003',
+      'TM-AG-004',
+      'TM-AG-005'
+    ]));
+    expect(pending).toHaveLength(12);
+    for (const executable of EXECUTABLE_R2_COMPONENTS) expect(pending).not.toContain(executable);
     expect(pending).toContain('TM-ORCH-001');
   });
 });
