@@ -1,0 +1,111 @@
+{
+  "componentId": "TM-AG-011",
+  "fixtureId": "PA-B-001",
+  "canonicalInput": {
+    "schemaVersion": "1.0",
+    "requestId": "req-pa-b-001",
+    "claim": {
+      "claimRef": "claim:museum-001:hours:2026-09-10",
+      "subjectRef": "place:museum-001",
+      "claimType": "OPENING_HOURS",
+      "assertedValue": "09:00-17:00",
+      "question": "Müze 10 Eylül 2026 tarihinde 09:00-17:00 açık mı?",
+      "effectiveWindow": {
+        "start": "2026-09-10T00:00:00+03:00",
+        "end": "2026-09-10T23:59:59+03:00"
+      }
+    },
+    "verificationPolicy": {
+      "minimumAuthorityScore": 0.8,
+      "primarySourceRequired": true,
+      "currentEvidenceRequired": true,
+      "maxAgeSeconds": 86400
+    },
+    "authorityPolicySnapshotId": "authority-policy:v1",
+    "sourcePolicySnapshotId": "source-policy:v1",
+    "trustedSourceRegistryEntries": [
+      {
+        "sourceRegistryRef": "source-registry:museum-001",
+        "scope": "ENTITY",
+        "scopeRef": "place:museum-001",
+        "sourceType": "OFFICIAL_ENTITY",
+        "trustTier": 1,
+        "claimCapabilities": ["OPENING_HOURS", "FEES"],
+        "healthStatus": "ACTIVE",
+        "sourceRef": "official:museum-001"
+      }
+    ],
+    "currentDateTime": "2026-09-09T12:00:00+03:00",
+    "contextManifestId": "ctx-pa-b-001"
+  },
+  "canonicalOutput": {
+    "schemaVersion": "1.0",
+    "officialFactId": "official-fact:pa-b-001",
+    "requestId": "req-pa-b-001",
+    "claimRef": "claim:museum-001:hours:2026-09-10",
+    "subjectRef": "place:museum-001",
+    "claimType": "OPENING_HOURS",
+    "authorityPolicySnapshotId": "authority-policy:v1",
+    "sourcePolicySnapshotId": "source-policy:v1",
+    "status": "VERIFIED",
+    "resolvedValue": "09:00-17:00",
+    "verificationScope": {
+      "subjectRef": "place:museum-001",
+      "effectiveWindow": {
+        "start": "2026-09-10T00:00:00+03:00",
+        "end": "2026-09-10T23:59:59+03:00"
+      },
+      "claimType": "OPENING_HOURS"
+    },
+    "sourceLookupPath": "REGISTRY_HIT",
+    "sourceLookupTrace": [
+      {
+        "stepIndex": 0,
+        "stepType": "REGISTRY_LOOKUP",
+        "sourceRef": "official:museum-001",
+        "sourceRegistryRef": "source-registry:museum-001",
+        "outcome": "HIT",
+        "reasonCode": "HEALTHY_SCOPE_MATCH"
+      },
+      {
+        "stepIndex": 1,
+        "stepType": "OFFICIAL_FETCH",
+        "sourceRef": "official:museum-001",
+        "sourceRegistryRef": "source-registry:museum-001",
+        "outcome": "SUCCESS",
+        "reasonCode": "CURRENT_CLAIM_SCOPE_MATCH"
+      }
+    ],
+    "sourceRegistryRefs": ["source-registry:museum-001"],
+    "primarySourceRefs": ["official:museum-001"],
+    "evidence": [
+      {
+        "evidenceId": "pa-ev-001",
+        "sourceRef": "official:museum-001",
+        "sourceRegistryRef": "source-registry:museum-001",
+        "sourceTier": 1,
+        "sourceRole": "AUTHORITATIVE",
+        "claimType": "OPENING_HOURS",
+        "authorityScore": 0.98,
+        "authorityClass": "A",
+        "retrievedAt": "2026-09-09T12:00:00+03:00",
+        "effectiveFrom": "2026-09-10T00:00:00+03:00",
+        "effectiveUntil": "2026-09-10T23:59:59+03:00",
+        "freshnessStatus": "CURRENT",
+        "supports": "SUPPORTS"
+      }
+    ],
+    "conflicts": [],
+    "sourceFeedback": [
+      {
+        "sourceRef": "official:museum-001",
+        "sourceRegistryRef": "source-registry:museum-001",
+        "healthSignal": "HEALTHY",
+        "reasonCode": "FETCH_SUCCESS",
+        "replacementSourceRef": null
+      }
+    ],
+    "freshnessStatus": "CURRENT",
+    "confidence": 0.98
+  }
+}
