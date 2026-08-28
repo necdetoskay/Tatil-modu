@@ -1,0 +1,89 @@
+{
+  "schemaVersion": "1.0",
+  "componentId": "TM-AG-003",
+  "fixtureId": "DR-001",
+  "recordingKind": "CANONICAL_RECORDED_EXECUTION",
+  "canonicalInput": {
+    "schemaVersion": "1.0",
+    "requestId": "req-dr-001",
+    "travelerProfile": {
+      "schemaVersion": "1.0",
+      "requestId": "req-dr-001",
+      "party": {
+        "adults": 2,
+        "children": [
+          { "ageYears": 2, "evidenceRefs": ["ev-child-1"] },
+          { "ageYears": 6, "evidenceRefs": ["ev-child-2"] }
+        ],
+        "totalTravelers": 4
+      },
+      "tripContext": {
+        "origin": { "value": "Kocaeli", "evidenceRefs": ["ev-origin"] },
+        "destination": { "value": "Bursa", "evidenceRefs": ["ev-destination"] }
+      },
+      "transport": { "mode": "own_car", "evidenceRefs": ["ev-transport"] },
+      "unknownFields": [],
+      "conflicts": [],
+      "evidence": [
+        { "evidenceId": "ev-adults", "type": "USER_EXPLICIT", "fieldPath": "party.adults", "sourceRef": "request:req-dr-001" },
+        { "evidenceId": "ev-child-1", "type": "USER_EXPLICIT", "fieldPath": "party.children[0].ageYears", "sourceRef": "request:req-dr-001" },
+        { "evidenceId": "ev-child-2", "type": "USER_EXPLICIT", "fieldPath": "party.children[1].ageYears", "sourceRef": "request:req-dr-001" },
+        { "evidenceId": "ev-origin", "type": "USER_EXPLICIT", "fieldPath": "tripContext.origin", "sourceRef": "request:req-dr-001" },
+        { "evidenceId": "ev-destination", "type": "USER_EXPLICIT", "fieldPath": "tripContext.destination", "sourceRef": "request:req-dr-001" },
+        { "evidenceId": "ev-transport", "type": "USER_EXPLICIT", "fieldPath": "transport.mode", "sourceRef": "request:req-dr-001" },
+        { "evidenceId": "ev-total", "type": "NORMALIZATION", "fieldPath": "party.totalTravelers", "sourceRef": "normalization:req-dr-001" }
+      ],
+      "overallConfidence": 1
+    },
+    "policyPackage": {
+      "schemaVersion": "1.0",
+      "requestId": "req-dr-001",
+      "preferences": [],
+      "constraints": [],
+      "exceptions": [],
+      "conflicts": [],
+      "clarificationRequired": [],
+      "overallConfidence": 1
+    },
+    "destinationScope": {
+      "mode": "FIXED_TARGET",
+      "originName": "Kocaeli",
+      "targetName": "Bursa",
+      "country": "TR",
+      "dateRange": null
+    },
+    "contextManifestId": null
+  },
+  "canonicalOutput": {
+    "schemaVersion": "1.0",
+    "requestId": "req-dr-001",
+    "destinations": [
+      {
+        "destinationId": "destination:bursa:primary",
+        "name": "Bursa",
+        "administrativeType": "city",
+        "relationToTarget": "primary",
+        "exceptionPolicyRefs": [],
+        "geoIdentity": {
+          "latitude": null,
+          "longitude": null,
+          "evidenceRefs": []
+        },
+        "experienceThemes": [],
+        "seasonality": {
+          "dataType": "NONE",
+          "summary": null,
+          "evidenceRefs": []
+        },
+        "constraintRelevance": [],
+        "routeValidationRequired": false,
+        "researchStatus": "DISCOVERY_ONLY",
+        "unresolvedClaims": [],
+        "evidence": [],
+        "confidence": 0.6
+      }
+    ],
+    "researchWarnings": ["FIXED_TARGET_NOT_YET_REGION_VERIFIED"],
+    "overallConfidence": 0.6
+  }
+}
