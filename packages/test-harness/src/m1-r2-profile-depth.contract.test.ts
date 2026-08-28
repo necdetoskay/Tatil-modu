@@ -281,7 +281,7 @@ describe('M1.4 R2 case depth — TM-AG-001 Profile', () => {
     const schemas = compilation.compiled.find(item => item.componentId === 'TM-AG-001');
     if (!pack || !schemas) throw new Error('TM-AG-001 fixture pack/schema missing');
 
-    const behaviorFixtures = pack.cases.filter(item => item.group === 'behavior');
+    const behaviorFixtures = pack.cases.filter(item => item.groupKind === 'behavior');
     expect(behaviorFixtures).toHaveLength(10);
 
     const results = [];
