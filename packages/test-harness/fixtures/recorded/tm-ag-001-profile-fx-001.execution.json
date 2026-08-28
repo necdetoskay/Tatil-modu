@@ -1,0 +1,44 @@
+{
+  "componentId": "TM-AG-001",
+  "fixtureId": "PROFILE-FX-001",
+  "canonicalInput": {
+    "schemaVersion": "1.0",
+    "requestId": "req-001",
+    "tripRequest": {
+      "userMessage": "2 yetişkiniz, 2 ve 6 yaşında iki çocuğumuz var. Kocaeli'den Bursa'ya arabayla gideceğiz.",
+      "locale": "tr-TR",
+      "currentDate": "2026-08-27"
+    },
+    "knownFacts": [],
+    "contextManifestId": "ctx-001"
+  },
+  "canonicalOutput": {
+    "schemaVersion": "1.0",
+    "requestId": "req-001",
+    "party": {
+      "adults": 2,
+      "children": [
+        {"ageYears":2,"evidenceRefs":["ev-child-1"]},
+        {"ageYears":6,"evidenceRefs":["ev-child-2"]}
+      ],
+      "totalTravelers": 4
+    },
+    "tripContext": {
+      "origin": {"value":"Kocaeli","evidenceRefs":["ev-origin"]},
+      "destination": {"value":"Bursa","evidenceRefs":["ev-destination"]}
+    },
+    "transport": {"mode":"own_car","evidenceRefs":["ev-transport"]},
+    "unknownFields": [],
+    "conflicts": [],
+    "evidence": [
+      {"evidenceId":"ev-adults","type":"USER_EXPLICIT","fieldPath":"party.adults","sourceRef":"request:req-001"},
+      {"evidenceId":"ev-child-1","type":"USER_EXPLICIT","fieldPath":"party.children[0].ageYears","sourceRef":"request:req-001"},
+      {"evidenceId":"ev-child-2","type":"USER_EXPLICIT","fieldPath":"party.children[1].ageYears","sourceRef":"request:req-001"},
+      {"evidenceId":"ev-origin","type":"USER_EXPLICIT","fieldPath":"tripContext.origin","sourceRef":"request:req-001"},
+      {"evidenceId":"ev-destination","type":"USER_EXPLICIT","fieldPath":"tripContext.destination","sourceRef":"request:req-001"},
+      {"evidenceId":"ev-transport","type":"USER_EXPLICIT","fieldPath":"transport.mode","sourceRef":"request:req-001"},
+      {"evidenceId":"ev-total","type":"NORMALIZATION","fieldPath":"party.totalTravelers","sourceRef":"normalization:req-001"}
+    ],
+    "overallConfidence": 1
+  }
+}
