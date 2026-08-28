@@ -1,0 +1,122 @@
+{
+  "componentId": "TM-AG-013",
+  "fixtureId": "AR-B-001",
+  "canonicalInput": {
+    "schemaVersion": "1.0",
+    "requestId": "req-ar-b-001",
+    "itinerarySnapshot": {
+      "itineraryRef": "itinerary:family-trip:v1",
+      "snapshotHash": "hash-itinerary-v1",
+      "dayRefs": ["day:1","day:2","day:3","day:4","day:5"],
+      "segmentRefs": [],
+      "blockRefs": ["day1:block1","day2:block1","day3:block1","day4:block1","day5:block1"]
+    },
+    "changeSignals": [
+      {
+        "changeSignalId": "change:place-closed-001",
+        "triggerType": "PLACE_CLOSED",
+        "subjectRef": "place:old-001",
+        "affectedRefHints": ["day3:block1"],
+        "observedAt": "2026-09-09T09:00:00+03:00",
+        "freshnessStatus": "CURRENT",
+        "verificationStatus": "VERIFIED",
+        "evidenceRefs": ["official:closure:001"],
+        "payload": {"status":"CLOSED"}
+      }
+    ],
+    "planningPolicySnapshotId": "planning-policy:v1",
+    "hardConstraints": [],
+    "userFixedRefs": [],
+    "candidatePool": [
+      {
+        "candidateRef": "place:replacement-001",
+        "candidateType": "PLACE",
+        "locationRef": "location:day3-area",
+        "disposition": "ACCEPTED",
+        "freshnessStatus": "CURRENT",
+        "evidenceRefs": ["place-evidence:replacement-001"]
+      }
+    ],
+    "routeFacts": [],
+    "budgetRepairNeeds": [],
+    "verificationRepairTargets": [],
+    "contextManifestId": "ctx-ar-b-001"
+  },
+  "canonicalOutput": {
+    "schemaVersion": "1.0",
+    "repairId": "repair:ar-b-001",
+    "requestId": "req-ar-b-001",
+    "originalItineraryRef": "itinerary:family-trip:v1",
+    "planningPolicySnapshotId": "planning-policy:v1",
+    "triggerRefs": ["change:place-closed-001"],
+    "triggerResolutions": [
+      {
+        "triggerRef": "change:place-closed-001",
+        "disposition": "APPLIED",
+        "reasonCode": "VERIFIED_PLACE_CLOSURE_INVALIDATES_BLOCK",
+        "affectedRefs": ["day3:block1"],
+        "conflictWithTriggerRefs": [],
+        "evidenceRefs": ["official:closure:001"]
+      }
+    ],
+    "impactScope": {
+      "directlyAffectedBlockRefs": ["day3:block1"],
+      "directlyAffectedSegmentRefs": [],
+      "dependentBlockRefs": [],
+      "dependentSegmentRefs": [],
+      "affectedDayRefs": ["day:3"],
+      "protectedUnchangedDayRefs": ["day:1","day:2","day:4","day:5"]
+    },
+    "scopeEscalation": {
+      "initialScope": "BLOCK",
+      "finalScope": "BLOCK",
+      "escalated": false,
+      "reasonCode": null,
+      "evidenceRefs": ["official:closure:001"],
+      "dependencyRefs": []
+    },
+    "patches": [
+      {
+        "patchId": "patch:replace-day3-block1",
+        "operation": "REPLACE_BLOCK",
+        "targetRef": "day3:block1",
+        "beforeRef": "place:old-001",
+        "afterRef": "place:replacement-001",
+        "reasonCodes": ["PLACE_CLOSED"],
+        "triggerRefs": ["change:place-closed-001"],
+        "constraintRefs": [],
+        "evidenceRefs": ["official:closure:001","place-evidence:replacement-001"]
+      }
+    ],
+    "repairedFragments": {
+      "dayFragments": [
+        {
+          "fragmentRef": "day:3",
+          "fragmentType": "DAY",
+          "beforeHash": "hash-day3-before",
+          "afterHash": "hash-day3-after",
+          "contentRef": "day:3:repaired:v2"
+        }
+      ],
+      "segmentFragments": []
+    },
+    "preservationProofs": [
+      {"scopeRef":"day:1","beforeHash":"hash-day1","afterHash":"hash-day1","unchanged":true},
+      {"scopeRef":"day:2","beforeHash":"hash-day2","afterHash":"hash-day2","unchanged":true},
+      {"scopeRef":"day:4","beforeHash":"hash-day4","afterHash":"hash-day4","unchanged":true},
+      {"scopeRef":"day:5","beforeHash":"hash-day5","afterHash":"hash-day5","unchanged":true}
+    ],
+    "invalidatedRefs": ["day3:block1","place:old-001"],
+    "verificationNeeds": [],
+    "downstreamRecheckRequests": [
+      {
+        "recheckId": "recheck:verification:ar-b-001",
+        "type": "VERIFICATION_RECHECK",
+        "scopeRefs": ["day:3","day3:block1"],
+        "required": true
+      }
+    ],
+    "repairStatus": "REPAIRED",
+    "warnings": []
+  }
+}
