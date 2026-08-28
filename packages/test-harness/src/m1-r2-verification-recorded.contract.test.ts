@@ -83,7 +83,7 @@ async function loadFixtureAndSchemas() {
   return { recording, fixture, schemas };
 }
 
-describe('M1.4 R2 recorded canonical execution — TM-AG-014 Verification', () => {
+describe('M1.4 R2 recorded artifact replay — TM-AG-014 Verification', () => {
   it('runs VF-B-001 through canonical R0 → R1 → independent PASS/snapshot-binding expectation', async () => {
     const { recording, fixture, schemas } = await loadFixtureAndSchemas();
     const result = await runBehaviorFixtureCase({

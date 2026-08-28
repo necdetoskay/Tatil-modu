@@ -72,7 +72,7 @@ function evaluatePermanentClosureExpectation(
   return { violations };
 }
 
-describe('M1.4 R2 recorded canonical execution — TM-AG-004 Place Intelligence', () => {
+describe('M1.4 R2 recorded artifact replay — TM-AG-004 Place Intelligence', () => {
   it('runs PI-B-002 through canonical R0 → R1 → independent fixture expectation', async () => {
     const registry = await loadAgentRegistry();
     const inventory = await loadFixtureInventory(registry);

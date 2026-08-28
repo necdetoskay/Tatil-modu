@@ -2,7 +2,7 @@
   "schemaVersion": "1.0",
   "componentId": "TM-AG-006",
   "fixtureId": "FOOD-B004",
-  "recordingKind": "CANONICAL_RECORDED_EXECUTION",
+  "recordingKind": "CANONICAL_RECORDED_ARTIFACT",
   "canonicalInput": {
     "schemaVersion": "1.0",
     "requestId": "req-food-b004",

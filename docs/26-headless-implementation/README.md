@@ -3,24 +3,13 @@
 **Doküman türü:** canonical implementation execution plan  
 **Amaç:** H0–H12 sprintlerinin gerçek kod, test ve execution evidence durumunu yönetmek.  
 **Plan seti:** complete  
-**Execution:** H1 in progress
+**Execution:** Bu planın güncel execution durumu `project-status.json` kaynağında tutulur.
 
 ## Current state
-```yaml
-current_sprint: H1_contracts_and_domain
-implementation_state: in_progress
-implementation_plan_H0_H12: complete
-H0_repository_foundation: PASS
-H1_L0_overall: in_progress
-H1_validated_slices:
-  - travel_request_contract
-  - common_evidence_envelope
-  - common_error_envelope
-  - constraint_policy_contract
-H1_next_slice: family_suitability_contract
-ui_development_allowed: false
-h2_execution_allowed: false
-```
+
+Kanonik durum: [`../../project-status.json`](../../project-status.json). Üretilmiş görünüm: [`../generated/project-status.md`](../generated/project-status.md). Aşağıdaki sprint seti plan sırasını tanımlar; güncel ilerleme iddiası değildir.
+
+Deterministik fixture modundaki ilk gerçek runtime dikey dilimi orchestrator → uzman agent'lar → verification → final composer zincirini çalıştırır. Pozitif akışta sözleşmeye uygun final response üretir; zorunlu kanıt eksik olduğunda verification `blocked` döner ve final response üretilmez. Dar kapsamlı execution kaydı: [`headless-runtime-vertical-slice-validation-record.md`](headless-runtime-vertical-slice-validation-record.md).
 
 ## Canonical sprint seti
 | # | Sprint | Belge | Gate |

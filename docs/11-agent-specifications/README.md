@@ -2,8 +2,8 @@
 
 **Doküman türü:** canonical agent specification alanı  
 **Durum:** canonical catalog v1.1 + **17/17 golden contract packages + reconciliation PASS**  
-**Kodlama durumu:** runtime kapalı; **M1 harness implementation/test scaffolding açık**  
-**Prototype durumu:** domain runtime kapalı
+**Kodlama durumu:** M1 fixture-depth gate PASS; headless runtime vertical slice açık
+**Prototype durumu:** live provider ve production release gate'leri kapalı
 
 ## Amaç
 
@@ -21,7 +21,7 @@ Her agent kod yazılmadan önce net, test edilebilir ve authority sınırları b
 - Radar/DeepSeek Harness adoption: `docs/15-harness-and-orchestration/01-radar-deepseek-harness-adoption-review.md`
 
 ```yaml
-runtime_implementation_allowed: false
+runtime_implementation_allowed: true
 m1_harness_implementation_allowed: true
 live_provider_tests_as_first_step: false
 agent_specs_required_before_runtime: true
@@ -32,13 +32,13 @@ cross_contract_reconciliation: PASS
 m1_agent_registry: PASS
 m1_contract_loader_R0: PASS
 m1_deterministic_runner_R1: PASS_17_OF_17
-m1_fixture_runner_R2: PASS_COMPONENT_COVERAGE_17_OF_17_CASE_DEPTH_PENDING
+m1_fixture_runner_R2: PASS_CASE_DEPTH_17_OF_17
 m1_tool_gateway_authority_R6: PASS
 m1_context_manifest_trace: PASS
 m1_failure_attribution_RIVE: PASS
 m1_verified_state_gate: PASS
-m1_full_17_package_structural_sweep: PASS_WITH_RECORDED_COMPONENT_COVERAGE
-m1_overall_readiness: BLOCKED_BY_R2_CASE_DEPTH_MINIMUM
+m1_full_17_package_structural_sweep: PASS_WITH_RECORDED_ARTIFACT_COVERAGE
+m1_overall_readiness: PASS
 ```
 
 > Package readiness için bu README kanoniktir. Bazı erken oluşturulmuş `specification.md` dosyalarındaki lokal `Current status` blokları stale olabilir ve readiness kararını override etmez.
@@ -149,7 +149,7 @@ knowledge_issue_50: PASS_AS_INTERFACE
 event_season_issue_51: PASS_AS_INTERFACE
 verified_state_gate: PASS_EXECUTABLE
 m1_harness_entry: ALLOWED
-runtime_implementation: BLOCKED_UNTIL_R2_CASE_DEPTH_MINIMUM
+runtime_implementation: ALLOWED_AFTER_R2_CASE_DEPTH_PASS
 ```
 
 ## Eski first-phase specs
@@ -162,13 +162,13 @@ Eski tekil `.md` dosyaları tarihsel tasarım/reconciliation kaydıdır. İsim v
 M1_1_agent_registry: PASS
 M1_2_contract_loader_R0: PASS
 M1_3_deterministic_runner_R1: PASS_17_OF_17
-M1_4_fixture_runner_R2: PASS_COMPONENT_COVERAGE_17_OF_17_CASE_DEPTH_PENDING
+M1_4_fixture_runner_R2: PASS_CASE_DEPTH_17_OF_17
 M1_5_tool_gateway_authority_R6: PASS
 M1_6_context_trace: PASS
 M1_7_failure_attribution_RIVE: PASS
 M1_8_verified_state_gate: PASS
-M1_9_full_17_package_sweep: PASS_STRUCTURAL_AND_RECORDED_COMPONENT_COVERAGE
-M1_completion: BLOCKED_R2_CASE_DEPTH_LT_BASELINE
+M1_9_full_17_package_sweep: PASS_STRUCTURAL_AND_RECORDED_ARTIFACT_COVERAGE
+M1_completion: PASS
 ```
 
 ### M1.6 executable guarantees
@@ -212,13 +212,13 @@ M1_completion: BLOCKED_R2_CASE_DEPTH_LT_BASELINE
 - en az 2 provenance fixture,
 - executable ToolGateway policy projection.
 
-Ayrıca 17/17 registry component için en az bir **recorded canonical R2 execution** artık mevcuttur. Full-sweep bu coverage'ı hardcoded component listesinden değil `packages/test-harness/fixtures/recorded/*.execution.json` kayıtlarından otomatik türetir. Kayıp component, bilinmeyen component veya duplicate recorded fixture CI failure üretir.
+Ayrıca 17/17 registry component için en az bir **canonical R2 recorded-artifact replay** mevcuttur. Full-sweep bu coverage'ı hardcoded component listesinden değil `packages/test-harness/fixtures/recorded/*.execution.json` artifact'larından otomatik türetir. Kayıp component, bilinmeyen component veya duplicate artifact CI failure üretir. Dosya uzantısındaki `execution` geriye dönük uyumluluk içindir; bu kayıtların replay edilmesi component runtime'ının çağrıldığını kanıtlamaz.
 
-Her recorded R2 kanıtı şu zincire bağlanır:
+Her recorded-artifact R2 kanıtı şu zincire bağlanır:
 
 ```text
 golden fixture id
-→ independent canonical input/output recording
+→ independent canonical input/output artifact
 → R0 input/output schema
 → R1 deterministic oracle
 → fixture-specific independent expectation
@@ -227,21 +227,22 @@ golden fixture id
 
 Fixture pack'ler genel olarak tam canonical output snapshot'ları değil davranış beklentileri taşır. Bu nedenle `expected/assert` veriden sahte output üretip R2 PASS vermek yasaktır.
 
-### M1.4 için kalan gerçek gap — case depth
+### M1.4 case-depth kapanışı
 
-Component-level execution yolu artık tamamdır, fakat kanonik harness baseline her agent için minimum **10 executable R2 fixture case** ister. Şu anda bu minimum tüm 17 component için case-level olarak tamamlanmış değildir.
+Recorded-artifact replay hâlâ runtime execution kanıtı değildir. Buna ek olarak bütün 17 registry component için minimum **10 executable R2 fixture case**, bağımsız scenario builder ve expectation adapter üzerinden çalıştırılmıştır. Kapsam kaydı `packages/test-harness/registry/r2-case-depth.v1.json` dosyasındadır ve full-sweep her test dosyasının `runBehaviorFixtureCase` kullandığını doğrular.
 
-Dolayısıyla:
+Sonuç:
 
 ```yaml
-recorded_r2_component_coverage: 17/17
+recorded_r2_artifact_coverage: 17/17
 minimum_r2_cases_per_component_required: 10
-case_depth_gate: PENDING
-runtime_unlock: BLOCKED
+case_depth_component_coverage: 17/17
+case_depth_gate: PASS
+runtime_unlock: ALLOWED
 ```
 
-Bu ayrım önemlidir: `17/17 component coverage PASS`, `M1 complete` anlamına gelmez.
+Bu ayrım önemlidir: M1 PASS, runtime implementasyonuna izin verir; headless runtime veya ürün E2E'nin kendiliğinden tamamlandığı anlamına gelmez.
 
-Son doğrulanan 17/17 component-level coverage CI run: `33143523774`.
+Son belgelenen 17/17 recorded-artifact coverage CI run: `33143523774`.
 
-M1 tamamlanana kadar gerçek domain runtime implementation ve live provider-first test akışı açılmaz. M1 için gerçek web/Places/Routes/Weather/Booking çağrısı gerekmez.
+Headless runtime vertical slice artık uygulanabilir. Live provider-first test akışı ayrı gate olarak kapalı kalır; M1 doğrulaması gerçek web/Places/Routes/Weather/Booking çağrısı kullanmaz.

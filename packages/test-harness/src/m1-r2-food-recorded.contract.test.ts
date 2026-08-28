@@ -66,7 +66,7 @@ function evaluateAllergyViolationExpectation(
   return { violations };
 }
 
-describe('M1.4 R2 recorded canonical execution — TM-AG-006 Food & Local Taste', () => {
+describe('M1.4 R2 recorded artifact replay — TM-AG-006 Food & Local Taste', () => {
   it('runs FOOD-B004 through canonical R0 → R1 → independent fixture expectation', async () => {
     const registry = await loadAgentRegistry();
     const inventory = await loadFixtureInventory(registry);

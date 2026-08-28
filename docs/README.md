@@ -3,23 +3,8 @@
 Bu dosya dokümantasyonun ana giriş noktasıdır. Her konu için tek bir kanonik belge kullanılır.
 
 ## Güncel durum
-Canonical pre-code design freeze **PASS**. `11–23` deep-design katmanları tamamlandı. Implementation stratejisi **Headless Core First**; UI/frontend geliştirmesi Headless Core Acceptance Gate PASS olmadan açılamaz.
 
-```yaml
-canonical_design_freeze: approved
-open_design_blockers: 0
-implementation_strategy: headless_core_first
-implementation_readiness_first_phase: PASS
-agent_model_routing_design: first_phase_completed
-headless_core_implementation_allowed: true
-ui_development_allowed: false
-headless_core_accepted: false
-production_release_allowed: false
-live_provider_integration_allowed: false
-production_model_assignments: pending_L8_benchmark
-current_stage: H0_repository_foundation_validation
-h1_allowed: false
-```
+Tek kanonik makine-okunur durum kaydı [`../project-status.json`](../project-status.json) dosyasıdır. İnsan-okunur ve otomatik üretilen görünüm için [`generated/project-status.md`](generated/project-status.md) kullanılır. Bu sayfadaki tarihsel aşama tabloları readiness kararı için kaynak değildir.
 
 ## Klasör yapısı
 | Klasör | Sorumluluk |
@@ -74,20 +59,8 @@ h1_allowed: false
 | Agent/model routing & evaluation | `27-agent-model-routing-and-evaluation/README.md` |
 
 ## Aşama durumu
-| Aşama | Durum |
-|---|---|
-| Canonical design `11–23` | tamamlandı |
-| Pre-code freeze reassessment | **PASS** |
-| Headless test architecture | first phase tamamlandı |
-| Agent/model routing & evaluation | first phase tamamlandı; model isimleri L8 sonrası seçilecek |
-| Headless implementation readiness | first phase **PASS** |
-| H0 Repository Foundation code | tamamlandı |
-| H0 execution validation | **bekliyor; PASS evidence zorunlu** |
-| H1 Contracts & Domain | H0 PASS olmadan kilitli |
-| Headless core acceptance | bekliyor |
-| UI readiness review | headless acceptance PASS sonrasına kilitli |
-| UI/frontend implementation | **kilitli** |
-| Production readiness | kapalı |
+
+Güncel aşama ve gate değerleri yalnız [`generated/project-status.md`](generated/project-status.md) görünümünde tutulur.
 
 ## Source-of-truth kuralları
 1. Architecture ownership ve boundary kararlarında `08-architecture-baseline/` önceliklidir.

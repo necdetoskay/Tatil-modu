@@ -19,21 +19,26 @@ Bu dosya, repository üzerinde çalışan insan ve AI geliştiriciler için kıs
 ## Agent ID haritası
 
 ```text
-AG-001 Trip Profile Agent
-AG-002 Destination Discovery Agent
-AG-003 Places & Experiences Agent
-AG-004 Accommodation Agent
-AG-005 Food & Local Taste Agent
-AG-006 Review Intelligence Agent
-AG-007 Weather Context Agent
-AG-008 Route & Schedule Optimizer
-AG-009 Budget & Constraint Evaluator
-AG-010 Verification & Quality Reviewer
-AG-011 Final Plan Composer
-AG-012 Orchestrator
+TM-AG-001 Profile Agent
+TM-AG-002 Preference & Policy Agent
+TM-AG-003 Destination Research Agent
+TM-AG-004 Place Intelligence Agent
+TM-AG-005 Accommodation Agent
+TM-AG-006 Food & Local Taste Agent
+TM-AG-007 Weather Agent
+TM-AG-008 Transportation Agent
+TM-AG-009 Route Planner Agent
+TM-AG-010 Budget Agent
+TM-AG-011 Public Authority Intelligence Agent
+TM-AG-012 Review Intelligence Agent
+TM-AG-013 Adaptive Itinerary Agent
+TM-AG-014 Verification Agent
+TM-AG-015 Explanation Agent
+TM-AG-016 Final Composer Agent
+TM-ORCH-001 Travel Orchestrator
 ```
 
-Bu listeyi değiştirirken yalnız kanonik `agent-catalog.md` güncellenir; bu özet de aynı commit içinde senkronize edilir.
+Bu liste yalnız kısa çalışma özetidir. Kanonik agent seti `docs/11-agent-specifications/canonical-agent-contract-catalog.md` içindedir.
 
 ## Zorunlu geliştirme sırası
 
@@ -42,13 +47,14 @@ Bir agent için kod veya canlı entegrasyon başlamadan önce:
 1. `specification.md`
 2. `input.schema.json`
 3. `output.schema.json`
-4. `system-prompt.md`
-5. `decision-rules.md`
-6. `tool-policy.md`
-7. `handoff-contracts.md`
-8. `evaluation-rubric.md`
-9. fixture testleri
-10. contract, behavioral, scenario ve adversarial testleri
+4. `authority-policy.md`
+5. `tool-policy.md`
+6. `source-policy.md`
+7. `decision-rules.md`
+8. `handoff-contracts.md`
+9. `evaluation-rubric.md`
+10. `tests/fixture-pack.v1.json`
+11. contract, behavioral, scenario ve adversarial testleri
 
 hazır olmalıdır.
 
@@ -65,6 +71,8 @@ hazır olmalıdır.
 
 ## Mevcut durum
 
-- `AG-001 — Trip Profile Agent`: ilk dokümantasyon ve fixture paketi mevcut.
-- Sıradaki agent: `AG-002 — Destination Discovery Agent`.
-- Orchestrator, diğer agent sözleşmeleri yeterince olgunlaşmadan uygulanmaz.
+Tek kanonik makine-okunur durum kaydı `project-status.json` dosyasıdır. İnsan-okunur üretilmiş görünüm: `docs/generated/project-status.md`.
+
+- 17/17 golden contract paketi mevcut.
+- M1 executable contract harness aktiftir; R2 case-depth gate tamamlanana kadar runtime kilitlidir.
+- Orchestrator ve live provider entegrasyonu ilgili gate açılmadan uygulanmaz.

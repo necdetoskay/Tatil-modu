@@ -95,7 +95,7 @@ async function loadFixtureAndSchemas() {
   return { recording, fixture, schemas };
 }
 
-describe('M1.4 R2 recorded canonical execution — TM-AG-011 Public Authority Intelligence', () => {
+describe('M1.4 R2 recorded artifact replay — TM-AG-011 Public Authority Intelligence', () => {
   it('runs PA-B-001 through canonical R0 → R1 → independent authority/freshness expectation', async () => {
     const { recording, fixture, schemas } = await loadFixtureAndSchemas();
     const result = await runBehaviorFixtureCase({

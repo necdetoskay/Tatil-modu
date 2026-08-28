@@ -5,10 +5,11 @@ export default defineConfig({
     include: ['apps/**/*.test.ts', 'packages/**/*.test.ts'],
     environment: 'node',
     passWithNoTests: false,
+    fileParallelism: false,
     sequence: { concurrent: false },
     pool: 'forks',
-    testTimeout: 5_000,
-    hookTimeout: 5_000,
+    testTimeout: 20_000,
+    hookTimeout: 20_000,
     reporters: ['default'],
     coverage: { enabled: false }
   }

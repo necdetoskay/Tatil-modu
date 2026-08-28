@@ -91,7 +91,7 @@ async function loadFixtureAndSchemas() {
   return { recording, fixture, schemas };
 }
 
-describe('M1.4 R2 recorded canonical execution — TM-AG-016 Final Composer', () => {
+describe('M1.4 R2 recorded artifact replay — TM-AG-016 Final Composer', () => {
   it('runs FC-B-001 through canonical R0 → R1 → independent snapshot/warning binding expectation', async () => {
     const { recording, fixture, schemas } = await loadFixtureAndSchemas();
     const result = await runBehaviorFixtureCase({

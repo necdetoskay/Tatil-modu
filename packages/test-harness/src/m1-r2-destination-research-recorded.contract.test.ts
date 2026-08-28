@@ -66,7 +66,7 @@ function evaluateDestinationExpectation(
   return { violations };
 }
 
-describe('M1.4 R2 recorded canonical execution — TM-AG-003 Destination Research', () => {
+describe('M1.4 R2 recorded artifact replay — TM-AG-003 Destination Research', () => {
   it('runs DR-001 through canonical R0 → R1 → independent fixture expectation', async () => {
     const registry = await loadAgentRegistry();
     const inventory = await loadFixtureInventory(registry);

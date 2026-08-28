@@ -109,7 +109,7 @@ async function loadFixtureAndSchemas() {
   return { recording, fixture, schemas };
 }
 
-describe('M1.4 R2 recorded canonical execution — TM-AG-010 Budget', () => {
+describe('M1.4 R2 recorded artifact replay — TM-AG-010 Budget', () => {
   it('runs BG-B-001 through canonical R0 → R1 → independent budget recomputation', async () => {
     const { recording, fixture, schemas } = await loadFixtureAndSchemas();
     const result = await runBehaviorFixtureCase({

@@ -68,7 +68,7 @@ function evaluatePointToPointExpectation(
   return { violations };
 }
 
-describe('M1.4 R2 recorded canonical execution — TM-AG-008 Transportation', () => {
+describe('M1.4 R2 recorded artifact replay — TM-AG-008 Transportation', () => {
   it('runs TR-B001 through canonical R0 → R1 → independent fixture expectation', async () => {
     const registry = await loadAgentRegistry();
     const inventory = await loadFixtureInventory(registry);

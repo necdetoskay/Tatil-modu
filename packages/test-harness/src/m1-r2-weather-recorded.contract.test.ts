@@ -69,7 +69,7 @@ function evaluateClimateHorizonExpectation(
   return { violations };
 }
 
-describe('M1.4 R2 recorded canonical execution — TM-AG-007 Weather', () => {
+describe('M1.4 R2 recorded artifact replay — TM-AG-007 Weather', () => {
   it('runs WX-B003 through canonical R0 → R1 → independent fixture expectation', async () => {
     const registry = await loadAgentRegistry();
     const inventory = await loadFixtureInventory(registry);

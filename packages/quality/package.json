@@ -1,1 +1,11 @@
-{"name":"@tatil-modu/quality","version":"0.0.0","private":true,"type":"module","exports":"./src/index.ts"}
+{
+  "name": "@tatil-modu/quality",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": "./src/index.ts",
+  "dependencies": {
+    "@tatil-modu/contracts": "workspace:*",
+    "@tatil-modu/verification": "workspace:*"
+  }
+}

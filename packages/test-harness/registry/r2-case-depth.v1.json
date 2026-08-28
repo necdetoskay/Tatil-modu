@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "1.0",
+  "minimumCasesPerComponent": 10,
+  "components": [
+    { "componentId": "TM-AG-001", "coveredCaseCount": 10, "testFile": "packages/test-harness/src/m1-r2-profile-depth.contract.test.ts" },
+    { "componentId": "TM-AG-002", "coveredCaseCount": 14, "testFile": "packages/test-harness/src/m1-r2-preference-policy-depth.contract.test.ts" },
+    { "componentId": "TM-AG-003", "coveredCaseCount": 14, "testFile": "packages/test-harness/src/m1-r2-destination-research-depth.contract.test.ts" },
+    { "componentId": "TM-AG-004", "coveredCaseCount": 16, "testFile": "packages/test-harness/src/m1-r2-place-intelligence-depth.contract.test.ts" },
+    { "componentId": "TM-AG-005", "coveredCaseCount": 16, "testFile": "packages/test-harness/src/m1-r2-accommodation-depth.contract.test.ts" },
+    { "componentId": "TM-AG-006", "coveredCaseCount": 10, "testFile": "packages/test-harness/src/m1-r2-food-depth.contract.test.ts" },
+    { "componentId": "TM-AG-007", "coveredCaseCount": 10, "testFile": "packages/test-harness/src/m1-r2-weather-depth.contract.test.ts" },
+    { "componentId": "TM-AG-008", "coveredCaseCount": 10, "testFile": "packages/test-harness/src/m1-r2-transportation-depth.contract.test.ts" },
+    { "componentId": "TM-AG-009", "coveredCaseCount": 10, "testFile": "packages/test-harness/src/m1-r2-route-planner-depth.contract.test.ts" },
+    { "componentId": "TM-AG-010", "coveredCaseCount": 10, "testFile": "packages/test-harness/src/m1-r2-budget-depth.contract.test.ts" },
+    { "componentId": "TM-AG-011", "coveredCaseCount": 10, "testFile": "packages/test-harness/src/m1-r2-public-authority-depth.contract.test.ts" },
+    { "componentId": "TM-AG-012", "coveredCaseCount": 10, "testFile": "packages/test-harness/src/m1-r2-review-depth.contract.test.ts" },
+    { "componentId": "TM-AG-013", "coveredCaseCount": 10, "testFile": "packages/test-harness/src/m1-r2-adaptive-depth.contract.test.ts" },
+    { "componentId": "TM-AG-014", "coveredCaseCount": 10, "testFile": "packages/test-harness/src/m1-r2-verification-depth.contract.test.ts" },
+    { "componentId": "TM-AG-015", "coveredCaseCount": 10, "testFile": "packages/test-harness/src/m1-r2-explanation-depth.contract.test.ts" },
+    { "componentId": "TM-AG-016", "coveredCaseCount": 10, "testFile": "packages/test-harness/src/m1-r2-final-composer-depth.contract.test.ts" },
+    { "componentId": "TM-ORCH-001", "coveredCaseCount": 10, "testFile": "packages/test-harness/src/m1-r2-orchestrator-depth.contract.test.ts" }
+  ]
+}

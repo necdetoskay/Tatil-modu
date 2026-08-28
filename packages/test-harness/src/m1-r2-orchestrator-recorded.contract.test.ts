@@ -105,7 +105,7 @@ async function loadFixtureAndSchemas() {
   return { recording, fixture, schemas };
 }
 
-describe('M1.4 R2 recorded canonical execution — TM-ORCH-001 Travel Orchestrator', () => {
+describe('M1.4 R2 recorded artifact replay — TM-ORCH-001 Travel Orchestrator', () => {
   it('runs OR-B-014 through canonical R0 → R1 → independent handoff/order/commit expectation', async () => {
     const { recording, fixture, schemas } = await loadFixtureAndSchemas();
     const result = await runBehaviorFixtureCase({

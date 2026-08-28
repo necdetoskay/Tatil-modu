@@ -2,5 +2,8 @@
   "name": "@tatil-modu/cli",
   "version": "0.0.0",
   "private": true,
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "@tatil-modu/orchestrator": "workspace:*"
+  }
 }

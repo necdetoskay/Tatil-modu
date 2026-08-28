@@ -77,7 +77,7 @@ function evaluateFeasibleDayExpectation(
   return { violations };
 }
 
-describe('M1.4 R2 recorded canonical execution — TM-AG-009 Route Planner', () => {
+describe('M1.4 R2 recorded artifact replay — TM-AG-009 Route Planner', () => {
   it('runs RP-B-001 through canonical R0 → R1 → independent fixture expectation', async () => {
     const registry = await loadAgentRegistry();
     const inventory = await loadFixtureInventory(registry);

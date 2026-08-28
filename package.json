@@ -7,12 +7,19 @@
     "node": ">=24"
   },
   "scripts": {
+    "status:render": "node scripts/render-project-status.mjs",
+    "status:check": "node scripts/render-project-status.mjs --check",
     "typecheck": "tsc -p tsconfig.json --noEmit --pretty false",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:boundaries": "node scripts/check-boundaries.mjs",
-    "test:h0": "pnpm typecheck && pnpm test:boundaries && pnpm test",
-    "headless": "tsx apps/cli/src/index.ts"
+    "test:fast": "pnpm status:check && pnpm typecheck && pnpm test:boundaries",
+    "test:core": "vitest run packages/contracts packages/policy packages/memory packages/agents",
+    "test:integration": "vitest run packages/capabilities packages/providers-mock packages/providers-mapbox packages/harness",
+    "test:golden": "vitest run golden-scenario-001 headless-runtime.e2e",
+    "test:h0": "pnpm status:check && pnpm typecheck && pnpm test:boundaries && pnpm test",
+    "headless": "tsx apps/cli/src/index.ts",
+    "headless:run": "tsx apps/cli/src/index.ts run"
   },
   "devDependencies": {
     "@types/node": "^24.0.0",

@@ -96,7 +96,7 @@ async function loadFixtureAndSchemas() {
   return { recording, fixture, schemas };
 }
 
-describe('M1.4 R2 recorded canonical execution — TM-AG-012 Review Intelligence', () => {
+describe('M1.4 R2 recorded artifact replay — TM-AG-012 Review Intelligence', () => {
   it('runs RV-B-001 through canonical R0 → R1 → independent sample/prevalence recomputation', async () => {
     const { recording, fixture, schemas } = await loadFixtureAndSchemas();
     const result = await runBehaviorFixtureCase({

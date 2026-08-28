@@ -15,7 +15,13 @@ interface RecordedExecutionHeader {
   fixtureId: string;
 }
 
-async function loadRecordedR2Coverage(repoRoot = process.cwd()): Promise<Map<string, Set<string>>> {
+interface CaseDepthRegistry {
+  schemaVersion: string;
+  minimumCasesPerComponent: number;
+  components: { componentId: string; coveredCaseCount: number; testFile: string }[];
+}
+
+async function loadRecordedArtifactCoverage(repoRoot = process.cwd()): Promise<Map<string, Set<string>>> {
   const directory = resolve(repoRoot, 'packages/test-harness/fixtures/recorded');
   const filenames = (await readdir(directory))
     .filter(name => name.endsWith('.execution.json'))
@@ -81,9 +87,9 @@ describe('M1.9 full 17-package readiness sweep', () => {
     expect(failures).toEqual([]);
   });
 
-  it('requires at least one real recorded canonical R2 execution for every registered component', async () => {
+  it('requires at least one canonical R2 recorded-artifact replay for every registered component', async () => {
     const registry = await loadAgentRegistry();
-    const coverage = await loadRecordedR2Coverage();
+    const coverage = await loadRecordedArtifactCoverage();
     const registeredIds = new Set(registry.entries.map(entry => entry.componentId));
     const unknownRecordedComponents = [...coverage.keys()]
       .filter(componentId => !registeredIds.has(componentId))
@@ -99,5 +105,33 @@ describe('M1.9 full 17-package readiness sweep', () => {
     for (const entry of registry.entries) {
       expect(coverage.get(entry.componentId)?.size ?? 0).toBeGreaterThanOrEqual(1);
     }
+  });
+
+  it('requires an executable R2 case-depth suite with at least 10 cases for every component', async () => {
+    const registry = await loadAgentRegistry();
+    const depth = JSON.parse(await readFile(
+      resolve(process.cwd(), 'packages/test-harness/registry/r2-case-depth.v1.json'),
+      'utf8'
+    )) as CaseDepthRegistry;
+    const registeredIds = new Set(registry.entries.map(entry => entry.componentId));
+    const declaredIds = new Set(depth.components.map(entry => entry.componentId));
+    const failures: string[] = [];
+
+    if (depth.schemaVersion !== '1.0') failures.push('R2_DEPTH_SCHEMA_VERSION_INVALID');
+    if (depth.minimumCasesPerComponent < 10) failures.push('R2_DEPTH_MINIMUM_WEAKENED');
+    for (const componentId of registeredIds) {
+      if (!declaredIds.has(componentId)) failures.push(`R2_DEPTH_COMPONENT_MISSING:${componentId}`);
+    }
+    for (const entry of depth.components) {
+      if (!registeredIds.has(entry.componentId)) failures.push(`R2_DEPTH_UNKNOWN_COMPONENT:${entry.componentId}`);
+      if (entry.coveredCaseCount < depth.minimumCasesPerComponent) failures.push(`R2_DEPTH_CASES_LT_MINIMUM:${entry.componentId}`);
+      const testSource = await readFile(resolve(process.cwd(), entry.testFile), 'utf8').catch(() => '');
+      if (!testSource.includes(entry.componentId) || !testSource.includes('runBehaviorFixtureCase')) {
+        failures.push(`R2_DEPTH_EXECUTABLE_TEST_MISSING:${entry.componentId}`);
+      }
+    }
+
+    expect(depth.components).toHaveLength(17);
+    expect(failures).toEqual([]);
   });
 });
