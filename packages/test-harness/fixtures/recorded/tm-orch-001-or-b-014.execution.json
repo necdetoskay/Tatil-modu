@@ -1,0 +1,165 @@
+{
+  "componentId": "TM-ORCH-001",
+  "fixtureId": "OR-B-014",
+  "canonicalInput": {
+    "schemaVersion": "1.0",
+    "workflowId": "workflow:trip:001",
+    "tripRequestRef": "trip-request:001",
+    "registrySnapshotId": "agent-registry:v1",
+    "orchestrationPolicySnapshotId": "orchestration-policy:v1",
+    "harnessPolicySnapshotId": "harness-policy:m1-v1",
+    "runBudget": {
+      "maxWallClockMs": 120000,
+      "maxNodeAttempts": 2,
+      "maxRepairLoops": 2,
+      "maxToolCalls": 20,
+      "maxModelTokens": 20000,
+      "maxEstimatedCost": 5
+    },
+    "featureContext": {
+      "journeyEnrichmentMode": "DIRECT_ONLY",
+      "knowledgeRoutingMode": "KNOWLEDGE_FIRST",
+      "tripDatesAvailable": true,
+      "eventPreferenceMode": "NEUTRAL",
+      "crowdTolerance": "MEDIUM"
+    },
+    "initialWorkingStateRefs": ["candidate-state:trip:v1"],
+    "priorWorkflowCheckpointRef": null,
+    "contextManifestId": "ctx-or-b-014"
+  },
+  "canonicalOutput": {
+    "schemaVersion": "1.0",
+    "orchestrationRunId": "orchestration-run:or-b-014",
+    "workflowId": "workflow:trip:001",
+    "tripRequestRef": "trip-request:001",
+    "registrySnapshotId": "agent-registry:v1",
+    "orchestrationPolicySnapshotId": "orchestration-policy:v1",
+    "harnessPolicySnapshotId": "harness-policy:m1-v1",
+    "initialGraphHash": "graph-hash:v1",
+    "finalGraphHash": "graph-hash:v1",
+    "graphRevisions": [],
+    "nodeSelections": [
+      {"nodeId":"node:verification","agentId":"TM-AG-014","disposition":"SELECTED","reasonCodes":["MANDATORY_VERIFICATION"],"policyRefs":["orchestration-policy:v1"],"featureRefs":[]},
+      {"nodeId":"node:explanation","agentId":"TM-AG-015","disposition":"SELECTED","reasonCodes":["VERIFICATION_PASS"],"policyRefs":["orchestration-policy:v1"],"featureRefs":[]},
+      {"nodeId":"node:final","agentId":"TM-AG-016","disposition":"SELECTED","reasonCodes":["VERIFICATION_PASS_AND_EXPLANATION_READY"],"policyRefs":["orchestration-policy:v1"],"featureRefs":[]}
+    ],
+    "nodeRuns": [
+      {
+        "nodeRunId":"node-run:verification:1",
+        "nodeId":"node:verification",
+        "agentId":"TM-AG-014",
+        "attempt":1,
+        "contractVersion":"1.0",
+        "contractHash":"contract-hash:tm-ag-014:v1",
+        "contextManifestRef":"ctx:verification:1",
+        "executionRef":"execution:verification:1",
+        "evaluationRef":"evaluation:verification:1",
+        "inputRefs":["candidate-state:trip:v1"],
+        "outputRef":"verification-run:vf-b-001",
+        "status":"SUCCEEDED",
+        "startedAt":"2026-09-09T10:00:00+03:00",
+        "completedAt":"2026-09-09T10:00:05+03:00"
+      },
+      {
+        "nodeRunId":"node-run:explanation:1",
+        "nodeId":"node:explanation",
+        "agentId":"TM-AG-015",
+        "attempt":1,
+        "contractVersion":"1.0",
+        "contractHash":"contract-hash:tm-ag-015:v1",
+        "contextManifestRef":"ctx:explanation:1",
+        "executionRef":"execution:explanation:1",
+        "evaluationRef":"evaluation:explanation:1",
+        "inputRefs":["verification-run:vf-b-001"],
+        "outputRef":"explanation:ex-b-001",
+        "status":"SUCCEEDED",
+        "startedAt":"2026-09-09T10:00:06+03:00",
+        "completedAt":"2026-09-09T10:00:09+03:00"
+      },
+      {
+        "nodeRunId":"node-run:final:1",
+        "nodeId":"node:final",
+        "agentId":"TM-AG-016",
+        "attempt":1,
+        "contractVersion":"1.0",
+        "contractHash":"contract-hash:tm-ag-016:v1",
+        "contextManifestRef":"ctx:final:1",
+        "executionRef":"execution:final:1",
+        "evaluationRef":"evaluation:final:1",
+        "inputRefs":["verification-run:vf-b-001","explanation:ex-b-001"],
+        "outputRef":"final-plan:fc-b-001",
+        "status":"SUCCEEDED",
+        "startedAt":"2026-09-09T10:00:10+03:00",
+        "completedAt":"2026-09-09T10:00:13+03:00"
+      }
+    ],
+    "handoffs": [
+      {
+        "handoffId":"handoff:verification-to-explanation",
+        "producerNodeRunRef":"node-run:verification:1",
+        "producerAgentId":"TM-AG-014",
+        "consumerNodeRef":"node:explanation",
+        "consumerAgentId":"TM-AG-015",
+        "objectRef":"verification-run:vf-b-001",
+        "objectType":"VerificationResult",
+        "objectVersion":"1.0",
+        "objectHash":"hash:verification-result:v1",
+        "schemaRef":"verification-result.v1",
+        "schemaValidationStatus":"PASS",
+        "snapshotCompatibilityStatus":"PASS",
+        "authorityValidationStatus":"PASS",
+        "accepted":true
+      },
+      {
+        "handoffId":"handoff:explanation-to-final",
+        "producerNodeRunRef":"node-run:explanation:1",
+        "producerAgentId":"TM-AG-015",
+        "consumerNodeRef":"node:final",
+        "consumerAgentId":"TM-AG-016",
+        "objectRef":"explanation:ex-b-001",
+        "objectType":"ExplanationBundle",
+        "objectVersion":"1.0",
+        "objectHash":"hash:explanation:v1",
+        "schemaRef":"explanation-bundle.v1",
+        "schemaValidationStatus":"PASS",
+        "snapshotCompatibilityStatus":"PASS",
+        "authorityValidationStatus":"PASS",
+        "accepted":true
+      }
+    ],
+    "retryEvents": [],
+    "repairLoops": [],
+    "contextManifestRefs": ["ctx:verification:1","ctx:explanation:1","ctx:final:1"],
+    "failureAttributions": [],
+    "budgetUsage": {
+      "wallClockMs": 13000,
+      "nodeAttempts": 3,
+      "repairLoops": 0,
+      "toolCalls": 0,
+      "modelTokens": 2500,
+      "estimatedCost": 0.2,
+      "budgetExceededDimensions": []
+    },
+    "authorityViolations": [],
+    "stateTransitions": [
+      {"transitionId":"transition:1","fromPhase":"CREATED","toPhase":"VERIFICATION","reasonCode":"PLAN_READY_FOR_VERIFICATION","triggerRefs":["candidate-state:trip:v1"]},
+      {"transitionId":"transition:2","fromPhase":"VERIFICATION","toPhase":"EXPLANATION","reasonCode":"VERIFICATION_PASS","triggerRefs":["verification-run:vf-b-001"]},
+      {"transitionId":"transition:3","fromPhase":"EXPLANATION","toPhase":"COMPOSITION","reasonCode":"EXPLANATION_READY","triggerRefs":["explanation:ex-b-001"]},
+      {"transitionId":"transition:4","fromPhase":"COMPOSITION","toPhase":"COMPLETED","reasonCode":"FINAL_PLAN_VALID","triggerRefs":["final-plan:fc-b-001"]}
+    ],
+    "stateCommitAttempts": [
+      {
+        "stateCommitAttemptId":"state-commit:001",
+        "candidateStateRef":"candidate-state:trip:v1",
+        "candidateSnapshotHash":"hash-trip-v1",
+        "verificationRef":"verification-run:vf-b-001",
+        "verificationStatus":"PASS",
+        "decision":"COMMITTED",
+        "reasonCodes":["VERIFICATION_PASS_HASH_MATCH"]
+      }
+    ],
+    "finalVerificationRef":"verification-run:vf-b-001",
+    "finalPlanRef":"final-plan:fc-b-001",
+    "finalStatus":"COMPLETED"
+  }
+}
