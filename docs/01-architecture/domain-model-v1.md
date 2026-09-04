@@ -6,6 +6,10 @@
 
 Bu doküman Tatil Modu'nun ilişkisel domain modelini, PK/FK kurallarını, cardinality'leri, silme davranışlarını ve PostgreSQL index stratejisini tanımlar. Mevcut architecture baseline ile çakışma halinde `docs/08-architecture-baseline/` kararları önceliklidir.
 
+Fiziksel PostgreSQL/PostGIS karşılığı: [`postgresql-physical-schema-v1.sql`](postgresql-physical-schema-v1.sql).
+
+> Not: Fiziksel şema bu domain modelinin uygulanabilir DDL baseline adayıdır; production migration değildir. Migration standardı, seed registry, fixture ve EXPLAIN doğrulaması tamamlanmadan canonical runtime schema olarak kabul edilmez.
+
 ## 1. Tasarım hedefleri
 
 - Referential integrity veritabanı tarafından korunur.
@@ -812,14 +816,11 @@ Bu modelin kritik kararları:
 
 ## 31. Sonraki adım
 
-Bu doküman onaylandıktan sonra sırasıyla:
+Physical schema baseline artık oluşturuldu. Bundan sonraki sıra:
 
-1. PostgreSQL physical schema / DDL taslağı,
-2. migration standardı,
-3. seed/config registry listesi,
-4. ER diagram,
-5. repository/domain ownership sınırları,
-6. referential-integrity test fixture'ları,
-7. query-plan/index qualification testleri
-
-hazırlanmalıdır.
+1. migration standardı,
+2. seed/config registry listesi,
+3. ER diagram,
+4. integrity/constraint test fixture'ları,
+5. query benchmark + `EXPLAIN (ANALYZE, BUFFERS)`,
+6. ardından production migration planı.
