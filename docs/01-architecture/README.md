@@ -10,6 +10,8 @@
 | 04 | [domain-model-v1.md](domain-model-v1.md) | Canonical aday ilişkisel domain modeli; PK/FK, cardinality, index, evidence/freshness ve planlama veri yapısı |
 | 05 | [postgresql-physical-schema-v1.sql](postgresql-physical-schema-v1.sql) | PostgreSQL/PostGIS fiziksel şema baseline adayı; tablolar, FK/constraint/index DDL ve registry yapısı |
 | 06 | [database-migration-standard-v1.md](database-migration-standard-v1.md) | Expand/migrate/contract, FK validation, semantic constraint trigger, index/lock ve destructive migration standardı |
+| 07 | [registry-seed-baseline-v1.md](registry-seed-baseline-v1.md) | Yönetilebilir registry/config kodları, seed ownership, localization ve yaşam döngüsü baseline'ı |
+| 08 | [registry-seed-v1.sql](registry-seed-v1.sql) | Physical schema ile uyumlu idempotent başlangıç registry seed SQL'i |
 
 ## Domain model kuralı
 
@@ -31,7 +33,9 @@ Fiziksel şemaya geçildiğinde ayrıca:
 - null-safe unique ihtiyacı PostgreSQL semantiğine göre çözülür,
 - GiST/partial/composite indexler gerçek sorgu yollarına göre belirlenir,
 - cross-table semantic integrity yalnızca uygulama koduna bırakılmaz; production migration öncesi DB-enforced guard zorunludur,
-- DDL production migration'ı sayılmadan önce fixture + `EXPLAIN (ANALYZE, BUFFERS)` ile doğrulanır.
+- DDL production migration'ı sayılmadan önce fixture + `EXPLAIN (ANALYZE, BUFFERS)` ile doğrulanır,
+- canonical registry code'ları hardcoded UI enum'u olarak değil yönetilebilir seed/config contract'ı olarak tutulur,
+- seed dosyaları idempotent ve non-destructive olmalıdır.
 
 ## İlgili Dokümanlar
 
