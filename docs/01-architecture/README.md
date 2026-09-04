@@ -9,6 +9,7 @@
 | 03 | [data-source-trust-policy.md](data-source-trust-policy.md) | Güven seviyeleri, freshness, çelişki çözümü |
 | 04 | [domain-model-v1.md](domain-model-v1.md) | Canonical aday ilişkisel domain modeli; PK/FK, cardinality, index, evidence/freshness ve planlama veri yapısı |
 | 05 | [postgresql-physical-schema-v1.sql](postgresql-physical-schema-v1.sql) | PostgreSQL/PostGIS fiziksel şema baseline adayı; tablolar, FK/constraint/index DDL ve registry yapısı |
+| 06 | [database-migration-standard-v1.md](database-migration-standard-v1.md) | Expand/migrate/contract, FK validation, semantic constraint trigger, index/lock ve destructive migration standardı |
 
 ## Domain model kuralı
 
@@ -29,7 +30,8 @@ Fiziksel şemaya geçildiğinde ayrıca:
 - nullable ve `NOT NULL` semantiği doğrulanır,
 - null-safe unique ihtiyacı PostgreSQL semantiğine göre çözülür,
 - GiST/partial/composite indexler gerçek sorgu yollarına göre belirlenir,
-- DDL üretim migration'ı sayılmadan önce fixture + `EXPLAIN (ANALYZE, BUFFERS)` ile doğrulanır.
+- cross-table semantic integrity yalnızca uygulama koduna bırakılmaz,
+- DDL production migration'ı sayılmadan önce fixture + `EXPLAIN (ANALYZE, BUFFERS)` ile doğrulanır.
 
 ## İlgili Dokümanlar
 
