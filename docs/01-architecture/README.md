@@ -13,6 +13,8 @@
 | 07 | [registry-seed-baseline-v1.md](registry-seed-baseline-v1.md) | Yönetilebilir registry/config kodları, seed ownership, localization ve yaşam döngüsü baseline'ı |
 | 08 | [registry-seed-v1.sql](registry-seed-v1.sql) | Physical schema ile uyumlu idempotent başlangıç registry seed SQL'i |
 | 09 | [semantic-constraint-triggers-v1.sql](semantic-constraint-triggers-v1.sql) | FK'nin tek başına koruyamadığı subtype, plan target, trip-day, geo hierarchy ve updated_at kurallarını DB seviyesinde zorlayan trigger baseline'ı |
+| 10 | [er-diagram-v1.md](er-diagram-v1.md) | Geography, knowledge, evidence/freshness ve runtime planning bounded-context ER diyagramları |
+| 11 | [plan-item-target-contract-v1.sql](plan-item-target-contract-v1.sql) | Plan item tiplerinin izin verilen gerçek hedef türlerini registry üzerinden zorlayan additive DB contract |
 
 ## Domain model kuralı
 
@@ -36,10 +38,12 @@ Fiziksel şemaya geçildiğinde ayrıca:
 - cross-table semantic integrity yalnızca uygulama koduna bırakılmaz; production migration öncesi DB-enforced guard zorunludur,
 - DDL production migration'ı sayılmadan önce fixture + `EXPLAIN (ANALYZE, BUFFERS)` ile doğrulanır,
 - canonical registry code'ları hardcoded UI enum'u olarak değil yönetilebilir seed/config contract'ı olarak tutulur,
-- seed dosyaları idempotent ve non-destructive olmalıdır.
+- seed dosyaları idempotent ve non-destructive olmalıdır,
+- plan item tipi ile hedef entity türü arasındaki ilişki de registry tabanlı ve DB-enforced olmalıdır.
 
 ## İlgili Dokümanlar
 
 - [Architecture Freeze Baseline](../08-architecture-baseline/README.md)
 - [Agent Catalog](../02-agents/agent-catalog.md)
 - [Testing Standard (TST-001)](../03-testing/agent-testing-evaluation-standard.md)
+- [Referential Integrity Fixture Suite v1](../13-fixtures-and-evaluation/referential-integrity-fixture-suite-v1.md)
