@@ -8,6 +8,7 @@
 | 02 | [handoff-contract-standard.md](handoff-contract-standard.md) | Agent arası veri transferi sözleşmeleri |
 | 03 | [data-source-trust-policy.md](data-source-trust-policy.md) | Güven seviyeleri, freshness, çelişki çözümü |
 | 04 | [domain-model-v1.md](domain-model-v1.md) | Canonical aday ilişkisel domain modeli; PK/FK, cardinality, index, evidence/freshness ve planlama veri yapısı |
+| 05 | [postgresql-physical-schema-v1.sql](postgresql-physical-schema-v1.sql) | PostgreSQL/PostGIS fiziksel şema baseline adayı; tablolar, FK/constraint/index DDL ve registry yapısı |
 
 ## Domain model kuralı
 
@@ -21,6 +22,14 @@ Domain tasarımları yalnızca kavramsal diyagram olarak bırakılmaz. Kanonik m
 - temporal/freshness davranışı,
 - evidence/provenance ilişkisi,
 - transaction ve concurrency sınırları.
+
+Fiziksel şemaya geçildiğinde ayrıca:
+
+- tüm FK hedef tabloları açıkça tanımlanır,
+- nullable ve `NOT NULL` semantiği doğrulanır,
+- null-safe unique ihtiyacı PostgreSQL semantiğine göre çözülür,
+- GiST/partial/composite indexler gerçek sorgu yollarına göre belirlenir,
+- DDL üretim migration'ı sayılmadan önce fixture + `EXPLAIN (ANALYZE, BUFFERS)` ile doğrulanır.
 
 ## İlgili Dokümanlar
 
