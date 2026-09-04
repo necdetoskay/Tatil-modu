@@ -12,6 +12,7 @@
 | 06 | [database-migration-standard-v1.md](database-migration-standard-v1.md) | Expand/migrate/contract, FK validation, semantic constraint trigger, index/lock ve destructive migration standardı |
 | 07 | [registry-seed-baseline-v1.md](registry-seed-baseline-v1.md) | Yönetilebilir registry/config kodları, seed ownership, localization ve yaşam döngüsü baseline'ı |
 | 08 | [registry-seed-v1.sql](registry-seed-v1.sql) | Physical schema ile uyumlu idempotent başlangıç registry seed SQL'i |
+| 09 | [semantic-constraint-triggers-v1.sql](semantic-constraint-triggers-v1.sql) | FK'nin tek başına koruyamadığı subtype, plan target, trip-day, geo hierarchy ve updated_at kurallarını DB seviyesinde zorlayan trigger baseline'ı |
 
 ## Domain model kuralı
 
