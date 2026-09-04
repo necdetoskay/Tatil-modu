@@ -8,19 +8,20 @@ Amaç, physical schema + registry seed + semantic constraint trigger katmanını
 
 ## 1. Test ilkeleri
 
-- Her test izole transaction içinde çalışır ve rollback edilir.
+- Her negatif test izole PostgreSQL subtransaction içinde değerlendirilir; beklenen hata oluşursa yalnız o statement geri alınır.
 - Başarısız olması gereken SQL gerçekten hata üretmezse test FAIL kabul edilir.
-- Constraint/trigger adı mümkünse beklenen hata ile eşleştirilir.
-- Seed iki kez çalıştırılır; ikinci çalıştırma veri sayısını değiştirmemelidir.
+- Constraint/trigger hataları mümkün olduğunda beklenen SQLSTATE ile doğrulanır.
+- Seed CI'da iki kez çalıştırılır; ikinci uygulama hatasız ve idempotent olmalıdır.
 - Fixture UUID'leri deterministik olabilir; production ID üretim davranışını taklit etmek zorunlu değildir.
-- Testler uygulama ORM'sine bağlı kalmamalı; en az bir saf PostgreSQL harness bulunmalıdır.
+- Testler uygulama ORM'sine bağlı kalmaz; saf PostgreSQL/psql harness canonical minimum gate'tir.
 
 ## 2. Gate seviyeleri
 
 ### L1 — Schema boot
 - extension'lar yüklenir,
 - physical schema temiz DB'ye uygulanır,
-- registry seed uygulanır,
+- registry seed uygulanır ve ikinci kez tekrar uygulanır,
+- plan item target contract uygulanır,
 - semantic trigger DDL uygulanır.
 
 ### L2 — Referential integrity
@@ -31,7 +32,7 @@ Amaç, physical schema + registry seed + semantic constraint trigger katmanını
 
 ### L3 — Semantic integrity
 - subtype kind,
-- plan target semantics,
+- plan target count ve target-kind semantics,
 - trip date/day number,
 - geo hierarchy.
 
@@ -42,7 +43,11 @@ Amaç, physical schema + registry seed + semantic constraint trigger katmanını
 - event occurrence uniqueness.
 
 ### L5 — Query/index smoke
-- ana sorguların index kullanımı ve explain plan kontrolleri.
+- canonical index varlığı,
+- ana sorgu şekillerinin ilgili index aileleri tarafından desteklenebilirliği,
+- `EXPLAIN (ANALYZE, BUFFERS)` kanıtı.
+
+L5 küçük correctness fixture üzerinde production performans benchmark'ı değildir. Planner küçük tabloda seq scan seçebileceği için smoke testi gerektiğinde `enable_seqscan=off` ile index kullanılabilirliğini kanıtlar; gerçek performans gate'i ayrı büyük fixture ile yapılır.
 
 ## 3. Geography testleri
 
@@ -50,10 +55,10 @@ Amaç, physical schema + registry seed + semantic constraint trigger katmanını
 `geo_regions.parent_region_id = id` insert/update reddedilmeli.
 
 ### GEO-002 cycle reddedilir
-Province -> district -> locality zincirinde locality parent olarak province'in atasını döngüye sokacak update reddedilmeli.
+Geo hiyerarşisinde herhangi bir update ancestor zincirini child'a geri bağlayarak cycle oluşturamamalı.
 
 ### GEO-003 yanlış hierarchy parent reddedilir
-`district` parent'ı `neighborhood` olamaz.
+`district` parent'ı `neighborhood` olamaz; parent hierarchy level child level'dan düşük olmalıdır.
 
 ### GEO-004 duplicate sibling reddedilir
 Aynı parent/type/country altında aynı normalized name ikinci kez eklenememeli.
@@ -67,19 +72,19 @@ Child region varken parent hard delete reddedilmeli.
 `knowledge_entities(kind=place)` + `places` insert PASS.
 
 ### KNO-002 yanlış subtype kind reddedilir
-`knowledge_entities(kind=event)` id'si ile `places` insert COMMIT aşamasında reddedilmeli.
+`knowledge_entities(kind=event)` id'si ile `places` insert semantic constraint tarafından reddedilmeli.
 
 ### KNO-003 event/local_item/parking karşılıkları
-Her subtype için yanlış kind negatif testi ayrı çalışmalı.
+Her subtype için yanlış kind negatif testi geniş suite içinde ayrı çalıştırılmalı.
 
 ### KNO-004 dangling subtype mümkün değil
-`places` içinde olmayan knowledge entity id'si FK nedeniyle reddedilmeli.
+`knowledge_entities` içinde olmayan id ile subtype insert FK nedeniyle reddedilmeli.
 
 ### KNO-005 active slug uniqueness
 Aynı kind altında iki aktif entity aynı slug ile oluşturulamamalı.
 
 ### KNO-006 retired slug davranışı
-Retired entity varsa aynı slug yeni active entity için policy'ye göre izin verilen davranış doğrulanmalı.
+Retired kayıt active partial unique indexine dahil değildir; aynı slug yeni active entity için kullanılabilir.
 
 ## 5. Place/category/parking/local item testleri
 
@@ -113,7 +118,7 @@ Composite PK ilişki tipine göre duplicate'i engellemeli.
 Aynı event için aynı starts_at ikinci occurrence reddedilmeli.
 
 ### EVT-003 event delete cascade occurrence
-Event lifecycle test fixture'ında hard-delete testine izin verilen controlled fixture senaryosunda occurrences CASCADE davranışı doğrulanmalı.
+Controlled fixture senaryosunda event hard-delete yapılırsa child occurrences CASCADE davranışı doğrulanmalı.
 
 ### EVT-004 place delete restrict when event linked
 Event-place link varsa place hard delete reddedilmeli.
@@ -164,7 +169,7 @@ Aynı source içinde duplicate external id reddedilir.
 Aynı request/version iki kez oluşturulamaz.
 
 ### TRIP-003 day date outside request reddedilir
-Semantic trigger.
+Semantic constraint trigger tarafından reddedilir.
 
 ### TRIP-004 day number mismatch reddedilir
 Örn. starts_on 2026-09-10, trip_date 2026-09-12 iken day_number=2 reddedilir; 3 PASS.
@@ -182,7 +187,7 @@ Semantic trigger.
 place + event occurrence aynı item'da FAIL.
 
 ### TRIP-009 target kind coherence
-`event_visit` için place target verilmesi semantic policy varsa FAIL; bu kural trigger v2'de item-type allowed-target metadata ile genişletilmelidir.
+`plan_target_types` + `plan_item_type_allowed_targets` registry contract'ı DB seviyesinde zorlanır. Örneğin `event_visit -> place_id` FAIL, `event_visit -> event_occurrence_id` PASS olmalıdır.
 
 ## 10. Delete behavior matrix tests
 
@@ -206,7 +211,7 @@ En az şu davranışlar otomatik doğrulanır:
 Seed clean schema'da PASS.
 
 ### SEED-002 second apply
-Aynı seed ikinci kez PASS; row count ve canonical code set değişmez.
+Aynı seed ikinci kez PASS; canonical unique code set bozulmaz.
 
 ### SEED-003 repo-owned semantic field repair
 Örn. `plan_item_types.allows_targetless` canonical değerden sapmışsa seed'in policy'ye uygun onarım davranışı doğrulanır.
@@ -218,43 +223,77 @@ Admin tarafından değiştirilen `name` seed rerun ile ezilmemeli.
 
 Minimum sorgular:
 
-1. radius içindeki active places → GiST location.
-2. date range event occurrences → starts_at/status composite.
+1. radius içindeki active places → GiST location + region/status.
+2. date range event occurrences → status/start index.
 3. due freshness assignments → partial due index.
-4. current suitability lookup → partial unique/current index.
+4. current suitability lookup → partial current index.
 5. evidence entity+claim history → composite index.
 6. latest trip version → `(trip_request_id, plan_version desc)`.
 7. canonical name fuzzy search → trigram GIN.
 
-`EXPLAIN (ANALYZE, BUFFERS)` çıktısı fixture raporuna eklenir.
+`EXPLAIN (ANALYZE, BUFFERS)` çıktısı CI artifact olarak saklanır.
 
 ## 13. Test veri seti minimumu
 
-- 2 ülke/province zinciri gerekmiyor; Türkiye fixture'ı yeterli.
-- 2 province, her birinde 2 district.
-- 20 place.
-- 5 event, 10 occurrence.
-- 10 local item.
-- 5 parking facility.
-- 100 evidence claim.
-- 20 freshness assignment.
-- 3 trip request, her biri 2-3 version.
-- Her trip için 2-5 day, 3 option/day, 4-8 item/option.
+İki farklı veri ölçeği kullanılır:
 
-Bu küçük dataset correctness içindir; benchmark fixture daha büyük olmalıdır.
+### Correctness fixture
+Küçük, deterministik ve hızlıdır. Executable gate için yeterli parent/child/entity/trip kayıtları oluşturur ve negatif testleri bozmaya çalışır.
+
+### Benchmark fixture
+Ayrı gate'tir ve en az:
+- 2 province, her birinde 2+ district,
+- 20+ place (tercihen performans testi için çok daha fazla),
+- 5+ event / 10+ occurrence,
+- 10+ local item,
+- 5+ parking facility,
+- 100+ evidence claim,
+- 20+ freshness assignment,
+- 3+ trip request ve birden çok version
+barındırmalıdır.
+
+Correctness harness sonucu production performans sonucu olarak yorumlanmaz.
 
 ## 14. PASS kriteri
 
 Suite PASS için:
 
 - tüm positive case'ler başarılı,
-- tüm negative case'ler beklenen DB katmanında reddedilmiş,
+- tüm negative case'ler beklenen DB katmanında ve mümkün olduğunda beklenen SQLSTATE ile reddedilmiş,
 - hiçbir dangling FK oluşmamış,
-- seed idempotent,
-- delete matrix beklenen sonucu vermiş,
-- semantic trigger testleri commit/deferred aşamada çalışmış,
-- query smoke'larda beklenen index ailesi gözlemlenmiş olmalıdır.
+- seed ikinci kez hatasız uygulanmış,
+- delete matrix seçili executable vakalarda beklenen sonucu vermiş,
+- semantic constraint trigger testleri gerçekten çalışmış,
+- canonical indexler mevcut ve sorgu şekillerini destekleyebilir durumda olmalıdır.
 
-## 15. Sonraki adım
+## 15. Executable karşılık
 
-Bu dokümanın executable karşılığı SQL/pgTAP veya repo'nun mevcut test harness'ine bağlanarak oluşturulmalıdır. Ardından query benchmark fixture ve migration upgrade/downgrade smoke testleri eklenir.
+Canonical executable dosyalar:
+
+- `scripts/db/domain-integrity-v1.sql` — L1 sonrası L2-L4 positive/negative integrity harness.
+- `scripts/db/query-index-smoke-v1.sql` — L5 index presence/usability ve EXPLAIN smoke.
+- `.github/workflows/domain-database-integrity.yml` — temiz PostGIS service üzerinde tüm zinciri çalıştıran bağımsız CI gate.
+
+CI sırası:
+
+```text
+physical schema
+  -> registry seed
+  -> registry seed (2. kez / idempotency)
+  -> plan item target contract
+  -> semantic constraint triggers
+  -> domain integrity harness
+  -> query/index smoke + artifact
+```
+
+## 16. Sonraki gate
+
+Executable correctness gate geçtikten sonra sırayla:
+
+1. migration clean-install smoke,
+2. migration upgrade/forward-fix smoke,
+3. daha büyük query benchmark fixture,
+4. canonical `EXPLAIN (ANALYZE, BUFFERS)` performans raporu,
+5. rollback/restore smoke
+
+tamamlanmalıdır.
