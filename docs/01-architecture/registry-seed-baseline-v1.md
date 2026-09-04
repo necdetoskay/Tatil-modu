@@ -17,52 +17,49 @@ Kurallar:
 - seed tekrar çalıştırılabilir ve idempotent olmalıdır.
 - seed hiçbir production kullanıcı verisini silmez.
 - seed canonical code'u rename etmez; yeni code + migration/deprecation yaklaşımı kullanılır.
-- aktiflik `is_active`/status ile yönetilir.
 - registry satırları normalde hard delete edilmez.
 
-## 2. Seed idempotency standardı
+## 2. Seed ownership ve idempotency
 
-Önerilen pattern:
+Repo-owned alanlar:
 
-```sql
-INSERT INTO registry_table (code, name, is_active)
-VALUES (...)
-ON CONFLICT (code) DO UPDATE
-SET name = EXCLUDED.name,
-    is_active = EXCLUDED.is_active;
-```
+- canonical `code`
+- kategori parent ilişkileri
+- `hierarchy_level`
+- `allows_targetless`
+- suitability `value_type`
+- freshness TTL/priority/live-verification flag
 
-Ancak production'da otomatik update yalnız repo tarafından sahip olunan alanlarla sınırlı olmalıdır. Yönetici tarafından değiştirilebilen metadata alanları seed tarafından ezilmez.
+Yönetilebilir alanlar:
+
+- display `name`
+- description
+- UI order
+- policy izin veriyorsa aktiflik
+
+Bu nedenle seed tekrar çalıştığında repo-owned semantic alanları düzeltir; yönetilebilir metinleri körlemesine overwrite etmez.
 
 ## 3. `entity_kinds`
-
-Başlangıç canonical kodları:
 
 - `place`
 - `event`
 - `local_item`
 - `parking_facility`
 
-V1'de yeni subtype eklenmedikçe başka değer açılmaz.
-
 ## 4. `geo_region_types`
 
-Başlangıç hiyerarşisi:
+| code | hierarchy_level |
+|---|---:|
+| `country` | 0 |
+| `province` | 10 |
+| `district` | 20 |
+| `town` | 30 |
+| `neighborhood` | 40 |
+| `locality` | 50 |
 
-| code | hierarchy_level | açıklama |
-|---|---:|---|
-| `country` | 0 | Ülke |
-| `province` | 10 | İl |
-| `district` | 20 | İlçe |
-| `town` | 30 | Belde/kasaba |
-| `neighborhood` | 40 | Mahalle |
-| `locality` | 50 | Köy/mevki/yerleşim |
-
-Level değerleri sıralama içindir; business kuralı yalnız integer karşılaştırmasına bırakılmaz. İzin verilen parent-child kombinasyonları ayrıca registry/policy ile doğrulanmalıdır.
+Hiyerarşi integer karşılaştırmasına bırakılmaz; parent-child geçişleri semantic constraint ile korunur.
 
 ## 5. `place_categories`
-
-V1 çekirdek kategori ağacı:
 
 ### Kültür ve tarih
 - `culture_history`
@@ -106,9 +103,11 @@ V1 çekirdek kategori ağacı:
 - `cultural_center`
 - `promenade`
 
-Bu ağaç başlangıç seed'idir; genişletilebilir. `women_beach` ayrı kategori olarak korunur çünkü planlama açısından semantic değeri vardır.
+`women_beach` ayrı semantic kategori olarak korunur.
 
-## 6. `reservation_requirement_types`
+## 6. Rezervasyon
+
+`reservation_requirement_types`:
 
 - `none`
 - `recommended`
@@ -116,9 +115,10 @@ Bu ağaç başlangıç seed'idir; genişletilebilir. `women_beach` ayrı kategor
 - `time_slot_required`
 - `unknown`
 
-## 7. Parking registry'leri
+## 7. Otopark
 
-### `parking_types`
+`parking_types`:
+
 - `open_lot`
 - `garage`
 - `street`
@@ -126,15 +126,17 @@ Bu ağaç başlangıç seed'idir; genişletilebilir. `women_beach` ayrı kategor
 - `park_and_ride`
 - `unknown`
 
-### `parking_relationship_types`
+`parking_relationship_types`:
+
 - `onsite`
 - `official_nearby`
 - `nearby_public`
 - `alternative`
 
-## 8. Local item registry'leri
+## 8. Yerel ürün ve lezzet
 
-### `local_item_types`
+`local_item_types`:
+
 - `food`
 - `dessert`
 - `beverage`
@@ -143,16 +145,18 @@ Bu ağaç başlangıç seed'idir; genişletilebilir. `women_beach` ayrı kategor
 - `souvenir`
 - `local_product`
 
-### `local_item_relationship_types`
+`local_item_relationship_types`:
+
 - `served_here`
 - `sold_here`
 - `produced_here`
 - `best_known_here`
 - `available_nearby`
 
-## 9. Event registry'leri
+## 9. Etkinlik
 
-### `event_types`
+`event_types`:
+
 - `festival`
 - `fair`
 - `concert`
@@ -163,7 +167,8 @@ Bu ağaç başlangıç seed'idir; genişletilebilir. `women_beach` ayrı kategor
 - `seasonal_event`
 - `market_event`
 
-### `event_place_role_types`
+`event_place_role_types`:
+
 - `venue`
 - `meeting_point`
 - `route_stop`
@@ -171,9 +176,8 @@ Bu ağaç başlangıç seed'idir; genişletilebilir. `women_beach` ayrı kategor
 
 ## 10. Suitability dimensions
 
-V1 çekirdek boyutlar:
+Aile/erişilebilirlik:
 
-### Aile / erişilebilirlik
 - `stroller_access`
 - `toddler_interest`
 - `school_age_interest`
@@ -182,24 +186,27 @@ V1 çekirdek boyutlar:
 - `restroom_access`
 - `rest_area_access`
 
-### Çevresel uygunluk
+Çevresel:
+
 - `rain_fit`
 - `heat_fit`
 - `cold_fit`
 - `winter_fit`
 - `wind_sensitivity`
 
-### Operasyonel uygunluk
+Operasyonel:
+
 - `crowd_sensitivity`
 - `long_walk_burden`
 - `parking_ease`
 - `short_visit_fit`
 
-`value_type` başlangıçta çoğunlukla `score_0_100` kullanır. Boolean veya structured value gerekiyorsa dimension metadata ile tanımlanır.
+V1 physical schema ile uyumlu `value_type='score'` kullanılır.
 
-## 11. Data source registry'leri
+## 11. Veri kaynağı ve trust
 
-### `data_source_types`
+`data_source_types`:
+
 - `official_public`
 - `official_business`
 - `map_provider`
@@ -211,21 +218,17 @@ V1 çekirdek boyutlar:
 - `community_source`
 - `manual_curated`
 
-### `trust_tiers`
-Önerilen semantic sıralama:
+`trust_tiers`, küçük rank daha yüksek güven olacak şekilde:
 
-- `authoritative`
-- `high`
-- `medium`
-- `low`
-- `unverified`
+- `authoritative` = 0
+- `high` = 10
+- `medium` = 20
+- `low` = 30
+- `unverified` = 40
 
-Trust tier tek başına claim doğruluğunu belirlemez; source type, freshness ve corroboration birlikte değerlendirilir.
+## 12. Claim ve verification
 
-## 12. Claim registry
-
-### `claim_types`
-Başlangıç family'leri:
+`claim_types`:
 
 - `identity`
 - `location`
@@ -244,11 +247,8 @@ Başlangıç family'leri:
 - `website`
 - `visit_duration`
 
-`claim_key` bunun altında daha spesifik alanı belirtir; örn. `opening_hours.monday`, `price.adult`, `parking.capacity`.
+`verification_types`:
 
-## 13. Verification registry
-
-### `verification_types`
 - `source_check`
 - `cross_source_corroboration`
 - `freshness_check`
@@ -257,40 +257,41 @@ Başlangıç family'leri:
 - `event_date_confirmation`
 - `manual_review`
 
-## 14. Freshness policy başlangıç seti
+## 13. Freshness policy seti
 
-Önerilen politikalar:
+| code | TTL | priority | live verification |
+|---|---:|---:|---|
+| `very_static` | 180 gün | 60 | hayır |
+| `static` | 90 gün | 50 | hayır |
+| `slow_change` | 30 gün | 40 | hayır |
+| `operational` | 7 gün | 30 | hayır |
+| `event_schedule` | 3 gün | 20 | evet |
+| `near_live` | 6 saat | 10 | evet |
+| `live` | 30 dk | 0 | evet |
 
-| code | TTL | canlı doğrulama | tipik kullanım |
-|---|---:|---|---|
-| `very_static` | 180 gün | hayır | tarihi yapı kimliği, konum |
-| `static` | 90 gün | hayır | kategori, genel açıklama |
-| `slow_change` | 30 gün | gerekirse | iletişim, park bilgisi |
-| `operational` | 7 gün | seyahat öncesi | çalışma saatleri, ücret |
-| `event_schedule` | 3 gün | seyahat öncesi | yakın tarihli festival/etkinlik |
-| `near_live` | 6 saat | evet | geçici kapanma/yoğunluk sinyali |
-| `live` | 30 dk | evet | trafik/hava gibi runtime context |
+Düşük `refresh_priority` değeri scheduler açısından daha yüksek öncelik anlamına gelir.
 
-TTL saniye cinsinden fiziksel seed'de tutulur.
+## 14. Seyahat grubu
 
-## 15. Party registry'leri
+`party_member_types`:
 
-### `party_member_types`
 - `adult`
 - `child`
 - `infant`
 - `senior`
 
-### `mobility_profiles`
+`mobility_profiles`:
+
 - `standard`
 - `stroller_required`
 - `limited_walking`
 - `wheelchair`
 - `assisted_mobility`
 
-## 16. Plan registry'leri
+## 15. Planlama
 
-### `plan_scenario_types`
+`plan_scenario_types`:
+
 - `primary`
 - `weather_safe`
 - `low_crowd`
@@ -299,100 +300,68 @@ TTL saniye cinsinden fiziksel seed'de tutulur.
 - `child_focused`
 - `indoor_fallback`
 
-### `plan_item_types`
-Hedef gerektirenler:
+Hedef gerektiren `plan_item_types`:
+
 - `place_visit`
 - `event_visit`
 - `local_item_experience`
 
-Hedef gerektirmeyenler (`allows_targetless=true`):
+`allows_targetless=true` olanlar:
+
 - `travel`
 - `meal_break`
 - `rest_break`
 - `free_time`
 - `buffer`
 
-## 17. Travel mode registry
+## 16. Travel modes
 
-### `travel_modes`
 - `car`
 - `walking`
 - `public_transport`
 - `taxi`
 - `bicycle`
 
-V1 rota optimizasyonunda `car` ana senaryodur; diğer modlar destek kabiliyetine göre aktif edilir.
+## 17. Live environment context
 
-## 18. Live context registry
-
-### `environment_context_types`
 - `weather`
 - `traffic`
 - `road_closure`
 - `air_quality`
 - `crowd_signal`
 
-## 19. Localization yaklaşımı
+## 18. Localization
 
-V1 seed tablolarındaki `name` Türkçe default olabilir; ancak uzun vadede localized text registry tablosu önerilir:
+V1 `name` alanında Türkçe başlangıç değeri kullanabilir. `code` hiçbir zaman UI etiketi değildir. Çok dillilik geldiğinde ayrı translation katmanı kullanılmalıdır.
 
-```text
-registry_translations
-- registry_namespace
-- registry_code
-- locale
-- display_name
-- description
-```
+## 19. Code yaşam döngüsü
 
-Bu yapı uygulanana kadar `code` hiçbir zaman UI etiketi olarak gösterilmez.
+Bir code kaldırılacaksa:
 
-## 20. Code yaşam döngüsü
-
-Bir registry code artık kullanılmayacaksa:
-
-1. yeni kayıtlar için kapatılır (`is_active=false`),
+1. yeni write path'te kapatılır,
 2. mevcut FK'ler korunur,
-3. gerekiyorsa replacement code metadata ile belirtilir,
-4. veri migrasyonu ayrı migration olarak yapılır,
+3. gerekiyorsa replacement code tanımlanır,
+4. veri migrasyonu ayrı migration ile yapılır,
 5. hard delete yapılmaz.
 
-## 21. Seed ownership
+## 20. Validation checklist
 
-### Repo-owned
-- canonical `code`
-- başlangıç parent ilişkileri
-- semantic flags (`allows_targetless` gibi)
-- hierarchy level
-
-### Yönetilebilir
-- display name
-- açıklama
-- UI sırası
-- aktiflik (policy izin veriyorsa)
-
-Repo seed'i yönetilebilir alanları körlemesine overwrite etmemelidir.
-
-## 22. Validation checklist
-
-- [ ] Her FK registry hedefinin seed değeri var.
+- [ ] Her FK registry hedefi seedleniyor.
 - [ ] Duplicate `code` yok.
 - [ ] Parent category cycle yok.
-- [ ] Inactive registry code yeni write path'te seçilemiyor.
-- [ ] Seed iki kez çalışınca aynı sonucu veriyor.
-- [ ] Seed rollback gerektirmeden forward-fix edilebilir.
-- [ ] `allows_targetless` plan-item semantic trigger ile uyumlu.
-- [ ] Freshness TTL değerleri scheduler sorgularıyla uyumlu.
-- [ ] UI hiçbir yerde `code` değerini display label olarak kullanmıyor.
+- [ ] Seed iki kez çalışınca aynı semantic sonucu veriyor.
+- [ ] Semantic alanlar physical schema ile birebir uyumlu.
+- [ ] `allows_targetless` trigger kuralıyla uyumlu.
+- [ ] Freshness TTL/priority scheduler ile uyumlu.
+- [ ] UI `code` değerini display label olarak göstermiyor.
 
-## 23. Sonraki adım
+## 21. Executable baseline
 
-Bu baseline'dan sonra:
+İdempotent SQL karşılığı: [`registry-seed-v1.sql`](registry-seed-v1.sql).
 
-1. executable idempotent seed SQL,
-2. semantic constraint trigger DDL,
-3. ER diagram,
-4. referential-integrity fixture suite,
-5. query benchmark fixture
+## 22. Sonraki adım
 
-hazırlanmalıdır.
+1. semantic constraint trigger DDL,
+2. ER diagram,
+3. referential-integrity fixture suite,
+4. query benchmark fixture.
