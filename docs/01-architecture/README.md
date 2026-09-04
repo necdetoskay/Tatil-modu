@@ -30,7 +30,7 @@ Fiziksel şemaya geçildiğinde ayrıca:
 - nullable ve `NOT NULL` semantiği doğrulanır,
 - null-safe unique ihtiyacı PostgreSQL semantiğine göre çözülür,
 - GiST/partial/composite indexler gerçek sorgu yollarına göre belirlenir,
-- cross-table semantic integrity yalnızca uygulama koduna bırakılmaz,
+- cross-table semantic integrity yalnızca uygulama koduna bırakılmaz; production migration öncesi DB-enforced guard zorunludur,
 - DDL production migration'ı sayılmadan önce fixture + `EXPLAIN (ANALYZE, BUFFERS)` ile doğrulanır.
 
 ## İlgili Dokümanlar
