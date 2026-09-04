@@ -1,0 +1,101 @@
+name: Domain Database Integrity
+
+on:
+  pull_request:
+    paths:
+      - 'docs/01-architecture/**'
+      - 'docs/13-fixtures-and-evaluation/**'
+      - 'scripts/db/**'
+      - '.github/workflows/domain-database-integrity.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'docs/01-architecture/**'
+      - 'docs/13-fixtures-and-evaluation/**'
+      - 'scripts/db/**'
+      - '.github/workflows/domain-database-integrity.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  domain-db:
+    name: PostgreSQL / PostGIS Integrity Gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+
+    services:
+      postgres:
+        image: postgis/postgis:16-3.4
+        env:
+          POSTGRES_USER: tatil
+          POSTGRES_PASSWORD: tatil
+          POSTGRES_DB: tatil_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U tatil -d tatil_test"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=20
+
+    env:
+      PGHOST: localhost
+      PGPORT: 5432
+      PGUSER: tatil
+      PGPASSWORD: tatil
+      PGDATABASE: tatil_test
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install PostgreSQL client
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y postgresql-client
+
+      - name: L1 — Apply physical schema
+        run: >-
+          psql -v ON_ERROR_STOP=1
+          -f docs/01-architecture/postgresql-physical-schema-v1.sql
+
+      - name: L1 — Apply registry seed
+        run: >-
+          psql -v ON_ERROR_STOP=1
+          -f docs/01-architecture/registry-seed-v1.sql
+
+      - name: L1 — Reapply registry seed (idempotency)
+        run: >-
+          psql -v ON_ERROR_STOP=1
+          -f docs/01-architecture/registry-seed-v1.sql
+
+      - name: L1 — Apply plan target contract
+        run: >-
+          psql -v ON_ERROR_STOP=1
+          -f docs/01-architecture/plan-item-target-contract-v1.sql
+
+      - name: L1 — Apply semantic constraint triggers
+        run: >-
+          psql -v ON_ERROR_STOP=1
+          -f docs/01-architecture/semantic-constraint-triggers-v1.sql
+
+      - name: L2-L4 — Run executable integrity harness
+        run: >-
+          psql -v ON_ERROR_STOP=1
+          -f scripts/db/domain-integrity-v1.sql
+
+      - name: L5 — Query/index smoke
+        run: |
+          mkdir -p artifacts
+          psql -v ON_ERROR_STOP=1 \
+            -f scripts/db/query-index-smoke-v1.sql \
+            | tee artifacts/domain-query-index-smoke.txt
+
+      - name: Upload query plan evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: domain-query-index-smoke
+          path: artifacts/domain-query-index-smoke.txt
+          if-no-files-found: warn

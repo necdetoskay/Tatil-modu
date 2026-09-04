@@ -7,9 +7,43 @@
 | 01 | [system-overview.md](system-overview.md) | 3 katmanlı mimari, agent akışı, tasarım ilkeleri |
 | 02 | [handoff-contract-standard.md](handoff-contract-standard.md) | Agent arası veri transferi sözleşmeleri |
 | 03 | [data-source-trust-policy.md](data-source-trust-policy.md) | Güven seviyeleri, freshness, çelişki çözümü |
+| 04 | [domain-model-v1.md](domain-model-v1.md) | Canonical aday ilişkisel domain modeli; PK/FK, cardinality, index, evidence/freshness ve planlama veri yapısı |
+| 05 | [postgresql-physical-schema-v1.sql](postgresql-physical-schema-v1.sql) | PostgreSQL/PostGIS fiziksel şema baseline adayı; tablolar, FK/constraint/index DDL ve registry yapısı |
+| 06 | [database-migration-standard-v1.md](database-migration-standard-v1.md) | Expand/migrate/contract, FK validation, semantic constraint trigger, index/lock ve destructive migration standardı |
+| 07 | [registry-seed-baseline-v1.md](registry-seed-baseline-v1.md) | Yönetilebilir registry/config kodları, seed ownership, localization ve yaşam döngüsü baseline'ı |
+| 08 | [registry-seed-v1.sql](registry-seed-v1.sql) | Physical schema ile uyumlu idempotent başlangıç registry seed SQL'i |
+| 09 | [semantic-constraint-triggers-v1.sql](semantic-constraint-triggers-v1.sql) | FK'nin tek başına koruyamadığı subtype, plan target, trip-day, geo hierarchy ve updated_at kurallarını DB seviyesinde zorlayan trigger baseline'ı |
+| 10 | [er-diagram-v1.md](er-diagram-v1.md) | Geography, knowledge, evidence/freshness ve runtime planning bounded-context ER diyagramları |
+| 11 | [plan-item-target-contract-v1.sql](plan-item-target-contract-v1.sql) | Plan item tiplerinin izin verilen gerçek hedef türlerini registry üzerinden zorlayan additive DB contract |
+
+## Domain model kuralı
+
+Domain tasarımları yalnızca kavramsal diyagram olarak bırakılmaz. Kanonik modele alınacak her domain değişikliği için en az şu konular açıkça tanımlanır:
+
+- primary key ve foreign key yapısı,
+- cardinality ve ownership,
+- unique/check constraint'ler,
+- `ON DELETE` davranışı,
+- index ve ana sorgu yolları,
+- temporal/freshness davranışı,
+- evidence/provenance ilişkisi,
+- transaction ve concurrency sınırları.
+
+Fiziksel şemaya geçildiğinde ayrıca:
+
+- tüm FK hedef tabloları açıkça tanımlanır,
+- nullable ve `NOT NULL` semantiği doğrulanır,
+- null-safe unique ihtiyacı PostgreSQL semantiğine göre çözülür,
+- GiST/partial/composite indexler gerçek sorgu yollarına göre belirlenir,
+- cross-table semantic integrity yalnızca uygulama koduna bırakılmaz; production migration öncesi DB-enforced guard zorunludur,
+- DDL production migration'ı sayılmadan önce fixture + `EXPLAIN (ANALYZE, BUFFERS)` ile doğrulanır,
+- canonical registry code'ları hardcoded UI enum'u olarak değil yönetilebilir seed/config contract'ı olarak tutulur,
+- seed dosyaları idempotent ve non-destructive olmalıdır,
+- plan item tipi ile hedef entity türü arasındaki ilişki de registry tabanlı ve DB-enforced olmalıdır.
 
 ## İlgili Dokümanlar
 
-- [Agent Spec Template (ARCH-001)](../11-architecture/ARCH-001-AGENT-SPECIFICATION-TEMPLATE.md)
+- [Architecture Freeze Baseline](../08-architecture-baseline/README.md)
 - [Agent Catalog](../02-agents/agent-catalog.md)
 - [Testing Standard (TST-001)](../03-testing/agent-testing-evaluation-standard.md)
+- [Referential Integrity Fixture Suite v1](../13-fixtures-and-evaluation/referential-integrity-fixture-suite-v1.md)
