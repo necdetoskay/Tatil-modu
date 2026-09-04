@@ -486,7 +486,6 @@ CREATE TABLE freshness_assignments (
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now()
 );
--- PostgreSQL 15+: NULLS NOT DISTINCT gives true null-safe uniqueness.
 ALTER TABLE freshness_assignments
   ADD CONSTRAINT uq_freshness_assignments_entity_claim UNIQUE NULLS NOT DISTINCT (knowledge_entity_id, claim_type_id);
 CREATE INDEX ix_freshness_assignments_due ON freshness_assignments(next_refresh_at) WHERE next_refresh_at IS NOT NULL;
@@ -625,7 +624,23 @@ CREATE INDEX ix_environment_context_expires ON environment_context_snapshots(exp
 CREATE INDEX ix_environment_context_location ON environment_context_snapshots USING gist(location);
 
 -- =========================================================
--- 11. Integrity notes intentionally enforced above
+-- 11. Cross-table semantic integrity required before production migration
+-- =========================================================
+-- Simple FK/check constraints cannot express these rules fully. Production
+-- migration MUST implement them with DEFERRABLE constraint triggers or an
+-- equivalent database-enforced mechanism:
+--
+-- A) places.id -> knowledge_entities row whose entity_kind code = 'place'.
+-- B) events.id -> entity_kind = 'event'.
+-- C) local_items.id -> entity_kind = 'local_item'.
+-- D) parking_facilities.id -> entity_kind = 'parking_facility'.
+-- E) plan_items target count must agree with plan_item_types.allows_targetless.
+-- F) trip_days.trip_date must remain inside parent trip_request date range.
+-- G) geo_regions parent/child hierarchy must be valid and cycle-free.
+-- H) updated_at maintenance must be standardized by DB trigger or repository convention.
+
+-- =========================================================
+-- 12. Integrity notes intentionally enforced above
 -- =========================================================
 -- 1) knowledge_entities + subtype insert must be one transaction.
 -- 2) subtype deletes are RESTRICT; lifecycle is status-driven.
